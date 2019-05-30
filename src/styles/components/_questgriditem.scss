@@ -1,0 +1,88 @@
+.quest-grid-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 382px;
+  height: 469px;
+  background: #000;
+  margin: auto;
+  margin-bottom: 20px;
+
+  .quest-badge {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    top: 25px;
+    left: 25px;
+    width: 109px;
+    height: 30px;
+    background-image: linear-gradient(75deg, #50fdc6, #3fcaff);
+
+    .icon {
+      width: 11px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    p {
+      margin: 0px;
+      margin-left: 10px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+  }
+
+  .top-container {
+    display: flex;
+    flex: 1;
+    background: #eee;
+  }
+
+  .bottom-container {
+    position: relative;
+    height: 180px;
+    background: white;
+  }
+
+  .progress-bar {
+    height: 10px;
+    background-color: #8b9699;
+  }
+
+  .progress-bar-filled {
+    position: absolute;
+    width: 202px;
+    height: 10px;
+    background-image: linear-gradient(75deg, #50fdc6, #3fcaff);
+  }
+
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+
+    .title {
+      font-size: 1.375rem;
+      text-transform: uppercase;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: normal;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      margin: 0px;
+    }
+
+    .description {
+      font-size: 0.75rem;
+      line-height: normal;
+      letter-spacing: normal;
+      margin-top: 2px;
+      color: #8b9699;
+    }
+  }
+}

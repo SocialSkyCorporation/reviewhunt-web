@@ -1,0 +1,103 @@
+.home-page {
+  .banner-content {
+    padding: 11.23vw 11.72vw 4.395vw 11.72vw;
+
+    &.primary-gradient {
+      background-color: #50fdc6; /* For browsers that do not support gradients */
+      background-image: linear-gradient(70deg, #50fdc6, #3fcaff);
+    }
+
+    h1,
+    h2,
+    p {
+      color: #0a0a0a;
+    }
+
+    h1 {
+      font-family: "Comfortaa", cursive;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      line-height: normal;
+    }
+
+    h2 {
+      // font-size: 2.25rem;
+      font-size: 3.516vw;
+      font-weight: bold;
+      line-height: 1;
+      letter-spacing: normal;
+      font-stretch: condensed;
+      margin: 0px;
+    }
+
+    .learn-more {
+      display: flex;
+      width: 140px;
+      height: 34px;
+      border: solid 1px #0a0a0a;
+      margin-top: 20px;
+
+      p {
+        margin: auto;
+        font-size: 0.625rem;
+        font-weight: normal;
+      }
+    }
+  }
+
+  .stat-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 18px;
+
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    h1 {
+      font-family: "Roboto", sans-serif;
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: normal;
+      margin: 0px;
+    }
+
+    h2 {
+      font-size: 0.75rem;
+      font-weight: normal;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      &:last-child {
+        margin-left: 4.98vw;
+      }
+    }
+
+    .stat-text {
+      margin-left: 1.367vw;
+    }
+  }
+
+  .grid-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4.395vw 11.72vw 4.395vw 11.72vw;
+    background-color: #0a0a0a;
+  }
+
+  .call-to-action {
+    height: 20.3646vw;
+    background-color: #50fdc6; /* For browsers that do not support gradients */
+    background-image: linear-gradient(70deg, #50fdc6, #3fcaff);
+  }
+}

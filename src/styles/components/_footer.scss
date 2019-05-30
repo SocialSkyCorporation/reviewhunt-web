@@ -1,0 +1,41 @@
+.footer {
+  background-color: #212121;
+  padding: 40px 120px 40px 120px;
+
+  h1, a, p {
+    color: #8b9699;
+    margin: 0px;
+  }
+
+  h1 {
+    font-family: 'Comfortaa', cursive;
+    font-size: 0.875rem;
+    font-weight: bold;
+    letter-spacing: 1.8px;
+  }
+
+  a {
+    font-size: 0.625rem;
+    line-height: 1.6;
+  }
+
+  p {
+    font-size: 0.625rem;
+    line-height: 1.6;
+  }
+
+  .redirect-row {
+    display: flex;
+    margin: 20px 0px 20px 0px;
+  }
+
+  .redirect-column {
+    display: flex;
+    flex-direction: column;
+
+    &:first-child {
+      margin-right: 40px;
+    }
+  }
+
+}
