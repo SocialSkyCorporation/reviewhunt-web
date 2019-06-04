@@ -12,6 +12,7 @@ const Home = asyncComponent(() => import("pages/Home"));
 const About = asyncComponent(() => import("pages/About"));
 const Auth = asyncComponent(() => import("pages/Auth"));
 const Product = asyncComponent(() => import("pages/Product"));
+const Profile = asyncComponent(() => import("pages/Profile"));
 
 const RoutesWithContext = props => {
   return (
@@ -48,7 +49,7 @@ class Routes extends Component {
               <Header />
               <Switch>
                 {/* <Route path="/" exact component={Home} /> */}
-                <Route path="/" exact component={Product} />
+                <Route path="/" exact component={Profile} />
                 <Route path="/about" exact component={About} />
                 <Route path="/auth" exact component={Auth} />
                 <Route path="*" component={NotFound} />

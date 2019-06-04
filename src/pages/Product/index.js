@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import questImg from "assets/images/quest-circle.svg";
+import React, { Component } from 'react';
+import questImg from 'assets/images/quest-circle.svg';
+import downArrowImg from 'assets/images/down-arrow-blue.svg';
 
 export default class Product extends Component {
   renderBanner() {
@@ -39,10 +40,61 @@ export default class Product extends Component {
   renderProductInfo() {
     return (
       <div className="product-info">
-      <div className="product-info-title">Product Information</div>
+        <div className="title">Product Information</div>
+        <div className="section-divider" />
+        <div className="desc">
+          Bark transforms people nearby into fun barking dogs. Every user
+          chooses one of the 8 different dog breeds and chats with other barkers
+          by communicating like dogs. Simply bark at each other within a 1 mile
+          radius by pressing the bark button. Communicate with other barkers via
+          short and unique bark messages. Drop a post on your location like when
+          a dog leaves a poo, and get unlimited attention.
+        </div>
 
+        <div className="show-more-container">
+          <div className="show-more">Show More</div>
+          <img className="down-arrow" src={downArrowImg} />
+        </div>
+        <div className="section-divider" />
+        <div className="title">Quests and Reviews</div>
+
+        <div className="progress-bar-empty">
+          <div className="progress-bar-filled" />
+        </div>
+
+        <div className="progress-bar-text">
+          <div>61% remaining</div>
+          <div>$10,500 bounty fund</div>
+        </div>
+
+        <div className="section-divider" />
+
+        <div className="title">Please Note</div>
+        <div className="please-note">
+          • Kogi Cosby sweater ethical squid irony disrupt, organic tote bag
+          gluten-free XOXO wolf typewriter mixtape small batch. DIY pickled four
+          loko McSweeney's, Odd Future dreamcatcher plaid. PBR&B single-origin
+          coffee gluten-free McSweeney's banjo, bicycle rights food truck
+          gastropub vinyl four loko umami +1 narwhal chia. Fashion axe Banksy
+          chia umami artisan, bitters 90's fanny pack. Single-origi.
+          <br />
+          <br />
+          • Kogi Cosby sweater ethical squid irony disrupt, organic tote bag
+          gluten-free XOXO wolf typewriter mixtape small batch. DIY pickled four
+          loko McSweeney's, Odd Future dreamcatcher plaid. PBR&B single-origin
+          coffee gluten-free McSweeney's banjo, bicycle rights food truck
+          gastropub vinyl four loko umami +1 narwhal chia. Fashion axe Banksy
+          chia umami artisan, bitters 90's fanny pack. Single-origi.
+          <br />
+          <br />• Kogi Cosby sweater ethical squid irony disrupt, organic tote
+          bag gluten-free XOXO wolf typewriter mixtape small batch. DIY pickled
+          four loko McSweeney's, Odd Future dreamcatcher plaid. PBR&B
+          single-origin coffee gluten-free McSweeney's banjo, bicycle rights
+          food truck gastropub vinyl four loko umami +1 narwhal chia. Fashion
+          axe Banksy chia umami artisan, bitters 90's fanny pack. Single-origi.
+        </div>
       </div>
-    )
+    );
   }
 
   render() {

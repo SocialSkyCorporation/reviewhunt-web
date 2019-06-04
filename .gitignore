@@ -23,7 +23,7 @@ yarn-error.log*
 Thumbs.db
 
 # dotenv-rails
-.env.production
+.env*
 
 # Compiled css
 src/custom.css

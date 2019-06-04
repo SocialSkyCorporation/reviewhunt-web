@@ -3,6 +3,7 @@
     line-height: 1;
   }
 
+  //TODO: move to common
   .banner-container {
     height: 396px;
     padding: 120px;
@@ -16,7 +17,7 @@
     }
 
     .product-category {
-      font-family: "Comfortaa", cursive;
+      font-family: 'Comfortaa', cursive;
       font-weight: bold;
       font-size: 1rem;
       color: #0a0a0a;
@@ -83,14 +84,75 @@
   }
 
   .product-info {
-      padding: 50px 120px 50px 120px;
+    padding: 50px 120px 50px 120px;
 
-      .product-info-title {
-        font-family: 'Comfortaa', cursive;
-        font-size: 1rem;
-        font-weight: bold;
-        color: #0a0a0a;
-      }
+    .title {
+      font-family: 'Comfortaa', cursive;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #0a0a0a;
+    }
 
+    .desc {
+      font-size: 0.875rem;
+      line-height: 1.29;
+      color: #8b9699;
+    }
+
+    .show-more-container {
+      display: flex;
+      margin-top: 12px;
+    }
+
+    .show-more {
+      font-size: 0.875rem;
+      line-height: 1.29;
+      color: #3fcaff;
+    }
+
+    .down-arrow {
+      margin-left: 8px;
+    }
+
+    .progress-bar-empty {
+      height: 29px;
+      background-color: #f0f0f0;
+    }
+
+    .progress-bar-empty {
+      position: relative;
+      height: 29px;
+      background-color: #f0f0f0;
+      margin-top: 21px;
+    }
+
+    .progress-bar-filled {
+      position: absolute;
+      width: 100px;
+      height: 29px;
+      background-image: linear-gradient(86deg, #50fdc6, #3fcaff);
+    }
+
+    .progress-bar-text {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 0.875rem;
+      color: #0a0a0a;
+      font-weight: normal;
+    }
+
+    .please-note {
+      font-size: 0.75rem;
+      line-height: 1.5;
+      color: #8b9699;
+      margin-top: 21px;
+    }
+  }
+
+  .section-divider {
+    height: 1px;
+    border: solid 1px #e5e5e5;
+    margin: 30px 0px 30px 0px;
   }
 }
