@@ -4,16 +4,6 @@ $circle-color: #fff;
 $inset-size: 36px;
 $inset-color: #fff;
 
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .progress-circle {
   margin: 20px auto;
   width: $circle-size;
@@ -27,12 +17,16 @@ $inset-color: #fff;
     height: $circle-size;
     position: absolute;
     -webkit-backface-visibility: hidden;
-    animation-duration: 1.7s;
-    animation-delay: 1;
-    animation-name: rotate;
-    animation-iteration-count: infinite;
+    animation: spin 1.7s infinite;
+    -webkit-animation: spin 1.7s infinite;
+    -moz-animation: spin 1.7s infinite;
     border-radius: 50%;
+
+    &.animation-disabled {
+      animation: none;
+    }
   }
+
   .progress-circle__slice {
     clip: rect(0px, $circle-size, $circle-size, $circle-size/2);
     .progress-circle__fill {
@@ -87,6 +81,12 @@ $inset-color: #fff;
         &.review {
           margin-left: 2px;
           margin-top: 2px;
+        }
+      }
+
+      &.clickable {
+        &:hover {
+          cursor: pointer;
         }
       }
 

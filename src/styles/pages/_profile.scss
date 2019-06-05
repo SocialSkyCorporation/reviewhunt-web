@@ -5,6 +5,11 @@
     line-height: 1;
   }
 
+  .banner-container {
+    padding-top: 115px;
+    padding-bottom: 50px;
+  }
+
   .summary-container {
     display: flex;
   }
@@ -17,7 +22,16 @@
   .summary-item {
     display: flex;
     align-items: center;
-    margin-right: 40px;
+    margin-right: 5.3333vw;
+
+    .icon {
+      width: 50px;
+      height: 50px;
+      @include responsive(mobile) {
+        width: 40px;
+        height: 40px;
+      }
+    }
 
     .text-container {
       margin-left: 14px;
@@ -26,6 +40,9 @@
         font-size: 1.125rem;
         font-weight: 500;
         color: #212121;
+        @include responsive(mobile) {
+          font-size: 1rem;
+        }
       }
 
       .subtitle {
@@ -39,10 +56,24 @@
   .tab-container {
     display: flex;
     justify-content: space-between;
-    margin: 50px 120px 50px 120px;
+
+    @include responsive(tablet) {
+      flex-direction: column;
+    }
+
+    @include responsive(mobile) {
+      padding-top: 32px;
+    }
 
     .tabs {
       width: 20%;
+
+      @include responsive(tablet) {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+
       .tab-item {
         margin-bottom: 15px;
         color: #8b9699;
@@ -59,6 +90,15 @@
 
     .tab-content {
       width: 80%;
+
+      @include responsive(tablet) {
+        width: 100%;
+        margin-top: 32px;
+      }
+
+      @include responsive(mobile) {
+        margin-top: 16px;
+      }
     }
 
     .content-title {
@@ -95,6 +135,11 @@
           display: flex;
           flex: 1;
           align-items: center;
+
+          @include responsive(mobile) {
+            flex-direction: column;
+            align-items: flex-start;
+          }
         }
 
         .title {
@@ -113,6 +158,10 @@
           flex-direction: column;
           justify-content: space-around;
           height: 82px;
+
+          @include responsive(mobile) {
+            width: 100%;
+          }
         }
 
         .value-container {
@@ -129,6 +178,17 @@
           &.select {
             padding: 0px;
           }
+
+          &.password {
+            @include responsive(mobile) {
+              margin: 0px 0px 16px;
+            }
+          }
+
+          @include responsive(mobile) {
+            width: 100%;
+            margin: 16px 0px;
+          }
         }
 
         .social-container {
@@ -142,6 +202,11 @@
             margin-left: 10px;
             color: #8b9699;
             font-weight: normal;
+          }
+
+          @include responsive(mobile) {
+            width: 100%;
+            margin: 16px 0px;
           }
         }
 
@@ -161,6 +226,11 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+
+          @include responsive(mobile) {
+            width: 100%;
+            margin: 16px 0px;
+          }
         }
       }
 
@@ -204,7 +274,6 @@
 
   .content-quest {
     border: solid 1px #e5e5e5;
-    //TODO: make responsive
     padding: 30px;
 
     .quest-item-row {
@@ -263,24 +332,65 @@
       .quest-tag-container {
         display: flex;
         margin-top: 8px;
+      }
+    }
 
-        .quest-tag {
-          border-radius: 4px;
-          padding: 3px 10px;
-          font-size: 0.75rem;
-          color: #0a0a0a;
-          margin-right: 4px;
-          background-color: #50fdc6;
-          background-image: linear-gradient(82deg, #50fdc6, #3fcaff);
+    .current-quest {
+      .back-button-container:hover {
+        cursor: pointer;
+      }
 
-          &.complete {
-            background-color: #e5e5e5;
-            background-image: none;
-          }
+      .back-icon {
+        width: auto;
+        height: 12px;
+      }
+
+      .clock-icon {
+        width: 17px;
+        height: 17px;
+      }
+
+      .header-text {
+        font-size: 0.875rem;
+        margin-left: 6px;
+        color: #8b9699;
+      }
+
+      .header-title {
+        font-size: 1.5rem;
+        margin-top: 12px;
+      }
+
+      .header-description {
+        font-size: 0.875rem;
+        font-weight: 300;
+        line-height: 1.29;
+        margin-top: 2px;
+      }
+
+      .info-number {
+        font-size: 0.875rem;
+      }
+
+      .info-title {
+        font-size: 1.125rem;
+        margin: 5px 0px 8px;
+      }
+
+      .info-description {
+        font-size: 0.75rem;
+        font-weight: 300;
+        line-height: 1.33;
+        margin: 20px 0px;
+
+        &.small-margin {
+          margin: 5px 0px 20px;
         }
       }
 
-     
+      .info-subheading {
+        font-size: 12px;
+      }
     }
   }
 }

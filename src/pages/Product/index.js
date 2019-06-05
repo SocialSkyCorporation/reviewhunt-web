@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
+import ProgressBar from 'components/ProgressBar';
+import SimpleButton from 'components/SimpleButton';
+import ScreenshotCarousel from './ScreenshotCarousel';
+import QuestCarousel from 'pages/Product/QuestCarousel';
+
 import questImg from 'assets/images/quest-circle.svg';
 import downArrowImg from 'assets/images/down-arrow-blue.svg';
+import starImg from 'assets/images/star.svg';
+import FullWidthButton from 'components/FullWidthButton';
 
 export default class Product extends Component {
   renderBanner() {
     return (
-      <div className="banner-container">
+      <div className="padded-container banner-container primary-gradient">
         <div className="product-category">APP</div>
         <div className="product-name">BARK</div>
         <div className="line" />
@@ -17,21 +24,24 @@ export default class Product extends Component {
 
         <div className="quest-step-container">
           {new Array(5).fill(undefined).map((item, index) => {
+            const lastItem = index === 4;
             return (
-              <div className="quest-step">
-                <img src={questImg} />
+              <div className="quest-step" key={index}>
+                <div className="step-image-container">
+                  <img src={questImg} />
+                  {lastItem && <img className="quest-star" src={starImg} />}
+                </div>
                 <div className="quest-step-text">
                   <div className="price-text">$2</div>
                   <div className="quest-text">Quest {index + 1}</div>
                 </div>
-                {index !== 4 && <div className="step-divider" />}
+                {!lastItem && <div className="step-divider" />}
               </div>
             );
           })}
         </div>
 
-        <div className="join-button">JOIN THE QUEST</div>
-
+        <SimpleButton text="JOIN THE QUEST" style={{ marginTop: 30 }} />
         <div />
       </div>
     );
@@ -39,8 +49,9 @@ export default class Product extends Component {
 
   renderProductInfo() {
     return (
-      <div className="product-info">
+      <div className="padded-container product-info">
         <div className="title">Product Information</div>
+        <ScreenshotCarousel />
         <div className="section-divider" />
         <div className="desc">
           Bark transforms people nearby into fun barking dogs. Every user
@@ -58,14 +69,18 @@ export default class Product extends Component {
         <div className="section-divider" />
         <div className="title">Quests and Reviews</div>
 
-        <div className="progress-bar-empty">
-          <div className="progress-bar-filled" />
-        </div>
+        <ProgressBar
+          height={29}
+          progress={30}
+          containerStyle={{ marginTop: 21 }}
+        />
 
         <div className="progress-bar-text">
           <div>61% remaining</div>
           <div>$10,500 bounty fund</div>
         </div>
+
+        <QuestCarousel />
 
         <div className="section-divider" />
 
@@ -93,6 +108,9 @@ export default class Product extends Component {
           food truck gastropub vinyl four loko umami +1 narwhal chia. Fashion
           axe Banksy chia umami artisan, bitters 90's fanny pack. Single-origi.
         </div>
+
+
+        <FullWidthButton style={{ marginTop: 16 }} text="JOIN THE QUEST" />
       </div>
     );
   }
@@ -102,7 +120,6 @@ export default class Product extends Component {
       <div className="product-page">
         {this.renderBanner()}
         {this.renderProductInfo()}
-        <div />
       </div>
     );
   }

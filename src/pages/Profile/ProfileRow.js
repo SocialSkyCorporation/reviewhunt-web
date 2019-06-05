@@ -23,7 +23,7 @@ const ProfileRow = ({ title, value, editMode, type, password }) => (
                 className="value-container"
                 placeholder="Current password"
               />
-              <Input className="value-container" placeholder="New password" />
+              <Input className="value-container password" placeholder="New password" />
             </div>
           )}
           {type === TYPE_SOCIAL && (

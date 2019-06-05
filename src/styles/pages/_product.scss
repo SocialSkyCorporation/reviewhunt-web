@@ -1,13 +1,13 @@
 .product-page {
+  min-height: 100vh;
   & > div {
     line-height: 1;
   }
 
   //TODO: move to common
   .banner-container {
-    height: 396px;
-    padding: 120px;
-    background-image: linear-gradient(69deg, #50fdc6, #3fcaff);
+    padding-top: 115px;
+    padding-bottom: 40px;
 
     .line {
       width: 35px;
@@ -42,11 +42,13 @@
     .quest-step-container {
       display: flex;
       justify-content: space-between;
+      width: 100%;
       margin-top: 20px;
     }
 
     .quest-step {
       display: flex;
+      flex: 1;
       align-items: center;
 
       .quest-step-text {
@@ -64,28 +66,36 @@
       }
 
       .step-divider {
-        width: 40px;
+        display: flex;
+        flex: 1;
         height: 1px;
-        border: solid 1px #0a0a0a;
+        background: #000;
         margin: 0px 26px 0px 26px;
-      }
-    }
 
-    .join-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 140px;
-      height: 34px;
-      border: solid 1px #0a0a0a;
-      font-size: 0.75rem;
-      margin-top: 30px;
+        @include responsive(tablet) {
+          margin: 0px 8px 0px 8px;
+        }
+      }
+
+      .step-image-container {
+        position: relative;
+      }
+
+      .quest-star {
+        position: absolute;
+        left: 26%;
+        top: -22px;
+        -webkit-animation: spin 1.6s ease-in-out infinite;
+        -moz-animation: spin 1.6s ease-in-out infinite;
+        animation: spin 1.6s ease-in-out infinite;
+        animation-direction: alternate-reverse;
+        -moz-animation-direction: alternate-reverse;
+        -webkit-animation-direction: alternate-reverse;
+      }
     }
   }
 
   .product-info {
-    padding: 50px 120px 50px 120px;
-
     .title {
       font-family: 'Comfortaa', cursive;
       font-size: 1rem;
@@ -97,6 +107,42 @@
       font-size: 0.875rem;
       line-height: 1.29;
       color: #8b9699;
+    }
+
+    .carousel-container {
+      position: relative;
+      margin: 20px 0px 30px;
+      @include responsive(mobile) {
+        margin: 20px 0px 80px;
+      }
+    }
+
+    .carousel-control-button {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 50%;
+
+      &.left {
+        left: -60px;
+
+        @include responsive(mobile) {
+          left: 35%;
+          top: 104%;
+        }
+      }
+
+      &.right {
+        right: -60px;
+        @include responsive(mobile) {
+          right: 35%;
+          top: 104%;
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
     }
 
     .show-more-container {
@@ -114,25 +160,6 @@
       margin-left: 8px;
     }
 
-    .progress-bar-empty {
-      height: 29px;
-      background-color: #f0f0f0;
-    }
-
-    .progress-bar-empty {
-      position: relative;
-      height: 29px;
-      background-color: #f0f0f0;
-      margin-top: 21px;
-    }
-
-    .progress-bar-filled {
-      position: absolute;
-      width: 100px;
-      height: 29px;
-      background-image: linear-gradient(86deg, #50fdc6, #3fcaff);
-    }
-
     .progress-bar-text {
       display: flex;
       justify-content: space-between;
@@ -147,6 +174,67 @@
       line-height: 1.5;
       color: #8b9699;
       margin-top: 21px;
+    }
+
+    .screenshot-img {
+      max-width: 75vw;
+      height: 40vh;
+      object-fit: contain;
+
+      @include responsive(mobile) {
+        height: 60vh;
+      }
+    }
+
+    .quest-carousel-item {
+      padding: 30px;
+      width: 464px;
+      height: 395px;
+      border: solid 1px #e5e5e5;
+      margin-right: 10px;
+
+      @include responsive(mobile) {
+        width: 80vw;
+      }
+      .quest-item-id {
+        font-size: 0.875rem;
+      }
+
+      .quest-item-title {
+        font-size: 1.125rem;
+        margin-top: 5px;
+      }
+
+      .bounty-text {
+        font-size: 1.5rem;
+      }
+
+      .quest-description-container {
+        display: flex;
+        margin-top: 21px;
+
+        @include responsive(mobile) {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .quest-description {
+          font-size: 0.75rem;
+          font-weight: 300;
+          line-height: 1.33;
+        }
+
+        .quest-image {
+          width: 154px;
+          height: auto;
+          margin-left: 30px;
+
+          @include responsive(mobile) {
+            margin-left: 0px;
+            margin-top: 16px;
+          }
+        }
+      }
     }
   }
 

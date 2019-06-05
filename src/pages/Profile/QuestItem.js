@@ -5,11 +5,11 @@ import clockImg from 'assets/images/clock.svg';
 import QuestStepProgress from 'components/QuestStepProgress';
 
 const QuestItem = (props) => {
-  const { title, steps, currentStep, ended } = props;
+  const { title, steps, currentStep, ended, onClick } = props;
   const completed = currentStep > steps.length - 1;
 
   return (
-    <div className={`quest-item-row`}>
+    <div className={`quest-item-row`} onClick={onClick}>
       <div className={`quest-item-container ${ended && 'ended'}`}>
         <div className="quest-img">
           <img src="https://picsum.photos/110" className="quest-img" />

@@ -132,7 +132,7 @@ hr {
 }
 
 .padded-container {
-  padding: 60px 40px;
+  padding: 60px 120px;
 
   @include responsive(mobile) {
     padding: 60px 1.5rem;
@@ -140,9 +140,8 @@ hr {
 }
 
 .primary-gradient {
-  color: #fff;
-  background-color: $primary; /* For browsers that do not support gradients */
-  background: linear-gradient($primary, #fa7f92);
+  background-color: #50fdc6;
+  background-image: linear-gradient(82deg, #50fdc6, #3fcaff);
 }
 
 .inversed-color {
@@ -390,7 +389,7 @@ hr {
 }
 
 .left-padded {
-  padding-left: 80px;
+  padding-left: 120px;
 
   @include responsive(ipadpro) {
     padding-left: 40px;
@@ -402,7 +401,7 @@ hr {
 }
 
 .right-padded {
-  padding-right: 80px;
+  padding-right: 120px;
 
   @include responsive(ipadpro) {
     padding-right: 40px;
@@ -463,29 +462,136 @@ hr {
   }
 }
 
-.banner-container {
-  height: 320px;
-  padding: 120px;
-  background-image: linear-gradient(69deg, #50fdc6, #3fcaff);
+///////////////////////////////////////////////
+// TODO: Refactor other common css
 
-  .banner-header {
-    font-family: 'Comfortaa', cursive;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #0a0a0a;
+.row-align-start {
+  display: flex;
+  align-items: flex-start;
+}
+
+.row-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.row-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.row-space-around {
+  display: flex;
+  justify-content: space-around;
+}
+
+.text-black {
+  color: $text_black;
+}
+
+.text-grey {
+  color: $text_grey;
+}
+
+.banner-header {
+  font-family: 'Comfortaa', cursive;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #0a0a0a;
+  @include responsive(mobile) {
+    font-size: 0.875rem;
   }
+}
 
-  .banner-subheader {
-    font-size: 2.25rem;
-    font-weight: bold;
-    margin-top: 5px;
-    color: #0a0a0a;
+.banner-subheader {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-top: 5px;
+  color: #0a0a0a;
+  @include responsive(mobile) {
+    font-size: 1.625rem;
   }
+}
 
-  .banner-line {
-    width: 35px;
-    height: 1px;
-    border: solid 1.5px #0a0a0a;
-    margin: 15px 0px 20px 0px;
+.banner-line {
+  width: 35px;
+  height: 1px;
+  border: solid 1.5px #0a0a0a;
+  margin: 15px 0px 20px 0px;
+}
+
+.simple-button {
+  display: inline-block;
+  padding: 10px 32px;
+  border: solid 1px #0a0a0a;
+  font-size: 0.75rem;
+  text-align: center;
+  color: #0a0a0a;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    color: #fff;
+    background: #000;
+    border: solid 1px #000;
+    transform: scale(1.02);
+  }
+}
+
+.quest-tag {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  color: #0a0a0a;
+  margin-right: 4px;
+  background-color: #50fdc6;
+  background-image: linear-gradient(82deg, #50fdc6, #3fcaff);
+
+  &.complete {
+    background-color: #e5e5e5;
+    background-image: none;
+  }
+}
+
+.full-width-button {
+  padding: 10px;
+  font-weight: 300;
+  font-size: 0.75rem;
+  text-align: center;
+  background: #000;
+  color: #fff;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.ant-select-selection {
+  border: solid 0px #8b9699 !important;
+  border-bottom-width: 1px !important;
+  font-size: 1rem;
+  color: #0a0a0a;
+  width: 180px;
+
+  svg {
+    fill: #8b9699;
+  }
+}
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }

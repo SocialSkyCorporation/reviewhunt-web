@@ -3,10 +3,17 @@
   display: flex;
   flex-direction: column;
   width: 382px;
-  height: 469px;
   background: #000;
-  margin: auto;
-  margin-bottom: 20px;
+  margin: 10px auto;
+  border: solid 1px #e5e5e5;
+
+  @include responsive(mobile) {
+    width: 90vw;
+  }
+
+  & > div {
+    line-height: 1;
+  }
 
   .quest-badge {
     position: absolute;
@@ -31,7 +38,8 @@
       margin: 0px;
       margin-left: 10px;
       font-size: 0.75rem;
-      font-weight: bold;
+      font-weight: 500;
+      color: #212121;
     }
   }
 
@@ -43,26 +51,54 @@
 
   .bottom-container {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     height: 180px;
     background: white;
-  }
+    padding: 25px;
 
-  .progress-bar {
-    height: 10px;
-    background-color: #8b9699;
-  }
+    .bounty-text-container {
+      margin-left: 12px;
+    }
 
-  .progress-bar-filled {
-    position: absolute;
-    width: 202px;
-    height: 10px;
-    background-image: linear-gradient(75deg, #50fdc6, #3fcaff);
+    .vertical-divider {
+      width: 1px;
+      height: 40px;
+      background: #8b9699;
+    }
+
+    .grid-item-icon {
+      width: 32px;
+      height: 32px;
+
+      @include responsive(mobile) {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .subheader {
+      font-size: 1.125rem;
+      font-weight: 400;
+
+      @include responsive(mobile) {
+        font-size: 1rem;
+      }
+    }
+
+    .subtext {
+      font-size: 0.75rem;
+      margin-top: 2px;
+      @include responsive(mobile) {
+        font-size: 0.625rem;
+      }
+    }
   }
 
   .text-container {
     display: flex;
     flex-direction: column;
-    padding: 25px;
 
     .title {
       font-size: 1.375rem;
@@ -81,8 +117,23 @@
       font-size: 0.75rem;
       line-height: normal;
       letter-spacing: normal;
+      white-space: nowrap;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
       margin-top: 2px;
       color: #8b9699;
+    }
+
+    .two-lines {
+      -webkit-line-clamp: 2;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      white-space: normal;
+
+      //fallback for non webkit
+      max-height: 28px;
     }
   }
 }

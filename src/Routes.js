@@ -48,10 +48,11 @@ class Routes extends Component {
             <div className="content-body">
               <Header />
               <Switch>
-                {/* <Route path="/" exact component={Home} /> */}
-                <Route path="/" exact component={Profile} />
+                <Route path="/" exact component={Home} />
+                <Route path="/product" exact component={Product} />
                 <Route path="/about" exact component={About} />
                 <Route path="/auth" exact component={Auth} />
+                <Route path="/profile" exact component={Profile} />
                 <Route path="*" component={NotFound} />
               </Switch>
               <Footer/>

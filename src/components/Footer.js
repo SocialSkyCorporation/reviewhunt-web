@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <div className="footer">
+    <div className="padded-container footer">
       <h1>REVIEWHUNT</h1>
 
       <div className="redirect-row">

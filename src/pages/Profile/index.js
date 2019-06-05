@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Select } from 'antd';
 import moneyImg from 'assets/images/money-circle.svg';
+import crownImg from 'assets/images/crown-circle.svg';
 import TabItem from './TabItem';
 import ProfileRow, {
   TYPE_DROPDOWN,
@@ -8,6 +9,7 @@ import ProfileRow, {
   TYPE_PASSWORD
 } from './ProfileRow';
 import QuestItem from './QuestItem';
+import CurrentQuest from './CurrentQuest';
 import ProgressBar from 'components/ProgressBar';
 
 const TAB_PROFILE = 0;
@@ -16,28 +18,29 @@ const TAB_WALLET = 2;
 
 export default class Profile extends Component {
   state = {
-    tabIndex: 1,
+    tabIndex: 0,
     editProfile: false,
-    socialChannels: []
+    socialChannels: [],
+    currentQuest: null
   };
 
   renderBanner() {
     return (
-      <div className="banner-container">
+      <div className="padded-container primary-gradient banner-container">
         <div className="banner-header">MY ACCOUNT</div>
         <div className="banner-subheader">YOUNGHWI CHO</div>
         <div className="banner-line" />
 
         <div className="summary-container">
           <div className="summary-item">
-            <img src={moneyImg} />
+            <img className="icon" src={crownImg} alt="" />
             <div className="text-container">
               <div className="title">TOP 3.5%</div>
               <div className="subtitle">Your buzz performance</div>
             </div>
           </div>
           <div className="summary-item">
-            <img src={moneyImg} />
+            <img className="icon" src={moneyImg} alt="" />
             <div className="text-container">
               <div className="title">$5,055</div>
               <div className="subtitle">Total bounty rewards so far</div>
@@ -50,7 +53,7 @@ export default class Profile extends Component {
 
   renderContent() {
     return (
-      <div className="tab-container">
+      <div className="padded-container tab-container">
         {this.renderTabs()}
         {this.renderTabContent()}
       </div>
@@ -132,7 +135,7 @@ export default class Profile extends Component {
               title="Instagram"
               value="https://www.instagram.com/andrew___cho/"
               editMode={editProfile}
-              type={TYPE_DROPDOWN}
+              type={TYPE_SOCIAL}
             />
             <ProfileRow
               title="Twitter"
@@ -176,24 +179,38 @@ export default class Profile extends Component {
   }
 
   renderQuestTab() {
+    const { currentQuest } = this.state;
+
+    if (currentQuest) {
+      return (
+        <>
+          <ProgressBar height={8} progress={30} />
+          <div className="content-quest">
+            <CurrentQuest onBackPressed={() => this.setState({currentQuest: null})} />
+          </div>
+        </>
+      );
+    }
+
     return (
-      <>
-      <ProgressBar height={8} progress={30}/>
       <div className="content-quest">
-        {false && (
-          <>
-            <div className="content-title">YOUR QUESTS</div>
-            <Select defaultValue={'All'} style={{ width: 100 }} />
-            <QuestItem steps={[1, 2, 3, 'review', 'buzz']} currentStep={1} />
-            <QuestItem steps={[1, 2, 3, 'review', 'buzz']} currentStep={3} />
-            <QuestItem steps={[1, 2, 3, 'review', 'buzz']} currentStep={3} />
-            <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={5} />
-            <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={3} ended />
-            <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={4} ended />
-          </>
-        )}
+        <div className="content-title">YOUR QUESTS</div>
+        <Select defaultValue={'All'} style={{ width: 100 }} />
+        <QuestItem
+          steps={[1, 2, 3, 'review', 'buzz']}
+          currentStep={1}
+          onClick={() => this.setState({ currentQuest: 1 })}
+        />
+        <QuestItem
+          steps={[1, 2, 3, 'review', 'buzz']}
+          currentStep={3}
+          onClick={() => this.setState({ currentQuest: 1 })}
+        />
+        <QuestItem steps={[1, 2, 3, 'review', 'buzz']} currentStep={3} />
+        <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={5} />
+        <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={3} ended />
+        <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={4} ended />
       </div>
-      </>
     );
   }
 

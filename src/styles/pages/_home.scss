@@ -1,11 +1,6 @@
 .home-page {
   .banner-content {
-    padding: 11.23vw 11.72vw 4.395vw 11.72vw;
-
-    &.primary-gradient {
-      background-color: #50fdc6; /* For browsers that do not support gradients */
-      background-image: linear-gradient(70deg, #50fdc6, #3fcaff);
-    }
+    padding-top: 120px;
 
     h1,
     h2,
@@ -14,34 +9,25 @@
     }
 
     h1 {
-      font-family: "Comfortaa", cursive;
+      font-family: 'Comfortaa', cursive;
       font-size: 1rem;
       font-weight: bold;
       letter-spacing: 2px;
       line-height: normal;
+      @include responsive(mobile) {
+        font-size: 0.75rem;
+      }
     }
 
     h2 {
-      // font-size: 2.25rem;
-      font-size: 3.516vw;
+      font-size: 2.25rem;
       font-weight: bold;
       line-height: 1;
       letter-spacing: normal;
       font-stretch: condensed;
       margin: 0px;
-    }
-
-    .learn-more {
-      display: flex;
-      width: 140px;
-      height: 34px;
-      border: solid 1px #0a0a0a;
-      margin-top: 20px;
-
-      p {
-        margin: auto;
-        font-size: 0.625rem;
-        font-weight: normal;
+      @include responsive(mobile) {
+        font-size: 1.25rem;
       }
     }
   }
@@ -55,20 +41,31 @@
       width: 50px;
       height: 50px;
       object-fit: contain;
+      @include responsive(mobile) {
+        width: 40px;
+        height: 40px;
+      }
     }
 
     h1 {
-      font-family: "Roboto", sans-serif;
+      font-family: 'Roboto', sans-serif;
       font-size: 1.125rem;
       font-weight: 500;
       line-height: normal;
       letter-spacing: normal;
       margin: 0px;
+      @include responsive(mobile) {
+        font-size: 0.875rem;
+      }
     }
 
     h2 {
       font-size: 0.75rem;
       font-weight: normal;
+
+      @include responsive(mobile) {
+        font-size: 0.625rem;
+      }
     }
 
     .stat-item {
@@ -91,8 +88,12 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    padding: 4.395vw 11.72vw 4.395vw 11.72vw;
-    background-color: #0a0a0a;
+    padding: 30px 0px 90px;
+    background-color: #fff;
+
+    @include responsive(tablet) {
+      justify-content: center;
+    }
   }
 
   .call-to-action {

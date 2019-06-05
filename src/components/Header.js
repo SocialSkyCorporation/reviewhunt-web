@@ -24,6 +24,9 @@ export default () => (
           <Link className="header-item" to="/join">
             <p>Join</p>
           </Link>
+          <Link className="header-item" to="/profile">
+            <p>Profile</p>
+          </Link>
         </div>
       </div>
     )}
