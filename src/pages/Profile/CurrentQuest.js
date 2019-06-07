@@ -1,18 +1,76 @@
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
-import backImg from 'assets/images/back.svg';
-import clockImg from 'assets/images/clock.svg';
-import SimpleButton from 'components/SimpleButton';
-import QuestStepProgress from 'components/QuestStepProgress';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import backImg from "assets/images/back.svg";
+import clockImg from "assets/images/clock.svg";
+import checkImg from "assets/images/check-green.svg";
+import rejectImg from "assets/images/reject.svg";
+import SimpleButton from "components/SimpleButton";
+import QuestStepProgress from "components/QuestStepProgress";
+import HistoryMessage from "./HistoryMessage";
 
-const QuestInfo = ({step}) => {
+const QuestInfo = ({ step }) => {
   return (
     <div>
       <div className="info-number text-black">QUEST {step}</div>
       <div className="info-title text-black">
         Become a top dog in your territory
       </div>
+
       <div className="quest-tag">Quest Bounty - $5</div>
+
+      <HistoryMessage
+        type="confirm"
+        message={"Your quest submission was confirmed."}
+      />
+
+      <HistoryMessage
+        type="reject"
+        message={
+          "Your quest submission was not approved (if you want to appeal, use #reviewhunt-appeal channel in our Disocrd group (https://discord.gg/84zsT4m)."
+        }
+      />
+
+      <HistoryMessage
+        type="star"
+        rating={9}
+        message={"Your buzz content get 3.5 rating"}
+      />
+
+      <HistoryMessage
+        type="star"
+        rating={1}
+        message={"Your buzz content get 3.5 rating"}
+      />
+      <HistoryMessage
+        type="star"
+        rating={2}
+        message={"Your buzz content get 3.5 rating"}
+      />
+      <HistoryMessage
+        type="star"
+        rating={3}
+        message={"Your buzz content get 3.5 rating"}
+      />
+      <HistoryMessage
+        type="star"
+        rating={4}
+        message={"Your buzz content get 3.5 rating"}
+      />
+      <HistoryMessage
+        type="star"
+        rating={5}
+        message={"Your buzz content get 3.5 rating"}
+      />
+      <HistoryMessage
+        type="star"
+        rating={6}
+        message={"Your buzz content get 3.5 rating"}
+      />
+
+      <HistoryMessage type="earned" message={"Your quest submission was confirmed."} />
+      <HistoryMessage type="paid" message={"Your quest submission was confirmed."} />
+
+
       <div className="info-description text-grey">
         Take over territories and change the name of the location by following
         dog’s territorial actions. You can become a top dog in your 2km X 2km
@@ -40,12 +98,15 @@ const QuestInfo = ({step}) => {
 
 const CurrentQuest = props => {
   const { data, onBackPressed } = props;
-  const {currentStep} = data;
+  const { currentStep } = data;
   const [questInfoIndex, setQuestInfoIndex] = useState(currentStep);
   return (
     <div className="current-quest">
       <div className="row-space-between">
-        <div className="row-align-center back-button-container" onClick={onBackPressed}>
+        <div
+          className="row-align-center back-button-container"
+          onClick={onBackPressed}
+        >
           <img className="back-icon" src={backImg} alt="" />
           <div className="header-text">Back</div>
         </div>
@@ -67,10 +128,10 @@ const CurrentQuest = props => {
 
       <div className="divider" />
       <QuestStepProgress
-        steps={[1, 2, 3, 'review', 'buzz']}
+        steps={[1, 2, 3, "review", "buzz"]}
         currentStep={currentStep}
         containerStyle={{ marginTop: 16, marginBottom: 16 }}
-        onStepClicked={(step) => setQuestInfoIndex(step)}
+        onStepClicked={step => setQuestInfoIndex(step)}
       />
       <QuestInfo step={questInfoIndex + 1} />
     </div>
@@ -85,6 +146,6 @@ CurrentQuest.defaultProps = {
   data: {
     currentStep: 1
   }
-}
+};
 
 export default CurrentQuest;

@@ -41,21 +41,22 @@ class Routes extends Component {
   componentWillUnmount() {}
 
   render() {
+    const showHeaderFooter = window.location && window.location.pathname !== '/login';
     return (
       <AppConsumer>
         {({ isLoading, me }) => {
           return (
             <div className="content-body">
-              <Header />
+            {showHeaderFooter && <Header/>}
               <Switch>
                 <Route path="/" exact component={Home} />
+                <Route path="/auth" exact component={Auth} />
                 <Route path="/product" exact component={Product} />
                 <Route path="/about" exact component={About} />
-                <Route path="/auth" exact component={Auth} />
                 <Route path="/profile" exact component={Profile} />
                 <Route path="*" component={NotFound} />
               </Switch>
-              <Footer/>
+              {showHeaderFooter && <Footer/>}
             </div>
           );
         }}

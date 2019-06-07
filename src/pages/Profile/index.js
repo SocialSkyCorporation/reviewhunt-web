@@ -1,25 +1,27 @@
-import React, { Component } from 'react';
-import { Select } from 'antd';
-import moneyImg from 'assets/images/money-circle.svg';
-import crownImg from 'assets/images/crown-circle.svg';
-import TabItem from './TabItem';
+import React, { Component } from "react";
+import { Select } from "antd";
+import moneyImg from "assets/images/money-circle.svg";
+import crownImg from "assets/images/crown-circle.svg";
+import TabItem from "./TabItem";
 import ProfileRow, {
   TYPE_DROPDOWN,
   TYPE_SOCIAL,
   TYPE_PASSWORD
-} from './ProfileRow';
-import QuestItem from './QuestItem';
-import CurrentQuest from './CurrentQuest';
-import ProgressBar from 'components/ProgressBar';
+} from "./ProfileRow";
+import QuestItem from "./QuestItem";
+import CurrentQuest from "./CurrentQuest";
+import ProgressBar from "components/ProgressBar";
 
 const TAB_PROFILE = 0;
 const TAB_QUEST = 1;
 const TAB_WALLET = 2;
 
+const { Option } = Select;
+
 export default class Profile extends Component {
   state = {
     tabIndex: 0,
-    editProfile: false,
+    editProfile: true,
     socialChannels: [],
     currentQuest: null
   };
@@ -99,7 +101,7 @@ export default class Profile extends Component {
 
     return (
       <div className="content-profile">
-        <div className="content-title">BASIC INFORMATION</div>
+        <div className="content-title text-black">BASIC INFORMATION</div>
         <ProfileRow title="Name" value="Younghwi Cho" editMode={editProfile} />
         <ProfileRow
           title="Email Address"
@@ -120,7 +122,31 @@ export default class Profile extends Component {
           password={true}
         />
 
-        <div className="content-title">YOUR SOCIAL CHANNELS</div>
+        <div className="row-align-center social-title-container">
+          <div className="content-title text-black social">
+            YOUR SOCIAL CHANNELS
+          </div>
+
+          {editProfile && (
+            <Select
+              defaultValue={"Add More Channels"}
+              className="value-container select text-grey"
+              onChange={e =>
+                this.setState({
+                  socialChannels: socialChannels.concat({
+                    channel: e,
+                    value: `https://${e}.com/`
+                  })
+                })
+              }
+            >
+              <Option value="instagram">Instagram</Option>
+              <Option value="twitter">Twitter</Option>
+              <Option value="youtube">YouTube</Option>
+              <Option value="blog">Blog</Option>
+            </Select>
+          )}
+        </div>
 
         {socialChannels.length === 0 && !editProfile && (
           <div className="social-connect-tip">
@@ -131,39 +157,30 @@ export default class Profile extends Component {
 
         {true && (
           <>
-            <ProfileRow
-              title="Instagram"
-              value="https://www.instagram.com/andrew___cho/"
-              editMode={editProfile}
-              type={TYPE_SOCIAL}
-            />
-            <ProfileRow
-              title="Twitter"
-              value="https://twitter.com/cyh76507707"
-              editMode={editProfile}
-              type={TYPE_SOCIAL}
-            />
-            <ProfileRow
-              title="Youtube"
-              value="https://www.youtube.com/channel/UCl_6lrasdfassdfasdfasdawoiejfioawjefoiwjiof"
-              editMode={editProfile}
-              type={TYPE_SOCIAL}
-            />
-            <ProfileRow
-              title="Blog"
-              value="https://steemit.com/@project7"
-              editMode={editProfile}
-              type={TYPE_SOCIAL}
-            />
+            {socialChannels.map((item, index) => {
+              return (
+                <ProfileRow
+                  key={index}
+                  title={item.channel}
+                  value={item.value}
+                  editMode={editProfile}
+                  type={TYPE_SOCIAL}
+                  onDeletePressed={() => {
+                    socialChannels.splice(index, 1);
+                    this.setState({ socialChannels });
+                  }}
+                />
+              );
+            })}
           </>
         )}
 
         <div className="button-container">
           <div
             className="edit-button"
-            onClick={() => this.setState({ editProfile: true })}
+            onClick={() => this.setState({ editProfile: !editProfile })}
           >
-            {editProfile ? 'SUBMIT' : 'EDIT PROFILE'}
+            {editProfile ? "SUBMIT" : "EDIT PROFILE"}
           </div>
           {editProfile && (
             <div
@@ -186,7 +203,9 @@ export default class Profile extends Component {
         <>
           <ProgressBar height={8} progress={30} />
           <div className="content-quest">
-            <CurrentQuest onBackPressed={() => this.setState({currentQuest: null})} />
+            <CurrentQuest
+              onBackPressed={() => this.setState({ currentQuest: null })}
+            />
           </div>
         </>
       );
@@ -194,22 +213,22 @@ export default class Profile extends Component {
 
     return (
       <div className="content-quest">
-        <div className="content-title">YOUR QUESTS</div>
-        <Select defaultValue={'All'} style={{ width: 100 }} />
+        <div className="content-title text-black">YOUR QUESTS</div>
+        <Select defaultValue={"All"} style={{ width: 100 }} />
         <QuestItem
-          steps={[1, 2, 3, 'review', 'buzz']}
+          steps={[1, 2, 3, "review", "buzz"]}
           currentStep={1}
           onClick={() => this.setState({ currentQuest: 1 })}
         />
         <QuestItem
-          steps={[1, 2, 3, 'review', 'buzz']}
+          steps={[1, 2, 3, "review", "buzz"]}
           currentStep={3}
           onClick={() => this.setState({ currentQuest: 1 })}
         />
-        <QuestItem steps={[1, 2, 3, 'review', 'buzz']} currentStep={3} />
-        <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={5} />
-        <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={3} ended />
-        <QuestItem steps={[1, 2, 'review', 'buzz']} currentStep={4} ended />
+        <QuestItem steps={[1, 2, 3, "review", "buzz"]} currentStep={3} />
+        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={5} />
+        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={3} ended />
+        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={4} ended />
       </div>
     );
   }

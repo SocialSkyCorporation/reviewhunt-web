@@ -10,11 +10,11 @@ const QuestGridItem = () => {
     <Link to="/product">
       <div className="quest-grid-item">
         <div className="quest-badge">
-          <img src={questSvg} />
+          <img src={questSvg} alt=""/>
           <p>3 QUESTS</p>
         </div>
 
-        <img className="top-container" src="https://picsum.photos/200/300" />
+        <img className="top-container" src="https://picsum.photos/200/300" alt="" />
 
           <ProgressBar height={10} progress={20} dark />
 

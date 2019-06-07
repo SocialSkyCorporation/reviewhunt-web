@@ -28,8 +28,8 @@ export default class Product extends Component {
             return (
               <div className="quest-step" key={index}>
                 <div className="step-image-container">
-                  <img src={questImg} />
-                  {lastItem && <img className="quest-star" src={starImg} />}
+                  <img src={questImg} alt=""/>
+                  {lastItem && <img className="quest-star" src={starImg} alt=""/>}
                 </div>
                 <div className="quest-step-text">
                   <div className="price-text">$2</div>
@@ -64,7 +64,7 @@ export default class Product extends Component {
 
         <div className="show-more-container">
           <div className="show-more">Show More</div>
-          <img className="down-arrow" src={downArrowImg} />
+          <img className="down-arrow" src={downArrowImg} alt=""/>
         </div>
         <div className="section-divider" />
         <div className="title">Quests and Reviews</div>

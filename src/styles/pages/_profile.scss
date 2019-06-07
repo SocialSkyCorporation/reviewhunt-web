@@ -19,6 +19,54 @@
     border: solid 1px #e5e5e5;
   }
 
+  .clock-icon {
+    width: 17px;
+    height: 17px;
+
+    @include responsive(mobile) {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  .value-container {
+    display: flex;
+    flex: 1;
+    max-height: 28px;
+    background-color: #e5e5e5;
+    border: 0px;
+    border-radius: 0px;
+    padding: 6px 10px;
+    font-size: 0.875rem;
+    color: #8b9699;
+
+    &.select {
+      padding: 0px;
+    }
+
+    &.password {
+      @include responsive(mobile) {
+        margin: 0px 0px 16px;
+      }
+    }
+
+    @include responsive(mobile) {
+      width: 100%;
+      margin: 16px 0px;
+    }
+  }
+
+  .ant-select-selection {
+    display: flex;
+    flex: 1;
+    max-height: 28px;
+    border-width: 0px;
+    background: transparent;
+    color: #8b9699;
+    font-size: 0.875rem;
+    border: none !important;
+  }
+
   .summary-item {
     display: flex;
     align-items: center;
@@ -102,17 +150,20 @@
     }
 
     .content-title {
+      min-width: 200px;
       font-size: 14px;
       font-weight: normal;
       line-height: normal;
       letter-spacing: normal;
-      color: #0a0a0a;
       margin-bottom: 30px;
-      margin-top: 36px;
 
-      &:first-child {
-        margin-top: 0px;
+      &.social {
+        margin-bottom: 0px;
       }
+    }
+
+    .social-title-container {
+      margin: 30px 0px 21px;
     }
 
     .content-profile {
@@ -164,33 +215,6 @@
           }
         }
 
-        .value-container {
-          display: flex;
-          flex: 1;
-          max-height: 28px;
-          background-color: #e5e5e5;
-          border: 0px;
-          border-radius: 4px;
-          padding: 6px 10px;
-          font-size: 0.875rem;
-          color: #8b9699;
-
-          &.select {
-            padding: 0px;
-          }
-
-          &.password {
-            @include responsive(mobile) {
-              margin: 0px 0px 16px;
-            }
-          }
-
-          @include responsive(mobile) {
-            width: 100%;
-            margin: 16px 0px;
-          }
-        }
-
         .social-container {
           display: flex;
           flex: 1;
@@ -204,18 +228,18 @@
             font-weight: normal;
           }
 
+          .social-delete-button {
+            margin-left: 8px;
+
+            &:hover {
+              cursor: pointer;
+            }
+          }
+
           @include responsive(mobile) {
             width: 100%;
             margin: 16px 0px;
           }
-        }
-
-        .ant-select-selection {
-          display: flex;
-          flex: 1;
-          max-height: 28px;
-          border-width: 0px;
-          background: transparent;
         }
 
         .value {
@@ -276,6 +300,12 @@
     border: solid 1px #e5e5e5;
     padding: 30px;
 
+    @include responsive(mobile) {
+      padding: 30px 0px;
+      border: solid 0px #e5e5e5;
+      border-top-width: 1px;
+    }
+
     .quest-item-row {
       display: flex;
       flex-direction: column;
@@ -297,6 +327,12 @@
       .quest-img {
         width: 110px;
         height: 110px;
+        object-fit: contain;
+
+        @include responsive(mobile) {
+          width: 80px;
+          height: 80px;
+        }
       }
 
       .quest-info {
@@ -315,6 +351,13 @@
           font-size: 1.125rem;
           color: #0a0a0a;
           text-transform: uppercase;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          @include responsive(mobile) {
+            font-size: 1rem;
+          }
         }
 
         .quest-time-container {
@@ -326,6 +369,10 @@
           font-size: 0.75rem;
           color: #8b9699;
           margin-left: 4px;
+
+          @include responsive(mobile) {
+            font-size: 10px;
+          }
         }
       }
 
@@ -343,11 +390,6 @@
       .back-icon {
         width: auto;
         height: 12px;
-      }
-
-      .clock-icon {
-        width: 17px;
-        height: 17px;
       }
 
       .header-text {
@@ -391,6 +433,23 @@
       .info-subheading {
         font-size: 12px;
       }
+    }
+  }
+
+  .history-message-item {
+    background: #e5e5e5;
+    padding: 10px 15px;
+    font-size: 0.75rem;
+    font-weight: normal;
+    margin-top: 5px;
+
+    .message-text {
+      margin-left: 5px;
+      margin-top: 1px;
+    }
+
+    a {
+      color: blue;
     }
   }
 }

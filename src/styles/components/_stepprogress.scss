@@ -1,20 +1,24 @@
-$circle-size: 40px;
 $circle-background: #000;
 $circle-color: #fff;
-$inset-size: 36px;
 $inset-color: #fff;
 
 .progress-circle {
   margin: 20px auto;
-  width: $circle-size;
-  height: $circle-size;
+  width: 40px;
+  height: 40px;
   background-color: $circle-background;
   border-radius: 50%;
 
+  @include responsive(mobile) {
+    margin: 16px auto;
+    width: 32px;
+    height: 32px;
+  }
+
   .progress-circle__slice,
   .progress-circle__fill {
-    width: $circle-size;
-    height: $circle-size;
+    width: 40px;
+    height: 40px;
     position: absolute;
     -webkit-backface-visibility: hidden;
     animation: spin 1.7s infinite;
@@ -22,25 +26,43 @@ $inset-color: #fff;
     -moz-animation: spin 1.7s infinite;
     border-radius: 50%;
 
+    @include responsive(mobile) {
+      width: 32px;
+      height: 32px;
+    }
+
     &.animation-disabled {
       animation: none;
     }
   }
 
   .progress-circle__slice {
-    clip: rect(0px, $circle-size, $circle-size, $circle-size/2);
+    clip: rect(0px, 40px, 40px, 20px);
+    @include responsive(mobile) {
+      clip: rect(0px, 32px, 32px, 16px);
+    }
     .progress-circle__fill {
-      clip: rect(0px, $circle-size/2, $circle-size, 0px);
+      clip: rect(0px, 20px, 40px, 0px);
+      @include responsive(mobile) {
+        clip: rect(0px, 16px, 32px, 0px);
+      }
       background-color: $circle-color;
       background-image: linear-gradient(82deg, #50fdc6, #3fcaff);
     }
   }
   .progress-circle__overlay {
-    width: $inset-size;
-    height: $inset-size;
+    width: 36px;
+    height: 36px;
     position: absolute;
-    margin-left: ($circle-size - $inset-size)/2;
-    margin-top: ($circle-size - $inset-size)/2;
+    margin-left: (40px - 36px)/2;
+    margin-top: (40px - 36px)/2;
+
+    @include responsive(mobile) {
+      width: 28px;
+      height: 28px;
+      margin-left: (32px - 28px)/2;
+      margin-top: (32px - 28px)/2;
+    }
 
     background-color: $inset-color;
     border-radius: 50%;
@@ -74,13 +96,28 @@ $inset-color: #fff;
       color: #8b9699;
       border: solid 1px #8b9699;
 
+      @include responsive(mobile) {
+        width: 22px;
+        height: 22px;
+      }
+
       .icon {
         width: 18px;
         height: auto;
 
+
         &.review {
           margin-left: 2px;
           margin-top: 2px;
+
+          @include responsive(mobile) {
+            margin: 0px;
+          }
+        }
+
+        @include responsive(mobile) {
+          width: 12px;
+          height: auto;
         }
       }
 
@@ -102,6 +139,11 @@ $inset-color: #fff;
         position: absolute;
         top: 5px;
         left: 5px;
+
+        @include responsive(mobile) {
+          top: 9px;
+          left: 5px;
+        }
       }
 
       &.ended {
@@ -120,6 +162,10 @@ $inset-color: #fff;
       height: 2px;
       opacity: 0.6;
       background: #8b9699;
+
+      @include responsive(mobile) {
+        width: 22px;
+      }
 
       &.complete {
         opacity: 1;

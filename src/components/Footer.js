@@ -7,17 +7,17 @@ export default function Footer() {
 
       <div className="redirect-row">
         <div className="redirect-column">
-          <a>HUNT Platform</a>
-          <a>Steemhunt</a>
-          <a>Github</a>
-          <a>Discord</a>
-          <a>Email</a>
-          <a>Steemit Blog</a>
+          <a href="/">HUNT Platform</a>
+          <a href="/">Steemhunt</a>
+          <a href="/">Github</a>
+          <a href="/">Discord</a>
+          <a href="/">Email</a>
+          <a href="/">Steemit Blog</a>
         </div>
         <div className="redirect-column">
-          <a>Terms of Service</a>
-          <a>Privacy Policy</a>
-          <a>Cookie Policy</a>
+          <a href="/">Terms of Service</a>
+          <a href="/">Privacy Policy</a>
+          <a href="/">Cookie Policy</a>
         </div>
       </div>
       

@@ -21,7 +21,7 @@ export default () => (
             <p>Login</p>
           </Link>
 
-          <Link className="header-item" to="/join">
+          <Link className="header-item" to="/auth">
             <p>Join</p>
           </Link>
           <Link className="header-item" to="/profile">

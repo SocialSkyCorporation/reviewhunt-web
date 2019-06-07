@@ -188,7 +188,7 @@
 
     .quest-carousel-item {
       padding: 30px;
-      width: 464px;
+      // width: 464px;
       height: 395px;
       border: solid 1px #e5e5e5;
       margin-right: 10px;
@@ -196,6 +196,7 @@
       @include responsive(mobile) {
         width: 80vw;
       }
+
       .quest-item-id {
         font-size: 0.875rem;
       }
@@ -221,13 +222,15 @@
         .quest-description {
           font-size: 0.75rem;
           font-weight: 300;
+          width: 220px;
           line-height: 1.33;
         }
 
         .quest-image {
-          width: 154px;
-          height: auto;
+          width: auto;
+          height: 274px;
           margin-left: 30px;
+          object-fit: contain;
 
           @include responsive(mobile) {
             margin-left: 0px;

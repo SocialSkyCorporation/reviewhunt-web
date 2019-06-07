@@ -27,14 +27,14 @@ export default class index extends Component {
 
         <div className="stat-container">
           <div className="stat-item">
-            <img src={imgMoney} />
+            <img src={imgMoney} alt=""/>
             <div className="stat-text">
               <h1>$149,000</h1>
               <h2>Total Bounty Fund</h2>
             </div>
           </div>
           <div className="stat-item">
-            <img src={imgHunter} />
+            <img src={imgHunter} alt=""/>
             <div className="stat-text">
               <h1>1,054</h1>
               <h2>Total Hunter on Quests</h2>

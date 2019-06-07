@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ProgressBar from 'components/ProgressBar';
 import clockImg from 'assets/images/clock.svg';
@@ -12,7 +12,7 @@ const QuestItem = (props) => {
     <div className={`quest-item-row`} onClick={onClick}>
       <div className={`quest-item-container ${ended && 'ended'}`}>
         <div className="quest-img">
-          <img src="https://picsum.photos/110" className="quest-img" />
+          <img src="https://picsum.photos/110" className="quest-img" alt=""/>
           <ProgressBar height={5} progress={50} />
         </div>
 
@@ -20,7 +20,7 @@ const QuestItem = (props) => {
           <div className="quest-title-container">
             <div className="quest-title">{title}</div>
             <div className="quest-time-container">
-              <img src={clockImg} />
+              <img className="clock-icon" src={clockImg} alt=""/>
               <div className="quest-time-left">Time left</div>
             </div>
           </div>
