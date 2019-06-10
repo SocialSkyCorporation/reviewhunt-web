@@ -20,8 +20,6 @@ export default class index extends Component {
           style={{
             marginTop: 20,
             marginBottom: 16,
-            paddingLeft: 32,
-            paddingRight: 32
           }}
         />
 
@@ -54,6 +52,11 @@ export default class index extends Component {
           <QuestGridItem />
           <QuestGridItem />
           <QuestGridItem />
+          <QuestGridItem />
+          <QuestGridItem />
+          <QuestGridItem />
+          <QuestGridItem />
+          <div className="empty-grid-item"/>
         </div>
       </div>
     );

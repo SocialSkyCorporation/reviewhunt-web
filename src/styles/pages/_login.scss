@@ -276,14 +276,7 @@ $opacity-black: rgba(0, 0, 0, 0.6);
 			border-right-color: transparent !important;
 		}
 
-		.col-on-mobile {
-			display: flex;
-			flex: 1;
-
-			@include responsive(mobile) {
-				flex-direction: column;
-			}
-		}
+		
 
 		.ant-select-selection {
 			width: 130px;
@@ -309,8 +302,16 @@ $opacity-black: rgba(0, 0, 0, 0.6);
 			}
 		}
 
-		.connect-text {
-			margin-left: 4px;
+		.profile-icon {
+			width: 34px;
+			height: 34px;
+	        background: #eee;
+			border-radius: 17px;
+			margin-right: 8px;
+		}
+
+		.steem-logo {
+			margin-right: 4px;
 		}
 
 		.add-text {

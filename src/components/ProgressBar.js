@@ -8,7 +8,7 @@ const ProgressBar = ({ height, progress, containerStyle, dark }) => {
     setTimeout(() => {
       setWidth(progress);
     }, 500);
-  });
+  }, []);
 
   return (
     <div className="progress-bar" style={containerStyle}>

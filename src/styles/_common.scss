@@ -494,11 +494,11 @@ hr {
 }
 
 .text-off-white {
-    color: #f4f4f4;
+  color: #f4f4f4;
 }
 
 .text-white {
-    color: #fff;
+  color: #fff;
 }
 
 .text-blue {
@@ -546,6 +546,10 @@ hr {
     background: #000;
     border: solid 1px #000;
     // transform: scale(1.02);
+  }
+
+  @include responsive(mobile) {
+    font-size: 0.5rem;
   }
 }
 
@@ -596,11 +600,20 @@ hr {
 }
 
 .grey-border {
-    border: solid 1px #2f2f2f;
+  border: solid 1px #2f2f2f;
 }
 
 .full-width {
   width: 100%;
+}
+
+.col-on-mobile {
+  display: flex;
+  flex: 1;
+
+  @include responsive(mobile) {
+    flex-direction: column;
+  }
 }
 
 @-moz-keyframes spin {

@@ -16,7 +16,7 @@ const STATUS_ONBOARDING = 2;
 export default class Login extends Component {
 	state = {
 		tabIndex: TAB_HUNTER,
-		status: STATUS_ONBOARDING
+		status: STATUS_SIGNUP
 	};
 
 	renderInputs() {
@@ -29,6 +29,8 @@ export default class Login extends Component {
 				`SIGN UP AS ${onHunterTab ? "HUNTER" : "MAKER"}`) ||
 			(status === STATUS_LOGIN && "LOGIN");
 		// const onClick = status === STATUS_SIGNUP ? () => {} : () => {};
+
+		// handle signin
 		const onClick = () => this.setState({ status: STATUS_ONBOARDING });
 
 		return (

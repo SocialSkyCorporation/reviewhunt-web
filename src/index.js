@@ -6,6 +6,7 @@ import { Router } from "react-router-dom";
 import { AppProvider } from "contexts/AppContext";
 import { AuthProvider } from "contexts/AuthContext";
 
+import ScrollToTop from "ScrollToTop";
 import App from "./App";
 import history from "./history";
 
@@ -15,15 +16,14 @@ steem.api.setOptions({ url: process.env.REACT_APP_STEEM_API_URL });
 window.API_ROOT = process.env.REACT_APP_API_ROOT;
 
 ReactDOM.render(
-  <AppProvider>
-    <AuthProvider>
-      <Router history={history}>
-        <App />
-      </Router>
-    </AuthProvider>
-    ,
-  </AppProvider>,
-  document.getElementById("root")
+	<Router history={history}>
+		<AppProvider>
+			<AuthProvider>
+				<App />
+			</AuthProvider>
+		</AppProvider>
+	</Router>,
+	document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

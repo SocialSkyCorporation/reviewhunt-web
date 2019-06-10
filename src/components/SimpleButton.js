@@ -1,16 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 const SimpleButton = props => {
-  const { onClick, text, style } = props;
+	const {onMouseOver, onMouseOut, onClick, text, style, icon, className } = props;
 
-  return (
-    <div className="simple-button" onClick={onClick} style={style}>
-      {text}
-    </div>
-  );
+	return (
+		<div 
+		onMouseOver={onMouseOver}
+		onMouseOut={onMouseOut}
+		className={`simple-button ${className}`} onClick={onClick} style={style}>
+			<div className="row-align-center">
+				{icon}
+				{text}
+			</div>
+		</div>
+	);
 };
 
-SimpleButton.propTypes = {};
+SimpleButton.propTypes = {
+	style: PropTypes.object
+};
 
+SimpleButton.defaultProps = {
+	className: "",
+	style: {},
+	onMouseOver: () => {},
+	onmMouseOut: () => {},
+};
 export default SimpleButton;

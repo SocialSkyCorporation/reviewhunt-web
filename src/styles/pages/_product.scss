@@ -1,13 +1,21 @@
 .product-page {
   min-height: 100vh;
+
   & > div {
     line-height: 1;
   }
 
-  //TODO: move to common
   .banner-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: space-around;
     padding-top: 115px;
     padding-bottom: 40px;
+
+    @include responsive(mobile) {
+      // min-height: 100vh;
+    }
 
     .line {
       width: 35px;
@@ -17,7 +25,7 @@
     }
 
     .product-category {
-      font-family: 'Comfortaa', cursive;
+      font-family: "Comfortaa", cursive;
       font-weight: bold;
       font-size: 1rem;
       color: #0a0a0a;
@@ -39,19 +47,30 @@
       font-weight: bold;
     }
 
-    .quest-step-container {
+    .quest-progress-container {
       display: flex;
       justify-content: space-between;
       width: 100%;
       margin-top: 20px;
+
+      @include responsive(mobile) {
+        justify-content: center;
+      }
     }
 
     .quest-step {
       display: flex;
       flex: 1;
       align-items: center;
+      min-height: 8vh;
+
+      @include responsive(mobile) {
+        align-items: flex-start;
+      }
+
 
       .quest-step-text {
+        position: relative;
         margin-left: 9px;
       }
 
@@ -71,9 +90,15 @@
         height: 1px;
         background: #000;
         margin: 0px 26px 0px 26px;
+        opacity: .4;
 
         @include responsive(tablet) {
           margin: 0px 8px 0px 8px;
+        }
+
+        @include responsive(mobile) {
+          width: 1px;
+          margin-left: 16px;
         }
       }
 
@@ -83,21 +108,22 @@
 
       .quest-star {
         position: absolute;
-        left: 26%;
+        left: 28%;
         top: -22px;
-        -webkit-animation: spin 1.6s ease-in-out infinite;
-        -moz-animation: spin 1.6s ease-in-out infinite;
-        animation: spin 1.6s ease-in-out infinite;
+        -webkit-animation: rotateY 1.5s linear infinite;
+        -moz-animation: rotateY 1.5s linear infinite;
+        animation: rotateY 1.5s linear infinite;
         animation-direction: alternate-reverse;
         -moz-animation-direction: alternate-reverse;
         -webkit-animation-direction: alternate-reverse;
+
       }
     }
   }
 
   .product-info {
     .title {
-      font-family: 'Comfortaa', cursive;
+      font-family: "Comfortaa", cursive;
       font-size: 1rem;
       font-weight: bold;
       color: #0a0a0a;
@@ -245,5 +271,22 @@
     height: 1px;
     border: solid 1px #e5e5e5;
     margin: 30px 0px 30px 0px;
+  }
+}
+
+@-moz-keyframes rotateY {
+  100% {
+    -moz-transform: rotateY(360deg);
+  }
+}
+@-webkit-keyframes rotateY {
+  100% {
+    -webkit-transform: rotateY(360deg);
+  }
+}
+@keyframes rotateY {
+  100% {
+    -webkit-transform: rotateY(360deg);
+    transform: rotateY(360deg);
   }
 }

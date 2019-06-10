@@ -7,6 +7,8 @@ import queryString from "query-string";
 import Header from "components/Header";
 import { AuthConsumer } from "contexts/AuthContext";
 import Footer from "components/Footer";
+import ProtectedRoute from "ProtectedRoute";
+import ScrollToTop from "ScrollToTop";
 
 const Home = asyncComponent(() => import("pages/Home"));
 const About = asyncComponent(() => import("pages/About"));
@@ -41,22 +43,23 @@ class Routes extends Component {
   componentWillUnmount() {}
 
   render() {
-    const showHeaderFooter = window.location && window.location.pathname !== '/login';
+    const showHeaderFooter =
+      window.location && window.location.pathname !== "/login";
     return (
       <AppConsumer>
         {({ isLoading, me }) => {
           return (
             <div className="content-body">
-            {showHeaderFooter && <Header/>}
+              {showHeaderFooter && <Header />}
               <Switch>
                 <Route path="/" exact component={Home} />
-                <Route path="/auth" exact component={Auth} />
+                <Route path="/auth" component={Auth} />
                 <Route path="/product" exact component={Product} />
                 <Route path="/about" exact component={About} />
-                <Route path="/profile" exact component={Profile} />
+                <ProtectedRoute path="/profile" exact component={Profile} />
                 <Route path="*" component={NotFound} />
               </Switch>
-              {showHeaderFooter && <Footer/>}
+              {showHeaderFooter && <Footer />}
             </div>
           );
         }}

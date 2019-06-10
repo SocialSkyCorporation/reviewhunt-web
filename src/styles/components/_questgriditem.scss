@@ -138,3 +138,13 @@
     }
   }
 }
+
+.empty-grid-item {
+  position: relative;
+  display: flex;
+  width: 382px;
+  
+  @include responsive(mobile) {
+    width: 90vw;
+  }
+}
