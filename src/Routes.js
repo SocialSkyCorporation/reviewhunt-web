@@ -8,7 +8,6 @@ import Header from "components/Header";
 import { AuthConsumer } from "contexts/AuthContext";
 import Footer from "components/Footer";
 import ProtectedRoute from "ProtectedRoute";
-import ScrollToTop from "ScrollToTop";
 
 const Home = asyncComponent(() => import("pages/Home"));
 const About = asyncComponent(() => import("pages/About"));

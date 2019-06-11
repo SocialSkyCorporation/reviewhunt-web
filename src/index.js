@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "serviceWorker";
 import steem from "steem";
@@ -6,9 +6,9 @@ import { Router } from "react-router-dom";
 import { AppProvider } from "contexts/AppContext";
 import { AuthProvider } from "contexts/AuthContext";
 
-import ScrollToTop from "ScrollToTop";
 import App from "./App";
 import history from "./history";
+import "i18n";
 
 require("./utils/polyfill");
 
@@ -16,13 +16,15 @@ steem.api.setOptions({ url: process.env.REACT_APP_STEEM_API_URL });
 window.API_ROOT = process.env.REACT_APP_API_ROOT;
 
 ReactDOM.render(
-	<Router history={history}>
-		<AppProvider>
-			<AuthProvider>
-				<App />
-			</AuthProvider>
-		</AppProvider>
-	</Router>,
+	<Suspense fallback="loading">
+		<Router history={history}>
+			<AppProvider>
+				<AuthProvider>
+					<App />
+				</AuthProvider>
+			</AppProvider>
+		</Router>
+	</Suspense>,
 	document.getElementById("root")
 );
 

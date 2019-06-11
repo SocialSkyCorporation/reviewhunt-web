@@ -19,20 +19,6 @@ class AppProvider extends React.Component {
 
   componentWillUnmount() {}
 
-
-  refreshMe = async () => {
-    if (!getToken()) {
-      return;
-    }
-
-    try {
-      const me = await steemConnectAPI.me();
-      this.setState({ me });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   render() {
     return (
       <Provider

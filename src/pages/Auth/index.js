@@ -5,6 +5,7 @@ import HunterSignup from "./HunterSignup";
 import MakerSignup from "./MakerSignup";
 import LoginForm from "./LoginForm";
 import Onboarding from "./Onboarding";
+import { withTranslation, Trans } from "react-i18next";
 
 const TAB_HUNTER = 0;
 const TAB_MAKER = 1;
@@ -13,25 +14,28 @@ const STATUS_SIGNUP = 0;
 const STATUS_LOGIN = 1;
 const STATUS_ONBOARDING = 2;
 
-export default class Login extends Component {
-	state = {
-		tabIndex: TAB_HUNTER,
-		status: STATUS_SIGNUP
-	};
+class Auth extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			tabIndex: TAB_HUNTER,
+			status: STATUS_SIGNUP
+		};
+	}
 
 	renderInputs() {
 		const { tabIndex, status } = this.state;
+		const { t } = this.props;
 		const triggerCanvas = () => this.canvas.randomSplat();
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const onMakerTab = tabIndex === TAB_MAKER;
 		const buttonText =
-			(status === STATUS_SIGNUP &&
-				`SIGN UP AS ${onHunterTab ? "HUNTER" : "MAKER"}`) ||
-			(status === STATUS_LOGIN && "LOGIN");
+			(status === STATUS_SIGNUP && onHunterTab && t("auth.signup_hunter")) ||
+			(status === STATUS_SIGNUP && !onHunterTab && t("auth.signup_maker")) ||
+			(status === STATUS_LOGIN && t("login").toUpperCase());
 		// const onClick = status === STATUS_SIGNUP ? () => {} : () => {};
 
 		// handle signin
-		const onClick = () => this.setState({ status: STATUS_ONBOARDING });
 
 		return (
 			<div className="input-container">
@@ -41,36 +45,19 @@ export default class Login extends Component {
 				{status === STATUS_SIGNUP && onMakerTab && (
 					<MakerSignup triggerCanvas={triggerCanvas} />
 				)}
-
-				{status === STATUS_LOGIN && (
-					<LoginForm triggerCanvas={triggerCanvas} />
-				)}
-
-				{status === STATUS_SIGNUP && (
-					<div className="policy-agree-text text-grey">
-						By signing up, you agree to our <a href="/">Terms</a>,{" "}
-						<a href="/">Data Policy</a> and{" "}
-						<a href="/">Cookies Policy</a>.
-					</div>
-				)}
-
-				<div
-					className="simple-button gradient-button primary-gradient"
-					onClick={onClick}
-				>
-					{buttonText}
-				</div>
+				{status === STATUS_LOGIN && <LoginForm triggerCanvas={triggerCanvas} />}
 			</div>
 		);
 	}
 
-	renderLoginButton() {
+	renderAccountText() {
 		const { status } = this.state;
+		const { t } = this.props;
 		const hintText =
 			status === STATUS_SIGNUP
-				? "Have an account? "
-				: `Don't have an account? `;
-		const buttonText = status === STATUS_SIGNUP ? "Log in" : `Sign up`;
+				? t("auth.account_exists")
+				: t("auth.no_account");
+		const buttonText = status === STATUS_SIGNUP ? t("login") : t("signup");
 		const onClick =
 			status === STATUS_SIGNUP
 				? () => this.setState({ status: STATUS_LOGIN })
@@ -90,22 +77,23 @@ export default class Login extends Component {
 
 	render() {
 		const { tabIndex, status } = this.state;
+		const { t } = this.props;
 		const onHunterTab = tabIndex === TAB_HUNTER;
+		const name = "YoungHwi Cho";
 		const triggerCanvas = () => this.canvas.randomSplat();
 		const title =
-			(status === STATUS_ONBOARDING && `Welcome YoungHwi Cho!`) ||
-			(status === STATUS_SIGNUP && "Join as Maker") ||
-			(status === STATUS_LOGIN && "Join as Hunter");
+			(status === STATUS_ONBOARDING && (
+				<Trans i18nKey="auth.welcome">Welcome {{ name }}!</Trans>
+			)) ||
+			(status === STATUS_SIGNUP && onHunterTab
+				? t("auth.join_hunter")
+				: t("auth.join_maker")) ||
+			(status === STATUS_LOGIN && t("auth.welcome_back"));
 
 		const description =
-			(status === STATUS_ONBOARDING &&
-				"Reviewhunt connects you with cool new products that needs early attention by early-adopters like you. By joining fun quests and mission bounties, you can earn bounties. Connect your social accounts and maximise your quest and bounty chances.") ||
-			(status === STATUS_SIGNUP &&
-				onHunterTab &&
-				"Are you a product maker who seeks early adopters? Reviewhunt will enable you to run review campaigns with unique quests and missions so that you can easily build a strong early user base and community exposure.") ||
-			(status === STATUS_SIGNUP &&
-				!onHunterTab &&
-				"Are you interested in cool early tech products? Do you want to give a chance for them to have an early attention, and get paid? Join as a hunter and bring them for mass adoption.");
+			(status === STATUS_ONBOARDING && t("auth.onboarding_desc")) ||
+			(status === STATUS_SIGNUP && onHunterTab && t("auth.hunter_desc")) ||
+			(status === STATUS_SIGNUP && !onHunterTab && t("auth.maker_desc"));
 
 		return (
 			<div>
@@ -116,8 +104,8 @@ export default class Login extends Component {
 					</a>
 					<div className="join-text text-off-white">{title}</div>
 					<div
-						className={`description-text ${status ===
-							STATUS_ONBOARDING && "onboarding"} text-grey`}
+						className={`description-text ${status === STATUS_ONBOARDING &&
+							"onboarding"} text-grey`}
 					>
 						{description}
 					</div>
@@ -130,22 +118,18 @@ export default class Login extends Component {
 										style={{
 											opacity: onHunterTab ? 1 : 0.5
 										}}
-										onClick={() =>
-											this.setState({ tabIndex: 0 })
-										}
+										onClick={() => this.setState({ tabIndex: 0 })}
 									>
-										HUNTER
+										{t("auth.hunter")}
 									</div>
 									<div
 										className="tab-item text-off-white"
 										style={{
 											opacity: onHunterTab ? 0.5 : 1
 										}}
-										onClick={() =>
-											this.setState({ tabIndex: 1 })
-										}
+										onClick={() => this.setState({ tabIndex: 1 })}
 									>
-										MAKER
+										{t("auth.maker")}
 									</div>
 								</div>
 								<div className="tab-highlight-container">
@@ -163,9 +147,11 @@ export default class Login extends Component {
 					) : (
 						<Onboarding triggerCanvas={triggerCanvas} />
 					)}
-					{status !== STATUS_ONBOARDING && this.renderLoginButton()}
+					{status !== STATUS_ONBOARDING && this.renderAccountText()}
 				</div>
 			</div>
 		);
 	}
 }
+
+export default withTranslation()(Auth);

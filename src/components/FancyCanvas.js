@@ -204,12 +204,8 @@ export default class FancyCanvas extends Component {
 			);
 
 			const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-			if (status != gl.FRAMEBUFFER_COMPLETE) return false;
+			if (status !== gl.FRAMEBUFFER_COMPLETE) return false;
 			return true;
-		}
-
-		function clamp01(input) {
-			return Math.min(Math.max(input, 0), 1);
 		}
 
 		function isMobile() {
@@ -1531,8 +1527,8 @@ export default class FancyCanvas extends Component {
 
 		function resizeCanvas() {
 			if (
-				canvas.width != canvas.clientWidth ||
-				canvas.height != canvas.clientHeight
+				canvas.width !== canvas.clientWidth ||
+				canvas.height !== canvas.clientHeight
 			) {
 				canvas.width = canvas.clientWidth;
 				canvas.height = canvas.clientHeight;

@@ -66,15 +66,17 @@
     }
   }
 
-  .ant-select-selection {
-    display: flex;
-    flex: 1;
-    max-height: 28px;
-    border-width: 0px;
-    background: transparent;
-    color: #8b9699;
-    font-size: 0.875rem;
-    border: none !important;
+  .gray-bg-select {
+    & > .ant-select-selection {
+      display: flex;
+      flex: 1;
+      max-height: 28px;
+      border-width: 0px;
+      background: transparent;
+      color: #8b9699;
+      font-size: 0.875rem;
+      border: none !important;
+    }
   }
 
   .summary-item {
@@ -310,9 +312,8 @@
       .button-container {
         display: flex;
         align-items: center;
-        margin-top: 16px;
+        margin-top: 32px;
       }
-
 
       .cancel-button {
         font-size: 0.75rem;

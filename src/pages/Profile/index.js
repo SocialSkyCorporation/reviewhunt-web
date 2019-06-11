@@ -16,6 +16,7 @@ import { AuthConsumer } from "contexts/AuthContext";
 import steemLogoWhite from "assets/images/steem-logo.svg";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { getLoginURL } from "utils/token";
+import { withTranslation } from "react-i18next";
 
 const TAB_PROFILE = 0;
 const TAB_QUEST = 1;
@@ -23,7 +24,7 @@ const TAB_WALLET = 2;
 
 const { Option } = Select;
 
-export default class Profile extends Component {
+class Profile extends Component {
   state = {
     tabIndex: 0,
     editProfile: false,
@@ -33,9 +34,12 @@ export default class Profile extends Component {
   };
 
   renderBanner() {
+    const { t } = this.props;
     return (
       <div className="padded-container primary-gradient banner-container">
-        <div className="banner-header">MY ACCOUNT</div>
+        <div className="banner-header">
+          {t("profile.my_account").toUpperCase()}
+        </div>
         <div className="banner-subheader">YOUNGHWI CHO</div>
         <div className="banner-line" />
 
@@ -43,15 +47,15 @@ export default class Profile extends Component {
           <div className="summary-item">
             <img className="icon" src={crownImg} alt="" />
             <div className="text-container">
-              <div className="title">TOP 3.5%</div>
-              <div className="subtitle">Your buzz performance</div>
+              <div className="title">{t("profile.top")} 3.5%</div>
+              <div className="subtitle">{t("profile.buzz_performance")}</div>
             </div>
           </div>
           <div className="summary-item">
             <img className="icon" src={moneyImg} alt="" />
             <div className="text-container">
               <div className="title">$5,055</div>
-              <div className="subtitle">Total bounty rewards so far</div>
+              <div className="subtitle">{t("profile.earned_bounty")}</div>
             </div>
           </div>
         </div>
@@ -70,20 +74,21 @@ export default class Profile extends Component {
 
   renderTabs() {
     const { tabIndex } = this.state;
+    const { t } = this.props;
     return (
       <div className="tabs">
         <TabItem
-          text="Profile"
+          text={t("profile_tab")}
           selected={tabIndex === 0}
           onClick={() => this.setState({ tabIndex: 0 })}
         />
         <TabItem
-          text="Quest Dashboard"
+          text={t("profile.quest_dashboard")}
           selected={tabIndex === 1}
           onClick={() => this.setState({ tabIndex: 1 })}
         />
         <TabItem
-          text="Wallet"
+          text={t("profile.wallet")}
           selected={tabIndex === 2}
           onClick={() => this.setState({ tabIndex: 2 })}
         />
@@ -104,6 +109,7 @@ export default class Profile extends Component {
 
   renderProfileTab() {
     const { editProfile, socialChannels, steemLogo } = this.state;
+    const { t } = this.props;
 
     return (
       <AuthConsumer>
@@ -114,9 +120,7 @@ export default class Profile extends Component {
                 {true ? (
                   <div className="row-align-center row-space-between col-on-mobile steem-connected-container">
                     <div>
-                      <div className="text-black">
-                        STEEMHUNT (STEEM) ACCOUNT
-                      </div>
+                      <div className="text-black">{t("steem_steemhunt")}</div>
                       <div className="profile-icon-container row-align-center">
                         <img
                           className="profile-icon"
@@ -129,8 +133,10 @@ export default class Profile extends Component {
                       </div>
                     </div>
                     <div>
-                      <SimpleButton className="steem-connect-button" text="DISCONNECT"
-                       />
+                      <SimpleButton
+                        className="steem-connect-button"
+                        text={t("disconnect").toUpperCase()}
+                      />
                     </div>
                   </div>
                 ) : (
@@ -177,26 +183,26 @@ export default class Profile extends Component {
 
               <div className="content-profile">
                 <div className="content-title text-black">
-                  BASIC INFORMATION
+                  {t('basic_information').toUpperCase()}
                 </div>
                 <ProfileRow
-                  title="Name"
+                  title={t('name')}
                   value="Younghwi Cho"
                   editMode={editProfile}
                 />
                 <ProfileRow
-                  title="Email Address"
+                  title={t('email')}
                   value="abc@mail.com"
                   editMode={editProfile}
                 />
                 <ProfileRow
-                  title="Country of Residence"
+                  title={t('country')}
                   value="Korea, Republic of"
                   editMode={editProfile}
                   type={TYPE_DROPDOWN}
                 />
                 <ProfileRow
-                  title="Password"
+                  title={t('password')}
                   value="password"
                   editMode={editProfile}
                   type={TYPE_PASSWORD}
@@ -205,22 +211,21 @@ export default class Profile extends Component {
 
                 <div className="row-align-center social-title-container">
                   <div className="content-title text-black social">
-                    YOUR SOCIAL CHANNELS
+                    {t('your_channels').toUpperCase()}
                   </div>
                 </div>
 
                 {socialChannels.length === 0 && !editProfile && (
                   <div className="social-connect-tip">
-                    Connect your social and community channels and get more buzz
-                    bounty opportunities.
+                  {t('profile.social_tip')}
                   </div>
                 )}
 
                 {editProfile && (
                   <div className="row-align-center col-on-mobile">
                     <Select
-                      defaultValue={"Add Channels"}
-                      className="value-container select channel-select text-grey"
+                      defaultValue={t('profile.add_channels')}
+                      className="value-container select channel-select gray-bg-select text-grey"
                       onChange={e =>
                         this.setState({
                           socialChannels: socialChannels.concat({
@@ -237,7 +242,7 @@ export default class Profile extends Component {
                     </Select>
 
                     <Input
-                      placeholder="Input URL"
+                      placeholder={t('input_url')}
                       className="value-container text-grey"
                       onChange={e => {}}
                     />
@@ -268,7 +273,9 @@ export default class Profile extends Component {
                   <SimpleButton
                     onClick={() => this.setState({ editProfile: !editProfile })}
                     text={
-                    editProfile ? "SUBMIT" : "EDIT PROFILE"
+                      editProfile
+                        ? t("submit").toUpperCase()
+                        : t("profile.edit_profile").toUpperCase()
                     }
                   />
                   {editProfile && (
@@ -276,7 +283,7 @@ export default class Profile extends Component {
                       className="cancel-button"
                       onClick={() => this.setState({ editProfile: false })}
                     >
-                      CANCEL
+                      {t('cancel').toUpperCase()}
                     </div>
                   )}
                 </div>
@@ -290,6 +297,7 @@ export default class Profile extends Component {
 
   renderQuestTab() {
     const { currentQuest } = this.state;
+    const { t } = this.props;
 
     if (currentQuest) {
       return (
@@ -306,8 +314,8 @@ export default class Profile extends Component {
 
     return (
       <div className="content-quest">
-        <div className="content-title text-black">YOUR QUESTS</div>
-        <Select defaultValue={"All"} style={{ width: 100 }} />
+        <div className="content-title text-black">{t('your_quests').toUpperCase()}</div>
+        <Select className="category-select" defaultValue={t('all')} />
         <QuestItem
           steps={[1, 2, 3, "review", "buzz"]}
           currentStep={1}
@@ -336,3 +344,5 @@ export default class Profile extends Component {
     );
   }
 }
+
+export default withTranslation()(Profile);

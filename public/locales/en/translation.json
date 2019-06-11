@@ -1,0 +1,114 @@
+{
+	"app_title": "REVIEWHUNT",
+	"connect_steem": "CONNECT WITH STEEMHUNT ACCOUNT",
+	"register_social": "REGISTER YOUR SOCIAL CHANNELS",
+
+	"login": "Log in",
+	"signup": "Sign up",
+	"connect": "Connect",
+	"confirm": "Confirm",
+	"submit": "Submit",
+	"cancel": "Cancel",
+	"delete_channel": "Delete Channel",
+	"confirm_delete": "Are you sure you want to delete",
+	"ok": "Ok",
+	"all": "All",
+
+	"skip": "Skip for now",
+	"disconnect": "Disconnect",
+	"email": "Email address",
+	"password": "Password",
+	"confirm_password": "Confirm password",
+	"current_password": "Current password",
+	"new_password": "New password",
+	"country": "Country of Residence",
+	"gender": "Gender",
+	"company": "Name of company",
+	"name": "Name",
+	"full_name": "Full name",
+	"business_category": "Business category",
+	"profile_tab": "Profile",
+
+	"steem_steemhunt": "STEEM (STEEMHUNT) ACCOUNT",
+	"instagram": "Instagram",
+	"twitter": "Twitter",
+	"medium": "Medium",
+	"reddit": "Steemit",
+	"twitch": "Twitch",
+	"youtube": "YouTube",
+	"others": "Others",
+	"input_url": "Input URL",
+	"channels": "Channels",
+	"connect_hint": "Connect your Reviewhunt account to your Steemhunt (Steem) account for syncing the HUNT transactions.",
+
+	"not_found": {
+		"header": "The page you were looking for doesn't exist.",
+		"description": "You may have mistyped the address or the page may have moved."
+	},
+
+	"home": {
+		"banner": "FUN QUESTS + BOUNTIES<br/>MAKE COOL PRODUCTS FLY HIGH",
+		"total_bounty": "Total Bounty Fund",
+		"total_hunters": "Total Hunter on Quests",
+		"learn_more": "LEARN MORE",
+		"for_you": "For You"
+	},
+
+	"product": {
+		"hunters_on_quest": "Hunters on the quest now",
+		"total_bounty": "Total bounty to win for you",
+		"quest": "Quest",
+		"join": "JOIN THE QUEST",
+		"joined": "JOINED",
+		"information": "Product Information",
+		"show_more": "Show More",
+		"remaining": "Remaining",
+		"bounty_fund": "Bounty Fund",
+		"quests_reviews": "Quests and Reviews",
+		"please_note": "Please Note"
+	},
+
+	"auth": {
+		"hunter": "HUNTER",
+		"maker": "MAKER",
+		"hunter_desc": "Are you a product maker who seeks early adopters? Reviewhunt will enable you to run review campaigns with unique quests and missions so that you can easily build a strong early user base and community exposure.",
+		"maker_desc": "Are you interested in cool early tech products? Do you want to give a chance for them to have an early attention, and get paid? Join as a hunter and bring them for mass adoption.",
+		"onboarding_desc": "Reviewhunt connects you with cool new products that needs early attention by early-adopters like you. By joining fun quests and mission bounties, you can earn bounties. Connect your social accounts and maximise your quest and bounty chances.",
+		"welcome": "Welcome {{name}}!",
+		"welcome_back": "Welcome back",
+		"general_information": "GENERAL INFORMATION",
+		"dob": "DATE OF BIRTH",
+		"month": "Month",
+		"day": "Day",
+		"year": "Year",
+		"agreement": "By signing up, you agree to our <1>Terms</1>, <3>Data Policy</3> and <5>Cookies Policy</5>.",
+		"signup_hunter": "SIGN UP AS HUNTER",
+		"signup_maker": "SIGN UP AS MAKER",
+		"join_hunter": "Join as Hunter",
+		"join_maker": "Join as Maker",
+		"account_exists": "Have an account? ",
+		"no_account": "Don't have an account? "
+	},
+
+	"profile": {
+		"my_account": "My Account",
+		"top": "Top",
+		"buzz_performance": "Your buzz performance",
+		"earned_bounty": "Total bounty rewards so far",
+		"basic_information": "Basic Information",
+		"quest_dashboard": "Quest Dashboard",
+		"wallet": "Wallet",
+		"edit_profile": "Edit Profile",
+		"your_quests": "Your Quests",
+		"your_channels": "Your Social Channels",
+		"social_tip": "Connect your social and community channels and get more buzz bounty opportunities.",
+		"add_channels": "Add Channels"
+	},
+
+	"header": {
+		"about": "About",
+		"login": "Login",
+		"join": "Join",
+		"profile": "Profile"
+	}
+}

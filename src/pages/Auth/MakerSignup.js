@@ -1,44 +1,53 @@
 import React from "react";
-import { Input, Select } from "antd";
-import PropTypes from 'prop-types';
+import {Form, Input, Select } from "antd";
+import PropTypes from "prop-types";
+import { useTranslation, Trans } from "react-i18next";
 
-const MakerSignup = ({ className, triggerCanvas }) => {
+const MakerSignup = ({ triggerCanvas }) => {
+	const { t } = useTranslation();
 	return (
-		<>
+		<Form>
 			<Input
 				className="auth-form-input"
-				placeholder="Name of company"
+				placeholder={t("company")}
 				onChange={triggerCanvas}
 			/>
 			<Input
 				className="auth-form-input"
-				placeholder="Your full name"
+				placeholder={t("full_name")}
 				onChange={triggerCanvas}
 			/>
 			<Input
 				className="auth-form-input"
-				placeholder="Email address"
+				placeholder={t("email")}
 				onChange={triggerCanvas}
 			/>
 			<Input.Password
 				className="auth-form-input"
-				placeholder="Password"
+				placeholder={t("password")}
 				onChange={triggerCanvas}
 			/>
 			<Input.Password
 				className="auth-form-input"
-				placeholder="Confirm password"
+				placeholder={t("confirm_password")}
 				onChange={triggerCanvas}
 			/>
-			<Select placeholder="Business category" />
-		</>
+			<Select placeholder={t("business_category")} />
+			<div className="policy-agree-text text-grey">
+				<Trans i18nKey="auth.agreement">
+					By signing up, you agree to our
+					<a href="/">Terms</a>, <a href="/">Data Policy</a>
+					and <a href="/">Cookies Policy</a>.
+				</Trans>
+			</div>
+
+			<div className="simple-button gradient-button primary-gradient">
+				{t("auth.signup_maker")}
+			</div>
+		</Form>
 	);
 };
 
-MakerSignup.displayName = "MakerSignup";
-
-MakerSignup.propTypes = {
-	className: PropTypes.string
-};
+MakerSignup.propTypes = {};
 
 export default MakerSignup;

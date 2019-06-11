@@ -9,9 +9,12 @@ import downArrowImg from "assets/images/down-arrow-blue.svg";
 import starImg from "assets/images/star.svg";
 import FullWidthButton from "components/FullWidthButton";
 import ScrollToTop from "ScrollToTop";
+import { useTranslation } from "react-i18next";
 
-export default class Product extends Component {
-  renderBanner() {
+export default () => {
+  const {t} = useTranslation();
+
+  const banner = () => {
     return (
       <div className="padded-container banner-container primary-gradient">
         <div>
@@ -19,9 +22,9 @@ export default class Product extends Component {
           <div className="product-name">BARK</div>
           <div className="line" />
           <div className="product-users">
-            Hunters on the quest now: <span>57</span>
+            {t('product.hunters_on_quest')}: <span>57</span>
             <br />
-            Total bounty to win for you: <span>$115</span>
+            {t('product.total_bounty')}: <span>$115</span>
           </div>
         </div>
 
@@ -39,7 +42,7 @@ export default class Product extends Component {
                       <img className="quest-star" src={starImg} alt="" />
                     )}
                     <div className="price-text">$200</div>
-                    <div className="quest-text">Quest {index + 1}</div>
+                    <div className="quest-text">{t('product.quest')} {index + 1}</div>
                   </div>
                 </div>
                 {!lastItem && <div className="step-divider" />}
@@ -49,16 +52,16 @@ export default class Product extends Component {
         </div>
 
         <div>
-          <SimpleButton text="JOIN THE QUEST" style={{ marginTop: 30 }} />
+          <SimpleButton text={t('product.join')}style={{ marginTop: 30 }} />
         </div>
       </div>
     );
   }
 
-  renderProductInfo() {
+  const productInfo = () => {
     return (
       <div className="padded-container product-info">
-        <div className="title">Product Information</div>
+        <div className="title">{t('product.information')}</div>
         <ScreenshotCarousel />
         <div className="section-divider" />
         <div className="desc">
@@ -71,11 +74,11 @@ export default class Product extends Component {
         </div>
 
         <div className="show-more-container">
-          <div className="show-more">Show More</div>
+          <div className="show-more">{t('product.show_more')}</div>
           <img className="down-arrow" src={downArrowImg} alt="" />
         </div>
         <div className="section-divider" />
-        <div className="title">Quests and Reviews</div>
+        <div className="title">{t('product.quests_reviews')}</div>
 
         <ProgressBar
           height={29}
@@ -84,15 +87,15 @@ export default class Product extends Component {
         />
 
         <div className="progress-bar-text">
-          <div>61% remaining</div>
-          <div>$10,500 bounty fund</div>
+          <div>61% {t('product.remaining')}</div>
+          <div>$10,500 {t('product.bounty_fund')}</div>
         </div>
 
         <QuestCarousel />
 
         <div className="section-divider" />
 
-        <div className="title">Please Note</div>
+        <div className="title">{t('product.please_note')}</div>
         <div className="please-note">
           • Kogi Cosby sweater ethical squid irony disrupt, organic tote bag
           gluten-free XOXO wolf typewriter mixtape small batch. DIY pickled four
@@ -117,18 +120,16 @@ export default class Product extends Component {
           axe Banksy chia umami artisan, bitters 90's fanny pack. Single-origi.
         </div>
 
-        <FullWidthButton style={{ marginTop: 16 }} text="JOIN THE QUEST" />
+        <FullWidthButton style={{ marginTop: 16 }} text={t('product.join')}/>
       </div>
     );
   }
 
-  render() {
     return (
       <div className="product-page">
         <ScrollToTop />
-        {this.renderBanner()}
-        {this.renderProductInfo()}
+        {banner()}
+        {productInfo()}
       </div>
     );
-  }
 }

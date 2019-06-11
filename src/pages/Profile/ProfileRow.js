@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Input, Modal, Select } from "antd";
 import deleteImg from "assets/images/delete.svg";
+import {useTranslation} from "react-i18next";
 
 const TYPE_DROPDOWN = "DROPDOWN";
 const TYPE_PASSWORD = "PASSWORD";
@@ -18,6 +19,7 @@ const ProfileRow = ({
 }) => {
   const [textValue, setTextValue] = useState(value);
   const [modalVisible, setModalVisible] = useState(false);
+  const { t } = useTranslation(); 
 
   const onChange = e => setTextValue(e.nativeEvent.target.value);
 
@@ -30,19 +32,19 @@ const ProfileRow = ({
             {type === TYPE_DROPDOWN && (
               <Select
                 defaultValue={value}
-                className="value-container select text-grey"
+                className="value-container select gray-bg-select text-grey"
               />
             )}
             {type === TYPE_PASSWORD && (
               <div className="password-container">
                 <Input
                   className="value-container text-grey"
-                  placeholder="Current password"
+                  placeholder={t('current_password')}
                   onChange={onChange}
                 />
                 <Input
                   className="value-container password text-grey"
-                  placeholder="New password"
+                  placeholder={t('new_password')}
                   onChange={onChange}
                 />
               </div>
@@ -77,17 +79,17 @@ const ProfileRow = ({
       <div className="divider" />
       <div>
         <Modal
-          title="Modal"
+          title={t('delete_channel')}
           visible={modalVisible}
           onOk={() => {
             setModalVisible(false);
             onDeletePressed();
           }}
           onCancel={() => setModalVisible(false)}
-          okText="Ok"
-          cancelText="Cancel"
+          okText={t('ok')}
+          cancelText={t('cancel')}
         >
-          <p>Are you sure you want to delete {value}?</p>
+          <p>{t('confirm_delete')} {value}?</p>
         </Modal>
       </div>
     </div>
