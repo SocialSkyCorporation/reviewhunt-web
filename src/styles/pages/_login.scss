@@ -395,6 +395,12 @@ $opacity-black: rgba(0, 0, 0, 0.6);
 			border: none;
 		}
 	}
+
+	.error-message {
+		text-align: center;
+		font-size: 0.75rem;
+		margin-top: 32px;
+	}
 }
 
 .fancy-canvas {

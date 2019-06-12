@@ -1,7 +1,7 @@
 import React from "react";
 import { getRedditAuthorizationURL } from "utils/auth/redditAuthHelper";
 import { getKarma } from "utils/auth/redditAuthHelper";
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 
 const AuthContext = React.createContext();
 const { Provider, Consumer } = AuthContext;
@@ -9,7 +9,24 @@ const { Provider, Consumer } = AuthContext;
 class AuthProvider extends React.Component {
   state = {
     steemconnectLoading: false,
-    me: null 
+    me: null,
+    formData: {
+      nameOfCompany: "",
+      fullName: "",
+      emailAddress: "",
+      password: "",
+      confirmPassword: "",
+      countryOfResidence: "Country Of Residence",
+      gender: "Gender",
+      month: "Month",
+      day: "Day",
+      year: "Year",
+      businessCategory: "Business Category"
+    }
+  };
+
+  setFormData = formData => {
+    this.setState({ formData });
   };
 
   authReddit() {
@@ -31,19 +48,19 @@ class AuthProvider extends React.Component {
       case "steemconnect":
         const { access_token, state } = obj;
         this.props.history.replace(state);
-        this.setState({steemconnectLoading: true});
+        this.setState({ steemconnectLoading: true });
         // const me = await getMe(access_token);
         // console.log("me", me);
         // this.setState({ me });
 
         setTimeout(() => {
           this.setState({ me: {} });
-        }, 2000)
+        }, 2000);
 
         break;
       default:
     }
-  }
+  };
 
   render() {
     return (
@@ -51,7 +68,8 @@ class AuthProvider extends React.Component {
         value={{
           ...this.state,
           authReddit: this.authReddit,
-          handleAuth: this.handleAuth
+          handleAuth: this.handleAuth,
+          setFormData: this.setFormData,
         }}
       >
         {this.props.children}

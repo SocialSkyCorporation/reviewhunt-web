@@ -33,9 +33,6 @@ class Auth extends Component {
 			(status === STATUS_SIGNUP && onHunterTab && t("auth.signup_hunter")) ||
 			(status === STATUS_SIGNUP && !onHunterTab && t("auth.signup_maker")) ||
 			(status === STATUS_LOGIN && t("login").toUpperCase());
-		// const onClick = status === STATUS_SIGNUP ? () => {} : () => {};
-
-		// handle signin
 
 		return (
 			<div className="input-container">
