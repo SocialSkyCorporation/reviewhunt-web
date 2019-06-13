@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 
 export default class FancyCanvas extends Component {
+  shouldComponentUpdate() {
+    return false;
+  }
 	componentDidMount() {
 		const canvas = document.getElementById("fancy-canvas");
 
@@ -13,7 +16,7 @@ export default class FancyCanvas extends Component {
 			PRESSURE_ITERATIONS: 20,
 			CURL: 30,
 			SPLAT_RADIUS: 0.56,
-			SHADING: true,
+			SHADING: false,
 			COLORFUL: false,
 			PAUSED: false,
 			BACK_COLOR: { r: 0, g: 0, b: 0 },
@@ -21,8 +24,8 @@ export default class FancyCanvas extends Component {
 			BLOOM: true,
 			BLOOM_ITERATIONS: 8,
 			BLOOM_RESOLUTION: 256,
-			BLOOM_INTENSITY: 0.8,
-			BLOOM_THRESHOLD: 0.8,
+			BLOOM_INTENSITY: 0.5,
+			BLOOM_THRESHOLD: 0.5,
 			BLOOM_SOFT_KNEE: 0.7
 		};
 
@@ -1611,6 +1614,7 @@ export default class FancyCanvas extends Component {
 	}
 
 	render() {
+    console.log("canvas rendered");
 		return <canvas id="fancy-canvas" className="fancy-canvas" />;
 	}
 }

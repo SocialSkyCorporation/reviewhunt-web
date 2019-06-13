@@ -10,23 +10,6 @@ class AuthProvider extends React.Component {
   state = {
     steemconnectLoading: false,
     me: null,
-    formData: {
-      nameOfCompany: "",
-      fullName: "",
-      emailAddress: "",
-      password: "",
-      confirmPassword: "",
-      countryOfResidence: "Country Of Residence",
-      gender: "Gender",
-      month: "Month",
-      day: "Day",
-      year: "Year",
-      businessCategory: "Business Category"
-    }
-  };
-
-  setFormData = formData => {
-    this.setState({ formData });
   };
 
   authReddit() {
@@ -69,7 +52,7 @@ class AuthProvider extends React.Component {
           ...this.state,
           authReddit: this.authReddit,
           handleAuth: this.handleAuth,
-          setFormData: this.setFormData,
+          setFormData: this.setFormData
         }}
       >
         {this.props.children}

@@ -19,28 +19,67 @@ class Auth extends Component {
 		super(props);
 		this.state = {
 			tabIndex: TAB_HUNTER,
-			status: STATUS_SIGNUP
+			status: STATUS_SIGNUP,
+			nameOfCompany: "",
+			fullName: "",
+			emailAddress: "",
+			password: "",
+			confirmPassword: "",
+			countryOfResidence: "Country Of Residence",
+			gender: "Gender",
+			month: "Month",
+			day: "Day",
+			year: "Year",
+			businessCategory: "Business Category"
 		};
 	}
 
+	setFormData = (key, value) => {
+		this.setState({[key]: value});
+	}
+
 	renderInputs() {
-		const { tabIndex, status } = this.state;
+		const {
+			tabIndex,
+			status,
+			nameOfCompany,
+			fullName,
+			emailAddress,
+			password,
+			confirmPassword,
+			countryOfResidence,
+			gender,
+			month,
+			day,
+			year,
+			businessCategory
+		} = this.state;
 		const { t } = this.props;
 		const triggerCanvas = () => this.canvas.randomSplat();
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const onMakerTab = tabIndex === TAB_MAKER;
-		const buttonText =
-			(status === STATUS_SIGNUP && onHunterTab && t("auth.signup_hunter")) ||
-			(status === STATUS_SIGNUP && !onHunterTab && t("auth.signup_maker")) ||
-			(status === STATUS_LOGIN && t("login").toUpperCase());
+
+		const formData = {
+			nameOfCompany,
+			fullName,
+			emailAddress,
+			password,
+			confirmPassword,
+			countryOfResidence,
+			gender,
+			month,
+			day,
+			year,
+			businessCategory
+		};
 
 		return (
 			<div className="input-container">
 				{status === STATUS_SIGNUP && onHunterTab && (
-					<HunterSignup triggerCanvas={triggerCanvas} />
+					<HunterSignup triggerCanvas={triggerCanvas} formData={formData} setFormData={this.setFormData} />
 				)}
 				{status === STATUS_SIGNUP && onMakerTab && (
-					<MakerSignup triggerCanvas={triggerCanvas} />
+					<MakerSignup triggerCanvas={triggerCanvas} formData={formData} setFormData={this.setFormData} />
 				)}
 				{status === STATUS_LOGIN && <LoginForm triggerCanvas={triggerCanvas} />}
 			</div>

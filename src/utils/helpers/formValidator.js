@@ -11,7 +11,7 @@ defaultValues: { key: value } ex// { name : 'name'} shouldn't be allowed
 */
 const validateForm = (form, requiredKeys, defaultValues) => {
   let errorMessages = [];
-  if (!requiredKeys) requiredKeys = [];
+  if (!requiredKeys) requiredKeys = "*";
 
   for (const key in form) {
     console.log(_.startCase(key), _.startCase(form[key]));

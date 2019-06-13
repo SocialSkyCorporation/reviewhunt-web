@@ -30,6 +30,7 @@ const Onboarding = ({ triggerCanvas }) => {
 	const [steemImg, setSteemImg] = useState(steemLogo);
 	const { t } = useTranslation();
 
+
 	const steemNotConnected = connecting => (
 		<div className="steem-connect-container onboarding-content">
 			<div>

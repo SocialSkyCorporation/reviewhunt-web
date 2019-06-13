@@ -1,32 +1,30 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Input, Select } from "antd";
 import { useTranslation, Trans } from "react-i18next";
 import { days, monthsShort, countries, years, genders } from "utils/constants";
 import { validateForm } from "utils/helpers/formValidator";
-import AuthContext from "contexts/AuthContext";
 
 const { Option } = Select;
 
-const HunterSignup = ({ triggerCanvas }) => {
+const HunterSignup = ({ triggerCanvas, formData, setFormData }) => {
 	const [errorMessage, setErrorMessage] = useState(null);
 	const { t } = useTranslation();
-	const ctx = useContext(AuthContext);
-	const { setFormData, formData } = ctx;
+	const {
+		fullName,
+		emailAddress,
+		password,
+		confirmPassword,
+		countryOfResidence,
+		gender,
+		month,
+		day,
+		year
+	} = formData;
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		const errors = validateForm(formData, [
-			"fullName",
-			"emailAddress",
-			"password",
-			"confirmPassword",
-			"countryOfResidence",
-			"gender",
-			"month",
-			"day",
-			"year"
-		]);
+		const errors = validateForm(formData);
 		if (!errors) {
 			console.log("no errors");
 			setErrorMessage(null);
@@ -51,40 +49,40 @@ const HunterSignup = ({ triggerCanvas }) => {
 			<Input
 				className="auth-form-input"
 				placeholder={t("full_name")}
-				value={formData.fullName}
+				value={fullName}
 				onChange={e => {
 					const fullName = e.nativeEvent.target.value;
-					setFormData({ ...formData, fullName });
+					setFormData("fullName", fullName);
 					triggerCanvas();
 				}}
 			/>
 			<Input
 				className="auth-form-input"
 				placeholder={t("email")}
-				value={formData.emailAddress}
+				value={emailAddress}
 				onChange={e => {
 					const emailAddress = e.nativeEvent.target.value;
-					setFormData({ ...formData, emailAddress });
+					setFormData("emailAddress", emailAddress);
 					triggerCanvas();
 				}}
 			/>
 			<Input.Password
 				className="auth-form-input"
 				placeholder={t("password")}
-				value={formData.password}
+				value={password}
 				onChange={e => {
 					const password = e.nativeEvent.target.value;
-					setFormData({ ...formData, password });
+					setFormData("password", password);
 					triggerCanvas();
 				}}
 			/>
 			<Input.Password
 				className="auth-form-input"
 				placeholder={t("confirm_password")}
-				value={formData.confirmPassword}
+				value={confirmPassword}
 				onChange={e => {
 					const confirmPassword = e.nativeEvent.target.value;
-					setFormData({ ...formData, confirmPassword });
+					setFormData("confirmPassword", confirmPassword);
 					triggerCanvas();
 				}}
 			/>
@@ -95,9 +93,9 @@ const HunterSignup = ({ triggerCanvas }) => {
 
 				<Select
 					onChange={countryOfResidence =>
-						setFormData({ ...formData, countryOfResidence })
+						setFormData("countryOfResidence", countryOfResidence)
 					}
-					value={formData.countryOfResidence}
+					value={countryOfResidence}
 				>
 					{countries.map((c, i) => (
 						<Option key={i} value={c}>
@@ -106,8 +104,8 @@ const HunterSignup = ({ triggerCanvas }) => {
 					))}
 				</Select>
 				<Select
-					onChange={gender => setFormData({ ...formData, gender })}
-					value={formData.gender}
+					onChange={gender => setFormData("gender", gender)}
+					value={gender}
 				>
 					{genders.map((g, i) => (
 						<Option key={i} value={g}>
@@ -118,8 +116,8 @@ const HunterSignup = ({ triggerCanvas }) => {
 				<div className="form-section-title text-grey">{t("auth.dob")}</div>
 				<div className="row-space-around">
 					<Select
-						onChange={month => setFormData({ ...formData, month })}
-						value={formData.month}
+						onChange={month => setFormData("month", month)}
+						value={month}
 						className="select-dropdown"
 					>
 						{monthsShort.map((m, i) => (
@@ -129,8 +127,8 @@ const HunterSignup = ({ triggerCanvas }) => {
 						))}
 					</Select>
 					<Select
-						onChange={day => setFormData({ ...formData, day })}
-						value={formData.day}
+						onChange={day => setFormData("day", day)}
+						value={day}
 						className="select-dropdown"
 					>
 						{days.map((d, i) => (
@@ -140,8 +138,8 @@ const HunterSignup = ({ triggerCanvas }) => {
 						))}
 					</Select>
 					<Select
-						onChange={year => setFormData({ ...formData, year })}
-						value={formData.year}
+						onChange={year => setFormData("year", year)}
+						value={year}
 						className="select-dropdown"
 					>
 						{years.map((y, i) => (
