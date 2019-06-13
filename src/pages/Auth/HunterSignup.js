@@ -1,48 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Input, Select } from "antd";
 import { useTranslation, Trans } from "react-i18next";
-import { days, monthsShort, countries, years, genders } from "utils/constants";
-import { validateForm } from "utils/helpers/formValidator";
+import { countries, years, genders } from "utils/constants";
 
 const { Option } = Select;
 
-const HunterSignup = ({ triggerCanvas, formData, setFormData }) => {
-	const [errorMessage, setErrorMessage] = useState(null);
+const HunterSignup = ({
+	triggerCanvas,
+	fullName,
+	emailAddress,
+	password,
+	confirmPassword,
+	countryOfResidence,
+	gender,
+	year,
+	setFormData,
+	handleSubmit
+}) => {
 	const { t } = useTranslation();
-	const {
-		fullName,
-		emailAddress,
-		password,
-		confirmPassword,
-		countryOfResidence,
-		gender,
-		month,
-		day,
-		year
-	} = formData;
-
-	const handleSubmit = e => {
-		e.preventDefault();
-		const errors = validateForm(formData);
-		if (!errors) {
-			console.log("no errors");
-			setErrorMessage(null);
-
-			//make an api call
-		} else {
-			setErrorMessage(
-				errors.map((e, i) => {
-					return (
-						<div key={i}>
-							{e}
-							<br />
-						</div>
-					);
-				})
-			);
-		}
-	};
 
 	return (
 		<>
@@ -98,8 +74,8 @@ const HunterSignup = ({ triggerCanvas, formData, setFormData }) => {
 					value={countryOfResidence}
 				>
 					{countries.map((c, i) => (
-						<Option key={i} value={c}>
-							{c}
+						<Option key={i} value={c.code}>
+							{c.value}
 						</Option>
 					))}
 				</Select>
@@ -115,33 +91,7 @@ const HunterSignup = ({ triggerCanvas, formData, setFormData }) => {
 				</Select>
 				<div className="form-section-title text-grey">{t("auth.dob")}</div>
 				<div className="row-space-around">
-					<Select
-						onChange={month => setFormData("month", month)}
-						value={month}
-						className="select-dropdown"
-					>
-						{monthsShort.map((m, i) => (
-							<Option key={i} value={m}>
-								{m}
-							</Option>
-						))}
-					</Select>
-					<Select
-						onChange={day => setFormData("day", day)}
-						value={day}
-						className="select-dropdown"
-					>
-						{days.map((d, i) => (
-							<Option key={i} value={d}>
-								{d}
-							</Option>
-						))}
-					</Select>
-					<Select
-						onChange={year => setFormData("year", year)}
-						value={year}
-						className="select-dropdown"
-					>
+					<Select onChange={year => setFormData("year", year)} value={year}>
 						{years.map((y, i) => (
 							<Option key={i} value={y}>
 								{y}
@@ -157,10 +107,6 @@ const HunterSignup = ({ triggerCanvas, formData, setFormData }) => {
 					and <a href="/">Cookies Policy</a>.
 				</Trans>
 			</div>
-			{errorMessage && (
-				<div className="text-warning error-message">{errorMessage}</div>
-			)}
-			}
 			<div
 				className="simple-button gradient-button primary-gradient"
 				onClick={handleSubmit}

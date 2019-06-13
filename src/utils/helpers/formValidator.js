@@ -14,7 +14,6 @@ const validateForm = (form, requiredKeys, defaultValues) => {
   if (!requiredKeys) requiredKeys = "*";
 
   for (const key in form) {
-    console.log(_.startCase(key), _.startCase(form[key]));
     if (
       (requiredKeys === "*" || requiredKeys.includes(key)) &&
       (!form[key] ||

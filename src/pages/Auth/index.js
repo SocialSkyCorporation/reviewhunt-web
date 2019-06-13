@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
+import { notification } from "antd";
 import FancyCanvas from "components/FancyCanvas";
 import RHLogo from "assets/images/logo-circle-gradient.svg";
 import HunterSignup from "./HunterSignup";
@@ -6,6 +7,8 @@ import MakerSignup from "./MakerSignup";
 import LoginForm from "./LoginForm";
 import Onboarding from "./Onboarding";
 import { withTranslation, Trans } from "react-i18next";
+import { validateForm } from "utils/helpers/formValidator";
+import { withAuthContext } from "contexts/HOC";
 
 const TAB_HUNTER = 0;
 const TAB_MAKER = 1;
@@ -14,6 +17,9 @@ const STATUS_SIGNUP = 0;
 const STATUS_LOGIN = 1;
 const STATUS_ONBOARDING = 2;
 
+export const TYPE_HUNTER = "HUNTER";
+export const TYPE_MAKER = "MAKER";
+
 class Auth extends Component {
 	constructor(props) {
 		super(props);
@@ -21,22 +27,82 @@ class Auth extends Component {
 			tabIndex: TAB_HUNTER,
 			status: STATUS_SIGNUP,
 			nameOfCompany: "",
-			fullName: "",
-			emailAddress: "",
-			password: "",
-			confirmPassword: "",
+			fullName: "abcasef",
+			emailAddress: "abc@mail.com",
+			password: "12345567123",
+			confirmPassword: "12345567123",
 			countryOfResidence: "Country Of Residence",
 			gender: "Gender",
-			month: "Month",
-			day: "Day",
 			year: "Year",
 			businessCategory: "Business Category"
 		};
 	}
 
 	setFormData = (key, value) => {
-		this.setState({[key]: value});
-	}
+		this.setState({ [key]: value });
+	};
+
+	handleSignup = () => {
+		const {
+			tabIndex,
+			nameOfCompany,
+			fullName,
+			emailAddress,
+			password,
+			confirmPassword,
+			countryOfResidence,
+			gender,
+			year,
+			businessCategory
+		} = this.state;
+		// var userLang = navigator.language || navigator.userLanguage;
+		// alert ("The language is: " + userLang);
+		const onHunterTab = tabIndex === TAB_HUNTER;
+		const onMakerTab = tabIndex === TAB_MAKER;
+
+		let formData = {};
+
+		if (onHunterTab) {
+			formData = {
+				fullName,
+				emailAddress,
+				password,
+				confirmPassword,
+				countryOfResidence,
+				gender,
+				year
+			};
+		} else if (onMakerTab) {
+			formData = {
+				nameOfCompany,
+				fullName,
+				emailAddress,
+				password,
+				confirmPassword,
+				businessCategory
+			};
+		}
+
+		const errors = validateForm(formData);
+
+		if (!errors) {
+			if (onHunterTab) {
+				this.props.context.handleSignup(TYPE_HUNTER, formData);
+			} else if (onMakerTab) {
+				this.props.context.handleSignup(TYPE_MAKER, formData);
+			}
+		} else {
+			errors.map(e => {
+				notification.error({
+					message: "Missing Required Input Field",
+					description: e,
+					onClick: () => {}
+				});
+			});
+		}
+	};
+
+	handleLogin = () => {};
 
 	renderInputs() {
 		const {
@@ -49,12 +115,9 @@ class Auth extends Component {
 			confirmPassword,
 			countryOfResidence,
 			gender,
-			month,
-			day,
 			year,
 			businessCategory
 		} = this.state;
-		const { t } = this.props;
 		const triggerCanvas = () => this.canvas.randomSplat();
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const onMakerTab = tabIndex === TAB_MAKER;
@@ -67,8 +130,6 @@ class Auth extends Component {
 			confirmPassword,
 			countryOfResidence,
 			gender,
-			month,
-			day,
 			year,
 			businessCategory
 		};
@@ -76,10 +137,20 @@ class Auth extends Component {
 		return (
 			<div className="input-container">
 				{status === STATUS_SIGNUP && onHunterTab && (
-					<HunterSignup triggerCanvas={triggerCanvas} formData={formData} setFormData={this.setFormData} />
+					<HunterSignup
+						triggerCanvas={triggerCanvas}
+						setFormData={this.setFormData}
+						handleSubmit={this.handleSignup}
+						{...formData}
+					/>
 				)}
 				{status === STATUS_SIGNUP && onMakerTab && (
-					<MakerSignup triggerCanvas={triggerCanvas} formData={formData} setFormData={this.setFormData} />
+					<MakerSignup
+						triggerCanvas={triggerCanvas}
+						setFormData={this.setFormData}
+						handleSubmit={this.handleSignup}
+						{...formData}
+					/>
 				)}
 				{status === STATUS_LOGIN && <LoginForm triggerCanvas={triggerCanvas} />}
 			</div>
@@ -190,4 +261,4 @@ class Auth extends Component {
 	}
 }
 
-export default withTranslation()(Auth);
+export default withTranslation()(withAuthContext(Auth));

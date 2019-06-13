@@ -2,6 +2,9 @@ import React from "react";
 import { getRedditAuthorizationURL } from "utils/auth/redditAuthHelper";
 import { getKarma } from "utils/auth/redditAuthHelper";
 import { withRouter } from "react-router-dom";
+import api from "utils/api";
+
+import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 
 const AuthContext = React.createContext();
 const { Provider, Consumer } = AuthContext;
@@ -10,7 +13,50 @@ class AuthProvider extends React.Component {
   state = {
     steemconnectLoading: false,
     me: null,
+    loading: false
   };
+
+  handleSignup = (type, data) => {
+    this.setState({ loading: true });
+
+    if (type === TYPE_HUNTER) {
+       api
+        .post("/hunters.json", {
+          hunter: {
+            email: data.emailAddress,
+            password: data.password,
+            name: data.fullName,
+            country_code: 'KR',
+            langauge: "EN",
+            gender: "male",
+            year_of_birth: "",
+          }
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    } else if (type === TYPE_MAKER) {
+      api
+        .post("/makers.json", {
+          maker: {
+            email: data.emailAddress,
+            password: data.password,
+            company_name: data.companyName,
+            name: data.fullName,
+            business_category: data.businessCategory
+          }
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
+  }
 
   authReddit() {
     const url = getRedditAuthorizationURL();
@@ -52,7 +98,8 @@ class AuthProvider extends React.Component {
           ...this.state,
           authReddit: this.authReddit,
           handleAuth: this.handleAuth,
-          setFormData: this.setFormData
+          setFormData: this.setFormData,
+          handleSignup: this.handleSignup
         }}
       >
         {this.props.children}

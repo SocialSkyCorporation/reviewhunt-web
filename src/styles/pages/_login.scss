@@ -138,19 +138,6 @@ $opacity-black: rgba(0, 0, 0, 0.6);
 			}
 		}
 
-		.select-dropdown {
-			margin-left: 4px;
-			margin-right: 4px;
-
-			&:first-child {
-				margin-left: 0px;
-			}
-
-			&:last-child {
-				margin-right: 0px;
-			}
-		}
-
 		.form-section-title {
 			font-size: 0.875rem;
 			margin-top: 40px;
@@ -394,12 +381,6 @@ $opacity-black: rgba(0, 0, 0, 0.6);
 		@include responsive(mobile) {
 			border: none;
 		}
-	}
-
-	.error-message {
-		text-align: center;
-		font-size: 0.75rem;
-		margin-top: 32px;
 	}
 }
 

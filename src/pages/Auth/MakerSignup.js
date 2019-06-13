@@ -1,53 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import { Input, Select } from "antd";
 import PropTypes from "prop-types";
 import { useTranslation, Trans } from "react-i18next";
-import { validateForm } from "utils/helpers/formValidator";
 import { businessCategories } from "utils/constants";
 
 const { Option } = Select;
 
-const MakerSignup = ({ triggerCanvas, formData, setFormData }) => {
-	const [errorMessage, setErrorMessage] = useState(null);
+const MakerSignup = ({
+	triggerCanvas,
+	setFormData,
+	handleSubmit,
+	nameOfCompany,
+	fullName,
+	emailAddress,
+	password,
+	confirmPassword,
+	businessCategory
+}) => {
 	const { t } = useTranslation();
-	const {
-		nameOfCompany,
-		fullName,
-		emailAddress,
-		password,
-		confirmPassword,
-		businessCategory
-	} = formData;
-
-	const handleSubmit = e => {
-		e.preventDefault();
-		const errors = validateForm({
-			nameOfCompany,
-			fullName,
-			emailAddress,
-			password,
-			confirmPassword,
-			businessCategory
-		});
-
-		if (!errors) {
-			console.log("no errors");
-			setErrorMessage(null);
-
-			//make an api call
-		} else {
-			setErrorMessage(
-				errors.map((e, i) => {
-					return (
-						<div key={i}>
-							{e}
-							<br />
-						</div>
-					);
-				})
-			);
-		}
-	};
 
 	return (
 		<>
@@ -121,10 +91,6 @@ const MakerSignup = ({ triggerCanvas, formData, setFormData }) => {
 					and <a href="/">Cookies Policy</a>.
 				</Trans>
 			</div>
-			{errorMessage && (
-				<div className="text-warning error-message">{errorMessage}</div>
-			)}
-			}
 			<div
 				className="simple-button gradient-button primary-gradient"
 				onClick={handleSubmit}
