@@ -1,4 +1,4 @@
-import React, { Component, useContext } from "react";
+import React, { Component } from "react";
 import { notification } from "antd";
 import FancyCanvas from "components/FancyCanvas";
 import RHLogo from "assets/images/logo-circle-gradient.svg";
@@ -9,13 +9,10 @@ import Onboarding from "./Onboarding";
 import { withTranslation, Trans } from "react-i18next";
 import { validateForm } from "utils/helpers/formValidator";
 import { withAuthContext } from "contexts/HOC";
+import { STATUS_SIGNUP, STATUS_LOGIN, STATUS_ONBOARDING} from 'contexts/AuthContext';
 
 const TAB_HUNTER = 0;
 const TAB_MAKER = 1;
-
-const STATUS_SIGNUP = 0;
-const STATUS_LOGIN = 1;
-const STATUS_ONBOARDING = 2;
 
 export const TYPE_HUNTER = "HUNTER";
 export const TYPE_MAKER = "MAKER";
@@ -25,12 +22,11 @@ class Auth extends Component {
 		super(props);
 		this.state = {
 			tabIndex: TAB_HUNTER,
-			status: STATUS_SIGNUP,
 			nameOfCompany: "",
-			fullName: "abcasef",
-			emailAddress: "abc@mail.com",
-			password: "12345567123",
-			confirmPassword: "12345567123",
+			fullName: "sung woo park",
+			emailAddress: "swptest@mail.com",
+			password: "swp123456",
+			confirmPassword: "swp123456",
 			countryOfResidence: "Country Of Residence",
 			gender: "Gender",
 			year: "Year",
@@ -55,8 +51,6 @@ class Auth extends Component {
 			year,
 			businessCategory
 		} = this.state;
-		// var userLang = navigator.language || navigator.userLanguage;
-		// alert ("The language is: " + userLang);
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const onMakerTab = tabIndex === TAB_MAKER;
 
@@ -93,10 +87,8 @@ class Auth extends Component {
 			}
 		} else {
 			errors.map(e => {
-				notification.error({
-					message: "Missing Required Input Field",
-					description: e,
-					onClick: () => {}
+				notification['error']({
+					message: e,
 				});
 			});
 		}
@@ -107,7 +99,6 @@ class Auth extends Component {
 	renderInputs() {
 		const {
 			tabIndex,
-			status,
 			nameOfCompany,
 			fullName,
 			emailAddress,
@@ -118,6 +109,9 @@ class Auth extends Component {
 			year,
 			businessCategory
 		} = this.state;
+
+		const { loading, status } = this.props.context;
+
 		const triggerCanvas = () => this.canvas.randomSplat();
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const onMakerTab = tabIndex === TAB_MAKER;
@@ -141,6 +135,7 @@ class Auth extends Component {
 						triggerCanvas={triggerCanvas}
 						setFormData={this.setFormData}
 						handleSubmit={this.handleSignup}
+						loading={loading}
 						{...formData}
 					/>
 				)}
@@ -149,6 +144,7 @@ class Auth extends Component {
 						triggerCanvas={triggerCanvas}
 						setFormData={this.setFormData}
 						handleSubmit={this.handleSignup}
+						loading={loading}
 						{...formData}
 					/>
 				)}
@@ -158,8 +154,8 @@ class Auth extends Component {
 	}
 
 	renderAccountText() {
-		const { status } = this.state;
 		const { t } = this.props;
+		const { status } = this.props.context;
 		const hintText =
 			status === STATUS_SIGNUP
 				? t("auth.account_exists")
@@ -183,11 +179,14 @@ class Auth extends Component {
 	}
 
 	render() {
-		const { tabIndex, status } = this.state;
+		const { tabIndex } = this.state;
 		const { t } = this.props;
+		const { status, loading } = this.props.context;
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const name = "YoungHwi Cho";
+
 		const triggerCanvas = () => this.canvas.randomSplat();
+
 		const title =
 			(status === STATUS_ONBOARDING && (
 				<Trans i18nKey="auth.welcome">Welcome {{ name }}!</Trans>
@@ -225,7 +224,10 @@ class Auth extends Component {
 										style={{
 											opacity: onHunterTab ? 1 : 0.5
 										}}
-										onClick={() => this.setState({ tabIndex: 0 })}
+										onClick={() => {
+											if (loading) return;
+											this.setState({ tabIndex: 0 });
+										}}
 									>
 										{t("auth.hunter")}
 									</div>
@@ -234,7 +236,10 @@ class Auth extends Component {
 										style={{
 											opacity: onHunterTab ? 0.5 : 1
 										}}
-										onClick={() => this.setState({ tabIndex: 1 })}
+										onClick={() => {
+											if (loading) return;
+											this.setState({ tabIndex: 1 });
+										}}
 									>
 										{t("auth.maker")}
 									</div>

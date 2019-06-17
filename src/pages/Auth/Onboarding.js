@@ -1,35 +1,48 @@
 import React, { useState } from "react";
-import { Input, Select, Icon } from "antd";
+import { Input, Select, Icon, notification } from "antd";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import steemLogo from "assets/images/steem-logo.svg";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { getLoginURL } from "utils/token";
 import { AuthConsumer } from "contexts/AuthContext.js";
 import { useTranslation } from "react-i18next";
+import { isWebUri } from "valid-url";
 
 const { Option } = Select;
 
-const SocialRow = ({ triggerCanvas }) => {
+const SocialRow = ({ triggerCanvas, data, onDeleteClicked }) => {
 	const { t } = useTranslation();
+	const { channel, url } = data;
 	return (
-		<div className="row-align-center">
+		<div className="row-align-center onboarding-social-row">
 			<div className="col-on-mobile">
-				<div className="channel-text text-grey">Instagram</div>
+				<div className="channel-text text-grey">{t(channel)}</div>
 				<Input
-					addonAfter={<Icon type="close" />}
+					addonAfter={<Icon type="close" onClick={onDeleteClicked} />}
 					placeholder={t("input_url")}
-					className="delete-input"
+					className="delete-input text-grey"
+					value={url}
 					onChange={triggerCanvas}
+					disabled
 				/>
 			</div>
 		</div>
 	);
 };
 
-const Onboarding = ({ triggerCanvas }) => {
+const Onboarding = ({ triggerCanvas, history }) => {
 	const [steemImg, setSteemImg] = useState(steemLogo);
+	const [socialChannels, setSocialChannels] = useState([]);
+	const [selectValue, setSelectValue] = useState("channels");
+	const [urlInput, setUrlInput] = useState("");
 	const { t } = useTranslation();
 
+	const deleteSocialItem = index => {
+		let newChannels = Object.assign([], socialChannels);
+		newChannels.splice(index, 1);
+		setSocialChannels(newChannels);
+	};
 
 	const steemNotConnected = connecting => (
 		<div className="steem-connect-container onboarding-content">
@@ -59,11 +72,7 @@ const Onboarding = ({ triggerCanvas }) => {
 	const steemConnected = () => (
 		<div className="steem-connect-container onboarding-content row-space-between">
 			<div className="row-align-center">
-				<img
-					className="profile-icon"
-					src="https://picsum.photos/34"
-					alt=""
-				/>
+				<img className="profile-icon" src="https://picsum.photos/34" alt="" />
 				<div className="text-grey">@project7</div>
 			</div>
 			<div className="steem-connect-button">
@@ -80,9 +89,7 @@ const Onboarding = ({ triggerCanvas }) => {
 						<div className="onboarding-header text-white">
 							{t("connect_steem")}
 						</div>
-						{me
-							? steemConnected()
-							: steemNotConnected(steemconnectLoading)}
+						{me ? steemConnected() : steemNotConnected(steemconnectLoading)}
 					</div>
 
 					<div className="onboarding-container grey-border">
@@ -93,33 +100,66 @@ const Onboarding = ({ triggerCanvas }) => {
 							<div className="row-space-between">
 								<div className="col-on-mobile">
 									<Select
-										defaultValue={t("channels")}
+										value={t(selectValue)}
 										className="select-channel delete"
+										onChange={c => setSelectValue(c)}
 									>
-										<Option value="instagram">
-											{t("instagram")}
-										</Option>
-										<Option value="twitter">
-											{t("instagram")}
-										</Option>
-										<Option value="youtube">
-											{t("instagram")}
-										</Option>
-										<Option value="medium">
-											{t("instagram")}
-										</Option>
+										<Option value="instagram">{t("instagram")}</Option>
+										<Option value="twitter">{t("twitter")}</Option>
+										<Option value="medium">{t("medium")}</Option>
+										<Option value="reddit">{t("reddit")}</Option>
+										<Option value="twitch">{t("twitch")}</Option>
+										<Option value="youtube">{t("youtube")}</Option>
+										<Option value="others">{t("others")}</Option>
 									</Select>
 									<Input
-										addonAfter={<Icon type="plus" />}
+										addonAfter={
+											<Icon
+												type="plus"
+												onClick={() => {
+													if (selectValue === "channels" || urlInput === "")
+														return;
+													else if (!isWebUri(urlInput)) {
+														notification["error"]({
+															message: "Please enter a valid url."
+														});
+														return;
+													}
+													setSocialChannels(
+														socialChannels.concat({
+															channel: selectValue,
+															url: urlInput
+														})
+													);
+
+													setSelectValue("channels");
+													setUrlInput("");
+												}}
+											/>
+										}
+										value={urlInput}
 										placeholder={t("input_url")}
-										onChange={triggerCanvas}
+										onChange={e => {
+											setUrlInput(e.target.value);
+											triggerCanvas();
+										}}
 									/>
 								</div>
 							</div>
 
 							<div className="divider" />
 
-							<SocialRow triggerCanvas={triggerCanvas} />
+							{socialChannels.map((s, i) => (
+								<SocialRow
+									key={i}
+									onDeleteClicked={() => {
+										deleteSocialItem(i);
+									}}
+									index={i}
+									data={s}
+									triggerCanvas={triggerCanvas}
+								/>
+							))}
 
 							<div
 								className="simple-button gradient-button primary-gradient"
@@ -128,7 +168,12 @@ const Onboarding = ({ triggerCanvas }) => {
 								{t("confirm").toUpperCase()}
 							</div>
 
-							<div className="skip-button text-blue hover-link">
+							<div
+								className="skip-button text-blue hover-link"
+								onClick={() => {
+									history.push("/profile")
+								}}
+							>
 								{t("skip").toUpperCase()}
 							</div>
 						</div>
@@ -141,4 +186,4 @@ const Onboarding = ({ triggerCanvas }) => {
 
 Onboarding.propTypes = {};
 
-export default Onboarding;
+export default withRouter(Onboarding);

@@ -1,62 +1,84 @@
 import React from "react";
+import { notification } from "antd";
 import { getRedditAuthorizationURL } from "utils/auth/redditAuthHelper";
 import { getKarma } from "utils/auth/redditAuthHelper";
+import { setApiKey } from "utils/auth/emailAuthHelper";
 import { withRouter } from "react-router-dom";
 import api from "utils/api";
+import { extractErrorMessage } from "utils/errorMessage";
 
 import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 
 const AuthContext = React.createContext();
 const { Provider, Consumer } = AuthContext;
 
+const STATUS_SIGNUP = 0;
+const STATUS_LOGIN = 1;
+const STATUS_ONBOARDING = 2;
+
 class AuthProvider extends React.Component {
   state = {
     steemconnectLoading: false,
     me: null,
-    loading: false
+    loading: false,
+    status: STATUS_ONBOARDING
+  };
+
+  signupFail = e => {
+    this.setState({ loading: false });
+    notification['error']({
+      message: "Sign up failed",
+      description: extractErrorMessage(e),
+    });
+  };
+
+  signupSuccess = cb => {
+    console.log("cb", cb);
+    const {api_key, name, email} = cb;
+
+    setApiKey(api_key);
+
+    this.setState({loading: false, status: STATUS_ONBOARDING});
   };
 
   handleSignup = (type, data) => {
     this.setState({ loading: true });
+    const langauge = navigator.language || navigator.userLanguage || "EN";
+
+    let endpoint = "";
+    let body = {};
 
     if (type === TYPE_HUNTER) {
-       api
-        .post("/hunters.json", {
-          hunter: {
-            email: data.emailAddress,
-            password: data.password,
-            name: data.fullName,
-            country_code: 'KR',
-            langauge: "EN",
-            gender: "male",
-            year_of_birth: "",
-          }
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      endpoint = "/hunters.json";
+      body = {
+        hunter: {
+          email: data.emailAddress,
+          password: data.password,
+          name: data.fullName,
+          country_code: data.countryOfResidence,
+          langauge,
+          gender: data.gender,
+          year_of_birth: data.year
+        }
+      };
     } else if (type === TYPE_MAKER) {
-      api
-        .post("/makers.json", {
-          maker: {
-            email: data.emailAddress,
-            password: data.password,
-            company_name: data.companyName,
-            name: data.fullName,
-            business_category: data.businessCategory
-          }
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      endpoint = "/makers.json";
+      body = {
+        maker: {
+          email: data.emailAddress,
+          password: data.password,
+          company_name: data.companyName,
+          name: data.fullName,
+          business_category: data.businessCategory
+        }
+      };
     }
-  }
+
+    api
+      .post(endpoint, body)
+      .then(this.signupSuccess)
+      .catch(this.signupFail);
+  };
 
   authReddit() {
     const url = getRedditAuthorizationURL();
@@ -110,6 +132,6 @@ class AuthProvider extends React.Component {
 
 const AuthProviderWithRouter = withRouter(AuthProvider);
 
-export { AuthProviderWithRouter as AuthProvider, Consumer as AuthConsumer };
+export { AuthProviderWithRouter as AuthProvider, Consumer as AuthConsumer, STATUS_LOGIN, STATUS_ONBOARDING, STATUS_SIGNUP };
 
 export default AuthContext;

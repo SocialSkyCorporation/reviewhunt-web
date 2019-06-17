@@ -16,9 +16,9 @@ export default () => {
           </Link>
 
           <div className="header-right">
-            <Link className="header-item" to="/about">
+            {/*<Link className="header-item" to="/about">
               {t('header.about')}
-            </Link>
+            </Link>*/}
 
             <Link className="header-item" to="/auth">
               {t('header.login')}

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Input, Select } from "antd";
+import { Icon, Input, Select } from "antd";
 import { useTranslation, Trans } from "react-i18next";
 import { countries, years, genders } from "utils/constants";
 
@@ -16,7 +16,8 @@ const HunterSignup = ({
 	gender,
 	year,
 	setFormData,
-	handleSubmit
+	handleSubmit,
+	loading
 }) => {
 	const { t } = useTranslation();
 
@@ -31,6 +32,7 @@ const HunterSignup = ({
 					setFormData("fullName", fullName);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<Input
 				className="auth-form-input"
@@ -41,6 +43,7 @@ const HunterSignup = ({
 					setFormData("emailAddress", emailAddress);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<Input.Password
 				className="auth-form-input"
@@ -51,6 +54,7 @@ const HunterSignup = ({
 					setFormData("password", password);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<Input.Password
 				className="auth-form-input"
@@ -61,6 +65,7 @@ const HunterSignup = ({
 					setFormData("confirmPassword", confirmPassword);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<div>
 				<div className="form-section-title text-grey">
@@ -72,6 +77,7 @@ const HunterSignup = ({
 						setFormData("countryOfResidence", countryOfResidence)
 					}
 					value={countryOfResidence}
+					disabled={loading}
 				>
 					{countries.map((c, i) => (
 						<Option key={i} value={c.code}>
@@ -82,6 +88,7 @@ const HunterSignup = ({
 				<Select
 					onChange={gender => setFormData("gender", gender)}
 					value={gender}
+					disabled={loading}
 				>
 					{genders.map((g, i) => (
 						<Option key={i} value={g}>
@@ -91,7 +98,11 @@ const HunterSignup = ({
 				</Select>
 				<div className="form-section-title text-grey">{t("auth.dob")}</div>
 				<div className="row-space-around">
-					<Select onChange={year => setFormData("year", year)} value={year}>
+					<Select
+						onChange={year => setFormData("year", year)}
+						value={year}
+						disabled={loading}
+					>
 						{years.map((y, i) => (
 							<Option key={i} value={y}>
 								{y}
@@ -109,14 +120,31 @@ const HunterSignup = ({
 			</div>
 			<div
 				className="simple-button gradient-button primary-gradient"
-				onClick={handleSubmit}
+				onClick={() => {
+					if (loading) return;
+					handleSubmit();
+				}}
 			>
-				{t("auth.signup_hunter")}
+				{loading ? <Icon type="loading" /> : t("auth.signup_hunter")}
 			</div>
 		</>
 	);
 };
 
-HunterSignup.propTypes = {};
+HunterSignup.propTypes = {
+	triggerCanvas: PropTypes.func,
+	setFormData: PropTypes.func,
+	handleSubmit: PropTypes.func,
+	nameOfCompany: PropTypes.string,
+	fullName: PropTypes.string,
+	emailAddress: PropTypes.string,
+	password: PropTypes.string,
+	countryOfResidence: PropTypes.string,
+	gender: PropTypes.string,
+	year: PropTypes.string,
+	confirmPassword: PropTypes.string,
+	businessCategory: PropTypes.string,
+	loading: PropTypes.bool
+};
 
 export default HunterSignup;

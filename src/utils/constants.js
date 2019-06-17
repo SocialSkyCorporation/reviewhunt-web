@@ -28,7 +28,7 @@ const monthsLong = [
   "December"
 ];
 
-const genders = ["Male", "Female", "Other"];
+const genders = ["male", "female", "other"];
 
 const countries = [
   { code: "AW", value: "Aruba" },

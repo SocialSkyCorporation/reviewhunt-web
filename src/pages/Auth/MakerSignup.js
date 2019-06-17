@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select } from "antd";
+import { Input, Icon, Select } from "antd";
 import PropTypes from "prop-types";
 import { useTranslation, Trans } from "react-i18next";
 import { businessCategories } from "utils/constants";
@@ -15,7 +15,8 @@ const MakerSignup = ({
 	emailAddress,
 	password,
 	confirmPassword,
-	businessCategory
+	businessCategory,
+	loading
 }) => {
 	const { t } = useTranslation();
 
@@ -30,6 +31,7 @@ const MakerSignup = ({
 					setFormData("nameOfCompany", nameOfCompany);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<Input
 				className="auth-form-input"
@@ -40,6 +42,7 @@ const MakerSignup = ({
 					setFormData("fullName", fullName);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<Input
 				className="auth-form-input"
@@ -50,6 +53,7 @@ const MakerSignup = ({
 					setFormData("emailAddress", emailAddress);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<Input.Password
 				className="auth-form-input"
@@ -60,6 +64,7 @@ const MakerSignup = ({
 					setFormData("password", password);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<Input.Password
 				className="auth-form-input"
@@ -70,6 +75,7 @@ const MakerSignup = ({
 					setFormData("confirmPassword", confirmPassword);
 					triggerCanvas();
 				}}
+				disabled={loading}
 			/>
 			<Select
 				placeholder={t("business_category")}
@@ -77,6 +83,7 @@ const MakerSignup = ({
 				onChange={businessCategory =>
 					setFormData("businessCategory", businessCategory)
 				}
+				disabled={loading}
 			>
 				{businessCategories.map((b, i) => (
 					<Option key={i} value={b}>
@@ -93,14 +100,28 @@ const MakerSignup = ({
 			</div>
 			<div
 				className="simple-button gradient-button primary-gradient"
-				onClick={handleSubmit}
+				onClick={() => {
+					if (loading) return;
+					handleSubmit();
+				}}
 			>
-				{t("auth.signup_maker")}
+				{loading ? <Icon type="loading" /> : t("auth.signup_maker")}
 			</div>
 		</>
 	);
 };
 
-MakerSignup.propTypes = {};
+MakerSignup.propTypes = {
+	triggerCanvas: PropTypes.func,
+	setFormData: PropTypes.func,
+	handleSubmit: PropTypes.func,
+	nameOfCompany: PropTypes.string,
+	fullName: PropTypes.string,
+	emailAddress: PropTypes.string,
+	password: PropTypes.string,
+	confirmPassword: PropTypes.string,
+	businessCategory: PropTypes.string,
+	loading: PropTypes.bool
+};
 
 export default MakerSignup;
