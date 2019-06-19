@@ -14,7 +14,7 @@ export default () => {
       <div className="padded-container banner-content primary-gradient">
         <h1>{t("app_title")}</h1>
         <h2>
-          <Trans>{t("home.banner")}</Trans>
+          <Trans i18nKey="home.banner">FUN QUESTS + BOUNTIES<br/>MAKE COOL PRODUCTS FLY HIGH</Trans>
         </h2>
         <SimpleButton
           text={t("home.learn_more")}

@@ -574,6 +574,7 @@ hr {
 
   @include responsive(mobile) {
     font-size: 8px;
+    padding: 4px 5px;
   }
 }
 

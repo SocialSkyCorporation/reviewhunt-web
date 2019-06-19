@@ -1,41 +1,49 @@
 import React from "react";
-import { Form, Input } from "antd";
+import { Input } from "antd";
 import PropTypes from "prop-types";
-import { AuthConsumer } from "contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 
-const LoginForm = ({ triggerCanvas }) => {
+const LoginForm = ({
+  triggerCanvas,
+  emailAddress,
+  password,
+  setFormData,
+  handleSubmit
+}) => {
   const { t } = useTranslation();
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    console.log("clicked submit")
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
-  }
-
   return (
-    <Form onSubmit={handleSubmit}>
+    <>
       <Input
         className="auth-form-input"
         placeholder={t("email")}
-        onChange={triggerCanvas}
+        onChange={e => {
+          setFormData("emailAddress", e.target.value);
+          triggerCanvas();
+        }}
+        value={emailAddress}
       />
       <Input.Password
         className="auth-form-input"
         placeholder={t("password")}
-        onChange={triggerCanvas}
+        onChange={e => {
+          setFormData("password", e.target.value);
+          triggerCanvas();
+        }}
+        value={password}
       />
-      <div className="simple-button gradient-button primary-gradient">
+      <div
+        className="simple-button gradient-button primary-gradient"
+        onClick={handleSubmit}
+      >
         {t("login")}
       </div>
-    </Form>
+    </>
   );
 };
 
-LoginForm.propTypes = {};
+LoginForm.propTypes = {
+  triggerCanvas: PropTypes.func
+};
 
 export default LoginForm;

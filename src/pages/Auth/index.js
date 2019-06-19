@@ -9,7 +9,11 @@ import Onboarding from "./Onboarding";
 import { withTranslation, Trans } from "react-i18next";
 import { validateForm } from "utils/helpers/formValidator";
 import { withAuthContext } from "contexts/HOC";
-import { STATUS_SIGNUP, STATUS_LOGIN, STATUS_ONBOARDING} from 'contexts/AuthContext';
+import {
+	STATUS_SIGNUP,
+	STATUS_LOGIN,
+	STATUS_ONBOARDING
+} from "contexts/AuthContext";
 
 const TAB_HUNTER = 0;
 const TAB_MAKER = 1;
@@ -24,7 +28,7 @@ class Auth extends Component {
 			tabIndex: TAB_HUNTER,
 			nameOfCompany: "",
 			fullName: "sung woo park",
-			emailAddress: "swptest@mail.com",
+			emailAddress: "abcde@mail.com",
 			password: "swp123456",
 			confirmPassword: "swp123456",
 			countryOfResidence: "Country Of Residence",
@@ -32,6 +36,11 @@ class Auth extends Component {
 			year: "Year",
 			businessCategory: "Business Category"
 		};
+	}
+
+	componentWillMount() {
+		const { name } = this.props.context;
+		if (name) this.props.history.replace("/");
 	}
 
 	setFormData = (key, value) => {
@@ -51,6 +60,7 @@ class Auth extends Component {
 			year,
 			businessCategory
 		} = this.state;
+		const { handleSignup } = this.props.context;
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const onMakerTab = tabIndex === TAB_MAKER;
 
@@ -81,20 +91,42 @@ class Auth extends Component {
 
 		if (!errors) {
 			if (onHunterTab) {
-				this.props.context.handleSignup(TYPE_HUNTER, formData);
+				handleSignup(TYPE_HUNTER, formData);
 			} else if (onMakerTab) {
-				this.props.context.handleSignup(TYPE_MAKER, formData);
+				handleSignup(TYPE_MAKER, formData);
 			}
 		} else {
-			errors.map(e => {
-				notification['error']({
-					message: e,
+			errors.forEach(e => {
+				notification["error"]({
+					message: e
 				});
 			});
 		}
 	};
 
-	handleLogin = () => {};
+	handleLogin = () => {
+		const { tabIndex, emailAddress, password } = this.state;
+		const { handleLogin } = this.props.context;
+		const onHunterTab = tabIndex === TAB_HUNTER;
+		const onMakerTab = tabIndex === TAB_MAKER;
+
+		let formData = { email: emailAddress, password };
+		const errors = validateForm(formData);
+
+		if (!errors) {
+			if (onHunterTab) {
+				handleLogin(TYPE_HUNTER, formData);
+			} else if (onMakerTab) {
+				handleLogin(TYPE_MAKER, formData);
+			}
+		} else {
+			errors.forEach(e => {
+				notification["error"]({
+					message: e
+				});
+			});
+		}
+	};
 
 	renderInputs() {
 		const {
@@ -148,14 +180,21 @@ class Auth extends Component {
 						{...formData}
 					/>
 				)}
-				{status === STATUS_LOGIN && <LoginForm triggerCanvas={triggerCanvas} />}
+				{status === STATUS_LOGIN && (
+					<LoginForm
+						triggerCanvas={triggerCanvas}
+						setFormData={this.setFormData}
+						handleSubmit={this.handleLogin}
+						{...formData}
+					/>
+				)}
 			</div>
 		);
 	}
 
 	renderAccountText() {
 		const { t } = this.props;
-		const { status } = this.props.context;
+		const { status, setStatus } = this.props.context;
 		const hintText =
 			status === STATUS_SIGNUP
 				? t("auth.account_exists")
@@ -163,8 +202,8 @@ class Auth extends Component {
 		const buttonText = status === STATUS_SIGNUP ? t("login") : t("signup");
 		const onClick =
 			status === STATUS_SIGNUP
-				? () => this.setState({ status: STATUS_LOGIN })
-				: () => this.setState({ status: STATUS_SIGNUP });
+				? () => setStatus(STATUS_LOGIN)
+				: () => setStatus(STATUS_SIGNUP);
 
 		return (
 			<div className="login-button-container grey-border">
@@ -181,9 +220,8 @@ class Auth extends Component {
 	render() {
 		const { tabIndex } = this.state;
 		const { t } = this.props;
-		const { status, loading } = this.props.context;
+		const { status, loading, name } = this.props.context;
 		const onHunterTab = tabIndex === TAB_HUNTER;
-		const name = "YoungHwi Cho";
 
 		const triggerCanvas = () => this.canvas.randomSplat();
 

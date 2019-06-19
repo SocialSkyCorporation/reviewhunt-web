@@ -5,7 +5,7 @@ import NotFound from "components/NotFound";
 import { AppConsumer } from "contexts/AppContext";
 import queryString from "query-string";
 import Header from "components/Header";
-import { AuthConsumer } from "contexts/AuthContext";
+import { withAuthContext } from "contexts/HOC";
 import Footer from "components/Footer";
 import ProtectedRoute from "ProtectedRoute";
 
@@ -15,11 +15,6 @@ const Auth = asyncComponent(() => import("pages/Auth"));
 const Product = asyncComponent(() => import("pages/Product"));
 const Profile = asyncComponent(() => import("pages/Profile"));
 
-const RoutesWithContext = props => {
-  return (
-    <AuthConsumer>{value => <Routes {...props} {...value} />}</AuthConsumer>
-  );
-};
 
 class Routes extends Component {
   componentWillMount() {
@@ -67,4 +62,4 @@ class Routes extends Component {
   }
 }
 
-export default withRouter(RoutesWithContext);
+export default withRouter(withAuthContext(Routes));

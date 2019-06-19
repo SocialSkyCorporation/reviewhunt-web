@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 import test1Img from './test1.png';
 import leftArrowImg from 'assets/images/left-circle.svg';
@@ -72,7 +71,5 @@ class QuestCarousel extends Component {
     );
   }
 }
-
-QuestCarousel.propTypes = {};
 
 export default QuestCarousel;

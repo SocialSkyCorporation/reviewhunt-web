@@ -19,5 +19,5 @@ export function setToken(token) {
 export function removeToken() {
   return window.safeStorage.removeItem('access_token');
 }
-export const getLoginURL = (path = window.location.pathname) => steemConnectAPI.getLoginURL(path);
+export const getLoginURL = (state = {}) => steemConnectAPI.getLoginURL(JSON.stringify({...state, path: window.location.pathname}));
 

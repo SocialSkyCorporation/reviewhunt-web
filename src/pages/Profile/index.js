@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Icon, Input, Select } from "antd";
+import { Icon, Select } from "antd";
 import moneyImg from "assets/images/money-circle.svg";
 import crownImg from "assets/images/crown-circle.svg";
 import TabItem from "./TabItem";
 import ProfileRow, {
   TYPE_DROPDOWN,
-  TYPE_SOCIAL,
+  // TYPE_SOCIAL,
   TYPE_PASSWORD
 } from "./ProfileRow";
 import QuestItem from "./QuestItem";
@@ -19,10 +19,9 @@ import { getLoginURL } from "utils/token";
 import { withTranslation } from "react-i18next";
 
 const TAB_PROFILE = 0;
-const TAB_QUEST = 1;
-const TAB_WALLET = 2;
-
-const { Option } = Select;
+const TAB_CHANNELS = 1;
+const TAB_QUEST = 2;
+const TAB_WALLET = 3;
 
 class Profile extends Component {
   state = {
@@ -45,17 +44,17 @@ class Profile extends Component {
 
         <div className="summary-container">
           <div className="summary-item">
-            <img className="icon" src={crownImg} alt="" />
+            <img className="summary-icon" src={crownImg} alt="" />
             <div className="text-container">
-              <div className="title">{t("profile.top")} 3.5%</div>
-              <div className="subtitle">{t("profile.buzz_performance")}</div>
+              <div className="summary-title">{t("profile.top")} 3.5%</div>
+              <div className="summary-subtitle">{t("profile.buzz_performance")}</div>
             </div>
           </div>
           <div className="summary-item">
-            <img className="icon" src={moneyImg} alt="" />
+            <img className="summary-icon" src={moneyImg} alt="" />
             <div className="text-container">
-              <div className="title">$5,055</div>
-              <div className="subtitle">{t("profile.earned_bounty")}</div>
+              <div className="summary-title">$5,055</div>
+              <div className="summary-subtitle">{t("profile.earned_bounty")}</div>
             </div>
           </div>
         </div>
@@ -83,14 +82,19 @@ class Profile extends Component {
           onClick={() => this.setState({ tabIndex: 0 })}
         />
         <TabItem
-          text={t("profile.quest_dashboard")}
+          text={"Channels"}
           selected={tabIndex === 1}
           onClick={() => this.setState({ tabIndex: 1 })}
         />
         <TabItem
-          text={t("profile.wallet")}
+          text={t("profile.quest_dashboard")}
           selected={tabIndex === 2}
           onClick={() => this.setState({ tabIndex: 2 })}
+        />
+        <TabItem
+          text={t("profile.wallet")}
+          selected={tabIndex === 3}
+          onClick={() => this.setState({ tabIndex: 3 })}
         />
       </div>
     );
@@ -102,13 +106,15 @@ class Profile extends Component {
     return (
       <div className="tab-content">
         {tabIndex === TAB_PROFILE && this.renderProfileTab()}
+        {tabIndex === TAB_CHANNELS && this.renderChannelsTab()}
         {tabIndex === TAB_QUEST && this.renderQuestTab()}
+        {tabIndex === TAB_WALLET && this.renderQuestTab()}
       </div>
     );
   }
 
   renderProfileTab() {
-    const { editProfile, socialChannels, steemLogo } = this.state;
+    const { editProfile, steemLogo } = this.state;
     const { t } = this.props;
 
     return (
@@ -128,7 +134,7 @@ class Profile extends Component {
                           alt=""
                         />
                         <div className="profile-icon-text text-black">
-                          @project7
+                        {me.name}
                         </div>
                       </div>
                     </div>
@@ -183,48 +189,48 @@ class Profile extends Component {
 
               <div className="content-profile">
                 <div className="content-title text-black">
-                  {t('basic_information').toUpperCase()}
+                  {t("profile.basic_information").toUpperCase()}
                 </div>
                 <ProfileRow
-                  title={t('name')}
+                  title={t("name")}
                   value="Younghwi Cho"
                   editMode={editProfile}
                 />
                 <ProfileRow
-                  title={t('email')}
+                  title={t("email")}
                   value="abc@mail.com"
                   editMode={editProfile}
                 />
                 <ProfileRow
-                  title={t('country')}
+                  title={t("country")}
                   value="Korea, Republic of"
                   editMode={editProfile}
                   type={TYPE_DROPDOWN}
                 />
                 <ProfileRow
-                  title={t('password')}
+                  title={t("password")}
                   value="password"
                   editMode={editProfile}
                   type={TYPE_PASSWORD}
                   password={true}
                 />
 
-                <div className="row-align-center social-title-container">
+                {/*<div className="row-align-center social-title-container">
                   <div className="content-title text-black social">
-                    {t('your_channels').toUpperCase()}
+                    {t("profile.your_channels").toUpperCase()}
                   </div>
                 </div>
 
                 {socialChannels.length === 0 && !editProfile && (
                   <div className="social-connect-tip">
-                  {t('profile.social_tip')}
+                    {t("profile.social_tip")}
                   </div>
                 )}
 
                 {editProfile && (
                   <div className="row-align-center col-on-mobile">
                     <Select
-                      defaultValue={t('profile.add_channels')}
+                      defaultValue={t("profile.add_channels")}
                       className="value-container select channel-select gray-bg-select text-grey"
                       onChange={e =>
                         this.setState({
@@ -242,7 +248,7 @@ class Profile extends Component {
                     </Select>
 
                     <Input
-                      placeholder={t('input_url')}
+                      placeholder={t("input_url")}
                       className="value-container text-grey"
                       onChange={e => {}}
                     />
@@ -267,7 +273,7 @@ class Profile extends Component {
                       );
                     })}
                   </>
-                )}
+                )}*/}
 
                 <div className="button-container">
                   <SimpleButton
@@ -283,7 +289,7 @@ class Profile extends Component {
                       className="cancel-button"
                       onClick={() => this.setState({ editProfile: false })}
                     >
-                      {t('cancel').toUpperCase()}
+                      {t("cancel").toUpperCase()}
                     </div>
                   )}
                 </div>
@@ -292,6 +298,17 @@ class Profile extends Component {
           );
         }}
       </AuthConsumer>
+    );
+  }
+
+  renderChannelsTab() {
+    const { t } = this.props;
+    return (
+      <div className="content-quest">
+        <div className="content-title text-black">
+          {t("profile.your_channels").toUpperCase()}
+        </div>
+      </div>
     );
   }
 
@@ -314,8 +331,10 @@ class Profile extends Component {
 
     return (
       <div className="content-quest">
-        <div className="content-title text-black">{t('your_quests').toUpperCase()}</div>
-        <Select className="category-select" defaultValue={t('all')} />
+        <div className="content-title text-black">
+          {t("profile.your_quests").toUpperCase()}
+        </div>
+        <Select className="category-select" defaultValue={t("all")} />
         <QuestItem
           steps={[1, 2, 3, "review", "buzz"]}
           currentStep={1}

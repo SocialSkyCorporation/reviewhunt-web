@@ -31,7 +31,9 @@ const QuestItem = (props) => {
             {!completed && !ended && <div className="quest-tag">Grab more $15 - $150</div>}
           </div>
 
-          <QuestStepProgress {...props}/>
+          <div className="quest-step-progress-container">
+            <QuestStepProgress {...props}/>
+          </div>
 
         </div>
       </div>

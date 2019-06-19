@@ -74,6 +74,11 @@ $inset-color: #fff;
   max-height: 40px;
   margin-top: 13px;
 
+  @include responsive(mobile) {
+    // transform: scale(0.8);
+    // transform-origin: 0 50%;
+  }
+
   &.completed {
     opacity: 0.5;
   }
@@ -104,7 +109,6 @@ $inset-color: #fff;
       .icon {
         width: 18px;
         height: auto;
-
 
         &.review {
           margin-left: 2px;
@@ -164,7 +168,7 @@ $inset-color: #fff;
       background: #8b9699;
 
       @include responsive(mobile) {
-        width: 22px;
+        width: 12px;
       }
 
       &.complete {

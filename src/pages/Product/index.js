@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import ProgressBar from "components/ProgressBar";
 import SimpleButton from "components/SimpleButton";
 import ScreenshotCarousel from "./ScreenshotCarousel";

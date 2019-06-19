@@ -1,7 +1,4 @@
 import React from "react";
-import { setToken, getToken } from "utils/token";
-import steemConnectAPI from "utils/steemConnectAPI";
-
 const AppContext = React.createContext();
 const { Provider, Consumer } = AppContext;
 
@@ -11,7 +8,6 @@ class AppProvider extends React.Component {
 
     this.state = {
       isLoading: false,
-      authenticated: true 
     };
   }
 

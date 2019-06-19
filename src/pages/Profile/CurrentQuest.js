@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import backImg from "assets/images/back.svg";
 import clockImg from "assets/images/clock.svg";
-import checkImg from "assets/images/check-green.svg";
-import rejectImg from "assets/images/reject.svg";
 import SimpleButton from "components/SimpleButton";
 import QuestStepProgress from "components/QuestStepProgress";
 import HistoryMessage from "./HistoryMessage";

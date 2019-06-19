@@ -1,8 +1,9 @@
 import React from "react";
 import { notification } from "antd";
-import { getRedditAuthorizationURL } from "utils/auth/redditAuthHelper";
 import { getKarma } from "utils/auth/redditAuthHelper";
 import { setApiKey } from "utils/auth/emailAuthHelper";
+import { getMe } from "utils/auth/steemAuthHelper";
+import { setToken } from "utils/token";
 import { withRouter } from "react-router-dom";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
@@ -15,30 +16,34 @@ const { Provider, Consumer } = AuthContext;
 const STATUS_SIGNUP = 0;
 const STATUS_LOGIN = 1;
 const STATUS_ONBOARDING = 2;
-
 class AuthProvider extends React.Component {
   state = {
     steemconnectLoading: false,
-    me: null,
+    me: {},
+    name: 'sung woo park',
+    email: null,
     loading: false,
-    status: STATUS_ONBOARDING
+    status: STATUS_LOGIN,
+    socialChannels: []
   };
 
-  signupFail = e => {
+  componentWillMount() {
+    // TODO: refresh session here
+  }
+
+  handleError = e => {
     this.setState({ loading: false });
-    notification['error']({
-      message: "Sign up failed",
-      description: extractErrorMessage(e),
+    notification["error"]({
+      message: extractErrorMessage(e)
     });
   };
 
-  signupSuccess = cb => {
+  authSuccess = async cb => {
     console.log("cb", cb);
-    const {api_key, name, email} = cb;
-
+    const { api_key, name, email } = cb;
     setApiKey(api_key);
-
-    this.setState({loading: false, status: STATUS_ONBOARDING});
+    await this.setState({ loading: false, name, email });
+    this.props.history.replace("/profile");
   };
 
   handleSignup = (type, data) => {
@@ -76,14 +81,37 @@ class AuthProvider extends React.Component {
 
     api
       .post(endpoint, body)
-      .then(this.signupSuccess)
-      .catch(this.signupFail);
+      .then(this.authSuccess)
+      .catch(this.handleError);
   };
 
-  authReddit() {
-    const url = getRedditAuthorizationURL();
-    window.location = url;
-  }
+  handleLogin = (type, data) => {
+    this.setState({ loading: true });
+
+    let endpoint = "";
+
+    if (type === TYPE_HUNTER) {
+      endpoint = `/hunters/api_key.json`;
+    } else if (type === TYPE_MAKER) {
+      endpoint = "/makers/api_key.json";
+    }
+
+    api
+      .get(endpoint, data)
+      .then(this.authSuccess)
+      .catch(this.handleError);
+  };
+
+  setSocialChannels = socialChannels => {
+    this.setState({ socialChannels });
+  };
+
+  deleteSocialItem = index => {
+    const { socialChannels } = this.state;
+    let newChannels = Object.assign([], socialChannels);
+    newChannels.splice(index, 1);
+    this.setState({ socialChannels: newChannels });
+  };
 
   handleAuth = async (source, obj) => {
     console.log("parsed url", source, obj);
@@ -98,19 +126,28 @@ class AuthProvider extends React.Component {
         break;
       case "steemconnect":
         const { access_token, state } = obj;
-        this.props.history.replace(state);
-        this.setState({ steemconnectLoading: true });
-        // const me = await getMe(access_token);
-        // console.log("me", me);
-        // this.setState({ me });
 
-        setTimeout(() => {
-          this.setState({ me: {} });
-        }, 2000);
+        try {
+          const stateValue = JSON.parse(state);
+          const { path, socialChannels } = stateValue;
+          this.props.history.replace(path);
+          this.setState({ steemconnectLoading: true, socialChannels });
+
+          setToken(access_token);
+          const me = await getMe(access_token);
+          console.log("me", me);
+          this.setState({ me });
+        } catch (e) {
+          notification["error"]({ message: extractErrorMessage(e) });
+        }
 
         break;
       default:
     }
+  };
+
+  setStatus = status => {
+    this.setState({ status });
   };
 
   render() {
@@ -121,7 +158,11 @@ class AuthProvider extends React.Component {
           authReddit: this.authReddit,
           handleAuth: this.handleAuth,
           setFormData: this.setFormData,
-          handleSignup: this.handleSignup
+          handleSignup: this.handleSignup,
+          handleLogin: this.handleLogin,
+          deleteSocialItem: this.deleteSocialItem,
+          setSocialChannels: this.setSocialChannels,
+          setStatus: this.setStatus
         }}
       >
         {this.props.children}
@@ -132,6 +173,12 @@ class AuthProvider extends React.Component {
 
 const AuthProviderWithRouter = withRouter(AuthProvider);
 
-export { AuthProviderWithRouter as AuthProvider, Consumer as AuthConsumer, STATUS_LOGIN, STATUS_ONBOARDING, STATUS_SIGNUP };
+export {
+  AuthProviderWithRouter as AuthProvider,
+  Consumer as AuthConsumer,
+  STATUS_LOGIN,
+  STATUS_ONBOARDING,
+  STATUS_SIGNUP
+};
 
 export default AuthContext;

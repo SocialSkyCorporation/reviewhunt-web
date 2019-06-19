@@ -1,38 +1,51 @@
 import React from "react";
-import { AppConsumer } from "contexts/AppContext";
+import { AuthConsumer } from "contexts/AuthContext";
 import { Link } from "react-router-dom";
 import imgLogo from "assets/images/logo-rh@2x.png";
+import faceImg from "assets/images/user-face.svg";
 import { useTranslation } from "react-i18next";
 
 export default () => {
   const { t } = useTranslation();
 
   return (
-    <AppConsumer>
-      {({ login }) => (
+    <AuthConsumer>
+      {({ name }) => (
         <div className="header">
           <Link to="/">
             <img className="logo" src={imgLogo} alt="logo" />
           </Link>
 
           <div className="header-right">
-            {/*<Link className="header-item" to="/about">
-              {t('header.about')}
-            </Link>*/}
-
-            <Link className="header-item" to="/auth">
-              {t('header.login')}
+            <Link className="header-item" to="/about">
+              {t("header.about")}
             </Link>
 
-            <Link className="header-item" to="/auth">
-              {t('header.join')}
-            </Link>
-            <Link className="header-item" to="/profile">
-              {t('header.profile')}
-            </Link>
+            {!name ? (
+              <>
+                <Link className="header-item" to="/auth">
+                  {t("header.login")}
+                </Link>
+
+                <Link className="header-item" to="/auth">
+                  {t("header.join")}
+                </Link>
+
+                <Link className="header-item" to="/profile">
+                  {t("header.profile")}
+                </Link>
+              </>
+            ) : (
+              <Link className="header-item account" to="/profile">
+                <div className="row-align-center">
+                  <img className="profile-icon" src={faceImg} alt=""/>
+                  <div>{name}</div>
+                </div>
+              </Link>
+            )}
           </div>
         </div>
       )}
-    </AppConsumer>
+    </AuthConsumer>
   );
 };

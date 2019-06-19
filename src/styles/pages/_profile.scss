@@ -84,7 +84,11 @@
     align-items: center;
     margin-right: 5.3333vw;
 
-    .icon {
+    @include responsive(tablet) {
+      min-width: 40%;
+    }
+
+    .summary-icon {
       width: 50px;
       height: 50px;
       @include responsive(mobile) {
@@ -96,19 +100,22 @@
     .text-container {
       margin-left: 14px;
 
-      .title {
-        font-size: 1.125rem;
+      .summary-title {
+        font-size: 1rem;
         font-weight: 500;
         color: #212121;
         @include responsive(mobile) {
-          font-size: 1rem;
+          font-size: 0.75rem;
         }
       }
 
-      .subtitle {
+      .summary-subtitle {
         font-size: 0.75rem;
         font-weight: normal;
         color: #0a0a0a;
+        @include responsive(mobile) {
+          font-size: 0.5rem;
+        }
       }
     }
   }
@@ -132,11 +139,19 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
+        overflow: -moz-scrollbars-vertical;
+        overflow-x: scroll;
+        align-items: center;
       }
 
       .tab-item {
         margin-bottom: 15px;
         color: #8b9699;
+
+        @include responsive(tablet) {
+          text-align: center;
+          margin-right: 48px;
+        }
 
         &.selected {
           color: #0a0a0a;
@@ -327,6 +342,11 @@
     }
   }
 
+  .content-channels {
+    border: solid 1px #e5e5e5;
+    padding: 30px;
+  }
+
   .content-quest {
     border: solid 1px #e5e5e5;
     padding: 30px;
@@ -338,10 +358,14 @@
     }
 
     .quest-item-row {
+      position: relative;
       display: flex;
       flex-direction: column;
-      height: 148px;
+      min-height: 148px;
 
+      @include responsive(mobile) {
+        min-height: 132px;
+      }
       &:hover {
         cursor: pointer;
       }
@@ -350,6 +374,7 @@
         display: flex;
         flex: 1;
         align-items: center;
+        width: 100%;
         &.ended {
           opacity: 0.3;
         }
@@ -409,6 +434,7 @@
 
       .quest-tag-container {
         display: flex;
+        flex-wrap: wrap;
         margin-top: 8px;
       }
     }
