@@ -10,7 +10,7 @@ export default () => {
 
   return (
     <AuthConsumer>
-      {({ name }) => (
+      {({ emailMe }) => (
         <div className="header">
           <Link to="/">
             <img className="logo" src={imgLogo} alt="logo" />
@@ -21,7 +21,7 @@ export default () => {
               {t("header.about")}
             </Link>
 
-            {!name ? (
+            {!emailMe ? (
               <>
                 <Link className="header-item" to="/auth">
                   {t("header.login")}
@@ -39,7 +39,7 @@ export default () => {
               <Link className="header-item account" to="/profile">
                 <div className="row-align-center">
                   <img className="profile-icon" src={faceImg} alt=""/>
-                  <div>{name}</div>
+                  <div>{emailMe.name}</div>
                 </div>
               </Link>
             )}

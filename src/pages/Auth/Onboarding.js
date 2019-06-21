@@ -39,7 +39,7 @@ const Onboarding = ({ triggerCanvas, history }) => {
 
 	return (
 		<AuthConsumer>
-			{({ me, steemconnectLoading, socialChannels, deleteSocialItem, setSocialChannels, name }) => {
+			{({ steemMe, steemconnectLoading, socialChannels, deleteSocialItem, setSocialChannels, name }) => {
 				const persistState = {
 					socialChannels
 				};
@@ -73,12 +73,12 @@ const Onboarding = ({ triggerCanvas, history }) => {
 					<div className="steem-connect-container onboarding-content row-space-between">
 						<div className="row-align-center">
 							<Avatar
-                  src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${me._id}?s=80`}
+                  src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${steemMe._id}?s=80`}
                   size="large"
                   className="profile-icon"
                 />
 
-							<div className="text-grey">{me.name}</div>
+							<div className="text-grey">{steemMe.name}</div>
 						</div>
 						<div className="steem-connect-button">
 							<div className="connect-text">{t("disconnect")}</div>
@@ -92,7 +92,7 @@ const Onboarding = ({ triggerCanvas, history }) => {
 							<div className="onboarding-header text-white">
 								{t("connect_steem")}
 							</div>
-							{me ? steemConnected() : steemNotConnected(steemconnectLoading)}
+							{steemMe ? steemConnected() : steemNotConnected(steemconnectLoading)}
 						</div>
 
 						<div className="onboarding-container grey-border">

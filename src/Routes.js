@@ -12,7 +12,7 @@ import ProtectedRoute from "ProtectedRoute";
 const Home = asyncComponent(() => import("pages/Home"));
 const About = asyncComponent(() => import("pages/About"));
 const Auth = asyncComponent(() => import("pages/Auth"));
-const Product = asyncComponent(() => import("pages/Product"));
+const Campaign = asyncComponent(() => import("pages/Campaign"));
 const Profile = asyncComponent(() => import("pages/Profile"));
 
 
@@ -43,12 +43,12 @@ class Routes extends Component {
       <AppConsumer>
         {({ isLoading, me }) => {
           return (
-            <div className="content-body">
+            <div id="content-body" className="content-body">
               {showHeaderFooter && <Header />}
               <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/auth" component={Auth} />
-                <Route path="/product" exact component={Product} />
+                <Route path="/campaigns/:id" component={Campaign} />
                 <Route path="/about" exact component={About} />
                 <ProtectedRoute path="/profile" exact component={Profile} />
                 <Route path="*" component={NotFound} />

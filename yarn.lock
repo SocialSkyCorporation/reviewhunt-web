@@ -8202,6 +8202,10 @@ react-app-rewired@^2.0.2:
     dotenv "^6.2.0"
     semver "^5.6.0"
 
+react-content-loader@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/react-content-loader/-/react-content-loader-4.2.1.tgz#0d355134ed7d0987966abd0f784bc59e76976e91"
+
 react-dev-utils@^9.0.1:
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-9.0.1.tgz#5c03d85a0b2537d0c46af7165c24a7dfb274bef2"

@@ -5,6 +5,7 @@ import steem from "steem";
 import { Router } from "react-router-dom";
 import { AppProvider } from "contexts/AppContext";
 import { AuthProvider } from "contexts/AuthContext";
+import { CampaignProvider } from "contexts/CampaignContext";
 import CircularProgress from "components/CircularProgress";
 
 import App from "./App";
@@ -21,7 +22,9 @@ ReactDOM.render(
 		<Router history={history}>
 			<AppProvider>
 				<AuthProvider>
-					<App />
+					<CampaignProvider>
+						<App />
+					</CampaignProvider>
 				</AuthProvider>
 			</AppProvider>
 		</Router>

@@ -1,4 +1,4 @@
-const monthsShort = [
+export const monthsShort = [
   "Jan",
   "Feb",
   "Mar",
@@ -13,7 +13,7 @@ const monthsShort = [
   "Dec"
 ];
 
-const monthsLong = [
+export const monthsLong = [
   "January",
   "February",
   "March",
@@ -28,9 +28,9 @@ const monthsLong = [
   "December"
 ];
 
-const genders = ["male", "female", "other"];
+export const genders = ["male", "female", "other"];
 
-const countries = [
+export const countries = [
   { code: "AW", value: "Aruba" },
   { code: "AF", value: "Afghanistan" },
   { code: "AO", value: "Angola" },
@@ -282,7 +282,7 @@ const countries = [
   { code: "ZW", value: "Zimbabwe" }
 ];
 
-const businessCategories = [
+export const businessCategories = [
   "Advertising",
   "Social",
   "Games",
@@ -304,16 +304,7 @@ const businessCategories = [
   "Others"
 ];
 
-const years = [...new Array(100)].map((item, index) => 2010 - index + "");
+export const years = [...new Array(100)].map((item, index) => 2010 - index + "");
 
-const days = [...new Array(31)].map((item, index) => index + 1 + "");
+export const days = [...new Array(31)].map((item, index) => index + 1 + "");
 
-export {
-  days,
-  genders,
-  monthsShort,
-  monthsLong,
-  years,
-  countries,
-  businessCategories
-};

@@ -1,9 +1,8 @@
 import React from "react";
 import { notification } from "antd";
 import { getKarma } from "utils/auth/redditAuthHelper";
-import { setApiKey } from "utils/auth/emailAuthHelper";
-import { getMe } from "utils/auth/steemAuthHelper";
-import { setToken } from "utils/token";
+import { getSteemMe, getEmailMe } from "utils/auth/authHelper";
+import { getToken, setToken } from "utils/token";
 import { withRouter } from "react-router-dom";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
@@ -16,19 +15,27 @@ const { Provider, Consumer } = AuthContext;
 const STATUS_SIGNUP = 0;
 const STATUS_LOGIN = 1;
 const STATUS_ONBOARDING = 2;
+
 class AuthProvider extends React.Component {
   state = {
     steemconnectLoading: false,
-    me: {},
-    name: 'sung woo park',
-    email: null,
+    steemMe: null,
+    emailMe: null,
     loading: false,
+    authenticating: false,
     status: STATUS_LOGIN,
     socialChannels: []
   };
 
-  componentWillMount() {
-    // TODO: refresh session here
+  async componentDidMount() {
+    this.setState({ authenticating: true });
+    const lastLoginType = getToken("last_login");
+
+    if (lastLoginType) {
+      const emailMe = await getEmailMe(lastLoginType);
+      console.log(emailMe);
+      await this.setState({ emailMe, authenticating: false });
+    }
   }
 
   handleError = e => {
@@ -38,10 +45,11 @@ class AuthProvider extends React.Component {
     });
   };
 
-  authSuccess = async cb => {
+  authSuccess = async (type, cb) => {
     console.log("cb", cb);
     const { api_key, name, email } = cb;
-    setApiKey(api_key);
+    setToken(type, api_key);
+    setToken("last_login", type);
     await this.setState({ loading: false, name, email });
     this.props.history.replace("/profile");
   };
@@ -81,7 +89,7 @@ class AuthProvider extends React.Component {
 
     api
       .post(endpoint, body)
-      .then(this.authSuccess)
+      .then(cb => this.authSuccess(type, cb))
       .catch(this.handleError);
   };
 
@@ -98,7 +106,7 @@ class AuthProvider extends React.Component {
 
     api
       .get(endpoint, data)
-      .then(this.authSuccess)
+      .then(cb => this.authSuccess(type, cb))
       .catch(this.handleError);
   };
 
@@ -133,8 +141,8 @@ class AuthProvider extends React.Component {
           this.props.history.replace(path);
           this.setState({ steemconnectLoading: true, socialChannels });
 
-          setToken(access_token);
-          const me = await getMe(access_token);
+          setToken("steemconnect", access_token);
+          const me = await getSteemMe(access_token);
           console.log("me", me);
           this.setState({ me });
         } catch (e) {

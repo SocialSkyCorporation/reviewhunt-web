@@ -1,5 +1,5 @@
 import 'whatwg-fetch';
-import { getEncryptedToken } from 'utils/token';
+import { getEncryptedToken, getToken } from 'utils/token';
 import { calculateContentPayout } from 'utils/helpers/steemitHelpers';
 
 const API_ROOT = process.env.REACT_APP_API_ROOT;
@@ -26,7 +26,7 @@ function getQueryString(params) {
     .join('&');
 }
 
-function request(method, path, params, shouldAuthenticate, callback = defaultCallback) {
+function request(method, path, params, shouldAuthenticate, tokenType, callback = defaultCallback) {
   var qs = '';
   var body;
   var headers = (params && params.headers) || {
@@ -34,7 +34,10 @@ function request(method, path, params, shouldAuthenticate, callback = defaultCal
     'Content-Type': 'application/json',
   };
   if (shouldAuthenticate) {
-    headers['Authorization'] = 'Token token=' + getEncryptedToken();
+    if(!tokenType) return;
+    const token = tokenType === "steemconnect" ? getEncryptedToken(tokenType) : getToken(tokenType);
+    console.log("token", token);
+    headers['Authorization'] = 'Token token=' + token;
   }
 
   if (['GET', 'DELETE'].indexOf(method) > -1) {
@@ -53,10 +56,10 @@ function request(method, path, params, shouldAuthenticate, callback = defaultCal
 }
 
 export default {
-  get: (path, params, shouldAuthenticate = false, callback = defaultCallback) => request('GET', path, params, shouldAuthenticate, callback),
-  post: (path, params, shouldAuthenticate = false, callback = defaultCallback) => request('POST', path, params, shouldAuthenticate, callback),
-  put: (path, params, shouldAuthenticate = false, callback = defaultCallback) => request('PUT', path, params, shouldAuthenticate, callback),
-  delete: (path, params, shouldAuthenticate = false, callback = defaultCallback) => request('DELETE', path, params, shouldAuthenticate, callback),
+  get: (path, params, shouldAuthenticate = false, tokenType = "", callback = defaultCallback) => request('GET', path, params, shouldAuthenticate, tokenType, callback),
+  post: (path, params, shouldAuthenticate = false, tokenType = "", callback = defaultCallback) => request('POST', path, params, shouldAuthenticate, tokenType, callback),
+  put: (path, params, shouldAuthenticate = false, tokenType = "", callback = defaultCallback) => request('PUT', path, params, shouldAuthenticate, tokenType, callback),
+  delete: (path, params, shouldAuthenticate = false, tokenType = "", callback = defaultCallback) => request('DELETE', path, params, shouldAuthenticate, tokenType, callback),
   setModerator: (post) => request('PATCH', `/posts/set_moderator/@${post.author}/${post.permlink}.json`, null , true),
   moderatePost: (post, is_active, is_verified) => request('PATCH', `/posts/moderate/@${post.author}/${post.permlink}.json`, {
     post: {

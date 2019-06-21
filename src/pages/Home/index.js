@@ -5,6 +5,8 @@ import imgHunter from "assets/images/hunter-circle.svg";
 import QuestGridItem from "components/QuestGridItem";
 import SimpleButton from "components/SimpleButton";
 import { useTranslation, Trans } from "react-i18next";
+import { CampaignConsumer } from "contexts/CampaignContext";
+import ContentLoader from "components/ContentLoader";
 
 export default () => {
   const { t } = useTranslation();
@@ -14,7 +16,11 @@ export default () => {
       <div className="padded-container banner-content primary-gradient">
         <h1>{t("app_title")}</h1>
         <h2>
-          <Trans i18nKey="home.banner">FUN QUESTS + BOUNTIES<br/>MAKE COOL PRODUCTS FLY HIGH</Trans>
+          <Trans i18nKey="home.banner">
+            FUN QUESTS + BOUNTIES
+            <br />
+            MAKE COOL PRODUCTS FLY HIGH
+          </Trans>
         </h2>
         <SimpleButton
           text={t("home.learn_more")}
@@ -46,20 +52,35 @@ export default () => {
 
   const content = () => {
     return (
-      <div className="padded-container">
-        <Select defaultValue={t("home.for_you")} style={{ marginBottom: 20 }} />
-        <div className="grid-content">
-          <QuestGridItem />
-          <QuestGridItem />
-          <QuestGridItem />
-          <QuestGridItem />
-          <QuestGridItem />
-          <QuestGridItem />
-          <QuestGridItem />
-          <QuestGridItem />
-          <div className="empty-grid-item" />
-        </div>
-      </div>
+      <CampaignConsumer>
+        {({ campaigns, fetchingCampaigns }) => {
+          return (
+            <div className="padded-container">
+              <Select
+                defaultValue={t("home.for_you")}
+                style={{ marginBottom: 20 }}
+              />
+
+              <div className="grid-content">
+              {fetchingCampaigns && (
+                  <>
+                    <ContentLoader />
+                    <ContentLoader />
+                    <ContentLoader />
+                    <ContentLoader />
+                    <ContentLoader />
+                    <ContentLoader />
+                    </>
+                )}
+                {campaigns.map((campaign, index) => (
+                  <QuestGridItem key={index} data={campaign} />
+                ))}
+                <div className="empty-grid-item" />
+              </div>
+            </div>
+          );
+        }}
+      </CampaignConsumer>
     );
   };
 

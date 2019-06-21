@@ -17,6 +17,7 @@ import steemLogoWhite from "assets/images/steem-logo.svg";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { getLoginURL } from "utils/token";
 import { withTranslation } from "react-i18next";
+import {countries} from 'utils/constants'
 
 const TAB_PROFILE = 0;
 const TAB_CHANNELS = 1;
@@ -119,11 +120,13 @@ class Profile extends Component {
 
     return (
       <AuthConsumer>
-        {({ me, steemconnectLoading }) => {
+        {({ emailMe, steemMe, steemconnectLoading }) => {
+          const country = countries.filter(country => country.code === emailMe.country_code)[0].value;
+          
           return (
             <div>
               <div className="steem-connect">
-                {true ? (
+                {steemMe ? (
                   <div className="row-align-center row-space-between col-on-mobile steem-connected-container">
                     <div>
                       <div className="text-black">{t("steem_steemhunt")}</div>
@@ -134,7 +137,7 @@ class Profile extends Component {
                           alt=""
                         />
                         <div className="profile-icon-text text-black">
-                        {me.name}
+                        {steemMe.name}
                         </div>
                       </div>
                     </div>
@@ -193,17 +196,17 @@ class Profile extends Component {
                 </div>
                 <ProfileRow
                   title={t("name")}
-                  value="Younghwi Cho"
+                  value={emailMe.name}
                   editMode={editProfile}
                 />
                 <ProfileRow
                   title={t("email")}
-                  value="abc@mail.com"
+                  value={emailMe.email}
                   editMode={editProfile}
                 />
                 <ProfileRow
                   title={t("country")}
-                  value="Korea, Republic of"
+                  value={country}
                   editMode={editProfile}
                   type={TYPE_DROPDOWN}
                 />

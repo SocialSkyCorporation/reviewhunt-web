@@ -39,8 +39,8 @@ class Auth extends Component {
 	}
 
 	componentWillMount() {
-		const { name } = this.props.context;
-		if (name) this.props.history.replace("/");
+		const { emailMe } = this.props.context;
+		if (emailMe) this.props.history.replace("/");
 	}
 
 	setFormData = (key, value) => {
