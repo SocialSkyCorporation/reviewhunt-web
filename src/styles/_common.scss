@@ -514,6 +514,7 @@ hr {
   font-size: 1rem;
   font-weight: bold;
   color: #0a0a0a;
+  text-transform: uppercase;
   @include responsive(mobile) {
     font-size: 0.875rem;
   }
@@ -524,6 +525,7 @@ hr {
   font-weight: bold;
   margin-top: 5px;
   color: #0a0a0a;
+  text-transform: uppercase;
   @include responsive(mobile) {
     font-size: 1.625rem;
   }
@@ -543,6 +545,7 @@ hr {
   font-size: 0.75rem;
   text-align: center;
   color: #0a0a0a;
+  text-transform: uppercase;
 
   &:hover {
     cursor: pointer;

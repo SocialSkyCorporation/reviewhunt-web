@@ -102,7 +102,7 @@ const CurrentQuest = props => {
     <div className="current-quest">
       <div className="row-space-between">
         <div
-          className="row-align-center back-button-container"
+          className="row-align-center hover-link"
           onClick={onBackPressed}
         >
           <img className="back-icon" src={backImg} alt="" />

@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import asyncComponent from "asyncComponent";
 import NotFound from "components/NotFound";
-import { AppConsumer } from "contexts/AppContext";
+import { AuthConsumer } from "contexts/AuthContext";
+import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 import queryString from "query-string";
 import Header from "components/Header";
-import { withAuthContext } from "contexts/HOC";
 import Footer from "components/Footer";
 import ProtectedRoute from "ProtectedRoute";
 
@@ -13,8 +13,10 @@ const Home = asyncComponent(() => import("pages/Home"));
 const About = asyncComponent(() => import("pages/About"));
 const Auth = asyncComponent(() => import("pages/Auth"));
 const Campaign = asyncComponent(() => import("pages/Campaign"));
-const Profile = asyncComponent(() => import("pages/Profile"));
-
+const HunterProfile = asyncComponent(() =>
+  import("pages/Profile/HunterProfile")
+);
+const MakerProfile = asyncComponent(() => import("pages/Profile/MakerProfile"));
 
 class Routes extends Component {
   componentWillMount() {
@@ -39,9 +41,11 @@ class Routes extends Component {
   render() {
     const showHeaderFooter =
       window.location && window.location.pathname !== "/login";
+
     return (
-      <AppConsumer>
-        {({ isLoading, me }) => {
+      <AuthConsumer>
+        {({ emailMe, userType }) => {
+          const isHunter = userType === TYPE_HUNTER;
           return (
             <div id="content-body" className="content-body">
               {showHeaderFooter && <Header />}
@@ -50,16 +54,20 @@ class Routes extends Component {
                 <Route path="/auth" component={Auth} />
                 <Route path="/campaigns/:id" component={Campaign} />
                 <Route path="/about" exact component={About} />
-                <ProtectedRoute path="/profile" exact component={Profile} />
+                <ProtectedRoute
+                  path="/profile"
+                  exact
+                  component={isHunter ? HunterProfile : MakerProfile}
+                />
                 <Route path="*" component={NotFound} />
               </Switch>
               {showHeaderFooter && <Footer />}
             </div>
           );
         }}
-      </AppConsumer>
+      </AuthConsumer>
     );
   }
 }
 
-export default withRouter(withAuthContext(Routes));
+export default withRouter(Routes);

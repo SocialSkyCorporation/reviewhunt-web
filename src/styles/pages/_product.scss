@@ -36,6 +36,7 @@
       font-weight: bold;
       margin-top: 5px;
       color: #0a0a0a;
+      text-transform: uppercase;
     }
 
     .product-users {
@@ -68,7 +69,6 @@
         align-items: flex-start;
       }
 
-
       .quest-step-text {
         position: relative;
         margin-left: 9px;
@@ -90,7 +90,7 @@
         height: 1px;
         background: #000;
         margin: 0px 26px 0px 26px;
-        opacity: .4;
+        opacity: 0.4;
 
         @include responsive(tablet) {
           margin: 0px 8px 0px 8px;
@@ -116,7 +116,6 @@
         animation-direction: alternate-reverse;
         -moz-animation-direction: alternate-reverse;
         -webkit-animation-direction: alternate-reverse;
-
       }
     }
   }
@@ -129,10 +128,25 @@
       color: #0a0a0a;
     }
 
-    .desc {
+    .show-more-desc {
+      position: relative;
       font-size: 0.875rem;
       line-height: 1.29;
+      overflow: hidden;
+      // white-space: nowrap;
+      text-overflow: ellipsis;
       color: #8b9699;
+      transition: height 1s linear;
+    }
+
+    .show-more-white-gradient {
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(transparent, #fff);
     }
 
     .carousel-container {
@@ -184,6 +198,15 @@
 
     .down-arrow {
       margin-left: 8px;
+      transition: transform .1s linear;
+
+      &.rotated {
+        transform: rotate(180deg);
+      }
+
+      &.unrotated {
+        transform: rotate(0deg);
+      }
     }
 
     .progress-bar-text {

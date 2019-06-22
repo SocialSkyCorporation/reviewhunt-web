@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import Slider from 'react-slick';
-import test1Img from './test1.png';
-import test2Img from './test2.png';
-import leftArrowImg from 'assets/images/left-circle.svg';
-import rightArrowImg from 'assets/images/right-circle.svg';
+import React, { Component } from "react";
+import Slider from "react-slick";
+import test1Img from "./test1.png";
+import test2Img from "./test2.png";
+import leftArrowImg from "assets/images/left-circle.svg";
+import rightArrowImg from "assets/images/right-circle.svg";
 
 class Carousel extends Component {
   next = () => {
@@ -16,7 +16,7 @@ class Carousel extends Component {
 
   render() {
     const settings = {
-      className: 'slider variable-width',
+      className: "slider variable-width",
       adaptiveHeight: true,
       dots: false,
       arrows: false,
@@ -24,15 +24,14 @@ class Carousel extends Component {
       variableWidth: true
     };
 
+    const { images } = this.props;
+
     return (
       <div className="carousel-container">
         <Slider ref={v => (this.slider = v)} {...settings}>
-          <img className="screenshot-img" src={test1Img} alt="" />
-          <img className="screenshot-img" src={test2Img} alt="" />
-          <img className="screenshot-img" src={test1Img} alt="" />
-          <img className="screenshot-img" src={test1Img} alt="" />
-          <img className="screenshot-img" src={test2Img} alt="" />
-          <img className="screenshot-img" src={test2Img} alt="" />
+          {images.map((image, index) => (
+            <img key={index} className="screenshot-img" src={image} alt="" />
+          ))}
         </Slider>
         <img
           className="carousel-control-button left"

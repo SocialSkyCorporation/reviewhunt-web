@@ -218,66 +218,6 @@ class Profile extends Component {
                   password={true}
                 />
 
-                {/*<div className="row-align-center social-title-container">
-                  <div className="content-title text-black social">
-                    {t("profile.your_channels").toUpperCase()}
-                  </div>
-                </div>
-
-                {socialChannels.length === 0 && !editProfile && (
-                  <div className="social-connect-tip">
-                    {t("profile.social_tip")}
-                  </div>
-                )}
-
-                {editProfile && (
-                  <div className="row-align-center col-on-mobile">
-                    <Select
-                      defaultValue={t("profile.add_channels")}
-                      className="value-container select channel-select gray-bg-select text-grey"
-                      onChange={e =>
-                        this.setState({
-                          socialChannels: socialChannels.concat({
-                            channel: e,
-                            value: `https://${e}.com/`
-                          })
-                        })
-                      }
-                    >
-                      <Option value="instagram">Instagram</Option>
-                      <Option value="twitter">Twitter</Option>
-                      <Option value="youtube">YouTube</Option>
-                      <Option value="blog">Blog</Option>
-                    </Select>
-
-                    <Input
-                      placeholder={t("input_url")}
-                      className="value-container text-grey"
-                      onChange={e => {}}
-                    />
-                  </div>
-                )}
-
-                {true && (
-                  <>
-                    {socialChannels.map((item, index) => {
-                      return (
-                        <ProfileRow
-                          key={index}
-                          title={item.channel}
-                          value={item.value}
-                          editMode={editProfile}
-                          type={TYPE_SOCIAL}
-                          onDeletePressed={() => {
-                            socialChannels.splice(index, 1);
-                            this.setState({ socialChannels });
-                          }}
-                        />
-                      );
-                    })}
-                  </>
-                )}*/}
-
                 <div className="button-container">
                   <SimpleButton
                     onClick={() => this.setState({ editProfile: !editProfile })}

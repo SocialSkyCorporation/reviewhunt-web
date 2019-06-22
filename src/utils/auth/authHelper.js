@@ -28,7 +28,7 @@ export const getEmailMe = async (type, token) => {
   if(type === TYPE_HUNTER) endpoint = "/hunters/me.json"
   else if(type === TYPE_MAKER) endpoint = "/makers/me.json";
 
-  const me = await api.get(endpoint, {}, true, "email");
+  const me = await api.get(endpoint, {}, true, type);
 
   return me;
 };

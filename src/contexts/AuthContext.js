@@ -24,17 +24,24 @@ class AuthProvider extends React.Component {
     loading: false,
     authenticating: false,
     status: STATUS_LOGIN,
+    userType: TYPE_HUNTER,
     socialChannels: []
   };
 
   async componentDidMount() {
     this.setState({ authenticating: true });
     const lastLoginType = getToken("last_login");
+    console.log("last login", lastLoginType);
 
     if (lastLoginType) {
       const emailMe = await getEmailMe(lastLoginType);
       console.log(emailMe);
-      await this.setState({ emailMe, authenticating: false });
+      await this.setState({
+        emailMe,
+        authenticating: false,
+        userType: lastLoginType
+      });
+      this.props.history.replace("/profile");
     }
   }
 
@@ -55,6 +62,8 @@ class AuthProvider extends React.Component {
   };
 
   handleSignup = (type, data) => {
+    const { loading } = this.state;
+    if (loading) return;
     this.setState({ loading: true });
     const langauge = navigator.language || navigator.userLanguage || "EN";
 
@@ -80,7 +89,7 @@ class AuthProvider extends React.Component {
         maker: {
           email: data.emailAddress,
           password: data.password,
-          company_name: data.companyName,
+          company_name: data.nameOfCompany,
           name: data.fullName,
           business_category: data.businessCategory
         }

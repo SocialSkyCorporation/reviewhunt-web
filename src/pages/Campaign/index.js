@@ -1,15 +1,13 @@
 import React, { useEffect, useContext } from "react";
-import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import _ from "lodash";
 
 import ProgressBar from "components/ProgressBar";
 import SimpleButton from "components/SimpleButton";
 import ScreenshotCarousel from "./ScreenshotCarousel";
 import QuestCarousel from "./QuestCarousel";
+import CollapsibleText from "./CollapsibleText";
 
 import questImg from "assets/images/quest-circle.svg";
-import downArrowImg from "assets/images/down-arrow-blue.svg";
 import starImg from "assets/images/star.svg";
 import FullWidthButton from "components/FullWidthButton";
 import CircularProgress from "components/CircularProgress";
@@ -24,30 +22,31 @@ export default props => {
     }
   } = props;
   const ctx = useContext(CampaignContext);
-  console.log(ctx);
 
   useEffect(() => {
-    const fetchData = async () => {};
-
-    if (_.isEmpty({})) {
-      //fetch
-      fetchData();
+    if (!ctx.fetching && ctx.currentCampaign === null) {
+      ctx.fetchCampaign(id);
     }
 
     scrollTop();
-  }, []);
+  }, [ctx, id]);
 
-  const banner = () => {
+  const banner = ({
+    current_participant_count,
+    product_name,
+    max_bounty_per_user
+  }) => {
     return (
       <div className="padded-container banner-container primary-gradient">
         <div>
           <div className="product-category">APP</div>
-          <div className="product-name">BARK</div>
+          <div className="product-name">{product_name}</div>
           <div className="line" />
           <div className="product-users">
-            {t("product.hunters_on_quest")}: <span>57</span>
+            {t("product.hunters_on_quest")}:{" "}
+            <span>{current_participant_count}</span>
             <br />
-            {t("product.total_bounty")}: <span>$115</span>
+            {t("product.total_bounty")}: <span>${max_bounty_per_user}</span>
           </div>
         </div>
 
@@ -83,37 +82,34 @@ export default props => {
     );
   };
 
-  const productInfo = () => {
+  const productInfo = ({ description, images, total_bounty, bounty_left }) => {
+    let progress =
+      (Number.parseFloat(bounty_left) / Number.parseFloat(total_bounty)) * 100;
+    progress = !Number.isNaN(progress) ? progress : 0;
+
     return (
       <div className="padded-container product-info">
         <div className="title">{t("product.information")}</div>
-        <ScreenshotCarousel />
+        <ScreenshotCarousel images={images} />
         <div className="section-divider" />
-        <div className="desc">
-          Bark transforms people nearby into fun barking dogs. Every user
-          chooses one of the 8 different dog breeds and chats with other barkers
-          by communicating like dogs. Simply bark at each other within a 1 mile
-          radius by pressing the bark button. Communicate with other barkers via
-          short and unique bark messages. Drop a post on your location like when
-          a dog leaves a poo, and get unlimited attention.
-        </div>
+        <CollapsibleText minHeight={100} text={description} />
 
-        <div className="show-more-container">
-          <div className="show-more">{t("product.show_more")}</div>
-          <img className="down-arrow" src={downArrowImg} alt="" />
-        </div>
         <div className="section-divider" />
         <div className="title">{t("product.quests_reviews")}</div>
 
         <ProgressBar
           height={29}
-          progress={30}
+          progress={progress}
           containerStyle={{ marginTop: 21 }}
         />
 
         <div className="progress-bar-text">
-          <div>61% {t("product.remaining")}</div>
-          <div>$10,500 {t("product.bounty_fund")}</div>
+          <div>
+            {progress}% {t("product.remaining")}
+          </div>
+          <div>
+            ${total_bounty} {t("product.bounty_fund")}
+          </div>
         </div>
 
         <QuestCarousel />
@@ -152,11 +148,17 @@ export default props => {
 
   return (
     <CampaignConsumer>
-      {({fetchingCampaign}) => {
+      {({ currentCampaign, fetchingCampaign }) => {
         return (
           <div className="product-page">
-            {banner()}
-            {fetchingCampaign ? <CircularProgress/> : productInfo()}
+            {!currentCampaign || fetchingCampaign ? (
+              <CircularProgress />
+            ) : (
+              <>
+                {banner(currentCampaign)}
+                {productInfo(currentCampaign)}
+              </>
+            )}
           </div>
         );
       }}

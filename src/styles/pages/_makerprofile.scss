@@ -1,0 +1,27 @@
+.campaign-creator {
+  .campaign-step {
+    .step-title {
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    .title-input-container {
+      margin-top: 20px;
+    }
+
+    .title-input-header {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+    }
+
+    .title-input-box {
+      width: 100%;
+      min-height: 28px;
+      border: solid 1px #e5e5e5;
+      font-size: 0.875rem;
+      padding: 0px 15px;
+      margin-top: 5px;
+    }
+  }
+}

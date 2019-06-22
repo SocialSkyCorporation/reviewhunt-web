@@ -14,6 +14,7 @@ import {
 	STATUS_LOGIN,
 	STATUS_ONBOARDING
 } from "contexts/AuthContext";
+import CircularProgress from 'components/CircularProgress';
 
 const TAB_HUNTER = 0;
 const TAB_MAKER = 1;
@@ -220,14 +221,14 @@ class Auth extends Component {
 	render() {
 		const { tabIndex } = this.state;
 		const { t } = this.props;
-		const { status, loading, name } = this.props.context;
+		const { status, loading, authenticating, emailMe } = this.props.context;
 		const onHunterTab = tabIndex === TAB_HUNTER;
 
 		const triggerCanvas = () => this.canvas.randomSplat();
 
 		const title =
 			(status === STATUS_ONBOARDING && (
-				<Trans i18nKey="auth.welcome">Welcome {{ name }}!</Trans>
+				<Trans i18nKey="auth.welcome">Welcome {emailMe.name}!</Trans>
 			)) ||
 			(status === STATUS_SIGNUP && onHunterTab
 				? t("auth.join_hunter")
@@ -238,6 +239,8 @@ class Auth extends Component {
 			(status === STATUS_ONBOARDING && t("auth.onboarding_desc")) ||
 			(status === STATUS_SIGNUP && onHunterTab && t("auth.hunter_desc")) ||
 			(status === STATUS_SIGNUP && !onHunterTab && t("auth.maker_desc"));
+
+		if (authenticating) return <CircularProgress/>
 
 		return (
 			<div>
