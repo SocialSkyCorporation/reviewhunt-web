@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from "react";
+import { Icon } from "antd";
 import { useDropzone } from "react-dropzone";
 import uploadImageImg from "assets/images/upload-images.svg";
 
 const baseStyle = {
+  position: "relative",
   flex: 1,
   display: "flex",
   flexDirection: "column",
@@ -13,6 +15,7 @@ const baseStyle = {
   marginTop: 5,
   borderWidth: 2,
   borderRadius: 2,
+  width: 240,
   borderColor: "#eeeeee",
   borderStyle: "dashed",
   backgroundColor: "#fafafa",
@@ -36,10 +39,12 @@ const rejectStyle = {
 const thumbsContainer = {
   display: "flex",
   flexDirection: "row",
-  flexWrap: "wrap"
+  flexWrap: "wrap",
+  marginTop: 16
 };
 
 const thumb = {
+  position: "relative",
   display: "inline-flex",
   borderRadius: 2,
   border: "1px solid #eaeaea",
@@ -63,8 +68,43 @@ const img = {
   height: "100%"
 };
 
+const closeIcon = {
+  position: "absolute",
+  right: -8,
+  top: -8,
+  color: "red",
+  backgroundColor: "white"
+};
+
+const descriptionStyle = {
+  textAlign: "center",
+  marginTop: 8
+};
+
+const selectedImgStyle = {
+  position: "absolute",
+  left: 0,
+  top: 0,
+  width: "100%",
+  height: "100%"
+};
+
 export default props => {
+  const { single } = props;
   const [files, setFiles] = useState([]);
+
+  const acceptMultipleImages = images =>
+    files.concat(
+      images.map(file =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file)
+        })
+      )
+    );
+
+  const acceptSingleImage = images => [
+    { preview: URL.createObjectURL(images[0]) }
+  ];
   const {
     getRootProps,
     getInputProps,
@@ -73,16 +113,37 @@ export default props => {
     isDragReject
   } = useDropzone({
     accept: "image/*",
+    multiple: !single,
     onDrop: acceptedFiles => {
+      if (acceptedFiles.length === 0) return;
       setFiles(
-        acceptedFiles.map(file =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file)
-          })
-        )
+        single
+          ? acceptSingleImage(acceptedFiles)
+          : acceptMultipleImages(acceptedFiles)
       );
     }
   });
+
+  let description = (
+    <p style={descriptionStyle}>
+      Drag and drop files here or <br />
+      <span className="text-blue">select files</span>
+    </p>
+  );
+
+  if (single) {
+    baseStyle["width"] = 'auto';
+    baseStyle["height"] = 'auto';
+    baseStyle["minWidth"] = 240;
+    baseStyle["minHeight"] = 240;
+    baseStyle["objectFit"] = 'cover';
+    description = (
+      <p style={descriptionStyle}>
+        Drag and drop file here or <br />
+        <span className="text-blue">choose file</span>
+      </p>
+    );
+  }
 
   const style = useMemo(
     () => ({
@@ -94,23 +155,49 @@ export default props => {
     [isDragActive, isDragReject, isDragAccept]
   );
 
-  const thumbs = files.map(file => (
-    <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
-        <img src={file.preview} style={img} alt="" />
+  const thumbs =
+    !single &&
+    files.map((file, index) => (
+      <div style={thumb} key={file.name}>
+        <Icon
+          style={closeIcon}
+          type="close-circle"
+          onClick={() => {
+            const newFiles = Object.assign([], files);
+            newFiles.splice(index, 1);
+            setFiles(newFiles);
+          }}
+        />
+        <div style={thumbInner}>
+          <img src={file.preview} style={img} alt="" />
+        </div>
       </div>
-    </div>
-  ));
+    ));
+
+  if (single) {
+    return (
+      <>
+        <div {...getRootProps({ style })}>
+          <input {...getInputProps()} />
+          {files && files.length > 0 ? (
+            <img src={files[0].preview} style={selectedImgStyle} alt="" />
+          ) : (
+            <>
+              <img src={uploadImageImg} alt="" />
+              {description}
+            </>
+          )}
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
       <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
         <img src={uploadImageImg} alt="" />
-        <p style={{ textAlign: "center", marginTop: 8 }}>
-          Drag and drop files here or <br />
-          <span className="text-blue">click to select files</span>
-        </p>
+        {description}
       </div>
       <aside style={thumbsContainer}>{thumbs}</aside>
     </>

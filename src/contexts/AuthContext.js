@@ -42,7 +42,9 @@ class AuthProvider extends React.Component {
         userType: lastLoginType
       });
       this.props.history.replace("/profile");
-    }
+    } else {
+      this.setState({ authenticating: false });
+  }
   }
 
   handleError = e => {
@@ -57,7 +59,7 @@ class AuthProvider extends React.Component {
     const { api_key, name, email } = cb;
     setToken(type, api_key);
     setToken("last_login", type);
-    await this.setState({ loading: false, name, email });
+    await this.setState({ authenticating: false, loading: false, name, email });
     this.props.history.replace("/profile");
   };
 
