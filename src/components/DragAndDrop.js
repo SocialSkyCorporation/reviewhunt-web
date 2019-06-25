@@ -86,7 +86,8 @@ const selectedImgStyle = {
   left: 0,
   top: 0,
   width: "100%",
-  height: "100%"
+  height: "100%",
+  objectFit: 'contain'
 };
 
 export default props => {
@@ -132,11 +133,9 @@ export default props => {
   );
 
   if (single) {
-    baseStyle["width"] = 'auto';
-    baseStyle["height"] = 'auto';
-    baseStyle["minWidth"] = 240;
-    baseStyle["minHeight"] = 240;
-    baseStyle["objectFit"] = 'cover';
+    baseStyle["width"] = 240;
+    baseStyle["height"] = 240;
+    baseStyle["objectFit"] = 'contain';
     description = (
       <p style={descriptionStyle}>
         Drag and drop file here or <br />

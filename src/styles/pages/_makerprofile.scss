@@ -68,5 +68,16 @@
         margin-top: 6px;
       }
     }
+
+    .save-delete-container {
+      display: flex;
+      margin-top: 16px;
+      align-items: center;
+      justify-content: flex-end;
+
+      .delete-button {
+        margin-right: 32px;
+      }
+    }
   }
 }

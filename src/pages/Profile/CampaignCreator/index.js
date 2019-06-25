@@ -1,17 +1,27 @@
 import React, { Component } from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
-import { NewCampaignProvider, NewCampaignConsumer } from "./NewCampaignContext";
+import {
+  NewCampaignProvider,
+  NewCampaignConsumer,
+  STEP_CREATE_CAMPAIGN,
+  STEP_CREATE_QUESTS
+} from "./NewCampaignContext";
+import CircularProgress from "components/CircularProgress";
 
 export default class CampaignCreator extends Component {
   renderStep = () => {
     return (
       <NewCampaignConsumer>
-        {({ step }) => {
+        {({ step, loading }) => {
+          if (loading) {
+            return <CircularProgress />;
+          }
+
           switch (step) {
-            case 1:
+            case STEP_CREATE_CAMPAIGN:
               return <Step1 />;
-            case 2:
+            case STEP_CREATE_QUESTS:
               return <Step2 />;
             default:
               return null;

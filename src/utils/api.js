@@ -34,7 +34,6 @@ function request(method, path, params, shouldAuthenticate, tokenType, callback =
     'Content-Type': 'application/json',
   };
   if (shouldAuthenticate) {
-    if(!tokenType) return;
     const token = tokenType === "steemconnect" ? getEncryptedToken(tokenType) : getToken(tokenType);
     console.log("token", token);
     headers['Authorization'] = 'Token token=' + token;
