@@ -1,9 +1,10 @@
 import React, { useMemo, useState, useEffect } from "react";
+import PropTypes from 'prop-types'
 import { Icon } from "antd";
 import { useDropzone } from "react-dropzone";
 import uploadImageImg from "assets/images/upload-images.svg";
 
-export default props => {
+const DragAndDrop = props => {
   const { single, maxBytes, onChange, images } = props;
   const [files, setFiles] = useState(images);
 
@@ -53,6 +54,7 @@ export default props => {
       <span className="text-blue">select files</span>
     </p>
   );
+
 
   if (single) {
     baseStyle["width"] = 240;
@@ -125,6 +127,18 @@ export default props => {
   );
 };
 
+DragAndDrop.propTypes = {
+  images: PropTypes.array,
+  single: PropTypes.bool,
+  onChange: PropTypes.func
+}
+
+DragAndDrop.defaultProps = {
+  images: [],
+  single: false,
+  onChange: () => {}
+}
+
 const baseStyle = {
   position: "relative",
   flex: 1,
@@ -137,7 +151,6 @@ const baseStyle = {
   marginTop: 5,
   borderWidth: 2,
   borderRadius: 2,
-  width: 240,
   borderColor: "#eeeeee",
   borderStyle: "dashed",
   backgroundColor: "#fafafa",
@@ -211,3 +224,5 @@ const selectedImgStyle = {
   height: "100%",
   objectFit: "contain"
 };
+
+export default DragAndDrop;

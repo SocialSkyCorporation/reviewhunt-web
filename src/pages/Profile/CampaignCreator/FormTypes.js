@@ -61,9 +61,9 @@ export const Screenshots = ({onChange, images, title, single, maxBytes }) => {
     <div className="title-input-container">
       <div className="row-space-between title-input-header text-grey">
         <div>{title}</div>
-        {maxBytes && <div>Max {maxBytes / 100000} MB</div>}
+        {maxBytes && <div>Max {maxBytes / Math.pow(10, 6)} MB</div>}
       </div>
-      <DragAndDrop single maxBytes={maxBytes} images={images} onChange={onChange}/>
+      <DragAndDrop single={single} maxBytes={maxBytes} images={images} onChange={onChange}/>
     </div>
   );
 };

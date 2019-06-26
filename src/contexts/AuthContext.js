@@ -29,26 +29,31 @@ class AuthProvider extends React.Component {
   };
 
   async componentDidMount() {
-    this.setState({ authenticating: true });
+    await this.setState({ authenticating: true });
     const lastLoginType = getToken("last_login");
     console.log("last login", lastLoginType);
 
     if (lastLoginType) {
-      const emailMe = await getEmailMe(lastLoginType);
-      console.log(emailMe);
-      await this.setState({
-        emailMe,
-        authenticating: false,
-        userType: lastLoginType
-      });
-      this.props.history.replace("/profile");
+      try {
+        const emailMe = await getEmailMe(lastLoginType);
+        console.log(emailMe);
+        await this.setState({
+          emailMe,
+          authenticating: false,
+          userType: lastLoginType
+        });
+        this.props.history.replace("/profile");
+      } catch (e) {
+        this.handleError(e)
+      this.setState({ authenticating: false });
+      }
     } else {
       this.setState({ authenticating: false });
-  }
+    }
   }
 
   handleError = e => {
-    this.setState({ loading: false });
+    this.setState({ loading: false, authenticating: false });
     notification["error"]({
       message: extractErrorMessage(e)
     });
@@ -59,7 +64,7 @@ class AuthProvider extends React.Component {
     const { api_key, name, email } = cb;
     setToken(type, api_key);
     setToken("last_login", type);
-    await this.setState({ authenticating: false, loading: false, emailMe: cb});
+    await this.setState({ authenticating: false, loading: false, emailMe: cb, userType: type });
     console.log(this.props.history);
     this.props.history.replace("/profile");
   };
@@ -106,6 +111,7 @@ class AuthProvider extends React.Component {
   };
 
   handleLogin = (type, data) => {
+    console.log("handling login");
     this.setState({ authenticating: true, loading: true });
     let endpoint = "";
 
@@ -157,7 +163,7 @@ class AuthProvider extends React.Component {
           console.log("me", me);
           this.setState({ me });
         } catch (e) {
-          notification["error"]({ message: extractErrorMessage(e) });
+          this.handleError(e);
         }
 
         break;
@@ -172,12 +178,12 @@ class AuthProvider extends React.Component {
   logout = async () => {
     const lastLoginType = getToken("last_login");
     console.log("last login", lastLoginType);
-    if(lastLoginType) {
+    if (lastLoginType) {
       removeToken(lastLoginType);
-      await this.setState({emailMe: false});
+      await this.setState({ emailMe: false });
       this.props.history.replace("/auth");
     }
-  }
+  };
 
   render() {
     return (

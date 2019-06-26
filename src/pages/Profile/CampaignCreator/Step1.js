@@ -39,7 +39,7 @@ const Step1 = ({}) => {
               value={description}
               setValue={setDescription}
             />
-            <Screenshots title={"Screenshots"} />
+            <Screenshots title={"Screenshots"} onChange={files => setImages(files)} maxBytes={10000000} />
             <div className="title-input-container">
               <div className="row-space-between title-input-header text-grey">
                 <div>Product Links</div>
@@ -73,13 +73,12 @@ const Step1 = ({}) => {
                     product_name,
                     short_description,
                     description,
-                    images,
                     urls: {
                       appstore,
                       playstore,
                       website
                     }
-                  })
+                  }, images)
                 }
                 text={"Save and Next"}
               />

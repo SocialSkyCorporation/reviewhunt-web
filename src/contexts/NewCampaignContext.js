@@ -1,9 +1,14 @@
 import React from "react";
 import { Modal, notification } from "antd";
+import _ from "lodash";
+import axios from "axios";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
+import { getToken } from "utils/token";
+import { validateImage } from "utils/helpers/uploadHelpers";
 import { TYPE_MAKER } from "pages/Auth";
-import _ from "lodash";
+
+const UPLOAD_API = `${process.env.REACT_APP_API_ROOT}/campaigns.json`;
 
 const NewCampaignContext = React.createContext();
 
@@ -16,7 +21,7 @@ export const STEP_CREATE_QUESTS = 2;
 class NewCampaignProvider extends React.Component {
   state = {
     // step: STEP_CREATE_CAMPAIGN,
-    step: STEP_CREATE_QUESTS,
+    step: STEP_CREATE_CAMPAIGN,
     quests: [
       {
         id: null,
@@ -35,14 +40,55 @@ class NewCampaignProvider extends React.Component {
     loading: false
   };
 
-  createCampaign = async form => {
-    await this.setState({ loading: true });
+  createCampaign = async (form, images = []) => {
+    // await this.setState({ loading: true });
     try {
-      const result = await api.post("/campaigns.json", form, true, TYPE_MAKER);
-      await this.setState({ loading: false });
-      const { id } = result;
-      await this.setState({ campaignId: id });
-      this.setStep(STEP_CREATE_QUESTS);
+      const formData = new FormData();
+      let validated = true;
+
+      for (const file of images) {
+        console.log(file);
+        validated = validated && validateImage(file);
+      }
+
+      if (validated) {
+        formData.append("campaign[images][]", new Blob(images));
+
+        for (const key in form) {
+          if (key === "urls") {
+            for (const storeKey in form[key]) {
+              formData.append(
+                `campaign[urls][${storeKey}]`,
+                form[key][storeKey]
+              );
+            }
+          } else {
+            formData.append(`campaign[${key}]`, form[key]);
+          }
+        }
+
+        const token = getToken(TYPE_MAKER);
+        axios({
+          method: "post",
+          url: UPLOAD_API,
+          data: formData,
+          headers: {
+            Authorization: `Token token=${token}`
+          },
+          config: {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          }
+        });
+      }
+
+      // uploadImages(endpoint, )
+      // const result = await api.post("/campaigns.json", form, true, TYPE_MAKER);
+      // await this.setState({ loading: false });
+      // const { id } = result;
+      // await this.setState({ campaignId: id });
+      // this.setStep(STEP_CREATE_QUESTS);
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
       await this.setState({ loading: false });
@@ -67,16 +113,17 @@ class NewCampaignProvider extends React.Component {
       const questsClone = _.clone(quests);
       questsClone[index]["id"] = id;
       questsClone[index]["value"] = form;
-      questsClone[index].saved = true;
+      questsClone[index]["saved"] = true;
       this.setState({ quests: questsClone });
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
-      this.setState({ quests, loading: false });
+      this.setState({ loading: false });
     }
   };
 
   saveQuest = async (id, form, index) => {
     const { quests, campaignId } = this.state;
+
     try {
       const result = await api.put(
         `/campaigns/${campaignId}/quests/${id}`,
@@ -87,11 +134,11 @@ class NewCampaignProvider extends React.Component {
       const questsClone = _.clone(quests);
       questsClone[index]["id"] = id;
       questsClone[index]["value"] = form;
-      questsClone[index].saved = true;
+      questsClone[index]["saved"] = true;
       this.setState({ quests: questsClone });
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
-      this.setState({ quests, loading: false });
+      this.setState({ loading: false });
     }
   };
 

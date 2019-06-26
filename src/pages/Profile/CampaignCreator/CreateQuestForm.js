@@ -14,7 +14,7 @@ import NewCampaignContext, {
 } from "contexts/NewCampaignContext";
 
 const CreateQuestForm = memo(
-  ({ id, index, saved }) => {
+  ({ id, index }) => {
     const {
       createQuest,
       deleteQuest,
@@ -23,9 +23,15 @@ const CreateQuestForm = memo(
       quests
     } = useContext(NewCampaignContext);
 
-    const { title, description, criteria, quest_type, bounty_amount, image } = quests[
-      index
-    ].value;
+    const {
+      title,
+      description,
+      criteria,
+      quest_type,
+      bounty_amount,
+      image
+    } = quests[index].value;
+    const saved = quests[index].saved;
 
     return (
       <div>
@@ -48,7 +54,9 @@ const CreateQuestForm = memo(
           single
           maxBytes={1000000}
           images={image}
-          onChange={files => updateStateSingleQuest(index, "image", files)}
+          onChange={files =>
+            updateStateSingleQuest(index, "image", files[0].image)
+          }
         />
         <TextInput
           title={"What to include in the quest proof"}

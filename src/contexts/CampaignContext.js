@@ -23,6 +23,7 @@ class CampaignProvider extends React.Component {
     console.log("fetching campaigns");
     await this.setState({ fetchingCampaigns: true });
     const campaigns = await api.get("/campaigns.json");
+    console.log("campaigns:", campaigns);
     await this.setState({ fetchingCampaigns: false, campaigns });
   };
 
