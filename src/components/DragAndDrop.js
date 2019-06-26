@@ -1,7 +1,129 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Icon } from "antd";
 import { useDropzone } from "react-dropzone";
 import uploadImageImg from "assets/images/upload-images.svg";
+
+export default props => {
+  const { single, maxBytes, onChange, images } = props;
+  const [files, setFiles] = useState(images);
+
+  useEffect(() => {
+    if (files.length > 0) {
+      onChange(files);
+    }
+  }, [files]);
+
+  const acceptMultipleImages = images =>
+    files.concat(
+      images.map(file =>
+        Object.assign(file, {
+          image: file,
+          preview: URL.createObjectURL(file)
+        })
+      )
+    );
+
+  const acceptSingleImage = images => {
+    console.log(URL.createObjectURL(images[0]));
+    return [{ image: images[0], preview: URL.createObjectURL(images[0]) }];
+  };
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject
+  } = useDropzone({
+    accept: "image/*",
+    multiple: !single,
+    maxSize: maxBytes,
+    onDrop: acceptedFiles => {
+      if (acceptedFiles.length === 0) return;
+      setFiles(
+        single
+          ? acceptSingleImage(acceptedFiles)
+          : acceptMultipleImages(acceptedFiles)
+      );
+    }
+  });
+
+  let description = (
+    <p style={descriptionStyle}>
+      Drag and drop files here or <br />
+      <span className="text-blue">select files</span>
+    </p>
+  );
+
+  if (single) {
+    baseStyle["width"] = 240;
+    baseStyle["height"] = 240;
+    baseStyle["objectFit"] = "contain";
+    description = (
+      <p style={descriptionStyle}>
+        Drag and drop file here or <br />
+        <span className="text-blue">choose file</span>
+      </p>
+    );
+  }
+
+  const style = useMemo(
+    () => ({
+      ...baseStyle,
+      ...(isDragActive ? activeStyle : {}),
+      ...(isDragAccept ? acceptStyle : {}),
+      ...(isDragReject ? rejectStyle : {})
+    }),
+    [isDragActive, isDragReject, isDragAccept]
+  );
+
+  const thumbs =
+    !single &&
+    files.map((file, index) => (
+      <div style={thumb} key={file.name}>
+        <Icon
+          style={closeIcon}
+          type="close-circle"
+          onClick={() => {
+            const newFiles = Object.assign([], files);
+            newFiles.splice(index, 1);
+            setFiles(newFiles);
+          }}
+        />
+        <div style={thumbInner}>
+          <img src={file.preview} style={img} alt="" />
+        </div>
+      </div>
+    ));
+
+  if (single) {
+    return (
+      <>
+        <div {...getRootProps({ style })}>
+          <input {...getInputProps()} />
+          {files && files.length > 0 ? (
+            <img src={files[0].preview} style={selectedImgStyle} alt="" />
+          ) : (
+            <>
+              <img src={uploadImageImg} alt="" />
+              {description}
+            </>
+          )}
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div {...getRootProps({ style })}>
+        <input {...getInputProps()} />
+        <img src={uploadImageImg} alt="" />
+        {description}
+      </div>
+      <aside style={thumbsContainer}>{thumbs}</aside>
+    </>
+  );
+};
 
 const baseStyle = {
   position: "relative",
@@ -87,118 +209,5 @@ const selectedImgStyle = {
   top: 0,
   width: "100%",
   height: "100%",
-  objectFit: 'contain'
-};
-
-export default props => {
-  const { single } = props;
-  const [files, setFiles] = useState([]);
-
-  const acceptMultipleImages = images =>
-    files.concat(
-      images.map(file =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file)
-        })
-      )
-    );
-
-  const acceptSingleImage = images => [
-    { preview: URL.createObjectURL(images[0]) }
-  ];
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragAccept,
-    isDragReject
-  } = useDropzone({
-    accept: "image/*",
-    multiple: !single,
-    onDrop: acceptedFiles => {
-      if (acceptedFiles.length === 0) return;
-      setFiles(
-        single
-          ? acceptSingleImage(acceptedFiles)
-          : acceptMultipleImages(acceptedFiles)
-      );
-    }
-  });
-
-  let description = (
-    <p style={descriptionStyle}>
-      Drag and drop files here or <br />
-      <span className="text-blue">select files</span>
-    </p>
-  );
-
-  if (single) {
-    baseStyle["width"] = 240;
-    baseStyle["height"] = 240;
-    baseStyle["objectFit"] = 'contain';
-    description = (
-      <p style={descriptionStyle}>
-        Drag and drop file here or <br />
-        <span className="text-blue">choose file</span>
-      </p>
-    );
-  }
-
-  const style = useMemo(
-    () => ({
-      ...baseStyle,
-      ...(isDragActive ? activeStyle : {}),
-      ...(isDragAccept ? acceptStyle : {}),
-      ...(isDragReject ? rejectStyle : {})
-    }),
-    [isDragActive, isDragReject, isDragAccept]
-  );
-
-  const thumbs =
-    !single &&
-    files.map((file, index) => (
-      <div style={thumb} key={file.name}>
-        <Icon
-          style={closeIcon}
-          type="close-circle"
-          onClick={() => {
-            const newFiles = Object.assign([], files);
-            newFiles.splice(index, 1);
-            setFiles(newFiles);
-          }}
-        />
-        <div style={thumbInner}>
-          <img src={file.preview} style={img} alt="" />
-        </div>
-      </div>
-    ));
-
-  if (single) {
-    return (
-      <>
-        <div {...getRootProps({ style })}>
-          <input {...getInputProps()} />
-          {files && files.length > 0 ? (
-            <img src={files[0].preview} style={selectedImgStyle} alt="" />
-          ) : (
-            <>
-              <img src={uploadImageImg} alt="" />
-              {description}
-            </>
-          )}
-        </div>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <div {...getRootProps({ style })}>
-        <input {...getInputProps()} />
-        <img src={uploadImageImg} alt="" />
-        {description}
-      </div>
-      <aside style={thumbsContainer}>{thumbs}</aside>
-    </>
-  );
+  objectFit: "contain"
 };

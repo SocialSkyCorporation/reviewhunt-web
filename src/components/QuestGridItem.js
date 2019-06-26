@@ -28,7 +28,7 @@ const QuestGridItem = (props) => {
           <p>3 QUESTS</p>
         </div>
 
-        <img className="top-container" src={main_thumbnail["x1"]} alt="" />
+        <img className="top-container" src={main_thumbnail && main_thumbnail["x1"]} alt="" />
 
         <ProgressBar height={10} progress={20} dark />
 

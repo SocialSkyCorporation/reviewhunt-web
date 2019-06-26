@@ -3,6 +3,7 @@ import { Modal, notification } from "antd";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
 import { TYPE_MAKER } from "pages/Auth";
+import _ from "lodash";
 
 const NewCampaignContext = React.createContext();
 
@@ -16,24 +17,33 @@ class NewCampaignProvider extends React.Component {
   state = {
     // step: STEP_CREATE_CAMPAIGN,
     step: STEP_CREATE_QUESTS,
-    quests: [{ id: null, value: {}, saved: false, saving: false }],
-    savingQuests: [],
+    quests: [
+      {
+        id: null,
+        value: {
+          title: "",
+          description: "",
+          criteria: "",
+          quest_type: "general",
+          image: [],
+          bounty_amount: 0
+        },
+        saved: false
+      }
+    ],
     campaignId: 2,
     loading: false
   };
 
   createCampaign = async form => {
-    console.log("create form", form);
     await this.setState({ loading: true });
     try {
       const result = await api.post("/campaigns.json", form, true, TYPE_MAKER);
       await this.setState({ loading: false });
-      console.log("result", result);
       const { id } = result;
       await this.setState({ campaignId: id });
       this.setStep(STEP_CREATE_QUESTS);
     } catch (e) {
-      console.log(e);
       notification["error"]({ message: extractErrorMessage(e) });
       await this.setState({ loading: false });
     }
@@ -44,9 +54,7 @@ class NewCampaignProvider extends React.Component {
   };
 
   createQuest = async (id, form, index) => {
-    console.log("creating", form);
-    const { quests, campaignId, savingQuests } = this.state;
-    this.setState({ savingQuests: savingQuests.concat(index) });
+    const { quests, campaignId } = this.state;
 
     try {
       const result = await api.post(
@@ -55,50 +63,44 @@ class NewCampaignProvider extends React.Component {
         true,
         TYPE_MAKER
       );
-      console.log("result", result);
       const { id } = result;
-      quests[index]["id"] = id;
-      quests[index].saved = true;
-      savingQuests.splice(index, 1);
-      this.setState({ quests, savingQuests });
+      const questsClone = _.clone(quests);
+      questsClone[index]["id"] = id;
+      questsClone[index]["value"] = form;
+      questsClone[index].saved = true;
+      this.setState({ quests: questsClone });
     } catch (e) {
-      console.log(e);
       notification["error"]({ message: extractErrorMessage(e) });
-      savingQuests.splice(index, 1);
-      this.setState({ quests, savingQuests, loading: false });
+      this.setState({ quests, loading: false });
     }
   };
 
   saveQuest = async (id, form, index) => {
-    console.log("saving", id, form);
-    console.log("creating", form);
-    const { quests, campaignId, savingQuests } = this.state;
-    this.setState({ savingQuests: savingQuests.concat(index) });
+    const { quests, campaignId } = this.state;
     try {
       const result = await api.put(
-        `/campaigns/${campaignId}/quests/`,
+        `/campaigns/${campaignId}/quests/${id}`,
         form,
         true,
         TYPE_MAKER
       );
-      console.log("result", result);
-      const { id } = result;
-      quests[index]["id"] = id;
-      quests[index].saved = true;
-      savingQuests.splice(index, 1);
-      this.setState({ quests, savingQuests });
+      const questsClone = _.clone(quests);
+      questsClone[index]["id"] = id;
+      questsClone[index]["value"] = form;
+      questsClone[index].saved = true;
+      this.setState({ quests: questsClone });
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
-      savingQuests.splice(index, 1);
-      this.setState({ quests, savingQuests, loading: false });
+      this.setState({ quests, loading: false });
     }
   };
 
   deleteQuest = index => {
     const { quests } = this.state;
     const okPressed = () => {
-      quests.splice(index, 1);
-      this.setState({ quests });
+      const questsClone = _.clone(quests);
+      questsClone.splice(index, 1);
+      this.setState({ quests: questsClone });
     };
 
     confirm({
@@ -117,7 +119,27 @@ class NewCampaignProvider extends React.Component {
     const { quests } = this.state;
     if (quests.length + 1 > 3) return;
 
-    this.setState({ quests: this.state.quests.concat({ key: 2, value: {} }) });
+    this.setState({
+      quests: this.state.quests.concat({
+        id: null,
+        value: {
+          title: "",
+          description: "",
+          criteria: "",
+          quest_type: "general",
+          image: [],
+          bounty_amount: 0
+        },
+        saved: false
+      })
+    });
+  };
+
+  updateStateSingleQuest = async (index, key, value) => {
+    const { quests } = this.state;
+    const questsClone = _.clone(quests);
+    questsClone[index]["value"][key] = value;
+    await this.setState({ quests: questsClone });
   };
 
   render() {
@@ -130,7 +152,8 @@ class NewCampaignProvider extends React.Component {
           deleteQuest: this.deleteQuest,
           createQuest: this.createQuest,
           saveQuest: this.saveQuest,
-          createCampaign: this.createCampaign
+          createCampaign: this.createCampaign,
+          updateStateSingleQuest: this.updateStateSingleQuest
         }}
       >
         {this.props.children}

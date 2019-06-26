@@ -9,7 +9,7 @@ const SimpleButton = props => {
 		onMouseOver={onMouseOver}
 		onMouseOut={onMouseOut}
 		className={`simple-button ${className}`} onClick={onClick} style={style}>
-			<div className="row-align-center">
+			<div className="row-align-center simple-button-text">
 				{icon}
 				{text}
 			</div>

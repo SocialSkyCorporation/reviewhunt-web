@@ -540,7 +540,9 @@ hr {
 
 .simple-button {
   display: inline-block;
-  padding: 10px 32px;
+  min-height: 40px;
+  min-width: 100px;
+  padding: 12px 32px;
   border: solid 1px #0a0a0a;
   font-size: 0.75rem;
   text-align: center;
@@ -553,6 +555,11 @@ hr {
     background: #000;
     border: solid 1px #000;
     // transform: scale(1.02);
+    @include responsive(tablet) {
+      border: solid 1px #0a0a0a;
+      color: #0a0a0a;
+      background: #fff;
+    }
   }
 
   @include responsive(mobile) {
@@ -592,6 +599,11 @@ hr {
   &:hover {
     cursor: pointer;
     background: #404040;
+
+    @include responsive(tablet) {
+      background: #000;
+      color: #fff;
+    }
   }
 }
 

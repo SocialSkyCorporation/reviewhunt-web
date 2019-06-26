@@ -2,7 +2,7 @@ import React from "react";
 import { notification } from "antd";
 import { getKarma } from "utils/auth/redditAuthHelper";
 import { getSteemMe, getEmailMe } from "utils/auth/authHelper";
-import { getToken, setToken } from "utils/token";
+import { getToken, setToken, removeToken } from "utils/token";
 import { withRouter } from "react-router-dom";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
@@ -59,7 +59,8 @@ class AuthProvider extends React.Component {
     const { api_key, name, email } = cb;
     setToken(type, api_key);
     setToken("last_login", type);
-    await this.setState({ authenticating: false, loading: false, name, email });
+    await this.setState({ authenticating: false, loading: false, emailMe: cb});
+    console.log(this.props.history);
     this.props.history.replace("/profile");
   };
 
@@ -105,8 +106,7 @@ class AuthProvider extends React.Component {
   };
 
   handleLogin = (type, data) => {
-    this.setState({ loading: true });
-
+    this.setState({ authenticating: true, loading: true });
     let endpoint = "";
 
     if (type === TYPE_HUNTER) {
@@ -169,6 +169,16 @@ class AuthProvider extends React.Component {
     this.setState({ status });
   };
 
+  logout = async () => {
+    const lastLoginType = getToken("last_login");
+    console.log("last login", lastLoginType);
+    if(lastLoginType) {
+      removeToken(lastLoginType);
+      await this.setState({emailMe: false});
+      this.props.history.replace("/auth");
+    }
+  }
+
   render() {
     return (
       <Provider
@@ -181,7 +191,8 @@ class AuthProvider extends React.Component {
           handleLogin: this.handleLogin,
           deleteSocialItem: this.deleteSocialItem,
           setSocialChannels: this.setSocialChannels,
-          setStatus: this.setStatus
+          setStatus: this.setStatus,
+          logout: this.logout
         }}
       >
         {this.props.children}

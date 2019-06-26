@@ -4,7 +4,7 @@ import { Collapse, Icon, Modal } from "antd";
 import { TextInput, Screenshots, ProductLinks } from "./FormTypes";
 import SimpleButton from "components/SimpleButton";
 import CreateQuestForm from "./CreateQuestForm";
-import { NewCampaignConsumer } from "./NewCampaignContext";
+import { NewCampaignConsumer } from "contexts/NewCampaignContext";
 import addCircleImg from "assets/images/add-circle.svg";
 
 const { Panel } = Collapse;

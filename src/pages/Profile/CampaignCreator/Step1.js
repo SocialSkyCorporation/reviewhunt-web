@@ -3,7 +3,7 @@ import { Input, Icon } from "antd";
 import PropTypes from "prop-types";
 import { TextInput, Screenshots, ProductLinks } from "./FormTypes";
 import SimpleButton from "components/SimpleButton";
-import { NewCampaignConsumer } from "./NewCampaignContext";
+import { NewCampaignConsumer } from "contexts/NewCampaignContext";
 import websiteImg from "assets/images/website.svg";
 import appstoreImg from "assets/images/appstore.svg";
 import playstoreImg from "assets/images/playstore.svg";

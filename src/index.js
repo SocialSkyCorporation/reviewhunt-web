@@ -6,6 +6,7 @@ import { Router } from "react-router-dom";
 import { AppProvider } from "contexts/AppContext";
 import { AuthProvider } from "contexts/AuthContext";
 import { CampaignProvider } from "contexts/CampaignContext";
+import { NewCampaignProvider } from "contexts/NewCampaignContext";
 import CircularProgress from "components/CircularProgress";
 
 import App from "./App";
@@ -23,7 +24,9 @@ ReactDOM.render(
 			<AppProvider>
 				<AuthProvider>
 					<CampaignProvider>
-						<App />
+						<NewCampaignProvider>
+							<App />
+						</NewCampaignProvider>
 					</CampaignProvider>
 				</AuthProvider>
 			</AppProvider>

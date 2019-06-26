@@ -1,51 +1,90 @@
-import React from "react";
-import { Input, Icon } from "antd";
+import React, { useState, memo } from "react";
+import { Input } from "antd";
 import PropTypes from "prop-types";
 import DragAndDrop from "components/DragAndDrop";
-import websiteImg from "assets/images/website.svg";
-import appstoreImg from "assets/images/appstore.svg";
-import playstoreImg from "assets/images/playstore.svg";
 
 const { TextArea } = Input;
 
-export const TextInput = ({
-  title,
-  onChange,
-  containerStyle,
-  textArea = false,
-  textAreaHeight = 32,
-  value,
-  setValue
-}) => {
-  return (
-    <div className="title-input-container" style={containerStyle}>
-      <div className="row-space-between title-input-header text-grey">
-        <div>{title}</div>
-        <div>51/60</div>
+export const TextInput = memo(
+  ({
+    title,
+    containerStyle,
+    textArea,
+    textAreaHeight,
+    value,
+    maxCharacters,
+    setValue
+  }) => {
+    return (
+      <div className="title-input-container" style={containerStyle}>
+        <div className="row-space-between title-input-header text-grey">
+          <div>{title}</div>
+          {maxCharacters && (
+            <div>
+              {value.length}/{maxCharacters}
+            </div>
+          )}
+        </div>
+
+        {textArea ? (
+          <TextArea
+            style={{ height: textAreaHeight }}
+            onChange={e => {
+              if (maxCharacters && e.target.value.length > maxCharacters) {
+                return;
+              }
+              setValue(e.target.value);
+            }}
+            value={value}
+          />
+        ) : (
+          <Input
+            className="title-input-box text-black"
+            onChange={e => {
+              if (maxCharacters && e.target.value.length > maxCharacters) {
+                return;
+              }
+              setValue(e.target.value);
+            }}
+            value={value}
+          />
+        )}
       </div>
+    );
+  },
+  ({ value: prevValue }, { value: nextValue }) => prevValue === nextValue
+);
 
-      {textArea ? (
-        <TextArea style={{height: textAreaHeight}} onChange={e => setValue(e.target.value)} value={value}/>
-      ) : (
-        <Input className="title-input-box text-black" onChange={e => setValue(e.target.value)} value={value}/>
-      )}
-    </div>
-  );
-};
 
-Input.propTypes = {};
-
-Input.defaultProps = {};
-
-export const Screenshots = ({ title, single }) => {
+export const Screenshots = ({onChange, images, title, single, maxBytes }) => {
   return (
     <div className="title-input-container">
       <div className="row-space-between title-input-header text-grey">
         <div>{title}</div>
-        <div>5.5 / 10 MB</div>
+        {maxBytes && <div>Max {maxBytes / 100000} MB</div>}
       </div>
-      <DragAndDrop single />
+      <DragAndDrop single maxBytes={maxBytes} images={images} onChange={onChange}/>
     </div>
   );
 };
 
+
+TextInput.propTypes = {
+  title: PropTypes.string,
+  value: PropTypes.string,
+  containerStyle: PropTypes.object,
+  textAreaHeight: PropTypes.number,
+  textArea: PropTypes.bool,
+  maxCharacters: PropTypes.number,
+  setValue: PropTypes.func
+};
+
+TextInput.defaultProps = {
+  title: "",
+  value: "",
+  containerStyle: {},
+  textAreaHeight: 32,
+  textArea: false,
+  maxCharacters: null,
+  setValue: () => {},
+};

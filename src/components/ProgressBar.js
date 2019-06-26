@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 
-const ProgressBar = ({ height, progress, containerStyle, dark }) => {
+const ProgressBar = memo(({ height, progress, containerStyle, dark }) => {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const ProgressBar = ({ height, progress, containerStyle, dark }) => {
       </div>
     </div>
   );
-};
+}, ({progress: prevProgress}, {progress: nextProgress}) => prevProgress === nextProgress);
 
 ProgressBar.propTypes = {
   height: PropTypes.number,
