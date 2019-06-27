@@ -32,7 +32,7 @@ class Profile extends Component {
         <div className="banner-subheader">Sebastian</div>
         <div className="banner-line" />
 
-        <div>
+        <div className="bold-span">
           <div>
             <span>10</span> quests ran from <span>2</span> review campaigns
           </div>

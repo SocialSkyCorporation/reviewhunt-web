@@ -128,7 +128,7 @@ const DragAndDrop = props => {
 };
 
 DragAndDrop.propTypes = {
-  images: PropTypes.array,
+  images: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   single: PropTypes.bool,
   onChange: PropTypes.func
 }

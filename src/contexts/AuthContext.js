@@ -42,10 +42,16 @@ class AuthProvider extends React.Component {
           authenticating: false,
           userType: lastLoginType
         });
-        this.props.history.replace("/profile");
+        console.log("path", window.location.pathname);
+        const path = window.location.pathname;
+        if (path === "/auth") {
+          this.props.history.replace("/");
+        } else {
+          this.props.history.replace(window.location.pathname);
+        }
       } catch (e) {
-        this.handleError(e)
-      this.setState({ authenticating: false });
+        this.handleError(e);
+        this.setState({ authenticating: false });
       }
     } else {
       this.setState({ authenticating: false });
@@ -64,7 +70,12 @@ class AuthProvider extends React.Component {
     const { api_key, name, email } = cb;
     setToken(type, api_key);
     setToken("last_login", type);
-    await this.setState({ authenticating: false, loading: false, emailMe: cb, userType: type });
+    await this.setState({
+      authenticating: false,
+      loading: false,
+      emailMe: cb,
+      userType: type
+    });
     console.log(this.props.history);
     this.props.history.replace("/profile");
   };

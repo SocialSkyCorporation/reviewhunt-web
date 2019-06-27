@@ -1,4 +1,4 @@
-.product-page {
+.campaign-page {
   min-height: 100vh;
 
   & > div {
@@ -140,13 +140,13 @@
     }
 
     .show-more-white-gradient {
-  position: absolute;
-  content: "";
-  left: 0px;
-  top: 0px;
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(transparent, #fff);
+      position: absolute;
+      content: "";
+      left: 0px;
+      top: 0px;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(transparent, #fff);
     }
 
     .carousel-container {
@@ -198,7 +198,7 @@
 
     .down-arrow {
       margin-left: 8px;
-      transition: transform .1s linear;
+      transition: transform 0.1s linear;
 
       &.rotated {
         transform: rotate(180deg);
@@ -287,6 +287,22 @@
           }
         }
       }
+    }
+  }
+
+  .url-icon-container {
+    margin-top: 30px;
+  }
+
+  .url-icon {
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+    border: 1px solid #0a0a0a;
+    border-radius: 17px;
+    margin-left: 5px;
+    &:first-child {
+      margin-left: 10px;
     }
   }
 

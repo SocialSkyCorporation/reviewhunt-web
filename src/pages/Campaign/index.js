@@ -9,6 +9,10 @@ import CollapsibleText from "./CollapsibleText";
 
 import questImg from "assets/images/quest-circle.svg";
 import starImg from "assets/images/star.svg";
+import appStoreImg from "assets/images/appstore.svg";
+import playStoreImg from "assets/images/playstore.svg";
+import websiteImg from "assets/images/website.svg";
+
 import FullWidthButton from "components/FullWidthButton";
 import CircularProgress from "components/CircularProgress";
 import { scrollTop } from "utils/scroller";
@@ -34,7 +38,8 @@ export default props => {
   const banner = ({
     current_participant_count,
     product_name,
-    max_bounty_per_user
+    max_bounty_per_user,
+    urls
   }) => {
     return (
       <div className="padded-container banner-container primary-gradient">
@@ -75,8 +80,29 @@ export default props => {
           })}
         </div>
 
-        <div>
+        <div className="row-align-center">
           <SimpleButton text={t("product.join")} style={{ marginTop: 30 }} />
+          <div className="row-align-center url-icon-container">
+            {urls["appstore"] && (
+              <a href={urls["appstore"]}>
+                <img className="url-icon hover-link" src={appStoreImg} alt="" />
+              </a>
+            )}
+            {urls["playstore"] && (
+              <a href={urls["playstore"]}>
+                <img
+                  className="url-icon hover-link"
+                  src={playStoreImg}
+                  alt=""
+                />
+              </a>
+            )}
+            {urls["website"] && (
+              <a href={urls["website"]}>
+                <img className="url-icon hover-link" src={websiteImg} alt="" />
+              </a>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -149,8 +175,9 @@ export default props => {
   return (
     <CampaignConsumer>
       {({ currentCampaign, fetchingCampaign }) => {
+        console.log(currentCampaign);
         return (
-          <div className="product-page">
+          <div className="campaign-page">
             {!currentCampaign || fetchingCampaign ? (
               <CircularProgress />
             ) : (
