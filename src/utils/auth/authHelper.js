@@ -25,6 +25,7 @@ export const getEmailMe = async (type, token) => {
 
   let endpoint = "";
 
+  console.log("logging in with type", type);
   if(type === TYPE_HUNTER) endpoint = "/hunters/me.json"
   else if(type === TYPE_MAKER) endpoint = "/makers/me.json";
 

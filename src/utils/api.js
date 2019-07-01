@@ -1,7 +1,5 @@
 import "whatwg-fetch";
-import axios from "axios";
 import { getEncryptedToken, getToken } from "utils/token";
-import { calculateContentPayout } from "utils/helpers/steemitHelpers";
 
 const API_ROOT = process.env.REACT_APP_API_ROOT;
 
@@ -46,7 +44,8 @@ function request(
       tokenType === "steemconnect"
         ? getEncryptedToken(tokenType)
         : getToken(tokenType);
-    console.log("token", token);
+
+    console.log("token", tokenType, token);
     headers["Authorization"] = "Token token=" + token;
   }
 
@@ -66,9 +65,14 @@ function request(
     .then(callback);
 }
 
-async function uploadFormData(path, data, shouldAuthenticate, tokenType) {
+async function uploadFormData(
+  path,
+  data,
+  shouldAuthenticate,
+  tokenType,
+  callback
+) {
   let headers = {};
-  headers["Content-Type"] = "multipart/form-data";
 
   if (shouldAuthenticate) {
     const token = getToken(tokenType);
@@ -78,12 +82,14 @@ async function uploadFormData(path, data, shouldAuthenticate, tokenType) {
 
   var url = API_ROOT + path;
 
-  return await axios({
+  return fetch(url, {
     method: "POST",
-    url,
-    data,
+    body: data,
     headers
-  });
+  })
+    .then(parseJSON)
+    .then(checkError)
+    .then(callback);
 }
 
 export default {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Select } from "antd";
+import { Icon, Select, notification } from "antd";
 import moneyImg from "assets/images/money-circle.svg";
 import crownImg from "assets/images/crown-circle.svg";
 import TabItem from "./TabItem";
@@ -16,8 +16,14 @@ import { AuthConsumer } from "contexts/AuthContext";
 import steemLogoWhite from "assets/images/steem-logo.svg";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { getLoginURL } from "utils/token";
+import { withAuthContext } from "contexts/HOC";
 import { withTranslation } from "react-i18next";
-import {countries} from 'utils/constants'
+import { countries } from "utils/constants";
+import api from "utils/api";
+import Wallet from "./Wallet";
+import { TYPE_HUNTER } from "pages/Auth";
+import { extractErrorMessage } from "utils/errorMessage";
+import CircularProgress from "components/CircularProgress";
 
 const TAB_PROFILE = 0;
 const TAB_CHANNELS = 1;
@@ -26,21 +32,48 @@ const TAB_WALLET = 3;
 
 class Profile extends Component {
   state = {
-    tabIndex: 0,
+    tabIndex: 3,
     editProfile: false,
     socialChannels: [],
     currentQuest: null,
-    steemLogo: steemLogoBlack
+    steemLogo: steemLogoBlack,
+    campaigns: [],
+    fetching: false
+  };
+
+  fetchCampaigns = async () => {
+    const { fetching } = this.state;
+    if (fetching) return;
+
+    this.setState({ fetching: true });
+
+    try {
+      const campaigns = await api.get(
+        "/campaigns/mine.json",
+        {},
+        true,
+        TYPE_HUNTER
+      );
+      console.log("fetched campaigns", campaigns);
+      this.setState({campaigns });
+    } catch (e) {
+      notification["error"]({
+        message: extractErrorMessage(e)
+      });
+    } finally {
+      this.setState({ fetching: false });
+    }
   };
 
   renderBanner() {
     const { t } = this.props;
+    const { emailMe } = this.props.authContext;
     return (
       <div className="padded-container primary-gradient banner-container">
         <div className="banner-header">
           {t("profile.my_account").toUpperCase()}
         </div>
-        <div className="banner-subheader">YOUNGHWI CHO</div>
+        <div className="banner-subheader">{emailMe.name}</div>
         <div className="banner-line" />
 
         <div className="summary-container">
@@ -48,14 +81,18 @@ class Profile extends Component {
             <img className="summary-icon" src={crownImg} alt="" />
             <div className="text-container">
               <div className="summary-title">{t("profile.top")} 3.5%</div>
-              <div className="summary-subtitle">{t("profile.buzz_performance")}</div>
+              <div className="summary-subtitle">
+                {t("profile.buzz_performance")}
+              </div>
             </div>
           </div>
           <div className="summary-item">
             <img className="summary-icon" src={moneyImg} alt="" />
             <div className="text-container">
               <div className="summary-title">$5,055</div>
-              <div className="summary-subtitle">{t("profile.earned_bounty")}</div>
+              <div className="summary-subtitle">
+                {t("profile.earned_bounty")}
+              </div>
             </div>
           </div>
         </div>
@@ -75,6 +112,7 @@ class Profile extends Component {
   renderTabs() {
     const { tabIndex } = this.state;
     const { t } = this.props;
+    const { logout } = this.props.authContext;
     return (
       <div className="tabs">
         <TabItem
@@ -90,13 +128,17 @@ class Profile extends Component {
         <TabItem
           text={t("profile.quest_dashboard")}
           selected={tabIndex === 2}
-          onClick={() => this.setState({ tabIndex: 2 })}
+          onClick={() => {
+            this.fetchCampaigns();
+            this.setState({ tabIndex: 2 });
+          }}
         />
         <TabItem
           text={t("profile.wallet")}
           selected={tabIndex === 3}
           onClick={() => this.setState({ tabIndex: 3 })}
         />
+        <TabItem text={"Logout"} selected={tabIndex === 4} onClick={logout} />
       </div>
     );
   }
@@ -109,7 +151,7 @@ class Profile extends Component {
         {tabIndex === TAB_PROFILE && this.renderProfileTab()}
         {tabIndex === TAB_CHANNELS && this.renderChannelsTab()}
         {tabIndex === TAB_QUEST && this.renderQuestTab()}
-        {tabIndex === TAB_WALLET && this.renderQuestTab()}
+        {tabIndex === TAB_WALLET && this.renderWallet()}
       </div>
     );
   }
@@ -121,8 +163,14 @@ class Profile extends Component {
     return (
       <AuthConsumer>
         {({ emailMe, steemMe, steemconnectLoading }) => {
-          const country = countries.filter(country => country.code === emailMe.country_code)[0].value;
-          
+          console.log("emailMe", emailMe);
+          const countryArray = countries.filter(
+            country => country.code === emailMe.country_code
+          );
+          const country =
+            countryArray && countryArray.length > 0 && countryArray[0].value;
+          console.log("country", country);
+
           return (
             <div>
               <div className="steem-connect">
@@ -137,7 +185,7 @@ class Profile extends Component {
                           alt=""
                         />
                         <div className="profile-icon-text text-black">
-                        {steemMe.name}
+                          {steemMe.name}
                         </div>
                       </div>
                     </div>
@@ -256,7 +304,7 @@ class Profile extends Component {
   }
 
   renderQuestTab() {
-    const { currentQuest } = this.state;
+    const { currentQuest, campaigns, fetching } = this.state;
     const { t } = this.props;
 
     if (currentQuest) {
@@ -272,13 +320,32 @@ class Profile extends Component {
       );
     }
 
+    if (fetching) {
+      return (
+        <div className="content-quest">
+          <CircularProgress />
+        </div>
+      );
+    }
+
     return (
       <div className="content-quest">
         <div className="content-title text-black">
           {t("profile.your_quests").toUpperCase()}
         </div>
         <Select className="category-select" defaultValue={t("all")} />
-        <QuestItem
+        {campaigns.map((campaign, index) => {
+          const { id } = campaign;
+          console.log(campaign);
+          return (
+            <QuestItem
+              key={id}
+              data={campaign}
+              onClick={() => this.setState({ currentQuest: campaign })}
+            />
+          );
+        })}
+{/*        <QuestItem
           steps={[1, 2, 3, "review", "buzz"]}
           currentStep={1}
           onClick={() => this.setState({ currentQuest: 1 })}
@@ -289,11 +356,15 @@ class Profile extends Component {
           onClick={() => this.setState({ currentQuest: 1 })}
         />
         <QuestItem steps={[1, 2, 3, "review", "buzz"]} currentStep={3} />
-        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={5} />
+        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={4} />
         <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={3} ended />
-        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={4} ended />
+        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={4} ended />*/}
       </div>
     );
+  }
+
+  renderWallet() {
+    return <Wallet />;
   }
 
   render() {
@@ -307,4 +378,4 @@ class Profile extends Component {
   }
 }
 
-export default withTranslation()(Profile);
+export default withTranslation()(withAuthContext(Profile));

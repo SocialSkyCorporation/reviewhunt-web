@@ -6,6 +6,7 @@ import { Router } from "react-router-dom";
 import { AppProvider } from "contexts/AppContext";
 import { AuthProvider } from "contexts/AuthContext";
 import { CampaignProvider } from "contexts/CampaignContext";
+import { WalletProvider } from "contexts/WalletContext";
 import { NewCampaignProvider } from "contexts/NewCampaignContext";
 import CircularProgress from "components/CircularProgress";
 
@@ -24,9 +25,11 @@ ReactDOM.render(
 			<AppProvider>
 				<AuthProvider>
 					<CampaignProvider>
-						<NewCampaignProvider>
-							<App />
-						</NewCampaignProvider>
+						<WalletProvider>
+							<NewCampaignProvider>
+								<App />
+							</NewCampaignProvider>
+						</WalletProvider>
 					</CampaignProvider>
 				</AuthProvider>
 			</AppProvider>

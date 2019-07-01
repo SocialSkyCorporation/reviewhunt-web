@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import moneySvg from "assets/images/money-single.svg";
 import hunterSvg from "assets/images/hunter-single.svg";
 import questSvg from "assets/images/quest-single.svg";
 import ProgressBar from "components/ProgressBar";
+import CampaignContext from "contexts/CampaignContext";
+import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+const QuestGridItem = props => {
+  const { setCurrentCampaign } = useContext(CampaignContext);
 
-const QuestGridItem = (props) => {
-  const {data} = props;
+  const { data } = props;
   const {
     id,
-    main_thumbnail,
+    thumbnails,
+    quest_count,
     product_name,
     short_description,
     current_participant_count,
@@ -21,14 +22,23 @@ const QuestGridItem = (props) => {
   } = data;
 
   return (
-    <Link to={`/campaigns/${id}`}>
+    <Link
+      onClick={e => {
+        setCurrentCampaign(data);
+      }}
+      to={`/campaigns/${id}`}
+    >
       <div className="quest-grid-item">
         <div className="quest-badge">
           <img src={questSvg} alt="" />
-          <p>3 QUESTS</p>
+          <p>{quest_count} QUESTS</p>
         </div>
 
-        <img className="top-container" src={main_thumbnail && main_thumbnail["x1"]} alt="" />
+        <img
+          className="top-container"
+          src={thumbnails && thumbnails["x1"]}
+          alt=""
+        />
 
         <ProgressBar height={10} progress={20} dark />
 

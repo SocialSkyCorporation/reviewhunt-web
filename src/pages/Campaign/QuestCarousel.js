@@ -1,6 +1,5 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useRef, useCallback } from "react";
 import Slider from "react-slick";
-import test1Img from "./test1.png";
 import leftArrowImg from "assets/images/left-circle.svg";
 import rightArrowImg from "assets/images/right-circle.svg";
 import { CampaignConsumer } from "contexts/CampaignContext";
@@ -51,7 +50,7 @@ const QuestCarousel = props => {
   };
 
   return (
-    <CampaignConsumer>
+  <CampaignConsumer>
       {({ currentCampaign }) => {
         return (
           <div className="carousel-container">

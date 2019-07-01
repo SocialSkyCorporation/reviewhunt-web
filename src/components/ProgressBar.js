@@ -7,7 +7,7 @@ const ProgressBar = memo(({ height, progress, containerStyle, dark }) => {
   useEffect(() => {
     setTimeout(() => {
       setWidth(progress);
-    }, 500);
+    }, 100);
   }, [progress]);
 
   return (

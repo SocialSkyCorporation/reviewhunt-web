@@ -98,7 +98,7 @@ const ProfileRow = ({
 
 ProfileRow.propTypes = {
   title: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   editMode: PropTypes.bool,
   type: PropTypes.string,
   password: PropTypes.bool

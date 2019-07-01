@@ -12,7 +12,7 @@ const DragAndDrop = props => {
     if (files.length > 0) {
       onChange(files);
     }
-  }, [files]);
+  }, [files, onChange]);
 
   const acceptMultipleImages = images =>
     files.concat(
@@ -39,6 +39,7 @@ const DragAndDrop = props => {
     multiple: !single,
     maxSize: maxBytes,
     onDrop: acceptedFiles => {
+      console.log("file dropped", acceptedFiles);
       if (acceptedFiles.length === 0) return;
       setFiles(
         single

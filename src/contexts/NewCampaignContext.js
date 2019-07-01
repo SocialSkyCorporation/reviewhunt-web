@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { Modal, notification } from "antd";
 import _ from "lodash";
-import axios from "axios";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
-import { getToken } from "utils/token";
 import { validateImage } from "utils/helpers/uploadHelpers";
 import { TYPE_MAKER } from "pages/Auth";
 
@@ -15,11 +13,22 @@ const { confirm } = Modal;
 
 export const STEP_CREATE_CAMPAIGN = 1;
 export const STEP_CREATE_QUESTS = 2;
+export const STEP_REVIEW_BUZZ = 3;
+export const STEP_CAMPAIGN_BUDGET = 4;
 
 class NewCampaignProvider extends Component {
   state = {
-    step: STEP_CREATE_QUESTS,
+    step: STEP_CAMPAIGN_BUDGET,
     // step: STEP_CREATE_CAMPAIGN,
+    campaignInfo: {
+      product_name: "",
+      short_description: "",
+      description: "",
+      images: [],
+      appstore: "https://appstore.com",
+      playstore: "",
+      website: ""
+    },
     quests: [
       {
         id: null,
@@ -34,9 +43,15 @@ class NewCampaignProvider extends Component {
         saved: false
       }
     ],
+    channels: [],
+    channelDescription: "",
+    totalBudgetAmount: 1000,
+    maxRewardAmount: 10,
     campaignId: 1,
     loading: false
   };
+
+
 
   createCampaign = async (form, images = []) => {
     await this.setState({ loading: true });
@@ -71,11 +86,10 @@ class NewCampaignProvider extends Component {
           true,
           TYPE_MAKER
         );
-        await this.setState({ loading: false });
-        const { id } = result.data;
+        const { id } = result;
         await this.setState({ campaignId: id });
         this.setStep(STEP_CREATE_QUESTS);
-        console.log(result);
+        await this.setState({ loading: false });
       }
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
@@ -92,55 +106,73 @@ class NewCampaignProvider extends Component {
 
     const formData = new FormData();
     let validated = form.image ? validateImage(form.image) : true;
-
-    for (const key in form) {
-      if (key === "image") {
-        console.log(form[key]);
-        if (form[key]) {
-          formData.append(`quest[${key}]`, new Blob([form[key]]));
+    if (validated) {
+      for (const key in form) {
+        if (key === "image") {
+          console.log(form[key]);
+          if (form[key]) {
+            formData.append(`quest[${key}]`, new Blob([form[key]]));
+          }
+        } else {
+          formData.append(`quest[${key}]`, form[key]);
         }
-      } else {
-        formData.append(`quest[${key}]`, form[key]);
       }
-    }
 
-    try {
-      const result = await api.uploadFormData(
-        `/campaigns/${campaignId}/quests.json`,
-        formData,
-        true,
-        TYPE_MAKER
-      );
+      try {
+        const result = await api.uploadFormData(
+          `/campaigns/${campaignId}/quests.json`,
+          formData,
+          true,
+          TYPE_MAKER
+        );
 
-      const { id } = result;
-      const questsClone = _.clone(quests);
-      questsClone[index]["id"] = id;
-      questsClone[index]["value"] = form;
-      questsClone[index]["saved"] = true;
-      this.setState({ quests: questsClone });
-    } catch (e) {
-      notification["error"]({ message: extractErrorMessage(e) });
-      this.setState({ loading: false });
+        const { id } = result;
+        const questsClone = _.clone(quests);
+        questsClone[index]["id"] = id;
+        questsClone[index]["value"] = form;
+        questsClone[index]["saved"] = true;
+        this.setState({ loading: false, quests: questsClone });
+      } catch (e) {
+        notification["error"]({ message: extractErrorMessage(e) });
+        this.setState({ loading: false });
+      }
     }
   };
 
   saveQuest = async (id, form, index) => {
     const { quests, campaignId } = this.state;
 
-    try {
-      const result = await api.put(
-        `/campaigns/${campaignId}/quests/${id}`,
-        form,
-        true,
-        TYPE_MAKER
-      );
-      const questsClone = _.clone(quests);
-      questsClone[index]["value"] = form;
-      questsClone[index]["saved"] = true;
-      this.setState({ quests: questsClone });
-    } catch (e) {
-      notification["error"]({ message: extractErrorMessage(e) });
-      this.setState({ loading: false });
+    const formData = new FormData();
+    let validated = form.image ? validateImage(form.image) : true;
+
+    if (validated) {
+      for (const key in form) {
+        if (key === "image") {
+          console.log(form[key]);
+          if (form[key]) {
+            formData.append(`quest[${key}]`, new Blob([form[key]]));
+          }
+        } else {
+          formData.append(`quest[${key}]`, form[key]);
+        }
+      }
+
+      try {
+        await api.uploadFormData(
+          `/campaigns/${campaignId}/quests.json`,
+          formData,
+          true,
+          TYPE_MAKER
+        );
+
+        const questsClone = _.clone(quests);
+        questsClone[index]["value"] = form;
+        questsClone[index]["saved"] = true;
+        this.setState({ loading: false, quests: questsClone });
+      } catch (e) {
+        notification["error"]({ message: extractErrorMessage(e) });
+        this.setState({ loading: false });
+      }
     }
   };
 
@@ -184,12 +216,40 @@ class NewCampaignProvider extends Component {
     });
   };
 
+  updateCampaignInfo = (key, value) => {
+    const { campaignInfo } = this.state;
+    const infoClone = _.clone(campaignInfo);
+    infoClone[key] = value;
+    this.setState({ campaignInfo: infoClone });
+  };
+
   updateStateSingleQuest = async (index, key, value) => {
     const { quests } = this.state;
     const questsClone = _.clone(quests);
     questsClone[index]["value"][key] = value;
     await this.setState({ quests: questsClone });
   };
+
+  updateReviewAndBuzz = e => {
+    const {channels} = this.state;
+    let channelsClone = _.clone(channels);
+    const value = e.target.value;
+
+    if (e.target.checked) {
+      channelsClone = channelsClone.concat(value);
+    } else {
+      channelsClone.splice(channelsClone.indexOf(value), 1);
+    }
+
+    this.setState({channels: channelsClone}, () => {
+      console.log(this.state.channels);
+    })
+  }
+
+  updateState = (key, value) => {
+    this.setState({[key]: value});
+  }
+
 
   render() {
     return (
@@ -202,7 +262,10 @@ class NewCampaignProvider extends Component {
           createQuest: this.createQuest,
           saveQuest: this.saveQuest,
           createCampaign: this.createCampaign,
-          updateStateSingleQuest: this.updateStateSingleQuest
+          updateStateSingleQuest: this.updateStateSingleQuest,
+          updateCampaignInfo: this.updateCampaignInfo,
+          updateReviewAndBuzz: this.updateReviewAndBuzz,
+          updateState: this.updateState
         }}
       >
         {this.props.children}

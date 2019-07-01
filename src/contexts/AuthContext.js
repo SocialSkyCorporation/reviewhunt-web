@@ -31,25 +31,23 @@ class AuthProvider extends React.Component {
   async componentDidMount() {
     await this.setState({ authenticating: true });
     const lastLoginType = getToken("last_login");
-    console.log("last login", lastLoginType);
 
     if (lastLoginType) {
       try {
         const emailMe = await getEmailMe(lastLoginType);
-        console.log(emailMe);
         await this.setState({
           emailMe,
           authenticating: false,
           userType: lastLoginType
         });
-        console.log("path", window.location.pathname);
         const path = window.location.pathname;
         if (path === "/auth") {
-          this.props.history.replace("/");
+          this.props.history.replace("/profile");
         } else {
           this.props.history.replace(window.location.pathname);
         }
       } catch (e) {
+        removeToken(lastLoginType);
         this.handleError(e);
         this.setState({ authenticating: false });
       }
@@ -66,17 +64,16 @@ class AuthProvider extends React.Component {
   };
 
   authSuccess = async (type, cb) => {
-    console.log("cb", cb);
-    const { api_key, name, email } = cb;
+    const { api_key } = cb;
     setToken(type, api_key);
     setToken("last_login", type);
+    const emailMe = await getEmailMe(type);
     await this.setState({
       authenticating: false,
       loading: false,
-      emailMe: cb,
+      emailMe,
       userType: type
     });
-    console.log(this.props.history);
     this.props.history.replace("/profile");
   };
 
@@ -122,7 +119,6 @@ class AuthProvider extends React.Component {
   };
 
   handleLogin = (type, data) => {
-    console.log("handling login");
     this.setState({ authenticating: true, loading: true });
     let endpoint = "";
 
@@ -150,7 +146,6 @@ class AuthProvider extends React.Component {
   };
 
   handleAuth = async (source, obj) => {
-    console.log("parsed url", source, obj);
     switch (source) {
       case "reddit":
         const { code } = obj;
@@ -171,7 +166,6 @@ class AuthProvider extends React.Component {
 
           setToken("steemconnect", access_token);
           const me = await getSteemMe(access_token);
-          console.log("me", me);
           this.setState({ me });
         } catch (e) {
           this.handleError(e);
@@ -188,7 +182,6 @@ class AuthProvider extends React.Component {
 
   logout = async () => {
     const lastLoginType = getToken("last_login");
-    console.log("last login", lastLoginType);
     if (lastLoginType) {
       removeToken(lastLoginType);
       await this.setState({ emailMe: false });

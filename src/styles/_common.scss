@@ -123,8 +123,6 @@ hr {
 
 .text-small {
   font-size: 0.875em !important;
-  color: $text_grey !important;
-  line-height: 1.5;
 }
 
 .round-border {
@@ -627,6 +625,14 @@ hr {
 
 .grey-border {
   border: solid 1px #2f2f2f;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.light-grey-border {
+  border: solid 1px #e5e5e5;
 }
 
 .full-width {

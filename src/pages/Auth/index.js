@@ -29,7 +29,7 @@ class Auth extends Component {
 			tabIndex: TAB_HUNTER,
 			nameOfCompany: "",
 			fullName: "sung woo park",
-			emailAddress: "abcde@mail.com",
+			emailAddress: "abcdefgh@mail.com",
 			password: "swp123456",
 			confirmPassword: "swp123456",
 			countryOfResidence: "Country Of Residence",
@@ -40,7 +40,7 @@ class Auth extends Component {
 	}
 
 	componentWillMount() {
-		const { emailMe } = this.props.context;
+		const { emailMe } = this.props.authContext;
 		if (emailMe) this.props.history.replace("/");
 	}
 
@@ -61,7 +61,7 @@ class Auth extends Component {
 			year,
 			businessCategory
 		} = this.state;
-		const { handleSignup } = this.props.context;
+		const { handleSignup } = this.props.authContext;
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const onMakerTab = tabIndex === TAB_MAKER;
 
@@ -107,7 +107,7 @@ class Auth extends Component {
 
 	handleLogin = () => {
 		const { tabIndex, emailAddress, password } = this.state;
-		const { handleLogin } = this.props.context;
+		const { handleLogin } = this.props.authContext;
 		const onHunterTab = tabIndex === TAB_HUNTER;
 		const onMakerTab = tabIndex === TAB_MAKER;
 
@@ -143,7 +143,7 @@ class Auth extends Component {
 			businessCategory
 		} = this.state;
 
-		const { loading, status } = this.props.context;
+		const { loading, status } = this.props.authContext;
 
 		const triggerCanvas = () => this.canvas.randomSplat();
 		const onHunterTab = tabIndex === TAB_HUNTER;
@@ -195,7 +195,7 @@ class Auth extends Component {
 
 	renderAccountText() {
 		const { t } = this.props;
-		const { status, setStatus } = this.props.context;
+		const { status, setStatus } = this.props.authContext;
 		const hintText =
 			status === STATUS_SIGNUP
 				? t("auth.account_exists")
@@ -221,7 +221,7 @@ class Auth extends Component {
 	render() {
 		const { tabIndex } = this.state;
 		const { t } = this.props;
-		const { status, loading, authenticating, emailMe } = this.props.context;
+		const { status, loading, authenticating, emailMe } = this.props.authContext;
 		const onHunterTab = tabIndex === TAB_HUNTER;
 
 		const triggerCanvas = () => this.canvas.randomSplat();

@@ -6,12 +6,9 @@ import React, {
   memo
 } from "react";
 import PropTypes from "prop-types";
-import { Collapse, Icon } from "antd";
 import { TextInput, Screenshots } from "./FormTypes";
 import SimpleButton from "components/SimpleButton";
-import NewCampaignContext, {
-  NewCampaignConsumer
-} from "contexts/NewCampaignContext";
+import NewCampaignContext from "contexts/NewCampaignContext";
 
 const CreateQuestForm = memo(
   ({ id, index }) => {
@@ -23,12 +20,10 @@ const CreateQuestForm = memo(
       quests
     } = useContext(NewCampaignContext);
 
-    const {
-      title,
+    const {title,
       description,
       criteria,
-      quest_type,
-      bounty_amount,
+    bounty_amount,
       image
     } = quests[index].value;
     const saved = quests[index].saved;
@@ -81,8 +76,8 @@ const CreateQuestForm = memo(
                 title,
                 description,
                 criteria,
-                quest_type,
                 bounty_amount: 1,
+                quest_type: `general_${index + 1}`,
                 image
               };
               if (saved) {

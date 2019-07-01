@@ -71,7 +71,7 @@ const QuestStepProgress = ({
                   }
                 }}
               >
-                {Number.isInteger(step) && index + 1}
+                {step.quest_type.indexOf("general") > -1 && index + 1}
                 {step === 'review' && (
                   <img
                     className="icon review"

@@ -16,7 +16,7 @@ import websiteImg from "assets/images/website.svg";
 import FullWidthButton from "components/FullWidthButton";
 import CircularProgress from "components/CircularProgress";
 import { scrollTop } from "utils/scroller";
-import CampaignContext, { CampaignConsumer } from "contexts/CampaignContext";
+import CampaignContext from "contexts/CampaignContext";
 
 export default props => {
   const { t } = useTranslation();
@@ -27,20 +27,31 @@ export default props => {
   } = props;
   const ctx = useContext(CampaignContext);
 
+  const {
+    currentCampaign,
+    fetchCampaign,
+    fetchingCampaign,
+    joinCampaign,
+    joiningCampaign
+  } = ctx;
+
   useEffect(() => {
-    if (!ctx.fetching && ctx.currentCampaign === null) {
-      ctx.fetchCampaign(id);
+    if (!fetchingCampaign) {
+      fetchCampaign(id);
     }
 
     scrollTop();
-  }, [ctx, id]);
+  }, []);
 
-  const banner = ({
-    current_participant_count,
-    product_name,
-    max_bounty_per_user,
-    urls
-  }) => {
+  const banner = () => {
+    const {
+      current_participant_count,
+      product_name,
+      quests,
+      urls,
+      joined
+    } = currentCampaign;
+
     return (
       <div className="padded-container banner-container primary-gradient">
         <div>
@@ -51,37 +62,45 @@ export default props => {
             {t("product.hunters_on_quest")}:{" "}
             <span>{current_participant_count}</span>
             <br />
-            {t("product.total_bounty")}: <span>${max_bounty_per_user}</span>
+            {t("product.total_bounty")}: <span>${0}</span>
           </div>
         </div>
 
         <div className="quest-progress-container col-on-mobile">
-          {new Array(5).fill(undefined).map((item, index) => {
-            const lastItem = index === 4;
-            return (
-              <div className="quest-step col-on-mobile" key={index}>
-                <div className="row-align-center">
-                  <div className="step-image-container">
-                    <img src={questImg} alt="" />
-                  </div>
-                  <div className="quest-step-text">
-                    {lastItem && (
-                      <img className="quest-star" src={starImg} alt="" />
-                    )}
-                    <div className="price-text">$200</div>
-                    <div className="quest-text">
-                      {t("product.quest")} {index + 1}
+          {quests &&
+            quests.map((item, index) => {
+              const { bounty_max, quest_type } = item;
+              const lastItem = index === quests.length - 1;
+              return (
+                <div className="quest-step col-on-mobile" key={index}>
+                  <div className="row-align-center">
+                    <div className="step-image-container">
+                      <img src={questImg} alt="" />
+                    </div>
+                    <div className="quest-step-text">
+                      {quest_type === "buzz" && (
+                        <img className="quest-star" src={starImg} alt="" />
+                      )}
+                      <div className="price-text">${bounty_max}</div>
+                      <div className="quest-text">
+                        {t("product.quest")} {index + 1}
+                      </div>
                     </div>
                   </div>
+                  {!lastItem && <div className="step-divider" />}
                 </div>
-                {!lastItem && <div className="step-divider" />}
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
 
         <div className="row-align-center">
-          <SimpleButton text={t("product.join")} style={{ marginTop: 30 }} />
+          <SimpleButton
+            text={joined ? "JOINED" : t("product.join")}
+            style={{ marginTop: 30 }}
+            onClick={() => joinCampaign(id)}
+            loading={joiningCampaign}
+            inverse={joined}
+          />
           <div className="row-align-center url-icon-container">
             {urls["appstore"] && (
               <a href={urls["appstore"]}>
@@ -108,7 +127,14 @@ export default props => {
     );
   };
 
-  const productInfo = ({ description, images, total_bounty, bounty_left }) => {
+  const productInfo = () => {
+    const {
+      description,
+      images,
+      total_bounty,
+      bounty_left,
+      joined
+    } = currentCampaign;
     let progress =
       (Number.parseFloat(bounty_left) / Number.parseFloat(total_bounty)) * 100;
     progress = !Number.isNaN(progress) ? progress : 0;
@@ -167,28 +193,25 @@ export default props => {
           axe Banksy chia umami artisan, bitters 90's fanny pack. Single-origi.
         </div>
 
-        <FullWidthButton style={{ marginTop: 16 }} text={t("product.join")} />
+        <FullWidthButton
+          style={{ marginTop: 16 }}
+          onClick={() => joinCampaign(id)}
+          text={joined ? "JOINED" : t("product.join")}
+        />
       </div>
     );
   };
 
   return (
-    <CampaignConsumer>
-      {({ currentCampaign, fetchingCampaign }) => {
-        console.log(currentCampaign);
-        return (
-          <div className="campaign-page">
-            {!currentCampaign || fetchingCampaign ? (
-              <CircularProgress />
-            ) : (
-              <>
-                {banner(currentCampaign)}
-                {productInfo(currentCampaign)}
-              </>
-            )}
-          </div>
-        );
-      }}
-    </CampaignConsumer>
+    <div className="campaign-page">
+      {!currentCampaign || fetchingCampaign ? (
+        <CircularProgress />
+      ) : (
+        <>
+          {banner()}
+          {productInfo()}
+        </>
+      )}
+    </div>
   );
 };

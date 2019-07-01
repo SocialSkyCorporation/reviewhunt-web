@@ -3,25 +3,33 @@ import PropTypes from 'prop-types';
 import ProgressBar from 'components/ProgressBar';
 import clockImg from 'assets/images/clock.svg';
 import QuestStepProgress from 'components/QuestStepProgress';
+import {isExpired, timeToX, timeUntil} from 'utils/date';
 
 const QuestItem = (props) => {
-  const { title, steps, currentStep, ended, onClick } = props;
-  const completed = currentStep > steps.length - 1;
+  const {data} = props;
+  const { product_name, quests, thumbnails, expires_at, onClick } = data;
+
+  const currentStep = 0;
+  const completed = currentStep > quests.length - 1;
+  const ended = isExpired(expires_at);
+
+
+  console.log("thumbnail", thumbnails);
 
   return (
     <div className={`quest-item-row`} onClick={onClick}>
       <div className={`quest-item-container ${ended && 'ended'}`}>
         <div className="quest-img">
-          <img src="https://picsum.photos/110" className="quest-img" alt=""/>
+          <img src={thumbnails && thumbnails["x1"]} className="quest-img" alt=""/>
           <ProgressBar height={5} progress={50} />
         </div>
 
         <div className="quest-info">
           <div className="quest-title-container">
-            <div className="quest-title">{title}</div>
+            <div className="quest-title">{product_name}</div>
             <div className="quest-time-container">
               <img className="clock-icon" src={clockImg} alt=""/>
-              <div className="quest-time-left">Time left</div>
+              <div className="quest-time-left">{timeToX(expires_at)}</div>
             </div>
           </div>
 
@@ -32,7 +40,7 @@ const QuestItem = (props) => {
           </div>
 
           <div className="quest-step-progress-container">
-            <QuestStepProgress {...props}/>
+            <QuestStepProgress ended={ended} steps={quests} />
           </div>
 
         </div>

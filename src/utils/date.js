@@ -31,12 +31,20 @@ export const toTimeAgo = function(dateString) {
   return moment(dateString + 'Z').fromNow();
 }
 
+export const isExpired = date => {
+  return moment(date).diff(moment()) <= 0;
+}
+
 const prependZero = function(num) {
   if (num < 10) {
     return `0${num}`;
   }
 
   return `${num}`;
+}
+
+export const timeToX = date => {
+  return moment().to(date);
 }
 
 export const timeUntil = function(toDateString) {

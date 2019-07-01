@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useContext, Component } from "react";
 import { Select } from "antd";
 import TabItem from "./TabItem";
 import QuestItem from "./QuestItem";
@@ -8,7 +8,7 @@ import SimpleButton from "components/SimpleButton";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { withTranslation } from "react-i18next";
 import CampaignCreator from "./CampaignCreator";
-import { withAuthContext } from "contexts/HOC";
+import { withAuthContext, withNewCampaignContext } from "contexts/HOC";
 
 const TAB_CREATE_CAMPAIGN = 0;
 const TAB_CAMPAIGNS = 1;
@@ -61,7 +61,7 @@ class Profile extends Component {
   renderTabs() {
     const { tabIndex } = this.state;
     const { t } = this.props;
-    const { logout } = this.props.context;
+    const { logout } = this.props.authContext;
 
     return (
       <div className="tabs">
@@ -110,9 +110,12 @@ class Profile extends Component {
   renderProfileTab() {
     const { t } = this.props;
 
+    const {step} = this.props.newCampaignContext;
+
+
     return (
       <>
-        <ProgressBar height={8} progress={30} />
+        <ProgressBar height={8} progress={(step / 5) * 100} />
         <div className="content-quest">
           <CampaignCreator />
         </div>
@@ -182,4 +185,4 @@ class Profile extends Component {
   }
 }
 
-export default withTranslation()(withAuthContext(Profile));
+export default withTranslation()(withNewCampaignContext(withAuthContext(Profile)));
