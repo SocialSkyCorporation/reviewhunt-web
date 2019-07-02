@@ -29,7 +29,7 @@ const Step3 = ({}) => {
 
   return (
     <div className="campaign-step">
-      <div className="text-grey">Step 3 of 5</div>
+      <div className="text-grey text-small">Step 3 of 5</div>
       <div className="step-title text-black">Review and Buzz</div>
 
       <div className="review-checkbox-container">

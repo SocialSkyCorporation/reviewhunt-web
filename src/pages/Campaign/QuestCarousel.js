@@ -30,6 +30,7 @@ const QuestCarouselItem = ({
 };
 
 const QuestCarousel = props => {
+  const { quests } = props;
   const sliderRef = useRef();
 
   const next = useCallback(() => {
@@ -50,32 +51,30 @@ const QuestCarousel = props => {
   };
 
   return (
-  <CampaignConsumer>
-      {({ currentCampaign }) => {
-        return (
-          <div className="carousel-container">
-            <Slider ref={sliderRef} {...settings}>
-              {currentCampaign.quests && currentCampaign.quests.map((campaign, index) => (
-                <QuestCarouselItem key={campaign.id} {...campaign} index={index} />
-              ))}
-            </Slider>
-            <img
-              className="carousel-control-button left"
-              src={leftArrowImg}
-              onClick={prev}
-              alt=""
-            />
-            <img
-              className="carousel-control-button right"
-              src={rightArrowImg}
-              onClick={next}
-              alt=""
-            />
-          </div>
-        );
-      }}
-    </CampaignConsumer>
+    <div className="carousel-container">
+      <Slider ref={sliderRef} {...settings}>
+        {quests.map((quest, index) => (
+          <QuestCarouselItem key={quest.id || index} {...quest} index={index} />
+        ))}
+      </Slider>
+      <img
+        className="carousel-control-button left"
+        src={leftArrowImg}
+        onClick={prev}
+        alt=""
+      />
+      <img
+        className="carousel-control-button right"
+        src={rightArrowImg}
+        onClick={next}
+        alt=""
+      />
+    </div>
   );
+};
+
+QuestCarousel.defaultProps = {
+  quests: []
 };
 
 export default QuestCarousel;

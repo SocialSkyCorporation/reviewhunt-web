@@ -1,11 +1,18 @@
-import React, { useEffect, useContext } from "react";
+import React, {
+  useRef,
+  useCallback,
+  useEffect,
+  useContext,
+  useState,
+  memo
+} from "react";
 import { useTranslation } from "react-i18next";
 
 import ProgressBar from "components/ProgressBar";
 import SimpleButton from "components/SimpleButton";
-import ScreenshotCarousel from "./ScreenshotCarousel";
-import QuestCarousel from "./QuestCarousel";
-import CollapsibleText from "./CollapsibleText";
+import ScreenshotCarousel from "pages/Campaign/ScreenshotCarousel";
+import QuestCarousel from "pages/Campaign/QuestCarousel";
+import CollapsibleText from "pages/Campaign/CollapsibleText";
 
 import questImg from "assets/images/quest-circle.svg";
 import starImg from "assets/images/star.svg";
@@ -15,33 +22,92 @@ import websiteImg from "assets/images/website.svg";
 
 import FullWidthButton from "components/FullWidthButton";
 import CircularProgress from "components/CircularProgress";
-import { scrollTop } from "utils/scroller";
 import CampaignContext from "contexts/CampaignContext";
 
+import fullscreenImg from "assets/images/fullscreen.svg";
+import { scrollTop } from "utils/scroller";
+
 export default props => {
+  const { containerRef, dummyRef, setDummyStyle } = props;
+  const ref = useRef(null);
+  const [width, setWidth] = useState(window.innerWidth);
+  const [style, setStyle] = useState({
+    position: "absolute",
+    left: 0,
+    top: 0,
+    boxShadow: `0 0 30px 0 rgba(141, 151, 158, 0.2)`,
+    transformOrigin: "0 0 0",
+    marginTop: 20,
+  });
+
+  const [fullscreen, setFullscreen] = useState(false);
+
   const { t } = useTranslation();
-  const {
-    match: {
-      params: { id }
-    }
-  } = props;
+
   const ctx = useContext(CampaignContext);
 
-  const {
-    currentCampaign,
-    fetchCampaign,
-    fetchingCampaign,
-    joinCampaign,
-    joiningCampaign
-  } = ctx;
-
   useEffect(() => {
-    if (!fetchingCampaign) {
-      fetchCampaign(id);
+    if (!fullscreen) {
+      const { clientWidth, clientHeight } = ref.current;
+      const scaleValue = dummyRef.current.clientWidth / width;
+      const { offsetLeft, offsetTop } = dummyRef.current;
+      
+      setStyle({
+        ...style,
+        width: width,
+        height: "auto",
+        transform: `scale(${scaleValue})`,
+        left: offsetLeft,
+        top: offsetTop,
+        marginTop: 20
+      });
+
     }
 
-    scrollTop();
-  }, []);
+    const handleResize = () => {
+      setStyle({...style, transition: 'none'})
+      setWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [width, fullscreen]);
+
+  useEffect(() => {
+    if(!fullscreen) {
+      const { clientWidth, clientHeight } = ref.current;
+      const scaleValue = dummyRef.current.clientWidth / width;
+      setDummyStyle({
+        width: clientWidth * scaleValue,
+        height: clientHeight * scaleValue
+      });
+    }
+  }, [style, fullscreen])
+
+  useEffect(() => {
+    const { offsetLeft, offsetTop } = dummyRef.current;
+    if (fullscreen) {
+      setStyle({
+        ...style,
+        width: width,
+        height: document.getElementById("content-body").scrollHeight,
+        backgroundColor: '#212121',
+        transition: `transform .5s ease-in-out`,
+        transform: `scale(1) translateX(${-offsetLeft}px) translateY(${-offsetTop}px)`,
+        marginTop: 0
+      });
+
+      scrollTop();
+    }
+  }, [fullscreen]);
+
+  const currentCampaign = {
+    product_name: "BARK",
+    urls: [],
+    images: ['https://picsum.photos/600/500', 'https://picsum.photos/600/500'],
+    quests: [1, 2, 3]
+  };
 
   const banner = () => {
     const {
@@ -97,8 +163,6 @@ export default props => {
           <SimpleButton
             text={joined ? "JOINED" : t("product.join")}
             style={{ marginTop: 30 }}
-            onClick={() => joinCampaign(id)}
-            loading={joiningCampaign}
             inverse={joined}
           />
           <div className="row-align-center url-icon-container">
@@ -136,6 +200,7 @@ export default props => {
       bounty_left,
       joined
     } = currentCampaign;
+
     let progress =
       (Number.parseFloat(bounty_left) / Number.parseFloat(total_bounty)) * 100;
     progress = !Number.isNaN(progress) ? progress : 0;
@@ -165,7 +230,7 @@ export default props => {
           </div>
         </div>
 
-        <QuestCarousel quests={quests} />
+        <QuestCarousel quests={quests}/>
 
         <div className="section-divider" />
 
@@ -196,7 +261,6 @@ export default props => {
 
         <FullWidthButton
           style={{ marginTop: 16 }}
-          onClick={() => joinCampaign(id)}
           text={joined ? "JOINED" : t("product.join")}
         />
       </div>
@@ -204,15 +268,24 @@ export default props => {
   };
 
   return (
-    <div className="campaign-page">
-      {!currentCampaign || fetchingCampaign ? (
-        <CircularProgress />
-      ) : (
-        <>
-          {banner()}
-          {productInfo()}
-        </>
+    <div>
+      {fullscreen && (
+        <div onClick={() => setFullscreen(false)} className="click-to-exit">
+          Click here to exit preview
+        </div>
       )}
+      <div ref={ref} className="campaign-page" style={style}>
+        {!fullscreen && (
+          <img
+            onClick={() => setFullscreen(true)}
+            className="fullscreen-img hover-link"
+            src={fullscreenImg}
+            alt=""
+          />
+        )}
+        {banner()}
+        {productInfo()}
+      </div>
     </div>
   );
 };

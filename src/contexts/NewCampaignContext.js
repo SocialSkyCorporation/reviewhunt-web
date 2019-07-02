@@ -15,10 +15,11 @@ export const STEP_CREATE_CAMPAIGN = 1;
 export const STEP_CREATE_QUESTS = 2;
 export const STEP_REVIEW_BUZZ = 3;
 export const STEP_CAMPAIGN_BUDGET = 4;
+export const STEP_CONFIRM = 5;
 
 class NewCampaignProvider extends Component {
   state = {
-    step: STEP_CAMPAIGN_BUDGET,
+    step: STEP_CONFIRM,
     // step: STEP_CREATE_CAMPAIGN,
     campaignInfo: {
       product_name: "",
@@ -47,11 +48,24 @@ class NewCampaignProvider extends Component {
     channelDescription: "",
     totalBudgetAmount: 1000,
     maxRewardAmount: 10,
-    campaignId: 1,
+    campaignId: 2,
+    estimate: {
+      total_bounty: 0,
+      average_bounty_per_hunter: 0,
+      participant_count: 0,
+      appstore_review_count: 0,
+      buzz_content_count: 0,
+      total_reach: 0
+    },
+
+    fetchingEstimate: false,
     loading: false
   };
 
-
+  constructor(props) {
+    super(props);
+    this.fetchEstimate = _.debounce(this.fetchEstimate, 1000);
+  }
 
   createCampaign = async (form, images = []) => {
     await this.setState({ loading: true });
@@ -231,7 +245,7 @@ class NewCampaignProvider extends Component {
   };
 
   updateReviewAndBuzz = e => {
-    const {channels} = this.state;
+    const { channels } = this.state;
     let channelsClone = _.clone(channels);
     const value = e.target.value;
 
@@ -241,15 +255,34 @@ class NewCampaignProvider extends Component {
       channelsClone.splice(channelsClone.indexOf(value), 1);
     }
 
-    this.setState({channels: channelsClone}, () => {
+    this.setState({ channels: channelsClone }, () => {
       console.log(this.state.channels);
-    })
-  }
+    });
+  };
 
   updateState = (key, value) => {
-    this.setState({[key]: value});
-  }
+    this.setState({ [key]: value });
+  };
 
+  fetchEstimate = async () => {
+    console.log("fetching estimate");
+    this.setState({ fetchingEstimate: true });
+    const { campaignId, totalBudgetAmount, maxRewardAmount } = this.state;
+
+    try {
+      const estimate = await api.get(
+        `/campaigns/${campaignId}/estimate.json`,
+        { total_bounty: totalBudgetAmount, buzz_max: maxRewardAmount },
+        true,
+        TYPE_MAKER
+      );
+      this.setState({ estimate });
+    } catch (e) {
+      notification["error"]({ message: extractErrorMessage(e) });
+    } finally {
+      this.setState({ fetchingEstimate: false });
+    }
+  };
 
   render() {
     return (
@@ -265,7 +298,8 @@ class NewCampaignProvider extends Component {
           updateStateSingleQuest: this.updateStateSingleQuest,
           updateCampaignInfo: this.updateCampaignInfo,
           updateReviewAndBuzz: this.updateReviewAndBuzz,
-          updateState: this.updateState
+          updateState: this.updateState,
+          fetchEstimate: this.fetchEstimate
         }}
       >
         {this.props.children}

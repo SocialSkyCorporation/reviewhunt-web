@@ -122,7 +122,11 @@ hr {
 }
 
 .text-small {
-  font-size: 0.875em !important;
+  font-size: 0.875rem !important;
+}
+
+.text-big {
+  font-size: 1.125rem !important;
 }
 
 .round-border {
@@ -483,6 +487,11 @@ hr {
   justify-content: space-around;
 }
 
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
 .text-black {
   color: $text_black;
 }
@@ -663,4 +672,9 @@ hr {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }

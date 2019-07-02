@@ -1,5 +1,6 @@
 .campaign-page {
   min-height: 100vh;
+  background: #fff;
 
   & > div {
     line-height: 1.2;
@@ -121,6 +122,8 @@
   }
 
   .product-info {
+    background: #fff;
+
     .title {
       font-family: "Comfortaa", cursive;
       font-size: 1rem;

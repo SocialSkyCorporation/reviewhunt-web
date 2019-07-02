@@ -18,7 +18,7 @@ const Step2 = ({}) => {
   );
   return (
     <div className="campaign-step">
-      <div className="text-grey">Step 2 of 5</div>
+      <div className="text-grey text-small">Step 2 of 5</div>
       <div className="step-title text-black">Design Quests</div>
       <Collapse defaultActiveKey={["1"]}>
         {quests.map(({ id, saved }, index) => (

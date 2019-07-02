@@ -25,7 +25,7 @@ const Step1 = ({}) => {
 
   return (
     <div className="campaign-step">
-      <div className="text-grey">Step 1 of 5</div>
+      <div className="text-grey text-small">Step 1 of 5</div>
       <div className="step-title text-black">PRODUCT DESCRIPTION</div>
       <TextInput
         title={"Product Name"}

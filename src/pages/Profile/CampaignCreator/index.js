@@ -3,11 +3,13 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
+import Step5 from "./Step5";
 import NewCampaignContext, {
   STEP_CREATE_CAMPAIGN,
   STEP_CREATE_QUESTS,
   STEP_REVIEW_BUZZ,
-  STEP_CAMPAIGN_BUDGET
+  STEP_CAMPAIGN_BUDGET,
+  STEP_CONFIRM
 } from "contexts/NewCampaignContext";
 import CircularProgress from "components/CircularProgress";
 
@@ -28,6 +30,8 @@ export default () => {
         return <Step3 />;
       case STEP_CAMPAIGN_BUDGET:
         return <Step4 />;
+      case STEP_CONFIRM:
+        return <Step5 />;
       default:
         return null;
     }
