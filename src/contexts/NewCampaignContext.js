@@ -17,97 +17,143 @@ export const STEP_REVIEW_BUZZ = 3;
 export const STEP_CAMPAIGN_BUDGET = 4;
 export const STEP_CONFIRM = 5;
 
-class NewCampaignProvider extends Component {
-  state = {
-    // step: STEP_CREATE_QUESTS,
-    step: STEP_CREATE_CAMPAIGN,
-    campaignInfo: {
-      product_name: "",
-      short_description: "",
-      description: "",
-      images: [],
+const initialState = {
+  // step: STEP_CREATE_QUESTS,
+  step: STEP_CREATE_CAMPAIGN,
+  campaignInfo: {
+    product_name: "",
+    short_description: "",
+    description: "",
+    images: [],
+    urls: {
       appstore: "https://appstore.com",
       playstore: "",
       website: ""
-    },
-    quests: [
-      {
-        id: null,
-        value: {
-          title: "",
-          description: "",
-          criteria: "",
-          quest_type: "general",
-          image: [],
-          bounty_amount: 0
-        },
-        saved: false
-      }
-    ],
-    channels: [],
-    channelDescription: "",
-    totalBudgetAmount: 1000,
-    maxRewardAmount: 10,
-    campaignId: 2,
-    estimate: {
-      total_bounty: 0,
-      average_bounty_per_hunter: 0,
-      participant_count: 0,
-      appstore_review_count: 0,
-      buzz_content_count: 0,
-      total_reach: 0
-    },
+    }
+  },
+  quests: [
+    {
+      id: null,
+      value: {
+        title: "",
+        description: "",
+        criteria: "",
+        quest_type: "general",
+        image: [],
+        bounty_amount: 0
+      },
+      saved: false
+    }
+  ],
+  channels: [],
+  channelDescription: "",
+  totalBudgetAmount: 1000,
+  maxRewardAmount: 10,
+  campaignId: null,
+  estimate: {
+    total_bounty: 0,
+    average_bounty_per_hunter: 0,
+    participant_count: 0,
+    appstore_review_count: 0,
+    buzz_content_count: 0,
+    total_reach: 0
+  },
 
-    fetchingEstimate: false,
-    loading: false
-  };
+  fetchingEstimate: false,
+  loading: false
+};
+
+class NewCampaignProvider extends Component {
+  state = Object.assign({}, initialState);
 
   constructor(props) {
     super(props);
     this.fetchEstimate = _.debounce(this.fetchEstimate, 1000);
   }
 
-  createCampaign = async (form, images = []) => {
+  resetState = () => {
+    this.setState({ ...initialState });
+  };
+
+  setCampaignData = campaign => {
+    const {
+      product_name,
+      short_description,
+      description,
+      images,
+      quests,
+      urls,
+      id
+    } = campaign;
+
+    const campaignInfo = {
+      ...initialState.campaignInfo,
+      product_name,
+      short_description,
+      description,
+      images,
+      urls
+    };
+    this.setState({ campaignInfo, quests, campaignId: id });
+  };
+
+  createCampaign = async () => {
+    const { campaignId, campaignInfo } = this.state;
+    const { images } = campaignInfo;
+
+    if (images.length === 0) {
+      notification["error"]({
+        message: "At least 1 image needs to be provided"
+      });
+    }
+
     await this.setState({ loading: true });
     try {
       const formData = new FormData();
-      let validated = true;
+      let validatedImages = [];
 
       for (const file of images) {
-        console.log(file);
-        validated = validated && validateImage(file);
-      }
+        let validated = false;
+        validated = typeof file === "object" && validateImage(file);
 
-      if (validated) {
-        formData.append("campaign[images][]", new Blob(images));
-
-        for (const key in form) {
-          if (key === "urls") {
-            for (const storeKey in form[key]) {
-              formData.append(
-                `campaign[urls][${storeKey}]`,
-                form[key][storeKey]
-              );
-            }
-          } else {
-            formData.append(`campaign[${key}]`, form[key]);
-          }
+        if (validated) {
+          formData.append("campaign[images][]", new Blob([file]));
         }
-
-        const result = await api.uploadFormData(
-          "post",
-          "/campaigns.json",
-          formData,
-          true,
-          TYPE_MAKER
-        );
-        const { id } = result;
-        await this.setState({ campaignId: id });
-        this.setStep(STEP_CREATE_QUESTS);
-        await this.setState({ loading: false });
       }
+
+      for (const key in campaignInfo) {
+        if (key === "images") continue;
+
+        if (key === "urls") {
+          for (const storeKey in campaignInfo[key]) {
+            formData.append(
+              `campaign[urls][${storeKey}]`,
+              campaignInfo[key][storeKey]
+            );
+          }
+        } else {
+          formData.append(`campaign[${key}]`, campaignInfo[key]);
+        }
+      }
+
+      const method = campaignId ? "put" : "post";
+      const endpoint = campaignId
+        ? `/campaigns/${campaignId}.json`
+        : "/campaigns.json";
+
+      const result = await api.uploadFormData(
+        method,
+        endpoint,
+        formData,
+        true,
+        TYPE_MAKER
+      );
+      const { id } = result;
+      await this.setState({ campaignId: id });
+      this.setStep(STEP_CREATE_QUESTS);
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
+    } finally {
       await this.setState({ loading: false });
     }
   };
@@ -194,11 +240,44 @@ class NewCampaignProvider extends Component {
     }
   };
 
+  deleteImg = async (path, index, deleteFromServer) => {
+    const { campaignId, campaignInfo } = this.state;
+    const { images } = campaignInfo;
+
+    if (deleteFromServer) {
+      this.setState({ loading: true });
+      try {
+        const signed_id = path.split("/")[6];
+        const result = await api.delete(
+          `/campaigns/${campaignId}/delete_image/${signed_id}.json`,
+          {},
+          true,
+          TYPE_MAKER
+        );
+        if (result.status === "DELETED") {
+          const newImages = Object.assign([], images);
+          newImages.splice(index, 1);
+          this.setState({
+            campaignInfo: { ...campaignInfo, images: newImages }
+          });
+        }
+      } catch (e) {
+        notification["error"]({ message: extractErrorMessage(e) });
+      } finally {
+        this.setState({ loading: false });
+      }
+    } else {
+      const newImages = Object.assign([], images);
+      newImages.splice(index, 1);
+      this.setState({ campaignInfo: { ...campaignInfo, images: newImages } });
+    }
+  };
+
   deleteQuest = (index, id) => {
     const { quests, campaignId } = this.state;
     const okPressed = async () => {
       try {
-        if(id) {
+        if (id) {
           await api.delete(`/campaigns/${campaignId}/quests/${id}.json`);
         }
         const questsClone = _.clone(quests);
@@ -305,12 +384,15 @@ class NewCampaignProvider extends Component {
           deleteQuest: this.deleteQuest,
           createQuest: this.createQuest,
           saveQuest: this.saveQuest,
+          deleteImg: this.deleteImg,
           createCampaign: this.createCampaign,
           updateStateSingleQuest: this.updateStateSingleQuest,
           updateCampaignInfo: this.updateCampaignInfo,
           updateReviewAndBuzz: this.updateReviewAndBuzz,
           updateState: this.updateState,
-          fetchEstimate: this.fetchEstimate
+          fetchEstimate: this.fetchEstimate,
+          setCampaignData: this.setCampaignData,
+          resetState: this.resetState
         }}
       >
         {this.props.children}
