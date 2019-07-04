@@ -1,14 +1,20 @@
 import React, { useContext, Component } from "react";
 import { Select } from "antd";
-import TabItem from "./TabItem";
-import QuestItem from "./QuestItem";
-import CurrentQuest from "./CurrentQuest";
+import TabItem from "../TabItem";
+import QuestItem from "../QuestItem";
+import CurrentQuest from "../CurrentQuest";
+import CampaignDashboard from "./CampaignDashboard";
 import ProgressBar from "components/ProgressBar";
 import SimpleButton from "components/SimpleButton";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { withTranslation } from "react-i18next";
-import CampaignCreator from "./CampaignCreator";
+import CampaignCreator from "../CampaignCreator";
 import { withAuthContext, withNewCampaignContext } from "contexts/HOC";
+
+import NewCampaignContext, {
+  STEP_CREATE_CAMPAIGN,
+  STEP_CREATE_QUESTS
+} from "contexts/NewCampaignContext";
 
 const TAB_CREATE_CAMPAIGN = 0;
 const TAB_CAMPAIGNS = 1;
@@ -17,7 +23,7 @@ const TAB_SETTINGS = 3;
 
 class Profile extends Component {
   state = {
-    tabIndex: 0,
+    tabIndex: 1,
     editProfile: false,
     socialChannels: [],
     currentQuest: null,
@@ -100,7 +106,7 @@ class Profile extends Component {
     return (
       <div className="tab-content">
         {tabIndex === TAB_CREATE_CAMPAIGN && this.renderProfileTab()}
-        {tabIndex === TAB_CAMPAIGNS && this.renderChannelsTab()}
+        {tabIndex === TAB_CAMPAIGNS && this.renderCampaignsTab()}
         {tabIndex === TAB_HISTORY && this.renderQuestTab()}
         {tabIndex === TAB_SETTINGS && this.renderQuestTab()}
       </div>
@@ -110,8 +116,7 @@ class Profile extends Component {
   renderProfileTab() {
     const { t } = this.props;
 
-    const {step} = this.props.newCampaignContext;
-
+    const { step } = this.props.newCampaignContext;
 
     return (
       <>
@@ -123,55 +128,20 @@ class Profile extends Component {
     );
   }
 
-  renderChannelsTab() {
+  renderCampaignsTab() {
     const { t } = this.props;
+    const { setStep } = this.props.newCampaignContext;
     return (
-      <div className="content-quest">
-        <div className="content-title text-black">
-          {t("profile.your_channels")}
-        </div>
-      </div>
-    );
-  }
-
-  renderQuestTab() {
-    const { currentQuest } = this.state;
-    const { t } = this.props;
-
-    if (currentQuest) {
-      return (
-        <>
-          <ProgressBar height={8} progress={30} />
-          <div className="content-quest">
-            <CurrentQuest
-              onBackPressed={() => this.setState({ currentQuest: null })}
-            />
-          </div>
-        </>
-      );
-    }
-
-    return (
-      <div className="content-quest">
-        <div className="content-title text-black">
-          {t("profile.your_quests")}
-        </div>
-        <Select className="category-select" defaultValue={t("all")} />
-        <QuestItem
-          steps={[1, 2, 3, "review", "buzz"]}
-          currentStep={1}
-          onClick={() => this.setState({ currentQuest: 1 })}
-        />
-        <QuestItem
-          steps={[1, 2, 3, "review", "buzz"]}
-          currentStep={3}
-          onClick={() => this.setState({ currentQuest: 1 })}
-        />
-        <QuestItem steps={[1, 2, 3, "review", "buzz"]} currentStep={3} />
-        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={5} />
-        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={3} ended />
-        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={4} ended />
-      </div>
+      <CampaignDashboard
+        onEditDescClicked={() => {
+          this.setState({ tabIndex: TAB_CREATE_CAMPAIGN });
+          setStep(STEP_CREATE_CAMPAIGN);
+        }}
+        onEditQuestClicked={() => {
+          this.setState({ tabIndex: TAB_CREATE_CAMPAIGN });
+          setStep(STEP_CREATE_QUESTS);
+        }}
+      />
     );
   }
 
@@ -185,4 +155,6 @@ class Profile extends Component {
   }
 }
 
-export default withTranslation()(withNewCampaignContext(withAuthContext(Profile)));
+export default withTranslation()(
+  withNewCampaignContext(withAuthContext(Profile))
+);
