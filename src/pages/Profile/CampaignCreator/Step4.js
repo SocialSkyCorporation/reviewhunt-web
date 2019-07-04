@@ -2,7 +2,10 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "antd";
 import { BudgetSlider } from "./FormTypes";
-import NewCampaignContext from "contexts/NewCampaignContext";
+import NewCampaignContext, {
+  STEP_CAMPAIGN_BUDGET,
+  STEP_REVIEW_BUZZ
+} from "contexts/NewCampaignContext";
 import hunterImg from "assets/images/hunter-circle.svg";
 import reviewImg from "assets/images/review-circle.svg";
 import buzzImg from "assets/images/buzz-circle.svg";
@@ -83,7 +86,9 @@ const Step4 = ({}) => {
       />
 
       <div className="reward-details">
-        <div className="text-black text-big reward-details-text">Reward Details</div>
+        <div className="text-black text-big reward-details-text">
+          Reward Details
+        </div>
 
         {quests.map((quest, index) => {
           return (
@@ -197,11 +202,17 @@ const Step4 = ({}) => {
         </div>
       </div>
       <div className="save-next-container">
-        <div className="row-align-center text-grey" onClick={() => setStep(1)}>
+        <div
+          className="row-align-center text-grey"
+          onClick={() => setStep(STEP_REVIEW_BUZZ)}
+        >
           <Icon type="left" />
           <div>Back</div>
         </div>
-        <SimpleButton text={"Save and Next"} />
+        <SimpleButton
+          text={"Save and Next"}
+          onClick={() => setStep(STEP_CAMPAIGN_BUDGET)}
+        />
       </div>
     </div>
   );

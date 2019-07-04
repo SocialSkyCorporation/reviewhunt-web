@@ -5,7 +5,8 @@ import { TextInput } from "./FormTypes";
 import SimpleButton from "components/SimpleButton";
 import NewCampaignContext, {
   STEP_CREATE_CAMPAIGN,
-  STEP_CREATE_QUESTS
+  STEP_CREATE_QUESTS,
+  STEP_CAMPAIGN_BUDGET
 } from "contexts/NewCampaignContext";
 import appstoreImg from "assets/images/appstore.svg";
 import playstoreImg from "assets/images/playstore.svg";
@@ -120,7 +121,9 @@ const Step3 = ({}) => {
           <Icon type="left" />
           <div>Back</div>
         </div>
-        <SimpleButton text={"Save and Next"} />
+        <SimpleButton text={"Save and Next"} 
+          onClick={() => setStep(STEP_CAMPAIGN_BUDGET)}
+        />
       </div>
     </div>
   );
