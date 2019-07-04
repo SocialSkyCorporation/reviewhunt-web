@@ -66,6 +66,7 @@ function request(
 }
 
 async function uploadFormData(
+  method,
   path,
   data,
   shouldAuthenticate,
@@ -83,7 +84,7 @@ async function uploadFormData(
   var url = API_ROOT + path;
 
   return fetch(url, {
-    method: "POST",
+    method,
     body: data,
     headers
   })

@@ -19,8 +19,8 @@ export const STEP_CONFIRM = 5;
 
 class NewCampaignProvider extends Component {
   state = {
-    step: STEP_CONFIRM,
-    // step: STEP_CREATE_CAMPAIGN,
+    // step: STEP_CREATE_QUESTS,
+    step: STEP_CREATE_CAMPAIGN,
     campaignInfo: {
       product_name: "",
       short_description: "",
@@ -95,6 +95,7 @@ class NewCampaignProvider extends Component {
         }
 
         const result = await api.uploadFormData(
+          "post",
           "/campaigns.json",
           formData,
           true,
@@ -119,7 +120,8 @@ class NewCampaignProvider extends Component {
     const { quests, campaignId } = this.state;
 
     const formData = new FormData();
-    let validated = form.image ? validateImage(form.image) : true;
+    console.log(form);
+    let validated = form.image.length > 0 ? validateImage(form.image) : true;
     if (validated) {
       for (const key in form) {
         if (key === "image") {
@@ -134,6 +136,7 @@ class NewCampaignProvider extends Component {
 
       try {
         const result = await api.uploadFormData(
+          "post",
           `/campaigns/${campaignId}/quests.json`,
           formData,
           true,
@@ -173,6 +176,7 @@ class NewCampaignProvider extends Component {
 
       try {
         await api.uploadFormData(
+          "put",
           `/campaigns/${campaignId}/quests.json`,
           formData,
           true,
@@ -190,12 +194,19 @@ class NewCampaignProvider extends Component {
     }
   };
 
-  deleteQuest = index => {
-    const { quests } = this.state;
-    const okPressed = () => {
-      const questsClone = _.clone(quests);
-      questsClone.splice(index, 1);
-      this.setState({ quests: questsClone });
+  deleteQuest = (index, id) => {
+    const { quests, campaignId } = this.state;
+    const okPressed = async () => {
+      try {
+        if(id) {
+          await api.delete(`/campaigns/${campaignId}/quests/${id}.json`);
+        }
+        const questsClone = _.clone(quests);
+        questsClone.splice(index, 1);
+        this.setState({ quests: questsClone });
+      } catch (e) {
+        notification["error"]({ message: extractErrorMessage(e) });
+      }
     };
 
     confirm({

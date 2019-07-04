@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 const SimpleButton = props => {
 	const {
+		type,
 		onMouseOver,
 		onMouseOut,
 		onClick,
@@ -16,14 +17,14 @@ const SimpleButton = props => {
 	} = props;
 
 	const inverseStyle = inverse
-		? { backgroundColor: "black", color: "white" }
+		? { backgroundColor: "rgba(10, 10, 10, 0.7)", color: "white" }
 		: {};
 
 	return (
 		<div
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
-			className={`simple-button ${className}`}
+			className={`simple-button ${type} ${className}`}
 			onClick={onClick}
 			style={{...inverseStyle, ...style}}
 		>
@@ -40,6 +41,7 @@ SimpleButton.propTypes = {
 };
 
 SimpleButton.defaultProps = {
+	type: "primary",
 	className: "",
 	style: {},
 	onMouseOver: () => {},

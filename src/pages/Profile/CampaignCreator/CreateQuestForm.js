@@ -20,12 +20,9 @@ const CreateQuestForm = memo(
       quests
     } = useContext(NewCampaignContext);
 
-    const {title,
-      description,
-      criteria,
-    bounty_amount,
-      image
-    } = quests[index].value;
+    const { title, description, criteria, bounty_amount, image } = quests[
+      index
+    ].value;
     const saved = quests[index].saved;
 
     return (
@@ -47,7 +44,7 @@ const CreateQuestForm = memo(
         <Screenshots
           title={"Proof Example"}
           single
-          maxBytes={1000000}
+          maxBytes={20000000}
           images={image}
           onChange={files =>
             updateStateSingleQuest(index, "image", files[0].image)
@@ -65,7 +62,7 @@ const CreateQuestForm = memo(
           {quests.length !== 1 && (
             <div
               className="text-grey delete-button hover-link"
-              onClick={deleteQuest}
+              onClick={() => deleteQuest(index, id)}
             >
               DELETE
             </div>

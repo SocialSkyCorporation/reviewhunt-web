@@ -129,6 +129,10 @@ hr {
   font-size: 1.125rem !important;
 }
 
+.text-subheader {
+  font-size: 1.5rem !important;
+}
+
 .round-border {
   border-radius: 9950vh !important;
 }
@@ -553,6 +557,24 @@ hr {
   text-align: center;
   color: #0a0a0a;
   text-transform: uppercase;
+
+  &.danger {
+    color: #f5222d;
+    border: solid 1px #f5222d;
+
+    &:hover {
+    color: #fff;
+    background: #f5222d;
+    border: solid 1px #f5222d;
+    // transform: scale(1.02);
+    @include responsive(tablet) {
+      border: solid 1px #f5222d;
+      color: #f5222d;
+      background: #fff;
+    }
+  }
+
+  }
 
   &:hover {
     cursor: pointer;
