@@ -24,13 +24,13 @@ ReactDOM.render(
 		<Router history={history}>
 			<AppProvider>
 				<AuthProvider>
-					<CampaignProvider>
-						<WalletProvider>
-							<NewCampaignProvider>
+					<NewCampaignProvider>
+						<CampaignProvider>
+							<WalletProvider>
 								<App />
-							</NewCampaignProvider>
-						</WalletProvider>
-					</CampaignProvider>
+							</WalletProvider>
+						</CampaignProvider>
+					</NewCampaignProvider>
 				</AuthProvider>
 			</AppProvider>
 		</Router>

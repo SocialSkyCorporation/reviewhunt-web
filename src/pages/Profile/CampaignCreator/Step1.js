@@ -18,9 +18,7 @@ const Step1 = ({}) => {
     short_description,
     description,
     images,
-    appstore,
-    playstore,
-    website
+    urls
   } = campaignInfo;
 
   return (
@@ -46,6 +44,7 @@ const Step1 = ({}) => {
         title={"Screenshots"}
         onChange={files => updateCampaignInfo("images", files)}
         maxBytes={10000000}
+        images={images}
       />
       <div className="title-input-container">
         <div className="row-space-between title-input-header text-grey">
@@ -55,44 +54,27 @@ const Step1 = ({}) => {
           addonBefore={<img src={websiteImg} alt="" />}
           className="title-input-box title-icon-input-box text-black"
           placeholder="Website URL"
-          value={website}
-          onChange={e => updateCampaignInfo("website", e.target.value)}
+          value={urls['website']}
+          onChange={e => updateCampaignInfo("urls", {...urls, website: e.target.value})}
         />
         <Input
           addonBefore={<img src={appstoreImg} alt="" />}
           className="title-input-box title-icon-input-box text-black"
           placeholder="App Store"
-          value={appstore}
-          onChange={e => updateCampaignInfo("appstore", e.target.value)}
+          value={urls['appstore']}
+          onChange={e => updateCampaignInfo("urls", {...urls, appstore: e.target.value})}
         />
         <Input
           addonBefore={<img src={playstoreImg} alt="" />}
           className="title-input-box title-icon-input-box text-black"
           placeholder="Google Play"
-          value={playstore}
-          onChange={e => updateCampaignInfo("playstore", e.target.value)}
+          value={urls['playstore']}
+          onChange={e => updateCampaignInfo("urls", {...urls, playstore: e.target.value})}
         />
       </div>
       <div className="save-next-container">
-        <div/>
-        <SimpleButton
-          onClick={() =>
-            createCampaign(
-              {
-                product_name,
-                short_description,
-                description,
-                urls: {
-                  appstore,
-                  playstore,
-                  website
-                }
-              },
-              images
-            )
-          }
-          text={"Save and Next"}
-        />
+        <div />
+        <SimpleButton onClick={() => createCampaign()} text={"Save and Next"} />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -12,9 +12,19 @@ import NewCampaignContext, {
   STEP_CONFIRM
 } from "contexts/NewCampaignContext";
 import CircularProgress from "components/CircularProgress";
+import ProgressBar from "components/ProgressBar";
+import _ from "lodash";
 
-export default () => {
-  const {step, loading} = useContext(NewCampaignContext);
+export default props => {
+  const { data } = props;
+  const { step, loading, setCampaignData } = useContext(NewCampaignContext);
+
+  useEffect(() => {
+    //if data is passed, it means it's being edited
+    if (data) {
+      setCampaignData(data);
+    }
+  }, [data]);
 
   const render = () => {
     if (loading) {
@@ -37,5 +47,12 @@ export default () => {
     }
   };
 
-  return <div className="campaign-creator">{render()}</div>;
+  return (
+    <>
+      <ProgressBar height={8} progress={(step / 5) * 100} />
+      <div className="content-quest">
+        <div className="campaign-creator">{render()}</div>
+      </div>
+    </>
+  );
 };

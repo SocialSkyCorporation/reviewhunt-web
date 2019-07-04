@@ -283,50 +283,95 @@
 }
 
 .content-dashboard {
-    border: solid 1px #e5e5e5;
-    padding: 30px;
+  border: solid 1px #e5e5e5;
+  padding: 30px;
 
-    .stat-items {
-      display: flex;
-      flex-wrap: wrap;
-      margin-top: 40px;
-      margin-bottom: 40px;
-    }
-
-    .submitted-items {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .dashboard-approve-button {
-      display: flex;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-      margin: 20px 0px;
-    }
-
-    .dashboard-stat-item {
-      display: flex; 
-      flex-direction: column;
-      flex: 1;
-
-      .stat-item-line {
-        width: 20px;
-        height: 2px;
-        background-color: #8b9699;
-      }
-
-      .stat-item-title {
-        margin-top: 10px;
-        margin-bottom: 3px;
-      }
-
-      .stat-item-value {
-        font-size: 1.375rem; 
-        font-weight: 500;
-        color: #212121;
-      }
-    }
-
+  .divider-line {
+    width: 100%;
+    height: 1px;
+    background-color: #e5e5e5;
+    margin: 32px 0px;
   }
+
+  .ant-menu-item:hover {
+    color: #fff;
+  }
+
+  .ant-menu-horizontal > .ant-menu-item:hover,
+  .ant-menu-horizontal > .ant-menu-item-selected {
+    color: #0a0a0a;
+    border-bottom: 1px solid #0a0a0a;
+  }
+
+  .manage-quest-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .select-filter {
+    align-self: flex-end;
+  }
+
+  .menu-container {
+    position: relative;
+    margin: 20px 0px;
+  }
+
+  .ant-select-selection-selected-value {
+    height: 40px;
+  }
+
+  .ant-select {
+    position: absolute;
+    right: 0px;
+  }
+
+  .ant-select-selection {
+    width: 150px;
+    font-size: 14px;
+    border-bottom: none !important;
+  }
+
+  .stat-items {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .submitted-items {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .dashboard-approve-button {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
+  }
+
+  .dashboard-stat-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .stat-item-line {
+      width: 20px;
+      height: 2px;
+      background-color: #8b9699;
+    }
+
+    .stat-item-title {
+      margin-top: 10px;
+      margin-bottom: 3px;
+    }
+
+    .stat-item-value {
+      font-size: 1.375rem;
+      font-weight: 500;
+      color: #212121;
+    }
+  }
+}

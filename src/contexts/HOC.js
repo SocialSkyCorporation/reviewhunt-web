@@ -1,6 +1,7 @@
 import React from "react";
 import { AuthConsumer } from "./AuthContext";
 import { NewCampaignConsumer } from "contexts/NewCampaignContext";
+import { CampaignConsumer } from "contexts/CampaignContext";
 
 export function withAuthContext(Component) {
   return function WrapperComponent(props) {
@@ -21,3 +22,15 @@ export function withNewCampaignContext(Component) {
     );
   };
 }
+
+export function withCampaignContext(Component) {
+  return function WrapperComponent(props) {
+    return (
+      <CampaignConsumer>
+        {state => <Component {...props} campaignContext={state} />}
+      </CampaignConsumer>
+    );
+  };
+}
+
+

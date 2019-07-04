@@ -481,6 +481,11 @@ hr {
   align-items: center;
 }
 
+.row-align-end {
+  display: flex;
+  align-items: end;
+}
+
 .row-space-between {
   display: flex;
   justify-content: space-between;
