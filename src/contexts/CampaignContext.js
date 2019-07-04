@@ -12,6 +12,7 @@ class CampaignProvider extends React.Component {
   state = {
     fetchingCampaigns: false,
     fetchingCampaign: false,
+    fetchingSubmittedQuests: false,
     campaigns: [],
     currentCampaign: null,
     joiningQuest: false
@@ -22,8 +23,25 @@ class CampaignProvider extends React.Component {
   }
 
   setCurrentCampaign = currentCampaign => {
-    this.setState({currentCampaign})
-  }
+    this.setState({ currentCampaign });
+  };
+
+  fetchSubmittedQuests = async id => {
+    const { fetchingSubmittedQuests } = this.state;
+    if (fetchingSubmittedQuests) return;
+
+    await this.setState({ fetchingSubmittedItems: true });
+    try {
+      const items = await api.get(`/campaigns/${id}/submitted.json`);
+      console.log("quests", items);
+    } catch (e) {
+      notification["error"]({
+        message: extractErrorMessage(e)
+      });
+    } finally {
+      await this.setState({ fetchingSubmittedItems: false });
+    }
+  };
 
   fetchCampaigns = async () => {
     const { fetchingCampaigns } = this.state;
@@ -35,12 +53,22 @@ class CampaignProvider extends React.Component {
   };
 
   fetchCampaign = async id => {
+    console.log("fetching campaign", id);
     const { fetchingCampaign } = this.state;
     if (fetchingCampaign) return;
 
     await this.setState({ fetchingCampaign: true });
-    const currentCampaign = await api.get(`/campaigns/${id}.json`);
-    await this.setState({ fetchingCampaign: false, currentCampaign });
+    try {
+      const currentCampaign = await api.get(`/campaigns/${id}.json`);
+      console.log("current camp", currentCampaign);
+      await this.setState({ currentCampaign });
+    } catch (e) {
+      notification["error"]({
+        message: extractErrorMessage(e)
+      });
+    } finally {
+      await this.setState({ fetchingCampaign: false});
+    }
   };
 
   joinCampaign = async id => {
@@ -78,7 +106,8 @@ class CampaignProvider extends React.Component {
           fetchCampaigns: this.fetchCampaigns,
           fetchCampaign: this.fetchCampaign,
           joinCampaign: this.joinCampaign,
-          setCurrentCampaign: this.setCurrentCampaign
+          setCurrentCampaign: this.setCurrentCampaign,
+          fetchSubmittedQuests: this.fetchSubmittedQuests,
         }}
       >
         {this.props.children}

@@ -20,6 +20,8 @@ const CreateQuestForm = memo(
       quests
     } = useContext(NewCampaignContext);
 
+    console.log("QUESTS", quests);
+
     const { title, description, criteria, bounty_amount, image } = quests[
       index
     ].value;

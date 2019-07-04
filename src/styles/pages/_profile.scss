@@ -153,7 +153,7 @@
       }
 
       .tab-item {
-        margin-bottom: 15px;
+        margin-bottom: 16px;
         color: #8b9699;
 
         @include responsive(tablet) {
@@ -167,6 +167,32 @@
 
         &:hover {
           cursor: pointer;
+        }
+      }
+
+      .tab-sub-item {
+        display: flex;
+        align-items: center;
+        color: #8b9699;
+        margin: 2px 0px;
+
+        &.selected {
+          color: #0a0a0a;
+        }
+
+        &:last-child {
+          margin-bottom: 16px;
+        }
+
+        .dot {
+          width: 4px;
+          height: 4px;
+          border-radius: 8px;
+          margin-right: 10px;
+          background-color: #8b9699;
+          &.selected {
+            background-color: #000;
+          }
         }
       }
     }
@@ -450,7 +476,6 @@
     }
 
     .current-quest {
-
       .back-icon {
         width: auto;
         height: 12px;

@@ -1,18 +1,23 @@
-import React, { useMemo, useState, useEffect } from "react";
-import PropTypes from 'prop-types'
-import { Icon } from "antd";
+import React, { useContext, useMemo, useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { Icon, Modal } from "antd";
 import { useDropzone } from "react-dropzone";
 import uploadImageImg from "assets/images/upload-images.svg";
+import NewCampaignContext from 'contexts/NewCampaignContext';
+
+const { confirm } = Modal;
+
 
 const DragAndDrop = props => {
   const { single, maxBytes, onChange, images } = props;
   const [files, setFiles] = useState(images);
+  const {deleteImg} = useContext(NewCampaignContext);
 
   useEffect(() => {
-    if (files.length > 0) {
-      onChange(files);
+    if (images.length >= 0) {
+      setFiles(images);
     }
-  }, [files, onChange]);
+  }, [images, onChange]);
 
   const acceptMultipleImages = images =>
     files.concat(
@@ -25,7 +30,6 @@ const DragAndDrop = props => {
     );
 
   const acceptSingleImage = images => {
-    console.log(URL.createObjectURL(images[0]));
     return [{ image: images[0], preview: URL.createObjectURL(images[0]) }];
   };
   const {
@@ -39,9 +43,8 @@ const DragAndDrop = props => {
     multiple: !single,
     maxSize: maxBytes,
     onDrop: acceptedFiles => {
-      console.log("file dropped", acceptedFiles);
       if (acceptedFiles.length === 0) return;
-      setFiles(
+      onChange(
         single
           ? acceptSingleImage(acceptedFiles)
           : acceptMultipleImages(acceptedFiles)
@@ -55,7 +58,6 @@ const DragAndDrop = props => {
       <span className="text-blue">select files</span>
     </p>
   );
-
 
   if (single) {
     baseStyle["width"] = 240;
@@ -81,22 +83,30 @@ const DragAndDrop = props => {
 
   const thumbs =
     !single &&
-    files.map((file, index) => (
-      <div style={thumb} key={file.name}>
-        <Icon
-          style={closeIcon}
-          type="close-circle"
-          onClick={() => {
-            const newFiles = Object.assign([], files);
-            newFiles.splice(index, 1);
-            setFiles(newFiles);
-          }}
-        />
-        <div style={thumbInner}>
-          <img src={file.preview} style={img} alt="" />
+    files.map((file, index) => {
+      const isEditMode = typeof file !== "object";
+      return (
+        <div style={thumb} key={isEditMode ? index : file.name}>
+          <Icon
+            style={closeIcon}
+            type="close-circle"
+            onClick={() => {
+              confirm({
+                title: "Are you sure?",
+                content: `You're about to delete an image. This action cannot be reverted.`,
+                onOk() {
+                  deleteImg(file, index, isEditMode);
+                },
+                onCancel() {}
+              });
+            }}
+          />
+          <div style={thumbInner}>
+            <img src={isEditMode ? file : file.preview} style={img} alt="" />
+          </div>
         </div>
-      </div>
-    ));
+      );
+    });
 
   if (single) {
     return (
@@ -132,13 +142,13 @@ DragAndDrop.propTypes = {
   images: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   single: PropTypes.bool,
   onChange: PropTypes.func
-}
+};
 
 DragAndDrop.defaultProps = {
   images: [],
   single: false,
   onChange: () => {}
-}
+};
 
 const baseStyle = {
   position: "relative",

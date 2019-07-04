@@ -1,6 +1,6 @@
 import React, { useContext, Component } from "react";
 import { Select } from "antd";
-import TabItem from "../TabItem";
+import TabItem, { TabSubItem } from "../TabItem";
 import QuestItem from "../QuestItem";
 import CurrentQuest from "../CurrentQuest";
 import CampaignDashboard from "./CampaignDashboard";
@@ -9,7 +9,12 @@ import SimpleButton from "components/SimpleButton";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { withTranslation } from "react-i18next";
 import CampaignCreator from "../CampaignCreator";
-import { withAuthContext, withNewCampaignContext } from "contexts/HOC";
+import {
+  withAuthContext,
+  withNewCampaignContext,
+  withCampaignContext
+} from "contexts/HOC";
+import CircularProgress from "components/CircularProgress";
 
 import NewCampaignContext, {
   STEP_CREATE_CAMPAIGN,
@@ -23,10 +28,10 @@ const TAB_SETTINGS = 3;
 
 class Profile extends Component {
   state = {
-    tabIndex: 1,
+    tabIndex: 0,
+    selectedCampaignId: -1,
     editProfile: false,
     socialChannels: [],
-    currentQuest: null,
     steemLogo: steemLogoBlack
   };
 
@@ -65,31 +70,55 @@ class Profile extends Component {
   }
 
   renderTabs() {
-    const { tabIndex } = this.state;
+    const { tabIndex, selectedCampaignId } = this.state;
     const { t } = this.props;
-    const { logout } = this.props.authContext;
+    const { logout, emailMe } = this.props.authContext;
+    const {
+      fetchCampaign,
+      fetchSubmittedQuests
+    } = this.props.campaignContext;
+    const {
+      resetState
+    } = this.props.newCampaignContext;
+    const { campaigns } = emailMe;
 
     return (
       <div className="tabs">
         <TabItem
           text="Create Campaign"
           selected={tabIndex === 0}
-          onClick={() => this.setState({ tabIndex: 0 })}
+          onClick={() => {
+            resetState();
+            this.setState({ tabIndex: 0, selectedCampaignId: -1 });
+          }}
         />
         <TabItem
           text={"Campaigns"}
           selected={tabIndex === 1}
-          onClick={() => this.setState({ tabIndex: 1 })}
+          style={{ marginBottom: 0 }}
         />
+        <div>
+          {campaigns.map((campaign, index) => (
+            <TabSubItem
+              key={campaign.id}
+              selected={campaign.id === selectedCampaignId}
+              onClick={() => {
+                fetchCampaign(campaign.id);
+                this.setState({ tabIndex: 1, selectedCampaignId: campaign.id });
+              }}
+              text={campaign.product_name}
+            />
+          ))}
+        </div>
         <TabItem
           text={"History"}
           selected={tabIndex === 2}
-          onClick={() => this.setState({ tabIndex: 2 })}
+          onClick={() => this.setState({ tabIndex: 2, selectedCampaignId: -1 })}
         />
         <TabItem
           text={"Setting"}
           selected={tabIndex === 3}
-          onClick={() => this.setState({ tabIndex: 3 })}
+          onClick={() => this.setState({ tabIndex: 3, selectedCampaignId: -1 })}
         />
         <TabItem
           text={"Logout"}
@@ -105,44 +134,54 @@ class Profile extends Component {
 
     return (
       <div className="tab-content">
-        {tabIndex === TAB_CREATE_CAMPAIGN && this.renderProfileTab()}
+        {tabIndex === TAB_CREATE_CAMPAIGN && this.renderCampaignCreator()}
         {tabIndex === TAB_CAMPAIGNS && this.renderCampaignsTab()}
-        {tabIndex === TAB_HISTORY && this.renderQuestTab()}
-        {tabIndex === TAB_SETTINGS && this.renderQuestTab()}
+        {tabIndex === TAB_HISTORY && this.renderCampaignsTab()}
+        {tabIndex === TAB_SETTINGS && this.renderCampaignsTab()}
       </div>
     );
   }
 
-  renderProfileTab() {
-    const { t } = this.props;
-
-    const { step } = this.props.newCampaignContext;
-
-    return (
-      <>
-        <ProgressBar height={8} progress={(step / 5) * 100} />
-        <div className="content-quest">
-          <CampaignCreator />
-        </div>
-      </>
-    );
+  renderCampaignCreator() {
+    return <CampaignCreator />;
   }
 
   renderCampaignsTab() {
     const { t } = this.props;
     const { setStep } = this.props.newCampaignContext;
-    return (
-      <CampaignDashboard
-        onEditDescClicked={() => {
-          this.setState({ tabIndex: TAB_CREATE_CAMPAIGN });
-          setStep(STEP_CREATE_CAMPAIGN);
-        }}
-        onEditQuestClicked={() => {
-          this.setState({ tabIndex: TAB_CREATE_CAMPAIGN });
-          setStep(STEP_CREATE_QUESTS);
-        }}
-      />
-    );
+    const {
+      fetchingCampaign,
+      currentCampaign,
+      submittedQuests
+    } = this.props.campaignContext;
+
+    if (fetchingCampaign || !currentCampaign) {
+      return (
+        <div className="content-dashboard">
+          <CircularProgress />
+        </div>
+      );
+    }
+
+    const { status } = currentCampaign;
+
+    if (status === "running") {
+      return (
+        <CampaignDashboard
+          onEditDescClicked={() => {
+            this.setState({ tabIndex: TAB_CREATE_CAMPAIGN });
+            setStep(STEP_CREATE_CAMPAIGN);
+          }}
+          onEditQuestClicked={() => {
+            this.setState({ tabIndex: TAB_CREATE_CAMPAIGN });
+            setStep(STEP_CREATE_QUESTS);
+          }}
+          submittedQuests={submittedQuests}
+        />
+      );
+    } else {
+      return <CampaignCreator data={currentCampaign} />;
+    }
   }
 
   render() {
@@ -156,5 +195,5 @@ class Profile extends Component {
 }
 
 export default withTranslation()(
-  withNewCampaignContext(withAuthContext(Profile))
+  withCampaignContext(withNewCampaignContext(withAuthContext(Profile)))
 );
