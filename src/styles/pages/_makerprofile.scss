@@ -64,8 +64,6 @@
       border: none;
     }
 
-    .create-quest-panel {
-    }
 
     .add-more-quest {
       display: flex;
@@ -145,6 +143,11 @@
         background-color: #3fcaff;
         border-color: #3fcaff;
       }
+    }
+
+    .review-buzz-text {
+      margin-bottom: 20px;
+      text-transform: uppercase;
     }
 
     .budget-slider {
@@ -286,12 +289,7 @@
   border: solid 1px #e5e5e5;
   padding: 30px;
 
-  .divider-line {
-    width: 100%;
-    height: 1px;
-    background-color: #e5e5e5;
-    margin: 32px 0px;
-  }
+ 
 
   .ant-menu-item:hover {
     color: #fff;
