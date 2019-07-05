@@ -2,7 +2,6 @@ import React, { useRef, useCallback } from "react";
 import Slider from "react-slick";
 import leftArrowImg from "assets/images/left-circle.svg";
 import rightArrowImg from "assets/images/right-circle.svg";
-import { CampaignConsumer } from "contexts/CampaignContext";
 
 const QuestCarouselItem = ({
   bounty_amount,

@@ -13,9 +13,7 @@ import addCircleImg from "assets/images/add-circle.svg";
 const { Panel } = Collapse;
 
 const Step2 = ({}) => {
-  const { quests, addQuest, setStep} = useContext(
-    NewCampaignContext
-  );
+  const { quests, addQuest, setStep } = useContext(NewCampaignContext);
   return (
     <div className="campaign-step">
       <div className="text-grey text-small">Step 2 of 5</div>
@@ -23,16 +21,19 @@ const Step2 = ({}) => {
       <Collapse defaultActiveKey={["1"]}>
         {quests.map((quest, index) => {
           console.log("quest", quest);
-          const {saved} = quest;
-          return (
-          <Panel
-            className="create-quest-panel"
-            header={`Quest ${index + 1}`}
-            key={index + 1}
-          >
-            <CreateQuestForm index={index} />
-          </Panel>
-        )})}
+          const { quest_type } = quest;
+          if (quest_type !== "buzz" && quest_type !== "review") {
+            return (
+              <Panel
+                className="create-quest-panel"
+                header={`Quest ${index + 1}`}
+                key={index + 1}
+              >
+                <CreateQuestForm index={index} />
+              </Panel>
+            );
+          }
+        })}
       </Collapse>
 
       {quests.length < 3 && (
@@ -50,7 +51,8 @@ const Step2 = ({}) => {
           <Icon type="left" />
           <div>Back</div>
         </div>
-        <SimpleButton text={"Save and Next"} 
+        <SimpleButton
+          text={"Save and Next"}
           onClick={() => setStep(STEP_REVIEW_BUZZ)}
         />
       </div>

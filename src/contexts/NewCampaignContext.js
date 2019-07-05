@@ -24,7 +24,7 @@ function questSortFunction(a, b) {
 }
 
 const initialState = {
-  step: STEP_CAMPAIGN_BUDGET,
+  step: STEP_CONFIRM,
   // step: STEP_CREATE_CAMPAIGN,
   campaignInfo: {
     product_name: "",

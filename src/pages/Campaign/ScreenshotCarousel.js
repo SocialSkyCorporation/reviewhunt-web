@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import Slider from "react-slick";
-import test1Img from "./test1.png";
-import test2Img from "./test2.png";
 import leftArrowImg from "assets/images/left-circle.svg";
 import rightArrowImg from "assets/images/right-circle.svg";
 

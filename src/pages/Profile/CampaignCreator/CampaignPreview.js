@@ -13,6 +13,7 @@ import SimpleButton from "components/SimpleButton";
 import ScreenshotCarousel from "pages/Campaign/ScreenshotCarousel";
 import QuestCarousel from "pages/Campaign/QuestCarousel";
 import CollapsibleText from "pages/Campaign/CollapsibleText";
+import NewCampaignContext from 'contexts/NewCampaignContext';
 
 import questImg from "assets/images/quest-circle.svg";
 import starImg from "assets/images/star.svg";
@@ -21,14 +22,13 @@ import playStoreImg from "assets/images/playstore.svg";
 import websiteImg from "assets/images/website.svg";
 
 import FullWidthButton from "components/FullWidthButton";
-import CircularProgress from "components/CircularProgress";
 import CampaignContext from "contexts/CampaignContext";
 
 import fullscreenImg from "assets/images/fullscreen.svg";
 import { scrollTop } from "utils/scroller";
 
 export default props => {
-  const { containerRef, dummyRef, setDummyStyle } = props;
+  const { dummyRef, setDummyStyle } = props;
   const ref = useRef(null);
   const [width, setWidth] = useState(window.innerWidth);
   const [style, setStyle] = useState({
@@ -37,21 +37,20 @@ export default props => {
     top: 0,
     boxShadow: `0 0 30px 0 rgba(141, 151, 158, 0.2)`,
     transformOrigin: "0 0 0",
-    marginTop: 20,
+    marginTop: 20
   });
 
   const [fullscreen, setFullscreen] = useState(false);
 
   const { t } = useTranslation();
 
-  const ctx = useContext(CampaignContext);
+  const  {quests, campaignInfo} = useContext(NewCampaignContext);
 
   useEffect(() => {
     if (!fullscreen) {
-      const { clientWidth, clientHeight } = ref.current;
       const scaleValue = dummyRef.current.clientWidth / width;
       const { offsetLeft, offsetTop } = dummyRef.current;
-      
+
       setStyle({
         ...style,
         width: width,
@@ -61,21 +60,20 @@ export default props => {
         top: offsetTop,
         marginTop: 20
       });
-
     }
 
     const handleResize = () => {
-      setStyle({...style, transition: 'none'})
+      setStyle({ ...style, transition: "none" });
       setWidth(window.innerWidth);
     };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [width, fullscreen]);
+  }, [width, fullscreen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if(!fullscreen) {
+    if (!fullscreen) {
       const { clientWidth, clientHeight } = ref.current;
       const scaleValue = dummyRef.current.clientWidth / width;
       setDummyStyle({
@@ -83,7 +81,7 @@ export default props => {
         height: clientHeight * scaleValue
       });
     }
-  }, [style, fullscreen])
+  }, [style, fullscreen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const { offsetLeft, offsetTop } = dummyRef.current;
@@ -92,7 +90,7 @@ export default props => {
         ...style,
         width: width,
         height: document.getElementById("content-body").scrollHeight,
-        backgroundColor: '#212121',
+        backgroundColor: "#212121",
         transition: `transform .5s ease-in-out`,
         transform: `scale(1) translateX(${-offsetLeft}px) translateY(${-offsetTop}px)`,
         marginTop: 0
@@ -100,12 +98,12 @@ export default props => {
 
       scrollTop();
     }
-  }, [fullscreen]);
+  }, [fullscreen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const currentCampaign = {
     product_name: "BARK",
     urls: [],
-    images: ['https://picsum.photos/600/500', 'https://picsum.photos/600/500'],
+    images: ["https://picsum.photos/600/500", "https://picsum.photos/600/500"],
     quests: [1, 2, 3]
   };
 
@@ -113,10 +111,9 @@ export default props => {
     const {
       current_participant_count,
       product_name,
-      quests,
       urls,
       joined
-    } = currentCampaign;
+    } = campaignInfo;
 
     return (
       <div className="padded-container banner-container primary-gradient">
@@ -167,12 +164,12 @@ export default props => {
           />
           <div className="row-align-center url-icon-container">
             {urls["appstore"] && (
-              <a href={urls["appstore"]}>
+              <a rel="noopener noreferrer" target="_blank" href={urls["appstore"]}>
                 <img className="url-icon hover-link" src={appStoreImg} alt="" />
               </a>
             )}
             {urls["playstore"] && (
-              <a href={urls["playstore"]}>
+              <a rel="noopener noreferrer" target="_blank" href={urls["playstore"]}>
                 <img
                   className="url-icon hover-link"
                   src={playStoreImg}
@@ -181,7 +178,7 @@ export default props => {
               </a>
             )}
             {urls["website"] && (
-              <a href={urls["website"]}>
+              <a rel="noopener noreferrer" target="_blank" href={urls["website"]}>
                 <img className="url-icon hover-link" src={websiteImg} alt="" />
               </a>
             )}
@@ -195,11 +192,10 @@ export default props => {
     const {
       description,
       images,
-      quests,
       total_bounty,
       bounty_left,
       joined
-    } = currentCampaign;
+    } = campaignInfo;
 
     let progress =
       (Number.parseFloat(bounty_left) / Number.parseFloat(total_bounty)) * 100;
@@ -230,7 +226,7 @@ export default props => {
           </div>
         </div>
 
-        <QuestCarousel quests={quests}/>
+        <QuestCarousel quests={quests} />
 
         <div className="section-divider" />
 
