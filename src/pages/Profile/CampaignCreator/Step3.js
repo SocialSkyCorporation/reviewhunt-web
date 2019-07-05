@@ -17,16 +17,24 @@ const channelOptions = [
   { label: "Twitter", value: "twitter" },
   { label: "Instagram", value: "instagram" },
   { label: "Reddit", value: "reddit" },
-  { label: "Blog", value: "blog" },
+  { label: "Medium", value: "medium" },
   { label: "Twitch", value: "twitch" },
   { label: "Steemit (and other Steem DApps)", value: "steemit" },
   { label: "Other local channels", value: "other" }
 ];
 
 const Step3 = ({}) => {
-  const { channels, campaignInfo, channelDescription, updateState, setStep, updateReviewAndBuzz } = useContext(
-    NewCampaignContext
-  );
+  const {
+    questReview,
+    questBuzz,
+    campaignInfo,
+    channelsCriteria,
+    appstoreCriteria,
+    updateState,
+    setStep,
+    updateReviewAndBuzz,
+    saveReviewAndBuzz
+  } = useContext(NewCampaignContext);
 
   return (
     <div className="campaign-step">
@@ -34,9 +42,10 @@ const Step3 = ({}) => {
       <div className="step-title text-black">Review and Buzz</div>
 
       <div className="review-checkbox-container">
+        <div className="review-buzz-text">Review</div>
         <Checkbox
-          checked={channels.includes(channelOptions[0].value)}
-          onChange={e => updateReviewAndBuzz(e)}
+          checked={questReview.allowed_channels.includes(channelOptions[0].value)}
+          onChange={e => updateReviewAndBuzz("review", e)}
           value={channelOptions[0].value}
         >
           {channelOptions[0].label}
@@ -87,15 +96,27 @@ const Step3 = ({}) => {
               </div>
             )}
           </div>
+
+          <TextInput
+            title={"What to include in the quest proof"}
+            textArea
+            textAreaHeight={92}
+            maxCharacters={560}
+            value={appstoreCriteria}
+            setValue={value => updateState("appstoreCriteria", value)}
+          />
+
+          <div className="divider-line" />
         </div>
 
+        <div className="review-buzz-text">Buzz</div>
         {channelOptions.map((channel, index) => {
           if (index === 0) return null;
           return (
             <Checkbox
               key={index}
-              checked={channels.includes(channel.value)}
-              onChange={e => updateReviewAndBuzz(e)}
+              checked={questBuzz.allowed_channels.includes(channel.value)}
+              onChange={e => updateReviewAndBuzz("buzz", e)}
               value={channel.value}
             >
               {channel.label}
@@ -105,12 +126,12 @@ const Step3 = ({}) => {
       </div>
 
       <TextInput
-        title={"Description"}
+        title={"What to include in the quest proof"}
         textArea
         textAreaHeight={92}
         maxCharacters={560}
-        value={channelDescription}
-        setValue={value => updateState('channelDescription', value)}
+        value={channelsCriteria}
+        setValue={value => updateState("channelsCriteria", value)}
       />
 
       <div className="save-next-container">
@@ -121,8 +142,9 @@ const Step3 = ({}) => {
           <Icon type="left" />
           <div>Back</div>
         </div>
-        <SimpleButton text={"Save and Next"} 
-          onClick={() => setStep(STEP_CAMPAIGN_BUDGET)}
+        <SimpleButton
+          text={"Save and Next"}
+          onClick={() => saveReviewAndBuzz()}
         />
       </div>
     </div>
