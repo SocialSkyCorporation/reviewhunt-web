@@ -59,6 +59,7 @@ const DragAndDrop = props => {
     </p>
   );
 
+
   if (single) {
     baseStyle["width"] = 240;
     baseStyle["height"] = 240;
@@ -109,12 +110,13 @@ const DragAndDrop = props => {
     });
 
   if (single) {
+    const isEditMode = typeof files[0] !== "object"; 
     return (
       <>
         <div {...getRootProps({ style })}>
           <input {...getInputProps()} />
           {files && files.length > 0 ? (
-            <img src={files[0].preview} style={selectedImgStyle} alt="" />
+            <img src={isEditMode ? files[0] : files[0].preview} style={selectedImgStyle} alt="" />
           ) : (
             <>
               <img src={uploadImageImg} alt="" />
