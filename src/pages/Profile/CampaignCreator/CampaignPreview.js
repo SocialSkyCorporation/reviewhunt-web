@@ -89,7 +89,8 @@ export default props => {
       setStyle({
         ...style,
         width: width,
-        height: document.getElementById("content-body").scrollHeight,
+        height: "auto",
+        minHeight: document.getElementById("content-body").scrollHeight,
         backgroundColor: "#212121",
         transition: `transform .5s ease-in-out`,
         transform: `scale(1) translateX(${-offsetLeft}px) translateY(${-offsetTop}px)`,

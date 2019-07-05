@@ -24,7 +24,7 @@ function questSortFunction(a, b) {
 }
 
 const initialState = {
-  step: STEP_CONFIRM,
+  step: STEP_CAMPAIGN_BUDGET,
   // step: STEP_CREATE_CAMPAIGN,
   campaignInfo: {
     product_name: "",
@@ -118,6 +118,7 @@ class NewCampaignProvider extends Component {
     };
 
     this.setState({
+      ...campaign,
       campaignInfo,
       quests: quests.sort(questSortFunction),
       campaignId: id,

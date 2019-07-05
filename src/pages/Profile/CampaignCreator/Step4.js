@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "antd";
 import { BudgetSlider } from "./FormTypes";
@@ -63,8 +63,16 @@ const Step4 = ({}) => {
     estimate,
     fetchEstimate,
     fetchingEstimate,
-    campaignInfo
+    campaignInfo,
+    campaignId
   } = useContext(NewCampaignContext);
+
+  useEffect(() => {
+    if(campaignId) {
+      fetchEstimate();
+    }
+  }, [fetchEstimate, campaignId])
+
   return (
     <div className="campaign-step">
       <div className="text-grey text-small">Step 4 of 5</div>
