@@ -9,6 +9,7 @@ import SimpleButton from "components/SimpleButton";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { withTranslation } from "react-i18next";
 import CampaignCreator from "../CampaignCreator";
+import HistoryTab from "./HistoryTab";
 import {
   withAuthContext,
   withNewCampaignContext,
@@ -28,7 +29,7 @@ const TAB_SETTINGS = 3;
 
 class Profile extends Component {
   state = {
-    tabIndex: 1,
+    tabIndex: TAB_HISTORY,
     selectedCampaignId: -1,
     editProfile: false,
     socialChannels: [],
@@ -157,7 +158,7 @@ class Profile extends Component {
       <div className="tab-content">
         {tabIndex === TAB_CREATE_CAMPAIGN && this.renderCampaignCreator()}
         {tabIndex === TAB_CAMPAIGNS && this.renderCampaignsTab()}
-        {tabIndex === TAB_HISTORY && this.renderCampaignsTab()}
+        {tabIndex === TAB_HISTORY && this.renderHistoryTab()}
         {tabIndex === TAB_SETTINGS && this.renderCampaignsTab()}
       </div>
     );
@@ -165,6 +166,10 @@ class Profile extends Component {
 
   renderCampaignCreator() {
     return <CampaignCreator />;
+  }
+
+  renderHistoryTab() {
+    return <HistoryTab />;
   }
 
   renderCampaignsTab() {
