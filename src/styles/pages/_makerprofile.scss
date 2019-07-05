@@ -64,7 +64,6 @@
       border: none;
     }
 
-
     .add-more-quest {
       display: flex;
       flex-direction: column;
@@ -289,8 +288,6 @@
   border: solid 1px #e5e5e5;
   padding: 30px;
 
- 
-
   .ant-menu-item:hover {
     color: #fff;
   }
@@ -299,11 +296,6 @@
   .ant-menu-horizontal > .ant-menu-item-selected {
     color: #0a0a0a;
     border-bottom: 1px solid #0a0a0a;
-  }
-
-  .manage-quest-header {
-    display: flex;
-    justify-content: space-between;
   }
 
   .select-filter {
@@ -340,6 +332,7 @@
   .submitted-items {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .dashboard-approve-button {
@@ -370,6 +363,50 @@
       font-size: 1.375rem;
       font-weight: 500;
       color: #212121;
+    }
+  }
+
+  .review-buzz-graph {
+    .review-stat-icons {
+      margin: 16px 0px 20px;
+    }
+    .review-buzz-icon {
+      width: 40px;
+      height: 40px;
+      border: solid 1px #0a0a0a;
+      border-radius: 20px;
+      padding: 8px;
+      margin-right: 8px;
+    }
+
+    .review-icon-item {
+      margin-right: 16px;
+    }
+
+    .graph-items-container {
+      margin: 10px 0px;
+    }
+
+    .graph-item {
+      position: relative;
+      width: 100%;
+      margin: 4px 0px;
+
+      .graph-title {
+        margin-left: 10px;
+        min-width: 100px;
+      }
+
+      .graph-bar-container {
+        width: 100%;
+      }
+
+      .graph-bar {
+        height: 4px;
+        border-radius: 6px;
+        background-color: #8b9699;
+        margin-right: 10px;
+      }
     }
   }
 }

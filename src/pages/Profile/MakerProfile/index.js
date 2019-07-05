@@ -28,7 +28,7 @@ const TAB_SETTINGS = 3;
 
 class Profile extends Component {
   state = {
-    tabIndex: 0,
+    tabIndex: 1,
     selectedCampaignId: -1,
     editProfile: false,
     socialChannels: [],
@@ -45,13 +45,13 @@ class Profile extends Component {
 
         <div className="bold-span">
           <div>
-            <span>10</span> quests ran from <span>2</span> review campaigns
+            <b>10</b> quests ran from <b>2</b> review campaigns
           </div>
           <div>
-            <span>2,205</span> hunters have joined your quest
+            <b>2,205</b> hunters have joined your quest
           </div>
           <div>
-            A total of <span>$20,500</span> review credit spent.
+            A total of <b>$20,500</b> review credit spent.
           </div>
         </div>
 
@@ -75,7 +75,6 @@ class Profile extends Component {
     const { logout, emailMe } = this.props.authContext;
     const {
       fetchCampaign,
-      fetchSubmittedQuests
     } = this.props.campaignContext;
     const {
       resetState
@@ -155,6 +154,7 @@ class Profile extends Component {
       submittedQuests
     } = this.props.campaignContext;
 
+
     if (fetchingCampaign || !currentCampaign) {
       return (
         <div className="content-dashboard">
@@ -165,7 +165,8 @@ class Profile extends Component {
 
     const { status } = currentCampaign;
 
-    if (status === "running") {
+    //TEST
+    if (true || status === "running") {
       return (
         <CampaignDashboard
           onEditDescClicked={() => {

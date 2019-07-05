@@ -14,7 +14,7 @@ import {
 	STATUS_LOGIN,
 	STATUS_ONBOARDING
 } from "contexts/AuthContext";
-import CircularProgress from 'components/CircularProgress';
+import CircularProgress from "components/CircularProgress";
 
 const TAB_HUNTER = 0;
 const TAB_MAKER = 1;
@@ -210,9 +210,9 @@ class Auth extends Component {
 			<div className="login-button-container grey-border">
 				<div className="text-grey">
 					{hintText}
-					<span className="text-blue hover-link" onClick={onClick}>
+					<b className="text-blue hover-link" onClick={onClick}>
 						{buttonText}
-					</span>
+					</b>
 				</div>
 			</div>
 		);
@@ -240,7 +240,7 @@ class Auth extends Component {
 			(status === STATUS_SIGNUP && onHunterTab && t("auth.hunter_desc")) ||
 			(status === STATUS_SIGNUP && !onHunterTab && t("auth.maker_desc"));
 
-		if (authenticating) return <CircularProgress/>
+		if (authenticating) return <CircularProgress />;
 
 		return (
 			<div>

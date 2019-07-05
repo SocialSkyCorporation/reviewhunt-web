@@ -55,7 +55,7 @@ const DragAndDrop = props => {
   let description = (
     <p style={descriptionStyle}>
       Drag and drop files here or <br />
-      <span className="text-blue">select files</span>
+      <b className="text-blue">select files</b>
     </p>
   );
 
@@ -67,7 +67,7 @@ const DragAndDrop = props => {
     description = (
       <p style={descriptionStyle}>
         Drag and drop file here or <br />
-        <span className="text-blue">choose file</span>
+        <b className="text-blue">choose file</b>
       </p>
     );
   }

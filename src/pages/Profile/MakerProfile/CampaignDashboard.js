@@ -1,15 +1,12 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { Menu, Select, Icon } from "antd";
-import { Link } from "react-router-dom";
 import ProgressBar from "components/ProgressBar";
-import SimpleButton from "components/SimpleButton";
 import SubmittedItem from "./SubmittedItem";
-import NewCampaignContext from "contexts/NewCampaignContext";
 import CampaignContext from "contexts/CampaignContext";
-import questImg from "assets/images/quest-circle.svg";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 import CircularProgress from "components/CircularProgress";
+import ReviewAndBuzzGraph from "./ReviewAndBuzzGraph";
 
 const { Option } = Select;
 
@@ -38,11 +35,10 @@ const CampaignDashboard = ({
   onEditDescClicked,
   submittedQuests
 }) => {
-  const [current, setCurrent] = useState("quests");
+  const [current, setCurrent] = useState("pending");
   const { currentCampaign, fetchingSubmittedQuests } = useContext(
     CampaignContext
   );
-  console.log("curr", currentCampaign);
 
   if (!currentCampaign) return null;
 
@@ -60,7 +56,7 @@ const CampaignDashboard = ({
         <div className="text-small text-grey">
           Transforms people nearby into fun barking dogs
         </div>
-        <div
+        {/*<div
           className="row-align-center"
           style={{ marginTop: 16, marginBottom: 16 }}
         >
@@ -70,7 +66,7 @@ const CampaignDashboard = ({
             style={{ marginRight: 10 }}
           />
           <SimpleButton onClick={onEditQuestClicked} text="Edit Quest" />
-        </div>
+        </div>*/}
 
         <div className="stat-items row-align-center">
           <StatItem
@@ -89,13 +85,21 @@ const CampaignDashboard = ({
           />
         </div>
 
-        <div className="manage-quest-header">
-          <div
-            className="text-small text-black uppercase"
-            style={{ marginTop: 24 }}
-          >
-            Manage Quest Submissions
-          </div>
+        <div
+          className="text-small text-black uppercase"
+          style={{ marginTop: 24 }}
+        >
+          Review and Buzz
+        </div>
+        <div className="divider-line" style={{ marginTop: 5 }} />
+
+        <ReviewAndBuzzGraph />
+
+        <div
+          className="text-small text-black uppercase"
+          style={{ marginTop: 30 }}
+        >
+          Manage Quest Submissions
         </div>
 
         <div className="row-align-center menu-container">
@@ -120,9 +124,16 @@ const CampaignDashboard = ({
           {fetchingSubmittedQuests ? (
             <CircularProgress />
           ) : (
-            submittedQuests.map((submittedQuest, index) => (
-              <SubmittedItem key={submittedQuest.id} />
-            ))
+            <>
+              {submittedQuests.map((submittedQuest, index) => (
+                <SubmittedItem key={submittedQuest.id} />
+              ))}
+              <SubmittedItem key={1} />
+              <SubmittedItem key={2} />
+              <SubmittedItem key={3} />
+              <SubmittedItem key={4} />
+              <SubmittedItem key={5} />
+            </>
           )}
         </div>
       </div>

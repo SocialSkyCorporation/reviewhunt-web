@@ -60,9 +60,9 @@ export default props => {
           <div className="line" />
           <div className="product-users">
             {t("product.hunters_on_quest")}:{" "}
-            <span>{current_participant_count}</span>
+            <b>{current_participant_count}</b>
             <br />
-            {t("product.total_bounty")}: <span>${0}</span>
+            {t("product.total_bounty")}: <b>${0}</b>
           </div>
         </div>
 
