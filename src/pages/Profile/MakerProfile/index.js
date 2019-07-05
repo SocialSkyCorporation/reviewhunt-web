@@ -73,34 +73,56 @@ class Profile extends Component {
     const { tabIndex, selectedCampaignId } = this.state;
     const { t } = this.props;
     const { logout, emailMe } = this.props.authContext;
-    const {
-      fetchCampaign,
-    } = this.props.campaignContext;
-    const {
-      resetState
-    } = this.props.newCampaignContext;
+    const { step, setStep } = this.props.newCampaignContext;
+    const { fetchCampaign } = this.props.campaignContext;
+    const { resetState } = this.props.newCampaignContext;
     const { campaigns } = emailMe;
+
+    const steps = [
+      "Product Description",
+      "Design Quests",
+      "Review and Buzz",
+      "Campaign Budget",
+      "Review"
+    ];
 
     return (
       <div className="tabs">
         <TabItem
           text="Create Campaign"
           selected={tabIndex === 0}
+          style={{ marginBottom: 0 }}
           onClick={() => {
             resetState();
             this.setState({ tabIndex: 0, selectedCampaignId: -1 });
           }}
         />
+
+        <div>
+          {steps.map((s, index) => (
+            <TabSubItem
+              key={index}
+              selected={tabIndex === 0 && index === step}
+              onClick={() => {
+                setStep(index);
+                this.setState({ tabIndex: 0 });
+              }}
+              text={s}
+            />
+          ))}
+        </div>
+
         <TabItem
           text={"Campaigns"}
           selected={tabIndex === 1}
           style={{ marginBottom: 0 }}
         />
+
         <div>
           {campaigns.map((campaign, index) => (
             <TabSubItem
               key={campaign.id}
-              selected={campaign.id === selectedCampaignId}
+              selected={tabIndex === 1 && campaign.id === selectedCampaignId}
               onClick={() => {
                 fetchCampaign(campaign.id);
                 this.setState({ tabIndex: 1, selectedCampaignId: campaign.id });
@@ -153,7 +175,6 @@ class Profile extends Component {
       currentCampaign,
       submittedQuests
     } = this.props.campaignContext;
-
 
     if (fetchingCampaign || !currentCampaign) {
       return (

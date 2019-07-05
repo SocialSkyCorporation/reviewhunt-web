@@ -11,11 +11,11 @@ const NewCampaignContext = React.createContext();
 const { Provider, Consumer } = NewCampaignContext;
 const { confirm } = Modal;
 
-export const STEP_CREATE_CAMPAIGN = 1;
-export const STEP_CREATE_QUESTS = 2;
-export const STEP_REVIEW_BUZZ = 3;
-export const STEP_CAMPAIGN_BUDGET = 4;
-export const STEP_CONFIRM = 5;
+export const STEP_CREATE_CAMPAIGN = 0;
+export const STEP_CREATE_QUESTS = 1;
+export const STEP_REVIEW_BUZZ = 2;
+export const STEP_CAMPAIGN_BUDGET = 3;
+export const STEP_CONFIRM = 4;
 
 const questOrder = ["general_1", "general_2", "general_3", "review", "buzz"];
 
