@@ -17,9 +17,15 @@ export const STEP_REVIEW_BUZZ = 3;
 export const STEP_CAMPAIGN_BUDGET = 4;
 export const STEP_CONFIRM = 5;
 
+const questOrder = ["general_1", "general_2", "general_3", "review", "buzz"];
+
+function questSortFunction(a, b) {
+  return questOrder.indexOf(a.quest_type) - questOrder.indexOf(b.quest_type);
+}
+
 const initialState = {
-  // step: STEP_CREATE_QUESTS,
-  step: STEP_CREATE_CAMPAIGN,
+  step: STEP_CAMPAIGN_BUDGET,
+  // step: STEP_CREATE_CAMPAIGN,
   campaignInfo: {
     product_name: "",
     short_description: "",
@@ -34,19 +40,20 @@ const initialState = {
   quests: [
     {
       id: null,
-      value: {
-        title: "",
-        description: "",
-        criteria: "",
-        quest_type: "general",
-        image: [],
-        bounty_amount: 0
-      },
+      title: "",
+      description: "",
+      criteria: "",
+      quest_type: "general",
+      image: [],
+      bounty_amount: 0,
       saved: false
     }
   ],
-  channels: [],
-  channelDescription: "",
+
+  questReview: { id: null, quest_type: "review", allowed_channels: [] },
+  questBuzz: { id: null, quest_type: "buzz", allowed_channels: [] },
+  appstoreCriteria: "",
+  channelsCriteria: "",
   totalBudgetAmount: 1000,
   maxRewardAmount: 10,
   campaignId: null,
@@ -76,6 +83,7 @@ class NewCampaignProvider extends Component {
   };
 
   setCampaignData = campaign => {
+    const { questReview, questBuzz } = this.state;
     const {
       product_name,
       short_description,
@@ -86,6 +94,20 @@ class NewCampaignProvider extends Component {
       id
     } = campaign;
 
+    const reviewArr = quests.filter(q => q.quest_type === "review");
+    const buzzArr = quests.filter(q => q.quest_type === "buzz");
+
+    let reviewClone = _.clone(questReview);
+    let buzzClone = _.clone(questBuzz);
+
+    if (reviewArr.length > 0) {
+      reviewClone = reviewArr[0];
+    }
+
+    if (buzzArr.length > 0) {
+      buzzClone = buzzArr[0];
+    }
+
     const campaignInfo = {
       ...initialState.campaignInfo,
       product_name,
@@ -94,7 +116,14 @@ class NewCampaignProvider extends Component {
       images,
       urls
     };
-    this.setState({ campaignInfo, quests, campaignId: id });
+
+    this.setState({
+      campaignInfo,
+      quests: quests.sort(questSortFunction),
+      campaignId: id,
+      questReview: reviewClone,
+      questBuzz: buzzClone
+    });
   };
 
   createCampaign = async () => {
@@ -167,23 +196,27 @@ class NewCampaignProvider extends Component {
 
     const formData = new FormData();
     console.log(form);
-    let validated = form.image.length > 0 ? validateImage(form.image) : true;
+    this.setState({ loading: true });
+    const image = form.image[0].image;
+    let validated = form.image.length > 0 ? validateImage(image) : false;
     if (validated) {
       for (const key in form) {
         if (key === "image") {
-          console.log(form[key]);
-          if (form[key]) {
-            formData.append(`quest[${key}]`, new Blob([form[key]]));
-          }
+          formData.append(`quest[image]`, new Blob([image]));
         } else {
           formData.append(`quest[${key}]`, form[key]);
         }
       }
 
+      const method = id ? "put" : "post";
+      const endpoint = id
+        ? `/campaigns/${campaignId}/quests/${id}.json`
+        : `/campaigns/${campaignId}/quests.json`;
+
       try {
         const result = await api.uploadFormData(
-          "post",
-          `/campaigns/${campaignId}/quests.json`,
+          method,
+          endpoint,
           formData,
           true,
           TYPE_MAKER
@@ -197,6 +230,7 @@ class NewCampaignProvider extends Component {
         this.setState({ loading: false, quests: questsClone });
       } catch (e) {
         notification["error"]({ message: extractErrorMessage(e) });
+      } finally {
         this.setState({ loading: false });
       }
     }
@@ -302,19 +336,17 @@ class NewCampaignProvider extends Component {
   addQuest = () => {
     console.log("adding quest");
     const { quests } = this.state;
-    if (quests.length + 1 > 3) return;
+    if (quests.length > 2) return;
 
     this.setState({
       quests: this.state.quests.concat({
         id: null,
-        value: {
-          title: "",
-          description: "",
-          criteria: "",
-          quest_type: "general",
-          image: [],
-          bounty_amount: 0
-        },
+        title: "",
+        description: "",
+        criteria: "",
+        quest_type: "general",
+        image: [],
+        bounty_amount: 0,
         saved: false
       })
     });
@@ -330,28 +362,129 @@ class NewCampaignProvider extends Component {
   updateStateSingleQuest = async (index, key, value) => {
     const { quests } = this.state;
     const questsClone = _.clone(quests);
-    questsClone[index]["value"][key] = value;
+    questsClone[index][key] = value;
     await this.setState({ quests: questsClone });
   };
 
-  updateReviewAndBuzz = e => {
-    const { channels } = this.state;
-    let channelsClone = _.clone(channels);
+  updateReviewAndBuzz = (type, e) => {
+    const { questReview, questBuzz } = this.state;
+    let reviewClone = _.clone(questReview);
+    let buzzClone = _.clone(questBuzz);
     const value = e.target.value;
 
-    if (e.target.checked) {
-      channelsClone = channelsClone.concat(value);
-    } else {
-      channelsClone.splice(channelsClone.indexOf(value), 1);
+    if (type === "review") {
+      if (e.target.checked) {
+        reviewClone["allowed_channels"] = reviewClone[
+          "allowed_channels"
+        ].concat(value);
+      } else {
+        reviewClone["allowed_channels"].splice(
+          reviewClone["allowed_channels"].indexOf(value),
+          1
+        );
+      }
+      this.setState({ questReview: reviewClone });
+    } else if (type === "buzz") {
+      if (e.target.checked) {
+        buzzClone["allowed_channels"] = buzzClone["allowed_channels"].concat(
+          value
+        );
+      } else {
+        buzzClone["allowed_channels"].splice(
+          buzzClone["allowed_channels"].indexOf(value),
+          1
+        );
+      }
+      this.setState({ questBuzz: buzzClone });
     }
-
-    this.setState({ channels: channelsClone }, () => {
-      console.log(this.state.channels);
-    });
   };
 
   updateState = (key, value) => {
     this.setState({ [key]: value });
+  };
+
+  saveReviewAndBuzz = async () => {
+    const {
+      questReview,
+      questBuzz,
+      campaignInfo,
+      campaignId,
+      appstoreCriteria,
+      channelsCriteria
+    } = this.state;
+
+    console.log("review and buzz save called");
+
+    try {
+      if (questReview["allowed_channels"].length > 0) {
+        console.log(questReview);
+        const reviewId = questReview.id;
+        this.setState({ loading: true });
+        const reviewFormdata = new FormData();
+        if (questReview["allowed_channels"].includes("appstore")) {
+          const appstoreUrl = campaignInfo["urls"]["appstore"];
+          const playstoreUrl = campaignInfo["urls"]["playstore"];
+          reviewFormdata.append("quest[quest_type]", "review");
+          if (appstoreUrl) {
+            reviewFormdata.append("quest[allowed_channels][]", "appstore");
+          }
+          if (playstoreUrl) {
+            reviewFormdata.append("quest[allowed_channels][]", "playstore");
+          }
+          reviewFormdata.append("quest[criteria]", appstoreCriteria);
+        }
+
+        const method = reviewId ? "put" : "post";
+        const endpoint = reviewId
+          ? `/campaigns/${campaignId}/quests/${reviewId}.json`
+          : `/campaigns/${campaignId}/quests.json`;
+
+        const reviewResult = await api.uploadFormData(
+          method,
+          endpoint,
+          reviewFormdata,
+          true,
+          TYPE_MAKER
+        );
+        this.setState({questReview: reviewResult});
+      }
+      if (questBuzz["allowed_channels"].length > 0) {
+        console.log(questBuzz);
+        const buzzId = questBuzz.id;
+        this.setState({ loading: true });
+        const buzzFormData = new FormData();
+        buzzFormData.append("quest[quest_type]", "buzz");
+        buzzFormData.append("quest[bounty_max]", "10");
+        for (const key in questBuzz["allowed_channels"]) {
+          if (key === "appstore") continue;
+          buzzFormData.append(
+            "quest[allowed_channels][]",
+            questBuzz["allowed_channels"][key]
+          );
+        }
+
+        buzzFormData.append("quest[criteria]", channelsCriteria);
+        const method = buzzId ? "put" : "post";
+        const endpoint = buzzId
+          ? `/campaigns/${campaignId}/quests/${buzzId}.json`
+          : `/campaigns/${campaignId}/quests.json`;
+
+        const buzzResult = await api.uploadFormData(
+          method,
+          endpoint,
+          buzzFormData,
+          true,
+          TYPE_MAKER
+        );
+
+        await this.setState({questBuzz: buzzResult});
+      }
+      this.setStep(STEP_CAMPAIGN_BUDGET);
+    } catch (e) {
+      notification["error"]({ message: extractErrorMessage(e) });
+    } finally {
+      this.setState({ loading: false });
+    }
   };
 
   fetchEstimate = async () => {
@@ -392,7 +525,8 @@ class NewCampaignProvider extends Component {
           updateState: this.updateState,
           fetchEstimate: this.fetchEstimate,
           setCampaignData: this.setCampaignData,
-          resetState: this.resetState
+          resetState: this.resetState,
+          saveReviewAndBuzz: this.saveReviewAndBuzz
         }}
       >
         {this.props.children}

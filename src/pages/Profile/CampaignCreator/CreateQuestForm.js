@@ -11,7 +11,7 @@ import SimpleButton from "components/SimpleButton";
 import NewCampaignContext from "contexts/NewCampaignContext";
 
 const CreateQuestForm = memo(
-  ({ id, index }) => {
+  ({ index }) => {
     const {
       createQuest,
       deleteQuest,
@@ -20,12 +20,15 @@ const CreateQuestForm = memo(
       quests
     } = useContext(NewCampaignContext);
 
-    console.log("QUESTS", quests);
-
-    const { title, description, criteria, bounty_amount, image } = quests[
-      index
-    ].value;
-    const saved = quests[index].saved;
+    const {
+      id,
+      saved,
+      title,
+      description,
+      criteria,
+      bounty_amount,
+      image
+    } = quests[index];
 
     return (
       <div>
@@ -47,9 +50,9 @@ const CreateQuestForm = memo(
           title={"Proof Example"}
           single
           maxBytes={20000000}
-          images={image}
+          images={typeof image === "string" ? [image] : image}
           onChange={files =>
-            updateStateSingleQuest(index, "image", files[0].image)
+            updateStateSingleQuest(index, "image", files)
           }
         />
         <TextInput

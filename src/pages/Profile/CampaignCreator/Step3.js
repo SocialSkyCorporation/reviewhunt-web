@@ -44,7 +44,10 @@ const Step3 = ({}) => {
       <div className="review-checkbox-container">
         <div className="review-buzz-text">Review</div>
         <Checkbox
-          checked={questReview.allowed_channels.includes(channelOptions[0].value)}
+          checked={
+            questReview.allowed_channels.includes("appstore") ||
+            questReview.allowed_channels.includes("playstore")
+          }
           onChange={e => updateReviewAndBuzz("review", e)}
           value={channelOptions[0].value}
         >

@@ -53,14 +53,13 @@ class CampaignProvider extends React.Component {
   };
 
   fetchCampaign = async id => {
-    console.log("fetching campaign", id);
     const { fetchingCampaign } = this.state;
     if (fetchingCampaign) return;
 
     await this.setState({ fetchingCampaign: true });
     try {
       const currentCampaign = await api.get(`/campaigns/${id}.json`);
-      console.log("current camp", currentCampaign);
+      console.log("curr", currentCampaign);
       await this.setState({ currentCampaign });
     } catch (e) {
       notification["error"]({

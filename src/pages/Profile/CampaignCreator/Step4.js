@@ -4,6 +4,7 @@ import { Icon } from "antd";
 import { BudgetSlider } from "./FormTypes";
 import NewCampaignContext, {
   STEP_CAMPAIGN_BUDGET,
+  STEP_CONFIRM,
   STEP_REVIEW_BUZZ
 } from "contexts/NewCampaignContext";
 import hunterImg from "assets/images/hunter-circle.svg";
@@ -14,6 +15,14 @@ import SimpleButton from "components/SimpleButton";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 import appstoreImg from "assets/images/appstore.svg";
 import playstoreImg from "assets/images/playstore.svg";
+
+const questDictionary = {
+  general_1: "QUEST 1",
+  general_2: "QUEST 2",
+  general_3: "QUEST 3",
+  review: "App review",
+  buzz: "Buzz content"
+};
 
 const RewardDetailRow = props => {
   const { title, bounty } = props;
@@ -75,8 +84,8 @@ const Step4 = ({}) => {
       <BudgetSlider
         title={"Max reward per content"}
         value={maxRewardAmount}
-        min={500}
-        max={1000}
+        min={10}
+        max={10000}
         step={5}
         onChange={value => {
           updateState("fetchingEstimate", true);
@@ -90,86 +99,108 @@ const Step4 = ({}) => {
           Reward Details
         </div>
 
-        {quests.map((quest, index) => {
-          return (
-            <RewardDetailRow key={index} title={"TODO"} bounty={"$1"}>
-              <div className="text-black text-small">Make your first bark.</div>
-            </RewardDetailRow>
-          );
-        })}
+        {quests.map(
+          ({ allowed_channels, quest_type, title, bounty_max }, index) => {
+            switch (quest_type) {
+              case "general_1":
+              case "general_2":
+              case "general_3":
+                return (
+                  <RewardDetailRow
+                    key={quest_type}
+                    title={questDictionary[quest_type]}
+                    bounty={`$${bounty_max}`}
+                  >
+                    <div className="text-black text-small">{title}</div>
+                  </RewardDetailRow>
+                );
+              case "review":
+                return (
+                  <RewardDetailRow
+                    key={quest_type}
+                    title={"App Review"}
+                    bounty={"$5"}
+                  >
+                    <div className="col">
+                      <div>
+                        <div className="row-align-center">
+                          <div className="url-icon-circle">
+                            <img src={appstoreImg} alt="" />
+                          </div>
+                          {campaignInfo.appstore ? (
+                            <a
+                              className="url-href"
+                              href={campaignInfo.appstore}
+                            >
+                              {campaignInfo.appstore}
+                            </a>
+                          ) : (
+                            <div className="row-align-center">
+                              <div className="url-desc text-grey">
+                                Not registered
+                              </div>
+                              <div
+                                className="url-href hover-link"
+                                onClick={() => {
+                                  setStep(1);
+                                }}
+                              >
+                                Register
+                              </div>
+                            </div>
+                          )}
+                        </div>
 
-        <RewardDetailRow title={"Quest 1"} bounty={"$1"}>
-          <div className="text-black text-small">Make your first bark.</div>
-        </RewardDetailRow>
-        <RewardDetailRow title={"Quest 2"} bounty={"$2"}>
-          <div className="text-black text-small">
-            Become a top dog in your territory
-          </div>
-        </RewardDetailRow>
-
-        <RewardDetailRow title={"Quest 3"} bounty={"$3"}>
-          <div className="text-black text-small">Drop a poo message.</div>
-        </RewardDetailRow>
-        <RewardDetailRow title={"App Review"} bounty={"$5"}>
-          <div className="col">
-            <div>
-              <div className="row-align-center">
-                <div className="url-icon-circle">
-                  <img src={appstoreImg} alt="" />
-                </div>
-                {campaignInfo.appstore ? (
-                  <a className="url-href" href={campaignInfo.appstore}>
-                    {campaignInfo.appstore}
-                  </a>
-                ) : (
-                  <div className="row-align-center">
-                    <div className="url-desc text-grey">Not registered</div>
-                    <div
-                      className="url-href hover-link"
-                      onClick={() => {
-                        setStep(1);
-                      }}
-                    >
-                      Register
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="app-review-item">
-                <div className="row-align-center">
-                  <div className="url-icon-circle">
-                    <img src={playstoreImg} alt="" />
-                  </div>
-                  {campaignInfo.playstore ? (
-                    <a className="url-href" href={campaignInfo.appstore}>
-                      {campaignInfo.playstore}
-                    </a>
-                  ) : (
-                    <div className="row-align-center">
-                      <div className="url-desc text-grey">Not registered</div>
-                      <div
-                        className="url-href hover-link"
-                        onClick={() => {
-                          setStep(1);
-                        }}
-                      >
-                        Register
+                        <div className="app-review-item">
+                          <div className="row-align-center">
+                            <div className="url-icon-circle">
+                              <img src={playstoreImg} alt="" />
+                            </div>
+                            {campaignInfo.playstore ? (
+                              <a
+                                className="url-href"
+                                href={campaignInfo.appstore}
+                              >
+                                {campaignInfo.playstore}
+                              </a>
+                            ) : (
+                              <div className="row-align-center">
+                                <div className="url-desc text-grey">
+                                  Not registered
+                                </div>
+                                <div
+                                  className="url-href hover-link"
+                                  onClick={() => {
+                                    setStep(1);
+                                  }}
+                                >
+                                  Register
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </RewardDetailRow>
-        <RewardDetailRow title={"Buzz Content"} bounty={"$0 - $500"}>
-          <div className="text-black text-small">Youtube</div>
-          <div className="text-black text-small">Reddit</div>
-          <div className="text-black text-small">Instagram</div>
-          <div className="text-black text-small">Twitter</div>
-          <div className="text-black text-small">Steemit</div>
-        </RewardDetailRow>
+                  </RewardDetailRow>
+                );
+
+              case "buzz":
+                return (
+                  <RewardDetailRow key={quest_type} title={"Buzz Content"} bounty={`$10 - $${maxRewardAmount}`}>
+                    {allowed_channels.map((channel, index) => {
+                      return (
+                        <div key={index} className="text-black text-small">
+                          {channel}
+                        </div>
+                      );
+                    })}
+                  </RewardDetailRow>
+                );
+              default:
+            }
+          }
+        )}
 
         <div>
           <div className="max-result-text text-grey text-small">MAX RESULT</div>
@@ -211,7 +242,7 @@ const Step4 = ({}) => {
         </div>
         <SimpleButton
           text={"Save and Next"}
-          onClick={() => setStep(STEP_CAMPAIGN_BUDGET)}
+          onClick={() => setStep(STEP_CONFIRM)}
         />
       </div>
     </div>
