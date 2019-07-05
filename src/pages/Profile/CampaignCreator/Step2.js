@@ -21,15 +21,18 @@ const Step2 = ({}) => {
       <div className="text-grey text-small">Step 2 of 5</div>
       <div className="step-title text-black">Design Quests</div>
       <Collapse defaultActiveKey={["1"]}>
-        {quests.map(({ id, saved }, index) => (
+        {quests.map((quest, index) => {
+          console.log("quest", quest);
+          const {saved} = quest;
+          return (
           <Panel
             className="create-quest-panel"
             header={`Quest ${index + 1}`}
             key={index + 1}
           >
-            <CreateQuestForm id={id} index={index} saved={saved} />
+            <CreateQuestForm index={index} />
           </Panel>
-        ))}
+        )})}
       </Collapse>
 
       {quests.length < 3 && (
