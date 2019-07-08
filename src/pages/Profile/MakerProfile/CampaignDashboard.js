@@ -1,12 +1,14 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { Menu, Select, Icon } from "antd";
+import { Menu, Modal, Select, Icon } from "antd";
 import ProgressBar from "components/ProgressBar";
-import SubmittedItem from "./SubmittedItem";
+import SubmittedItem, { EmptySubmittedItem } from "./SubmittedItem";
 import CampaignContext from "contexts/CampaignContext";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 import CircularProgress from "components/CircularProgress";
 import ReviewAndBuzzGraph from "./ReviewAndBuzzGraph";
+import prevImg from "assets/images/prev.svg";
+import nextImg from "assets/images/next.svg";
 
 const { Option } = Select;
 
@@ -36,6 +38,7 @@ const CampaignDashboard = ({
   submittedQuests
 }) => {
   const [current, setCurrent] = useState("pending");
+  const [modalVisible, setModalVisible] = useState(false);
   const { currentCampaign, fetchingSubmittedQuests } = useContext(
     CampaignContext
   );
@@ -55,6 +58,10 @@ const CampaignDashboard = ({
         <div className="text-black text-subheader">BARK</div>
         <div className="text-small text-grey">
           Transforms people nearby into fun barking dogs
+        </div>
+        <div className="text-blue text-small hover-link" style={{marginTop: 8}}>
+          See campaign brief
+          <Icon type="right" style={{marginLeft: 4}}/>
         </div>
         {/*<div
           className="row-align-center"
@@ -126,16 +133,42 @@ const CampaignDashboard = ({
           ) : (
             <>
               {submittedQuests.map((submittedQuest, index) => (
-                <SubmittedItem key={submittedQuest.id} />
+                <SubmittedItem
+                  onClick={() => setModalVisible(true)}
+                  key={submittedQuest.id}
+                />
               ))}
-              <SubmittedItem key={1} />
-              <SubmittedItem key={2} />
+              <SubmittedItem
+                key={1}
+                onClick={() => setModalVisible(true)}
+                approved
+              />
+              <SubmittedItem
+                key={2}
+                onClick={() => setModalVisible(true)}
+                rejected
+              />
               <SubmittedItem key={3} />
               <SubmittedItem key={4} />
               <SubmittedItem key={5} />
+              <EmptySubmittedItem />
             </>
           )}
         </div>
+        <Modal
+          maskClosable={true}
+          onCancel={() => setModalVisible(false)}
+          visible={modalVisible}
+          footer={null}
+          style={{ maxWidth: 300, minWidth: 255 }}
+          bodyStyle={{ paddingTop: 48 }}
+        >
+          <div>
+            <SubmittedItem noBorder />
+            <img className="prev-button" src={prevImg} />
+            <img className="next-button" src={nextImg} />
+          </div>
+        </Modal>
       </div>
     </>
   );

@@ -9,6 +9,7 @@ import { CampaignProvider } from "contexts/CampaignContext";
 import { WalletProvider } from "contexts/WalletContext";
 import { NewCampaignProvider } from "contexts/NewCampaignContext";
 import CircularProgress from "components/CircularProgress";
+import { StripeProvider } from "react-stripe-elements";
 
 import App from "./App";
 import history from "./history";
@@ -24,13 +25,15 @@ ReactDOM.render(
 		<Router history={history}>
 			<AppProvider>
 				<AuthProvider>
-					<NewCampaignProvider>
-						<CampaignProvider>
-							<WalletProvider>
-								<App />
-							</WalletProvider>
-						</CampaignProvider>
-					</NewCampaignProvider>
+					<StripeProvider apiKey="pk_test_12345">
+						<NewCampaignProvider>
+							<CampaignProvider>
+								<WalletProvider>
+									<App />
+								</WalletProvider>
+							</CampaignProvider>
+						</NewCampaignProvider>
+					</StripeProvider>
 				</AuthProvider>
 			</AppProvider>
 		</Router>

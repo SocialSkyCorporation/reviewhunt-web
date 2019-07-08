@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {Icon} from 'antd';
 import appstoreImg from "assets/images/appstore.svg";
 import playstoreImg from "assets/images/playstore.svg";
 import youtubeIcon from "assets/images/youtube.svg";
@@ -13,11 +14,14 @@ import othersIcon from "assets/images/other.svg";
 const IconValue = ({icon, title, value}) => {
   return (
     <div className="row-align-center review-icon-item">
-      <img className="review-buzz-icon" src={icon} alt="" />
+      <div className="review-buzz-icon">
+      <img src={icon} alt="" />
+      </div>
       <div>
         <div className="text-grey">{title}</div>
         <div className="text-black text-big">{value}</div>
       </div>
+      <Icon className="review-right-icon" type="right"/>
     </div>
   );
 };

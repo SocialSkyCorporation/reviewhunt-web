@@ -16,6 +16,7 @@ export const STEP_CREATE_QUESTS = 1;
 export const STEP_REVIEW_BUZZ = 2;
 export const STEP_CAMPAIGN_BUDGET = 3;
 export const STEP_CONFIRM = 4;
+export const STEP_CHECKOUT = 5;
 
 const questOrder = ["general_1", "general_2", "general_3", "review", "buzz"];
 
@@ -24,7 +25,7 @@ function questSortFunction(a, b) {
 }
 
 const initialState = {
-  step: STEP_CAMPAIGN_BUDGET,
+  step: STEP_CHECKOUT,
   // step: STEP_CREATE_CAMPAIGN,
   campaignInfo: {
     product_name: "",
@@ -56,7 +57,7 @@ const initialState = {
   channelsCriteria: "",
   totalBudgetAmount: 1000,
   maxRewardAmount: 10,
-  campaignId: null,
+  campaignId: 5,
   estimate: {
     total_bounty: 0,
     average_bounty_per_hunter: 0,
@@ -65,8 +66,10 @@ const initialState = {
     buzz_content_count: 0,
     total_reach: 0
   },
-
+  currencyInfo: {
+  },
   fetchingEstimate: false,
+  fetchingCurrency: false,
   loading: false
 };
 
@@ -508,6 +511,27 @@ class NewCampaignProvider extends Component {
     }
   };
 
+  fetchCurrency = async (currency) => {
+    console.log("fetching currency", currency);
+    this.setState({ fetchingCurrency: true });
+    const { campaignId} = this.state;
+
+    try {
+      const currencyInfo = await api.put(
+        `/campaigns/${campaignId}/set_currency.json`,
+        {currency},
+        true,
+        TYPE_MAKER
+      );
+      console.log(currencyInfo);
+      this.setState({ currencyInfo });
+    } catch (e) {
+      notification["error"]({ message: extractErrorMessage(e) });
+    } finally {
+      this.setState({ fetchingCurrency: false });
+    }
+  };
+
   render() {
     return (
       <Provider
@@ -525,6 +549,7 @@ class NewCampaignProvider extends Component {
           updateReviewAndBuzz: this.updateReviewAndBuzz,
           updateState: this.updateState,
           fetchEstimate: this.fetchEstimate,
+          fetchCurrency: this.fetchCurrency,
           setCampaignData: this.setCampaignData,
           resetState: this.resetState,
           saveReviewAndBuzz: this.saveReviewAndBuzz

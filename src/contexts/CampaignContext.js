@@ -14,7 +14,7 @@ class CampaignProvider extends React.Component {
     fetchingCampaign: false,
     fetchingSubmittedQuests: false,
     campaigns: [],
-    currentCampaign: null,
+    // currentCampaign: null,
     joiningQuest: false
   };
 

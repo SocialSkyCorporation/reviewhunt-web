@@ -471,6 +471,23 @@ hr {
 ///////////////////////////////////////////////
 // TODO: Refactor other common css
 
+.col-justify-between {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.col-align-center{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.row-align-between {
+  display: flex;
+  align-items: space-between;
+}
+
 .row-align-start {
   display: flex;
   align-items: flex-start;
