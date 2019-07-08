@@ -26,11 +26,12 @@ const TAB_CREATE_CAMPAIGN = 0;
 const TAB_CAMPAIGNS = 1;
 const TAB_HISTORY = 2;
 const TAB_SETTINGS = 3;
+const TAB_CHECKOUT = 4;
 
 class Profile extends Component {
   state = {
-    tabIndex: TAB_HISTORY,
-    selectedCampaignId: -1,
+    tabIndex: TAB_CREATE_CAMPAIGN,
+    selectedCampaignId: null,
     editProfile: false,
     socialChannels: [],
     steemLogo: steemLogoBlack
@@ -84,7 +85,8 @@ class Profile extends Component {
       "Design Quests",
       "Review and Buzz",
       "Campaign Budget",
-      "Review"
+      "Review",
+      "Checkout"
     ];
 
     return (
@@ -160,6 +162,7 @@ class Profile extends Component {
         {tabIndex === TAB_CAMPAIGNS && this.renderCampaignsTab()}
         {tabIndex === TAB_HISTORY && this.renderHistoryTab()}
         {tabIndex === TAB_SETTINGS && this.renderCampaignsTab()}
+        {tabIndex === TAB_CHECKOUT && this.renderCheckout()}
       </div>
     );
   }

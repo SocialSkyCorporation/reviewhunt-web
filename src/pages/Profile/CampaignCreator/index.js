@@ -4,12 +4,14 @@ import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
 import Step5 from "./Step5";
+import Step6 from "./Step6";
 import NewCampaignContext, {
   STEP_CREATE_CAMPAIGN,
   STEP_CREATE_QUESTS,
   STEP_REVIEW_BUZZ,
   STEP_CAMPAIGN_BUDGET,
-  STEP_CONFIRM
+  STEP_CONFIRM,
+  STEP_CHECKOUT
 } from "contexts/NewCampaignContext";
 import CircularProgress from "components/CircularProgress";
 import ProgressBar from "components/ProgressBar";
@@ -42,6 +44,8 @@ export default props => {
         return <Step4 />;
       case STEP_CONFIRM:
         return <Step5 />;
+      case STEP_CHECKOUT:
+        return <Step6 />;
       default:
         return null;
     }
