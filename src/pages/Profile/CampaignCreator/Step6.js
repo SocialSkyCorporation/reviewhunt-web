@@ -10,6 +10,7 @@ import NewCampaignContext, {
 } from "contexts/NewCampaignContext";
 import QRCode from "qrcode.react";
 import { CardElement, Elements, injectStripe } from "react-stripe-elements";
+import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 
 const PAYMENT_USD = "USD";
 const PAYMENT_KRW = "KRW";
@@ -23,7 +24,7 @@ class _CardForm extends React.Component {
           this.props.stripe.createToken().then(payload => console.log(payload))
         }
       >
-      <label>Card Details</label>
+        <label>Card Details</label>
         <div className="card-form">
             <CardElement />
           <button>Pay</button>
@@ -138,6 +139,7 @@ const Step6 = ({}) => {
       <div className="row-space-around">
         <PaymentOption
           onClick={() => {
+            if(paymentOption === PAYMENT_USD) return;
             fetchCurrency(PAYMENT_USD);
             setPaymentOption(PAYMENT_USD);
           }}
@@ -146,6 +148,7 @@ const Step6 = ({}) => {
         />
         <PaymentOption
           onClick={() => {
+            if(paymentOption === PAYMENT_KRW) return;
             fetchCurrency(PAYMENT_KRW);
             setPaymentOption(PAYMENT_KRW);
           }}
@@ -155,6 +158,7 @@ const Step6 = ({}) => {
         />
         <PaymentOption
           onClick={() => {
+            if(paymentOption === PAYMENT_BTC) return;
             fetchCurrency(PAYMENT_BTC);
             setPaymentOption(PAYMENT_BTC);
           }}
@@ -185,7 +189,7 @@ const Step6 = ({}) => {
                   />
                   <NameValue
                     title={"입금액 (KRW 환산)"}
-                    value={currencyInfo.amount}
+                    value={`${numberWithCommas(Number(currencyInfo.amount).toFixed(2))} KRW`}
                     minKeyWidth={120}
                   />
                   <div className="text-info text-grey">
@@ -200,6 +204,8 @@ const Step6 = ({}) => {
               {currencyInfo.currency === PAYMENT_BTC && (
                 <div className="payment-btc">
                   <QRCode value={currencyInfo.address} />
+                  <div className="text-btc">{numberWithCommas(currencyInfo.amount)} BTC</div>
+                  <div className="text-black">{currencyInfo.address}</div>
                   <div
                     className="text-info text-info"
                     style={{ marginTop: 16 }}
