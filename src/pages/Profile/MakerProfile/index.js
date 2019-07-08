@@ -4,12 +4,14 @@ import TabItem, { TabSubItem } from "../TabItem";
 import QuestItem from "../QuestItem";
 import CurrentQuest from "../CurrentQuest";
 import CampaignDashboard from "./CampaignDashboard";
+import HistoryTab from "./HistoryTab";
+import SettingTab from "./SettingTab";
+
 import ProgressBar from "components/ProgressBar";
 import SimpleButton from "components/SimpleButton";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { withTranslation } from "react-i18next";
 import CampaignCreator from "../CampaignCreator";
-import HistoryTab from "./HistoryTab";
 import {
   withAuthContext,
   withNewCampaignContext,
@@ -30,7 +32,7 @@ const TAB_CHECKOUT = 4;
 
 class Profile extends Component {
   state = {
-    tabIndex: TAB_CREATE_CAMPAIGN,
+    tabIndex: TAB_SETTINGS,
     selectedCampaignId: null,
     editProfile: false,
     socialChannels: [],
@@ -161,10 +163,14 @@ class Profile extends Component {
         {tabIndex === TAB_CREATE_CAMPAIGN && this.renderCampaignCreator()}
         {tabIndex === TAB_CAMPAIGNS && this.renderCampaignsTab()}
         {tabIndex === TAB_HISTORY && this.renderHistoryTab()}
-        {tabIndex === TAB_SETTINGS && this.renderCampaignsTab()}
+        {tabIndex === TAB_SETTINGS && this.renderSettings()}
         {tabIndex === TAB_CHECKOUT && this.renderCheckout()}
       </div>
     );
+  }
+
+  renderSettings() {
+    return <SettingTab />;
   }
 
   renderCampaignCreator() {
