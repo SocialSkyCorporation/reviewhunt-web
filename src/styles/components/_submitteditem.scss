@@ -1,6 +1,8 @@
 .submitted-item {
   position: relative;
-  width: 45%;
+  min-width: 255px;
+  max-width: 300px;
+
   .submitted-item-img {
     width: 100%;
     height: 450px;
@@ -30,4 +32,24 @@
     background-color: #e5e5e5;
     margin: 30px 0px;
   }
+
+  .approved-rejected-icon {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+
+  }
+}
+
+.prev-button {
+  position: absolute;
+  left: -80px;
+  top: 40%;
+
+}
+
+.next-button {
+  position: absolute;
+  right: -80px;
+  top: 40%;
 }
