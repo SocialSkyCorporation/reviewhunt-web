@@ -6,7 +6,7 @@ import React, {
   memo
 } from "react";
 import PropTypes from "prop-types";
-import { TextInput, Screenshots } from "./FormTypes";
+import { TextInput, Screenshots } from "components/FormTypes";
 import SimpleButton from "components/SimpleButton";
 import NewCampaignContext from "contexts/NewCampaignContext";
 
@@ -49,6 +49,7 @@ const CreateQuestForm = memo(
         <Screenshots
           title={"Proof Example"}
           single
+          small
           maxBytes={20000000}
           images={typeof image === "string" ? [image] : image}
           onChange={files =>

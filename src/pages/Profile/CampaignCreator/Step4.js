@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "antd";
-import { BudgetSlider } from "./FormTypes";
+import { BudgetSlider } from "components/FormTypes";
 import NewCampaignContext, {
   STEP_CAMPAIGN_BUDGET,
   STEP_CONFIRM,

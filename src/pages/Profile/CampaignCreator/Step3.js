@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Icon, Checkbox } from "antd";
 import PropTypes from "prop-types";
-import { TextInput } from "./FormTypes";
+import { TextInput } from "components/FormTypes";
 import SimpleButton from "components/SimpleButton";
 import NewCampaignContext, {
   STEP_CREATE_CAMPAIGN,

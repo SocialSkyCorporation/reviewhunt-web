@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Input, Icon } from "antd";
 import PropTypes from "prop-types";
-import { TextInput, Screenshots, ProductLinks } from "./FormTypes";
+import { TextInput, Screenshots, ProductLinks } from "components/FormTypes";
 import SimpleButton from "components/SimpleButton";
 import NewCampaignContext from "contexts/NewCampaignContext";
 import websiteImg from "assets/images/website.svg";

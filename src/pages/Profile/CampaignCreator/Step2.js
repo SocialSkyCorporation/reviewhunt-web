@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Collapse, Icon, Modal } from "antd";
-import { TextInput, Screenshots, ProductLinks } from "./FormTypes";
+import { TextInput, Screenshots, ProductLinks } from "components/FormTypes";
 import SimpleButton from "components/SimpleButton";
 import CreateQuestForm from "./CreateQuestForm";
 import NewCampaignContext, {
