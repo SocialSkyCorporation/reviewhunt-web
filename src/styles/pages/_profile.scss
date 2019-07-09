@@ -519,6 +519,12 @@
         }
       }
 
+      .info-quest-image {
+        max-height: 273px;
+        margin: 10px 0px;
+        object-fit: contain;
+      }
+
       .info-subheading {
         font-size: 12px;
       }

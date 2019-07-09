@@ -120,11 +120,11 @@ class Profile extends Component {
           selected={tabIndex === 0}
           onClick={() => this.setState({ tabIndex: 0 })}
         />
-        <TabItem
+        {/*<TabItem
           text={"Channels"}
           selected={tabIndex === 1}
           onClick={() => this.setState({ tabIndex: 1 })}
-        />
+        />*/}
         <TabItem
           text={t("profile.quest_dashboard")}
           selected={tabIndex === 2}
@@ -313,6 +313,7 @@ class Profile extends Component {
           <ProgressBar height={8} progress={30} />
           <div className="content-quest">
             <CurrentQuest
+              data={currentQuest}
               onBackPressed={() => this.setState({ currentQuest: null })}
             />
           </div>
@@ -330,8 +331,8 @@ class Profile extends Component {
 
     return (
       <div className="content-quest">
-        <div className="content-title text-black">
-          {t("profile.your_quests").toUpperCase()}
+        <div className="content-title text-black uppercase">
+          {t("profile.your_quests")}
         </div>
         <Select className="category-select" defaultValue={t("all")} />
         {campaigns.map((campaign, index) => {
@@ -345,20 +346,6 @@ class Profile extends Component {
             />
           );
         })}
-{/*        <QuestItem
-          steps={[1, 2, 3, "review", "buzz"]}
-          currentStep={1}
-          onClick={() => this.setState({ currentQuest: 1 })}
-        />
-        <QuestItem
-          steps={[1, 2, 3, "review", "buzz"]}
-          currentStep={3}
-          onClick={() => this.setState({ currentQuest: 1 })}
-        />
-        <QuestItem steps={[1, 2, 3, "review", "buzz"]} currentStep={3} />
-        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={4} />
-        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={3} ended />
-        <QuestItem steps={[1, 2, "review", "buzz"]} currentStep={4} ended />*/}
       </div>
     );
   }

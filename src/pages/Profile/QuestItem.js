@@ -6,15 +6,12 @@ import QuestStepProgress from 'components/QuestStepProgress';
 import {isExpired, timeToX, timeUntil} from 'utils/date';
 
 const QuestItem = (props) => {
-  const {data} = props;
-  const { product_name, quests, thumbnails, expires_at, onClick } = data;
+  const {data, onClick} = props;
+  const { product_name, quests, thumbnails, expires_at } = data;
 
   const currentStep = 0;
   const completed = currentStep > quests.length - 1;
   const ended = isExpired(expires_at);
-
-
-  console.log("thumbnail", thumbnails);
 
   return (
     <div className={`quest-item-row`} onClick={onClick}>
@@ -58,7 +55,7 @@ QuestItem.propTypes = {
 };
 
 QuestItem.defaultProps = {
-  steps: [1, 2, 3, 'review', 'buzz'],
+  steps: [],
   currentStep: 4,
   ended: false,
   title: 'Title'

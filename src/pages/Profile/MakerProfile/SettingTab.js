@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import SimpleButton from "components/SimpleButton";
+import AuthContext from "contexts/AuthContext";
 import ProfileRow, {
   TYPE_DROPDOWN,
   // TYPE_SOCIAL,
@@ -11,6 +12,14 @@ import ProfileRow, {
 const SettingTab = ({}) => {
   const { t } = useTranslation();
   const [editProfile, setEditProfile] = useState(false);
+  const { emailMe } = useContext(AuthContext);
+
+  const {name, email, company_name, business_category} = emailMe;
+
+  const [nameInput, setName] = useState(name);
+  const [emailInput, setEmail] = useState(email);
+  const [companyNameInput, setCompanyName] = useState(company_name);
+  const [businessCategoryInput, setBusinessCategory] = useState(business_category);
 
   return (
     <div>
@@ -18,18 +27,12 @@ const SettingTab = ({}) => {
         <div className="content-title text-black">
           {t("profile.basic_information").toUpperCase()}
         </div>
-        <ProfileRow title={t("name")} value={""} editMode={editProfile} />
-        <ProfileRow title={t("email")} value={""} editMode={editProfile} />
-        <ProfileRow title={"Company Name"} value={""} editMode={editProfile} />
+        <ProfileRow title={t("name")} value={nameInput} editMode={editProfile} />
+        <ProfileRow title={t("email")} value={emailInput} editMode={editProfile} />
+        <ProfileRow title={"Company Name"} value={companyNameInput} editMode={editProfile} />
         <ProfileRow
           title={"Business Category"}
-          value={""}
-          type={TYPE_DROPDOWN}
-          editMode={editProfile}
-        />
-        <ProfileRow
-          title={t("country")}
-          value={""}
+          value={businessCategoryInput}
           type={TYPE_DROPDOWN}
           editMode={editProfile}
         />
