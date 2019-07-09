@@ -14,7 +14,8 @@ export const TextInput = memo(
     textAreaHeight,
     value,
     maxCharacters,
-    setValue
+    setValue,
+    placeholder
   }) => {
     return (
       <div className="title-input-container" style={containerStyle}>
@@ -31,6 +32,7 @@ export const TextInput = memo(
           <TextArea
             className="title-text-area text-black"
             style={{ height: textAreaHeight }}
+            placeholder={placeholder}
             onChange={e => {
               if (maxCharacters && e.target.value.length > maxCharacters) {
                 return;
@@ -42,6 +44,7 @@ export const TextInput = memo(
         ) : (
           <Input
             className="title-input-box text-black"
+            placeholder={placeholder}
             onChange={e => {
               if (maxCharacters && e.target.value.length > maxCharacters) {
                 return;
@@ -111,6 +114,7 @@ export const BudgetSlider = ({ title, value, max, min, step, onChange }) => {
 TextInput.propTypes = {
   title: PropTypes.string,
   value: PropTypes.string,
+  placeholder: PropTypes.string,
   containerStyle: PropTypes.object,
   textAreaHeight: PropTypes.number,
   textArea: PropTypes.bool,
@@ -122,6 +126,7 @@ TextInput.defaultProps = {
   title: "",
   value: "",
   containerStyle: {},
+  placeholder: "",
   textAreaHeight: 32,
   textArea: false,
   maxCharacters: null,
