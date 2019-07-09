@@ -2,6 +2,7 @@ import React from "react";
 import { AuthConsumer } from "./AuthContext";
 import { NewCampaignConsumer } from "contexts/NewCampaignContext";
 import { CampaignConsumer } from "contexts/CampaignContext";
+import { HunterDashboardConsumer } from "contexts/HunterDashboardContext";
 
 export function withAuthContext(Component) {
   return function WrapperComponent(props) {
@@ -19,6 +20,16 @@ export function withNewCampaignContext(Component) {
       <NewCampaignConsumer>
         {state => <Component {...props} newCampaignContext={state} />}
       </NewCampaignConsumer>
+    );
+  };
+}
+
+export function withHunterDashboardContext(Component) {
+  return function WrapperComponent(props) {
+    return (
+      <HunterDashboardConsumer>
+        {state => <Component {...props} hunterDashboardContext={state} />}
+      </HunterDashboardConsumer>
     );
   };
 }

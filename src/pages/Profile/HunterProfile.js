@@ -16,7 +16,7 @@ import { AuthConsumer } from "contexts/AuthContext";
 import steemLogoWhite from "assets/images/steem-logo.svg";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { getLoginURL } from "utils/token";
-import { withAuthContext } from "contexts/HOC";
+import { withAuthContext, withHunterDashboardContext } from "contexts/HOC";
 import { withTranslation } from "react-i18next";
 import { countries } from "utils/constants";
 import api from "utils/api";
@@ -30,39 +30,12 @@ const TAB_CHANNELS = 1;
 const TAB_QUEST = 2;
 const TAB_WALLET = 3;
 
-class Profile extends Component {
+class HunterProfile extends Component {
   state = {
     tabIndex: 3,
     editProfile: false,
     socialChannels: [],
-    currentQuest: null,
     steemLogo: steemLogoBlack,
-    campaigns: [],
-    fetching: false
-  };
-
-  fetchCampaigns = async () => {
-    const { fetching } = this.state;
-    if (fetching) return;
-
-    this.setState({ fetching: true });
-
-    try {
-      const campaigns = await api.get(
-        "/campaigns/mine.json",
-        {},
-        true,
-        TYPE_HUNTER
-      );
-      console.log("fetched campaigns", campaigns);
-      this.setState({campaigns });
-    } catch (e) {
-      notification["error"]({
-        message: extractErrorMessage(e)
-      });
-    } finally {
-      this.setState({ fetching: false });
-    }
   };
 
   renderBanner() {
@@ -113,6 +86,8 @@ class Profile extends Component {
     const { tabIndex } = this.state;
     const { t } = this.props;
     const { logout } = this.props.authContext;
+    const { fetchCampaigns } = this.props.hunterDashboardContext;
+
     return (
       <div className="tabs">
         <TabItem
@@ -129,7 +104,7 @@ class Profile extends Component {
           text={t("profile.quest_dashboard")}
           selected={tabIndex === 2}
           onClick={() => {
-            this.fetchCampaigns();
+            fetchCampaigns();
             this.setState({ tabIndex: 2 });
           }}
         />
@@ -304,8 +279,8 @@ class Profile extends Component {
   }
 
   renderQuestTab() {
-    const { currentQuest, campaigns, fetching } = this.state;
     const { t } = this.props;
+    const { setCurrentQuest, fetchingQuest, currentQuest, campaigns } = this.props.hunterDashboardContext;
 
     if (currentQuest) {
       return (
@@ -314,14 +289,14 @@ class Profile extends Component {
           <div className="content-quest">
             <CurrentQuest
               data={currentQuest}
-              onBackPressed={() => this.setState({ currentQuest: null })}
+              onBackPressed={() => setCurrentQuest(null)}
             />
           </div>
         </>
       );
     }
 
-    if (fetching) {
+    if (fetchingQuest) {
       return (
         <div className="content-quest">
           <CircularProgress />
@@ -342,7 +317,7 @@ class Profile extends Component {
             <QuestItem
               key={id}
               data={campaign}
-              onClick={() => this.setState({ currentQuest: campaign })}
+              onClick={() => setCurrentQuest(campaign)}
             />
           );
         })}
@@ -365,4 +340,6 @@ class Profile extends Component {
   }
 }
 
-export default withTranslation()(withAuthContext(Profile));
+export default withTranslation()(
+  withAuthContext(withHunterDashboardContext(HunterProfile))
+);
