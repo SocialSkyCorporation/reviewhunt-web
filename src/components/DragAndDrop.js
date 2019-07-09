@@ -9,7 +9,7 @@ const { confirm } = Modal;
 
 
 const DragAndDrop = props => {
-  const { single, maxBytes, onChange, images } = props;
+  const { single, small, maxBytes, onChange, images } = props;
   const [files, setFiles] = useState(images);
   const {deleteImg} = useContext(NewCampaignContext);
 
@@ -61,15 +61,18 @@ const DragAndDrop = props => {
 
 
   if (single) {
-    baseStyle["width"] = 240;
-    baseStyle["height"] = 240;
-    baseStyle["objectFit"] = "contain";
     description = (
       <p style={descriptionStyle}>
         Drag and drop file here or <br />
         <b className="text-blue">choose file</b>
       </p>
     );
+  }
+
+  if(small) {
+    baseStyle["width"] = 240;
+    baseStyle["height"] = 240;
+    baseStyle["objectFit"] = "contain";
   }
 
   const style = useMemo(
@@ -149,6 +152,7 @@ DragAndDrop.propTypes = {
 DragAndDrop.defaultProps = {
   images: [],
   single: false,
+  small: false,
   onChange: () => {}
 };
 
