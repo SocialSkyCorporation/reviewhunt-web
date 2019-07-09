@@ -88,6 +88,24 @@ $inset-color: #fff;
     display: flex;
     align-items: center;
 
+    .quest-step-number {
+      position: relative;
+
+
+    }
+
+    .quest-step-icon {
+      position: absolute;
+      right: -12px;
+      bottom: -8px;
+
+      &.review {
+        right: -8px;
+        bottom: -6px;
+      }
+    }
+
+
     .quest-step {
       display: flex;
       align-items: center;

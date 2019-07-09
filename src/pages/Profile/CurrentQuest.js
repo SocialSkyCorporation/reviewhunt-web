@@ -6,17 +6,29 @@ import SimpleButton from "components/SimpleButton";
 import QuestStepProgress from "components/QuestStepProgress";
 import HistoryMessage from "./HistoryMessage";
 
-const QuestInfo = ({ step }) => {
+const QuestInfo = ({ steps, step }) => {
+  const quest = steps[step];
+  const {
+    bounty_base,
+    title,
+    criteria,
+    bounty_max,
+    description,
+    image
+  } = quest;
+  let tag =
+    bounty_max === bounty_base ? bounty_base : `${bounty_base} - ${bounty_max}`;
+
   return (
     <div>
-      <div className="info-number text-black">QUEST {step}</div>
-      <div className="info-title text-black">
-        Become a top dog in your territory
+      <div className="info-number text-black">
+        QUEST {steps[step].quest_type}
       </div>
+      <div className="info-title text-black">{title}</div>
 
-      <div className="quest-tag">Quest Bounty - $5</div>
+      <div className="quest-tag">Quest Bounty - ${tag}</div>
 
-      <HistoryMessage
+      {/*   <HistoryMessage
         type="confirm"
         message={"Your quest submission was confirmed."}
       />
@@ -65,30 +77,24 @@ const QuestInfo = ({ step }) => {
         message={"Your buzz content get 3.5 rating"}
       />
 
-      <HistoryMessage type="earned" message={"Your quest submission was confirmed."} />
-      <HistoryMessage type="paid" message={"Your quest submission was confirmed."} />
+      <HistoryMessage
+        type="earned"
+        message={"Your quest submission was confirmed."}
+      />
+      <HistoryMessage
+        type="paid"
+        message={"Your quest submission was confirmed."}
+      />*/}
 
-
-      <div className="info-description text-grey">
-        Take over territories and change the name of the location by following
-        dog’s territorial actions. You can become a top dog in your 2km X 2km
-        territory by barking the most. Once you become the top dog, you can
-        change the name of the territory whatever you want. Become a top dog,
-        change the name of your territory, and share the screenshot.
-      </div>
+      <div className="info-description text-grey">{description}</div>
 
       <div className="info-subheading text-black">
         YOUR SCREENSHOT MUST SHOW
       </div>
-      <div className="info-description small-margin text-grey">
-        1. Your dog number
-        <br />
-        2. Little crown on your profile photo
-        <br />
-        3. Entire smartphone screenshot (do not crop)
-      </div>
+      <div className="info-description small-margin text-grey">{criteria}</div>
 
       <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
+      <img className="info-quest-image" src={image} alt=""/>
       <div className="full-width-button">SUBMIT YOUR SCREENSHOT</div>
     </div>
   );
@@ -96,15 +102,21 @@ const QuestInfo = ({ step }) => {
 
 const CurrentQuest = props => {
   const { data, onBackPressed } = props;
-  const { currentStep } = data;
+  const { quests } = data;
+  let currentStep = 0;
+
+  quests.forEach(({ status }, i) => {
+    if (status !== null) {
+      currentStep++;
+    }
+  });
+
   const [questInfoIndex, setQuestInfoIndex] = useState(currentStep);
+
   return (
     <div className="current-quest">
       <div className="row-space-between">
-        <div
-          className="row-align-center hover-link"
-          onClick={onBackPressed}
-        >
+        <div className="row-align-center hover-link" onClick={onBackPressed}>
           <img className="back-icon" src={backImg} alt="" />
           <div className="header-text">Back</div>
         </div>
@@ -126,12 +138,12 @@ const CurrentQuest = props => {
 
       <div className="divider" />
       <QuestStepProgress
-        steps={[1, 2, 3, "review", "buzz"]}
+        steps={quests}
         currentStep={currentStep}
         containerStyle={{ marginTop: 16, marginBottom: 16 }}
         onStepClicked={step => setQuestInfoIndex(step)}
       />
-      <QuestInfo step={questInfoIndex + 1} />
+      <QuestInfo steps={quests} step={questInfoIndex} />
     </div>
   );
 };
@@ -142,7 +154,7 @@ CurrentQuest.propTypes = {
 
 CurrentQuest.defaultProps = {
   data: {
-    currentStep: 1
+    steps: []
   }
 };
 
