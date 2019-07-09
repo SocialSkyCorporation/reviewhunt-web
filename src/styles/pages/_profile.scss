@@ -520,6 +520,7 @@
       }
 
       .info-quest-image {
+        width: auto;
         max-height: 273px;
         margin: 10px 0px;
         object-fit: contain;
@@ -545,6 +546,31 @@
 
     a {
       color: blue;
+    }
+  }
+}
+
+.ant-modal {
+  .submission-modal {
+    span {
+      margin: 0 16px 0 8px;
+    }
+
+    .submission-modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 40px;
+    }
+
+    .submission-modal-header {
+      margin-top: 20px;
+    }
+
+    .submission-modal-desc {
+      margin-top: 10px;
+    }
+
+    .submission-modal-guidelines {
+      font-size: .75rem;
     }
   }
 }

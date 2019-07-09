@@ -7,6 +7,7 @@ import { AppProvider } from "contexts/AppContext";
 import { AuthProvider } from "contexts/AuthContext";
 import { CampaignProvider } from "contexts/CampaignContext";
 import { WalletProvider } from "contexts/WalletContext";
+import { HunterDashboardProvider } from "contexts/HunterDashboardContext";
 import { NewCampaignProvider } from "contexts/NewCampaignContext";
 import CircularProgress from "components/CircularProgress";
 import { StripeProvider } from "react-stripe-elements";
@@ -28,9 +29,11 @@ ReactDOM.render(
 					<StripeProvider apiKey="pk_test_12345">
 						<NewCampaignProvider>
 							<CampaignProvider>
-								<WalletProvider>
-									<App />
-								</WalletProvider>
+								<HunterDashboardProvider>
+									<WalletProvider>
+										<App />
+									</WalletProvider>
+								</HunterDashboardProvider>
 							</CampaignProvider>
 						</NewCampaignProvider>
 					</StripeProvider>
