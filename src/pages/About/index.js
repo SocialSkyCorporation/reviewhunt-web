@@ -29,7 +29,7 @@ export default () => {
         </div>
         <div className="row-align-center button-container">
           <SimpleButton
-            inverse
+            inverse={true}
             text="Join Now"
             style={{ fontSize: 12, marginRight: 10 }}
           />
@@ -118,6 +118,7 @@ export default () => {
       </div>
 
       <div className="easy-build-container">
+      <div>
         <div className="easy-build-sentence-1">
           It’s never been easier to build
         </div>
@@ -130,6 +131,7 @@ export default () => {
         <div className="row-align-center button-container">
           <SimpleButton text="Join Now" style={{marginRight: 10}} borderColor={"#73fdea"}/>
           <SimpleButton text="Read Pitch Deck" style={{marginLeft: 10}} borderColor={"#8b9699"} />
+        </div>
         </div>
       </div>
     </div>
