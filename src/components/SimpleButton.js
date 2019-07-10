@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Icon } from "antd";
 import PropTypes from "prop-types";
 
 const SimpleButton = props => {
+	const [hover, setHover] = useState(false);
 	const {
 		type,
 		onMouseOver,
@@ -17,21 +18,32 @@ const SimpleButton = props => {
 		inverse
 	} = props;
 
-	const buttonStyle = {...style, borderColor, color: borderColor};
+	const buttonStyle = { borderColor, color: borderColor, ...style };
 
 	const inverseStyle = inverse
-		? { backgroundColor: borderColor, color: "white" }
+		? { backgroundColor: borderColor, color: "#fff" }
 		: {};
 
-
+	const hoverStyle = hover
+		? {
+				backgroundColor: borderColor,
+				color: "#fff"
+		  }
+		: {};
 
 	return (
 		<div
-			onMouseOver={onMouseOver}
-			onMouseOut={onMouseOut}
-			className={`simple-button ${type} ${className}`}
+			onMouseOver={e => {
+				setHover(true);
+				onMouseOver(e);
+			}}
+			onMouseOut={e => {
+				setHover(false);
+				onMouseOut(e);
+			}}
+			className={`simple-button ${type} ${className} ${inverse && "inverse"}`}
 			onClick={onClick}
-			style={{...buttonStyle, ...inverseStyle }}
+			style={{ ...buttonStyle, ...inverseStyle, ...hoverStyle }}
 		>
 			<div className="row-align-center simple-button-text">
 				{icon}
@@ -50,9 +62,9 @@ SimpleButton.defaultProps = {
 	className: "",
 	style: {},
 	onMouseOver: () => {},
-	onmMouseOut: () => {},
+	onMouseOut: () => {},
 	loading: false,
 	inverse: false,
-	borderColor: '#000'
+	borderColor: "#000"
 };
 export default SimpleButton;

@@ -595,10 +595,8 @@ hr {
     border: solid 1px #f5222d;
 
     &:hover {
-      color: #fff;
       background: #f5222d;
       border: solid 1px #f5222d;
-      // transform: scale(1.02);
       @include responsive(tablet) {
         border: solid 1px #f5222d;
         color: #f5222d;
@@ -612,7 +610,6 @@ hr {
     color: #fff;
     background: #000;
     border: solid 1px #000;
-    // transform: scale(1.02);
     @include responsive(tablet) {
       border: solid 1px #0a0a0a;
       color: #0a0a0a;
