@@ -1,5 +1,5 @@
 import React, { useState, memo } from "react";
-import { Icon, Slider, Input } from "antd";
+import { Icon, Select, Slider, Input } from "antd";
 import PropTypes from "prop-types";
 import DragAndDrop from "components/DragAndDrop";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
@@ -60,6 +60,18 @@ export const TextInput = memo(
   ({ value: prevValue }, { value: nextValue }) => prevValue === nextValue
 );
 
+export const Dropdown = ({ value, children, style }) => {
+  return (
+    <Select
+      defaultValue={value}
+      className="value-container select gray-bg-select text-grey"
+      style={style}
+    >
+      {children}
+    </Select>
+  );
+};
+
 export const Screenshots = ({ onChange, images, title, single, maxBytes }) => {
   return (
     <div className="title-input-container">
@@ -85,11 +97,12 @@ export const BudgetSlider = ({ title, value, max, min, step, onChange }) => {
         <Input
           onChange={e => {
             const value = e.target.value;
-            const isValid = value === "$" || value.search(/^\$?[\d,]+(\.\d*)?$/) >= 0;
+            const isValid =
+              value === "$" || value.search(/^\$?[\d,]+(\.\d*)?$/) >= 0;
 
             if (isValid) {
-              const num = Number(value.replace(/[\$,]/g, ''));
-              if(num <= 20000) {
+              const num = Number(value.replace(/[\$,]/g, ""));
+              if (num <= 20000) {
                 onChange(num);
               }
             }

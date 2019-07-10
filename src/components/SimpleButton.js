@@ -13,12 +13,17 @@ const SimpleButton = props => {
 		icon,
 		className,
 		loading,
+		borderColor,
 		inverse
 	} = props;
 
+	const buttonStyle = {...style, borderColor, color: borderColor};
+
 	const inverseStyle = inverse
-		? { backgroundColor: "rgba(10, 10, 10, 0.7)", color: "white" }
+		? { backgroundColor: borderColor, color: "white" }
 		: {};
+
+
 
 	return (
 		<div
@@ -26,7 +31,7 @@ const SimpleButton = props => {
 			onMouseOut={onMouseOut}
 			className={`simple-button ${type} ${className}`}
 			onClick={onClick}
-			style={{...inverseStyle, ...style}}
+			style={{...buttonStyle, ...inverseStyle }}
 		>
 			<div className="row-align-center simple-button-text">
 				{icon}
@@ -47,6 +52,7 @@ SimpleButton.defaultProps = {
 	onMouseOver: () => {},
 	onmMouseOut: () => {},
 	loading: false,
-	inverse: false
+	inverse: false,
+	borderColor: '#000'
 };
 export default SimpleButton;
