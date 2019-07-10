@@ -38,7 +38,7 @@ class App extends Component {
           <meta property="og:description" content="Daily ranking of effortlessly cool products that rewards hunters" />
           <meta property="og:image" content={`${process.env.PUBLIC_URL}/og-image-1200.png`} />
           <meta property="og:url" content={process.env.PUBLIC_URL} />
-          <meta property="og:site_name" content="Steemhunt" />
+          <meta property="og:site_name" content="Reviewhunt" />
           <meta property="og:type" content="website" />
         </Helmet>
         <Routes />

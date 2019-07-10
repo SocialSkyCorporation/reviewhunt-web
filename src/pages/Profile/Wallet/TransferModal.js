@@ -174,10 +174,10 @@ export default class TransferModal extends Component {
               <div className="top-margin">
                 <p className="agreement-text subtitle">
                   Please check the address carefully before requesting a
-                  transfer. Transfer requests cannot be canceled. Steemhunt is
+                  transfer. Transfer requests cannot be canceled. Reviewhunt is
                   not liable for any losses incurred as a result of the wrong
                   information. We will suspend suspicious transactions such as
-                  identity theft, fraud, abuse, or hacking. Steemhunt is not
+                  identity theft, fraud, abuse, or hacking. Reviewhunt is not
                   responsible for damage caused by illegal transactions of its
                   users.
                 </p>

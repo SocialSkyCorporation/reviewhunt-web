@@ -7,20 +7,20 @@ export default function Footer() {
 
       <div className="redirect-row">
         <div className="redirect-column">
-          <a href="/">HUNT Platform</a>
-          <a href="/">Steemhunt</a>
-          <a href="/">Github</a>
-          <a href="/">Discord</a>
-          <a href="/">Email</a>
-          <a href="/">Steemit Blog</a>
+          <a href="https://token.hunt.town/" target="_blank" rel="noopener noreferrer">HUNT Platform</a>
+          <a href="https://steemhunt.com/" target="_blank" rel="noopener noreferrer">Steemhunt</a>
+          <a href="https://github.com/Steemhunt" target="_blank" rel="noopener noreferrer">Github</a>
+          <a href="https://discord.gg/ywBqD74" target="_blank" rel="noopener noreferrer">Discord</a>
+          <a href="mailto:admin@hunt.town" target="_blank" rel="noopener noreferrer">Email</a>
+          <a href="https://steemit.com/@steemhunt" target="_blank" rel="noopener noreferrer">Blog</a>
         </div>
         <div className="redirect-column">
-          <a href="/">Terms of Service</a>
-          <a href="/">Privacy Policy</a>
-          <a href="/">Cookie Policy</a>
+          <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a>
+          <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+          <a href="/cookie" target="_blank" rel="noopener noreferrer">Cookie Policy</a>
         </div>
       </div>
-      
+
       <p>Copyright © 2019 BourbonShake Inc. All rights reserved.</p>
     </div>
   );

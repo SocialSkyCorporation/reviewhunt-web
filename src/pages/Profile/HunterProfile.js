@@ -179,8 +179,7 @@ class HunterProfile extends Component {
                           STEEMHUNT (STEEM) ACCOUNT
                         </div>
                         <div className="profile-icon-container profile-icon-text text-grey">
-                          Connect your Reviewhunt account to your Steemhunt
-                          (Steem) account for syncing the HUNT transactions.
+                          Connect your Reviewhunt account to your Steem account for syncing the HUNT transactions.
                         </div>
                       </div>
                       <div>

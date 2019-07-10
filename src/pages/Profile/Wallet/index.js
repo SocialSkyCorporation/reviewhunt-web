@@ -50,7 +50,7 @@ export default () => (
               </div>
 
               <div className="balance-row">
-                <div className="sans small">Steemhunt Wallet</div>
+                <div className="sans small">HUNT Wallet</div>
                 <div className="token-bar-container">
                   <div className="token-bar">
                     <span className="token-amount">

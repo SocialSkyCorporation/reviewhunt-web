@@ -9,7 +9,7 @@ const NotFound = () => {
   return (
     <div className="not-found-page full-page primary-gradient">
       <div className="center-content">
-        <img src={imgLogo} alt="Steemhunt Logo" className="main-logo" />
+        <img src={imgLogo} alt="Reviewhunt Logo" className="main-logo" />
         <h1>{t('not_found.header')}</h1>
         <p>{t('not_found.description')}</p>
         <Link to="/" className="round-border padded-button">

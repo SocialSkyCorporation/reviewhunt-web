@@ -102,7 +102,7 @@ class Web3 extends Component {
       onOk: async () => {
         const { me, setEthAddress } = this.props.authContext;
 
-        const message = `Connect this Ethereum address to your Steemhunt account, ${me}. (Timestamp: ${new Date().getTime()})`;
+        const message = `Connect this Ethereum address to your Steem account, ${me}. (Timestamp: ${new Date().getTime()})`;
 
         const signature = await this.web3.eth.personal.sign(
           message,

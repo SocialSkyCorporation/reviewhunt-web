@@ -39,7 +39,7 @@
 	"others": "Others",
 	"input_url": "Input URL",
 	"channels": "Channels",
-	"connect_hint": "Connect your Reviewhunt account to your Steemhunt (Steem) account for syncing the HUNT transactions.",
+	"connect_hint": "Connect your Reviewhunt account to your Steem account for syncing the HUNT transactions.",
 
 	"not_found": {
 		"header": "The page you were looking for doesn't exist.",
