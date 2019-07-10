@@ -105,6 +105,10 @@
 
       .step-image-container {
         position: relative;
+        img {
+          width: 30px;
+          height: 30px;
+        }
       }
 
       .quest-star {

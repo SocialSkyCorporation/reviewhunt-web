@@ -39,8 +39,8 @@ class Routes extends Component {
   componentWillUnmount() {}
 
   render() {
-    const showHeaderFooter =
-      window.location && window.location.pathname !== "/login";
+    const pathname = window.location.pathname;
+    const showHeaderFooter = pathname !== "/auth";
 
     return (
       <AuthConsumer>
