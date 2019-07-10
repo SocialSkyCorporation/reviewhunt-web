@@ -15,7 +15,7 @@ export default () => {
       <div className="padded-container about-gradient banner">
         <div className="reviewhunt">REVIEWHUNT</div>
         <div className="banner-title">Fun Quests. Early Users.</div>
-        <img className="laptop-screenshot" src={macImgTop} />
+        <img className="laptop-screenshot" src={macImgTop} alt=""/>
       </div>
 
       <div className="into-tech-container">

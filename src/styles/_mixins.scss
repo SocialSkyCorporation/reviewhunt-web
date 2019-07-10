@@ -177,6 +177,9 @@
   @else if $media == ipadpro { // 2 columns
     @media only screen and (max-width: 1400px) { @content; }
   }
+  @else if $media == bigscreen { // 2 columns
+    @media only screen and (max-width: 1600px) { @content; }
+  }
   @else {
     @media only screen and (max-width: $media) { @content; }
   }
