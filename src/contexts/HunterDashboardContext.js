@@ -11,8 +11,9 @@ const { Provider, Consumer } = HunterDashboardContext;
 class HunterDashboardProvider extends React.Component {
   state = {
     campaigns: [],
-    currentQuest: null,
-    fetchingQuest: false
+    currentCampaign: null,
+    fetchingQuest: false,
+    submittingQuest: false
   };
 
   fetchCampaigns = async () => {
@@ -39,8 +40,23 @@ class HunterDashboardProvider extends React.Component {
     }
   };
 
-  setCurrentQuest = currentQuest => {
-    this.setState({ currentQuest });
+  submitQuest = async quest => {
+    const {id} = quest;
+    const { currentCampaign } = this.state;
+    console.log("current quest is", id);
+    this.setState({ submittingQuest: true });
+    try {
+    } catch (e) {
+      notification["error"]({
+        message: extractErrorMessage(e)
+      });
+    } finally {
+      this.setState({ submittingQuest: false });
+    }
+  };
+
+  setCurrentCampaign = currentCampaign => {
+    this.setState({ currentCampaign });
   };
 
   render() {
@@ -49,7 +65,8 @@ class HunterDashboardProvider extends React.Component {
         value={{
           ...this.state,
           fetchCampaigns: this.fetchCampaigns,
-          setCurrentQuest: this.setCurrentQuest
+          setCurrentCampaign: this.setCurrentCampaign,
+          submitQuest: this.submitQuest
         }}
       >
         {this.props.children}

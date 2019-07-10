@@ -517,6 +517,13 @@
         &.small-margin {
           margin: 5px 0px 20px;
         }
+
+        &.review {
+          margin: 5px 0px;
+          span {
+            margin: 0 16px 0 8px;
+          }
+        }
       }
 
       .info-quest-image {
@@ -528,6 +535,15 @@
 
       .info-subheading {
         font-size: 12px;
+        margin-top: 20px;
+      }
+
+      .screenshot-example {
+        margin-left: 20px;
+      }
+
+      .text-device {
+        margin-top: 10px;
       }
     }
   }
@@ -570,7 +586,7 @@
     }
 
     .submission-modal-guidelines {
-      font-size: .75rem;
+      font-size: 0.75rem;
     }
   }
 }

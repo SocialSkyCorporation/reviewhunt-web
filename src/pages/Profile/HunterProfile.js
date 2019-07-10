@@ -279,16 +279,16 @@ class HunterProfile extends Component {
 
   renderQuestTab() {
     const { t } = this.props;
-    const { setCurrentQuest, fetchingQuest, currentQuest, campaigns } = this.props.hunterDashboardContext;
+    const { setCurrentCampaign, fetchingQuest, currentCampaign, campaigns } = this.props.hunterDashboardContext;
 
-    if (currentQuest) {
+    if (currentCampaign) {
       return (
         <>
           <ProgressBar height={8} progress={30} />
           <div className="content-quest">
             <CurrentQuest
-              data={currentQuest}
-              onBackPressed={() => setCurrentQuest(null)}
+              data={currentCampaign}
+              onBackPressed={() => setCurrentCampaign(null)}
             />
           </div>
         </>
@@ -316,7 +316,7 @@ class HunterProfile extends Component {
             <QuestItem
               key={id}
               data={campaign}
-              onClick={() => setCurrentQuest(campaign)}
+              onClick={() => setCurrentCampaign(campaign)}
             />
           );
         })}
