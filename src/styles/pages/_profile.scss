@@ -5,6 +5,10 @@
     line-height: 1.2;
   }
 
+  .bullet-point {
+      margin: 0 16px 0 8px;
+  }
+
   .banner-container {
     padding-top: 115px;
     padding-bottom: 50px;
@@ -16,10 +20,6 @@
 
   .summary-container {
     display: flex;
-  }
-
-  &span {
-    font-weight: bold;
   }
 
   .divider {
@@ -545,6 +545,16 @@
       .text-device {
         margin-top: 10px;
       }
+
+      .skip-button {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+
+        svg {
+          margin-left: 4px;
+        }
+      }
     }
   }
 
@@ -568,9 +578,7 @@
 
 .ant-modal {
   .submission-modal {
-    span {
-      margin: 0 16px 0 8px;
-    }
+    
 
     .submission-modal-title {
       font-size: 1.5rem;
