@@ -159,6 +159,7 @@
     .carousel-container {
       position: relative;
       margin: 20px 0px 30px;
+      height: 395px;
       @include responsive(mobile) {
         margin: 20px 0px 80px;
       }
@@ -233,12 +234,13 @@
     }
 
     .screenshot-img {
-      max-width: 75vw;
-      height: 40vh;
+      max-width: 50vw;
+      height: 368px;
       object-fit: contain;
 
       @include responsive(mobile) {
-        height: 60vh;
+        max-width: 80vw;
+      height: 368px;
       }
     }
 
@@ -284,6 +286,7 @@
 
         .quest-image {
           width: auto;
+          max-width: 100%;
           height: 274px;
           margin-left: 30px;
           object-fit: contain;
