@@ -60,12 +60,14 @@ export const TextInput = memo(
   ({ value: prevValue }, { value: nextValue }) => prevValue === nextValue
 );
 
-export const Dropdown = ({title, value, children, style }) => {
+export const Dropdown = ({ title, value, children, style }) => {
   return (
     <div className="title-input-container">
-      <div className="row-space-between title-input-header text-grey">
-        <div>{title}</div>
-      </div>
+      {title && (
+        <div className="row-space-between title-input-header text-grey">
+          <div>{title}</div>
+        </div>
+      )}
       <Select
         defaultValue={value}
         className="value-container select gray-bg-select text-grey"
