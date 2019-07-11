@@ -1,7 +1,12 @@
 import React, { useState, useContext } from "react";
 import { Input, Icon } from "antd";
 import PropTypes from "prop-types";
-import { TextInput, Screenshots, ProductLinks } from "components/FormTypes";
+import {
+  TextInput,
+  Dropdown,
+  Screenshots,
+  ProductLinks
+} from "components/FormTypes";
 import SimpleButton from "components/SimpleButton";
 import NewCampaignContext from "contexts/NewCampaignContext";
 import websiteImg from "assets/images/website.svg";
@@ -25,6 +30,11 @@ const Step1 = ({}) => {
     <div className="campaign-step">
       <div className="text-grey text-small">Step 1 of 5</div>
       <div className="step-title text-black">PRODUCT DESCRIPTION</div>
+      <Dropdown
+        title="Product Category"
+        value="App"
+        style={{ marginTop: 5 }}
+      ></Dropdown>
       <TextInput
         title={"Product Name"}
         value={product_name}
@@ -54,22 +64,28 @@ const Step1 = ({}) => {
           addonBefore={<img src={websiteImg} alt="" />}
           className="title-input-box title-icon-input-box text-black"
           placeholder="Website URL"
-          value={urls['website']}
-          onChange={e => updateCampaignInfo("urls", {...urls, website: e.target.value})}
+          value={urls["website"]}
+          onChange={e =>
+            updateCampaignInfo("urls", { ...urls, website: e.target.value })
+          }
         />
         <Input
           addonBefore={<img src={appstoreImg} alt="" />}
           className="title-input-box title-icon-input-box text-black"
           placeholder="App Store"
-          value={urls['appstore']}
-          onChange={e => updateCampaignInfo("urls", {...urls, appstore: e.target.value})}
+          value={urls["appstore"]}
+          onChange={e =>
+            updateCampaignInfo("urls", { ...urls, appstore: e.target.value })
+          }
         />
         <Input
           addonBefore={<img src={playstoreImg} alt="" />}
           className="title-input-box title-icon-input-box text-black"
           placeholder="Google Play"
-          value={urls['playstore']}
-          onChange={e => updateCampaignInfo("urls", {...urls, playstore: e.target.value})}
+          value={urls["playstore"]}
+          onChange={e =>
+            updateCampaignInfo("urls", { ...urls, playstore: e.target.value })
+          }
         />
       </div>
       <div className="save-next-container">
