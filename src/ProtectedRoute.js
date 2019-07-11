@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Redirect, Route } from "react-router-dom";
 import AuthContext from "contexts/AuthContext";
+import {getParams} from 'utils/helpers/urlHelper';
 
 export default ({ render, ...routeProps }) => {
   const { emailMe, authenticating } = useContext(AuthContext);
@@ -9,5 +10,7 @@ export default ({ render, ...routeProps }) => {
     return <div className="full-page" />;
   }
 
-  return emailMe ? <Route {...routeProps} /> : <Redirect to="/auth" />;
+  const query = window.location.search;
+
+  return emailMe ? <Route {...routeProps} /> : <Redirect to={`/auth${query}`} />;
 };

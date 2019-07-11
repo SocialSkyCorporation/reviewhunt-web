@@ -6,6 +6,7 @@ import { getToken, setToken, removeToken } from "utils/token";
 import { withRouter } from "react-router-dom";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
+import {getParams} from 'utils/helpers/urlHelper';
 
 import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 
@@ -22,7 +23,7 @@ class AuthProvider extends React.Component {
     steemMe: null,
     emailMe: null,
     loading: false,
-    authenticating: false,
+    authenticating: true,
     status: STATUS_LOGIN,
     userType: TYPE_HUNTER,
     socialChannels: []
@@ -35,17 +36,19 @@ class AuthProvider extends React.Component {
     if (lastLoginType) {
       try {
         const emailMe = await getEmailMe(lastLoginType);
-        console.log(emailMe);
         await this.setState({
           emailMe,
           authenticating: false,
           userType: lastLoginType
         });
         const path = window.location.pathname;
+        const query = window.location.search;
+        console.log("auth query", query);
+
         if (path === "/auth") {
-          this.props.history.replace("/profile");
+          this.props.history.push(`/profile${query}`);
         } else {
-          this.props.history.replace(window.location.pathname);
+          this.props.history.replace(`${window.location.pathname}${query}`);
         }
       } catch (e) {
         removeToken(lastLoginType);

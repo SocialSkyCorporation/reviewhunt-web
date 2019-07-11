@@ -8,7 +8,6 @@ export function numberWithCommas(x) {
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     .split(".");
-  console.log(str);
   if (str.length > 1) {
     str[1] = str[1].replace(/,/g, "");
     str.join(".");

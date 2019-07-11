@@ -30,11 +30,6 @@ class WalletProvider extends React.Component {
     };
   }
 
-  componentWillMount() {
-    const url = getLoginURL();
-    console.log("login url", url);
-  }
-
   componentWillUnmount() {
     clearInterval(this.refresher);
   }

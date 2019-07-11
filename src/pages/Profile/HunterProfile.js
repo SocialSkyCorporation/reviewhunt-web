@@ -16,7 +16,11 @@ import { AuthConsumer } from "contexts/AuthContext";
 import steemLogoWhite from "assets/images/steem-logo.svg";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { getLoginURL } from "utils/token";
-import { withAuthContext, withHunterDashboardContext } from "contexts/HOC";
+import {
+  withAuthContext,
+  withProfileContext,
+  withHunterDashboardContext
+} from "contexts/HOC";
 import { withTranslation } from "react-i18next";
 import { countries } from "utils/constants";
 import api from "utils/api";
@@ -32,11 +36,19 @@ const TAB_WALLET = 3;
 
 class HunterProfile extends Component {
   state = {
-    tabIndex: 3,
-    editProfile: false,
     socialChannels: [],
-    steemLogo: steemLogoBlack,
+    steemLogo: steemLogoBlack
   };
+
+  componentDidMount() {
+    console.log("hunter mounted");
+    const { tabIndex } = this.props.profileContext;
+    const { fetchCampaigns } = this.props.hunterDashboardContext;
+
+    if(tabIndex == TAB_QUEST) {
+      fetchCampaigns();
+    }
+  }
 
   renderBanner() {
     const { t } = this.props;
@@ -83,17 +95,20 @@ class HunterProfile extends Component {
   }
 
   renderTabs() {
-    const { tabIndex } = this.state;
     const { t } = this.props;
     const { logout } = this.props.authContext;
     const { fetchCampaigns } = this.props.hunterDashboardContext;
+    const { setTabIndex, tabIndex } = this.props.profileContext;
 
     return (
       <div className="tabs">
         <TabItem
           text={t("profile_tab")}
-          selected={tabIndex === 0}
-          onClick={() => this.setState({ tabIndex: 0 })}
+          selected={tabIndex == TAB_PROFILE}
+          onClick={() => {
+            if (tabIndex == TAB_PROFILE) return;
+            setTabIndex(TAB_PROFILE);
+          }}
         />
         {/*<TabItem
           text={"Channels"}
@@ -102,16 +117,20 @@ class HunterProfile extends Component {
         />*/}
         <TabItem
           text={t("profile.quest_dashboard")}
-          selected={tabIndex === 2}
+          selected={tabIndex == TAB_QUEST}
           onClick={() => {
+            if (tabIndex === TAB_QUEST) return;
+            setTabIndex(TAB_QUEST);
             fetchCampaigns();
-            this.setState({ tabIndex: 2 });
           }}
         />
         <TabItem
           text={t("profile.wallet")}
-          selected={tabIndex === 3}
-          onClick={() => this.setState({ tabIndex: 3 })}
+          selected={tabIndex == TAB_WALLET}
+          onClick={() => {
+            if (tabIndex == TAB_WALLET) return;
+            setTabIndex(TAB_WALLET);
+          }}
         />
         <TabItem text={"Logout"} selected={tabIndex === 4} onClick={logout} />
       </div>
@@ -119,14 +138,14 @@ class HunterProfile extends Component {
   }
 
   renderTabContent() {
-    const { tabIndex } = this.state;
+    const { tabIndex } = this.props.profileContext;
 
     return (
       <div className="tab-content">
-        {tabIndex === TAB_PROFILE && this.renderProfileTab()}
-        {tabIndex === TAB_CHANNELS && this.renderChannelsTab()}
-        {tabIndex === TAB_QUEST && this.renderQuestTab()}
-        {tabIndex === TAB_WALLET && this.renderWallet()}
+        {tabIndex == TAB_PROFILE && this.renderProfileTab()}
+        {tabIndex == TAB_CHANNELS && this.renderChannelsTab()}
+        {tabIndex == TAB_QUEST && this.renderQuestTab()}
+        {tabIndex == TAB_WALLET && this.renderWallet()}
       </div>
     );
   }
@@ -134,135 +153,126 @@ class HunterProfile extends Component {
   renderProfileTab() {
     const { editProfile, steemLogo } = this.state;
     const { t } = this.props;
+    const { emailMe, steemMe, steemconnectLoading } = this.props.authContext;
+    const countryArray = countries.filter(
+      country => country.code === emailMe.country_code
+    );
+    const country =
+      countryArray && countryArray.length > 0 && countryArray[0].value;
 
     return (
-      <AuthConsumer>
-        {({ emailMe, steemMe, steemconnectLoading }) => {
-          console.log("emailMe", emailMe);
-          const countryArray = countries.filter(
-            country => country.code === emailMe.country_code
-          );
-          const country =
-            countryArray && countryArray.length > 0 && countryArray[0].value;
-          console.log("country", country);
-
-          return (
-            <div>
-              <div className="steem-connect">
-                {steemMe ? (
-                  <div className="row-align-center row-space-between col-on-mobile steem-connected-container">
-                    <div>
-                      <div className="text-black">{t("steem_steemhunt")}</div>
-                      <div className="profile-icon-container row-align-center">
-                        <img
-                          className="profile-icon"
-                          src="https://picsum.photos/34"
-                          alt=""
-                        />
-                        <div className="profile-icon-text text-black">
-                          {steemMe.name}
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <SimpleButton
-                        className="steem-connect-button"
-                        text={t("disconnect").toUpperCase()}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="row-align-center row-space-between col-on-mobile">
-                      <div>
-                        <div className="text-black">
-                          STEEMHUNT (STEEM) ACCOUNT
-                        </div>
-                        <div className="profile-icon-container profile-icon-text text-grey">
-                          Connect your Reviewhunt account to your Steem account for syncing the HUNT transactions.
-                        </div>
-                      </div>
-                      <div>
-                        <a href={getLoginURL()}>
-                          <SimpleButton
-                            className="steem-connect-button"
-                            onMouseOver={() =>
-                              this.setState({ steemLogo: steemLogoWhite })
-                            }
-                            onMouseOut={() =>
-                              this.setState({ steemLogo: steemLogoBlack })
-                            }
-                            icon={
-                              steemconnectLoading ? (
-                                <Icon type="sync" spin />
-                              ) : (
-                                <img
-                                  src={steemLogo}
-                                  alt=""
-                                  style={{ marginRight: 4 }}
-                                />
-                              )
-                            }
-                            text={steemconnectLoading ? "" : "CONNECT"}
-                          />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="content-profile">
-                <div className="content-title text-black">
-                  {t("profile.basic_information").toUpperCase()}
-                </div>
-                <ProfileRow
-                  title={t("name")}
-                  value={emailMe.name}
-                  editMode={editProfile}
-                />
-                <ProfileRow
-                  title={t("email")}
-                  value={emailMe.email}
-                  editMode={editProfile}
-                />
-                <ProfileRow
-                  title={t("country")}
-                  value={country}
-                  editMode={editProfile}
-                  type={TYPE_DROPDOWN}
-                />
-                <ProfileRow
-                  title={t("password")}
-                  value="password"
-                  editMode={editProfile}
-                  type={TYPE_PASSWORD}
-                  password={true}
-                />
-
-                <div className="button-container">
-                  <SimpleButton
-                    onClick={() => this.setState({ editProfile: !editProfile })}
-                    text={
-                      editProfile
-                        ? t("submit").toUpperCase()
-                        : t("profile.edit_profile").toUpperCase()
-                    }
+      <div>
+        <div className="steem-connect">
+          {steemMe ? (
+            <div className="row-align-center row-space-between col-on-mobile steem-connected-container">
+              <div>
+                <div className="text-black">{t("steem_steemhunt")}</div>
+                <div className="profile-icon-container row-align-center">
+                  <img
+                    className="profile-icon"
+                    src="https://picsum.photos/34"
+                    alt=""
                   />
-                  {editProfile && (
-                    <div
-                      className="cancel-button"
-                      onClick={() => this.setState({ editProfile: false })}
-                    >
-                      {t("cancel").toUpperCase()}
-                    </div>
-                  )}
+                  <div className="profile-icon-text text-black">
+                    {steemMe.name}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <SimpleButton
+                  className="steem-connect-button"
+                  text={t("disconnect").toUpperCase()}
+                />
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="row-align-center row-space-between col-on-mobile">
+                <div>
+                  <div className="text-black">STEEMHUNT (STEEM) ACCOUNT</div>
+                  <div className="profile-icon-container profile-icon-text text-grey">
+                    Connect your Reviewhunt account to your Steem account for
+                    syncing the HUNT transactions.
+                  </div>
+                </div>
+                <div>
+                  <a href={getLoginURL()}>
+                    <SimpleButton
+                      className="steem-connect-button"
+                      onMouseOver={() =>
+                        this.setState({ steemLogo: steemLogoWhite })
+                      }
+                      onMouseOut={() =>
+                        this.setState({ steemLogo: steemLogoBlack })
+                      }
+                      icon={
+                        steemconnectLoading ? (
+                          <Icon type="sync" spin />
+                        ) : (
+                          <img
+                            src={steemLogo}
+                            alt=""
+                            style={{ marginRight: 4 }}
+                          />
+                        )
+                      }
+                      text={steemconnectLoading ? "" : "CONNECT"}
+                    />
+                  </a>
                 </div>
               </div>
             </div>
-          );
-        }}
-      </AuthConsumer>
+          )}
+        </div>
+
+        <div className="content-profile">
+          <div className="content-title text-black">
+            {t("profile.basic_information").toUpperCase()}
+          </div>
+          <ProfileRow
+            title={t("name")}
+            value={emailMe.name}
+            editMode={editProfile}
+          />
+          <ProfileRow
+            title={t("email")}
+            value={emailMe.email}
+            editMode={editProfile}
+          />
+          <ProfileRow
+            title={t("country")}
+            value={country}
+            editMode={editProfile}
+            type={TYPE_DROPDOWN}
+          />
+          <ProfileRow
+            title={t("password")}
+            value="password"
+            editMode={editProfile}
+            type={TYPE_PASSWORD}
+            password={true}
+          />
+
+          <div className="button-container">
+            <SimpleButton
+              onClick={() => this.setState({ editProfile: !editProfile })}
+              text={
+                editProfile
+                  ? t("submit").toUpperCase()
+                  : t("profile.edit_profile").toUpperCase()
+              }
+            />
+            {editProfile && (
+              <div
+                className="cancel-button"
+                onClick={() => this.setState({ editProfile: false })}
+              >
+                {t("cancel").toUpperCase()}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -279,7 +289,12 @@ class HunterProfile extends Component {
 
   renderQuestTab() {
     const { t } = this.props;
-    const { setCurrentCampaign, fetchingQuest, currentCampaign, campaigns } = this.props.hunterDashboardContext;
+    const {
+      setCurrentCampaign,
+      fetchingQuest,
+      currentCampaign,
+      campaigns
+    } = this.props.hunterDashboardContext;
 
     if (currentCampaign) {
       return (
@@ -340,5 +355,5 @@ class HunterProfile extends Component {
 }
 
 export default withTranslation()(
-  withAuthContext(withHunterDashboardContext(HunterProfile))
+  withAuthContext(withProfileContext(withHunterDashboardContext(HunterProfile)))
 );

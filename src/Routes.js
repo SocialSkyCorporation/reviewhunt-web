@@ -31,7 +31,7 @@ class Routes extends Component {
         //handle contents differently based on source
         this.props.handleAuth(source, parsedURL);
       } catch (e) {
-        console.error("URI Parse error", this.props.location.search);
+        console.log("URI Parse error", this.props.location.search);
       }
     }
   }

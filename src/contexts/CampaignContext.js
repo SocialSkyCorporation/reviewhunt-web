@@ -18,10 +18,6 @@ class CampaignProvider extends React.Component {
     joiningQuest: false
   };
 
-  componentDidMount() {
-    this.fetchCampaigns();
-  }
-
   setCurrentCampaign = currentCampaign => {
     this.setState({ currentCampaign });
   };

@@ -2,6 +2,7 @@ import React from "react";
 import { AuthConsumer } from "./AuthContext";
 import { NewCampaignConsumer } from "contexts/NewCampaignContext";
 import { CampaignConsumer } from "contexts/CampaignContext";
+import { ProfileConsumer } from "contexts/ProfileContext";
 import { HunterDashboardConsumer } from "contexts/HunterDashboardContext";
 
 export function withAuthContext(Component) {
@@ -44,4 +45,13 @@ export function withCampaignContext(Component) {
   };
 }
 
+export function withProfileContext(Component) {
+  return function WrapperComponent(props) {
+    return (
+      <ProfileConsumer>
+        {state => <Component {...props} profileContext={state} />}
+      </ProfileConsumer>
+    );
+  };
+}
 

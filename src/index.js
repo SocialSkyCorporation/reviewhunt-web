@@ -9,11 +9,12 @@ import { CampaignProvider } from "contexts/CampaignContext";
 import { WalletProvider } from "contexts/WalletContext";
 import { HunterDashboardProvider } from "contexts/HunterDashboardContext";
 import { NewCampaignProvider } from "contexts/NewCampaignContext";
+import { ProfileProvider } from "contexts/ProfileContext";
 import CircularProgress from "components/CircularProgress";
 import { StripeProvider } from "react-stripe-elements";
 
 import App from "./App";
-import history from "./history";
+import history from "./browserHistory";
 import "i18n";
 
 require("./utils/polyfill");
@@ -26,17 +27,19 @@ ReactDOM.render(
 		<Router history={history}>
 			<AppProvider>
 				<AuthProvider>
-					<StripeProvider apiKey="pk_test_12345">
-						<NewCampaignProvider>
-							<CampaignProvider>
-								<HunterDashboardProvider>
-									<WalletProvider>
-										<App />
-									</WalletProvider>
-								</HunterDashboardProvider>
-							</CampaignProvider>
-						</NewCampaignProvider>
-					</StripeProvider>
+					<ProfileProvider>
+						<StripeProvider apiKey="pk_test_12345">
+							<NewCampaignProvider>
+								<CampaignProvider>
+									<HunterDashboardProvider>
+										<WalletProvider>
+											<App />
+										</WalletProvider>
+									</HunterDashboardProvider>
+								</CampaignProvider>
+							</NewCampaignProvider>
+						</StripeProvider>
+					</ProfileProvider>
 				</AuthProvider>
 			</AppProvider>
 		</Router>

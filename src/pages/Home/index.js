@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { Select } from "antd";
 import imgMoney from "assets/images/money-circle.svg";
 import imgHunter from "assets/images/hunter-circle.svg";
 import QuestGridItem from "components/QuestGridItem";
 import SimpleButton from "components/SimpleButton";
 import { useTranslation, Trans } from "react-i18next";
-import { CampaignConsumer } from "contexts/CampaignContext";
+import CampaignContext from "contexts/CampaignContext";
 import ContentLoader from "components/ContentLoader";
 import logoCircle from "assets/images/logo-circle.svg";
 
 export default () => {
   const { t } = useTranslation();
+  const { campaigns, fetchCampaigns, fetchingCampaigns } = useContext(
+    CampaignContext
+  );
+
+  useEffect(() => {
+    fetchCampaigns();
+  }, []);
 
   const banner = () => {
     return (
@@ -53,35 +60,26 @@ export default () => {
 
   const content = () => {
     return (
-      <CampaignConsumer>
-        {({ campaigns, fetchingCampaigns }) => {
-          return (
-            <div className="padded-container">
-              <Select
-                defaultValue={t("home.for_you")}
-                style={{ marginBottom: 20 }}
-              />
+      <div className="padded-container">
+        <Select defaultValue={t("home.for_you")} style={{ marginBottom: 20 }} />
 
-              <div className="grid-content">
-                {fetchingCampaigns && (
-                  <>
-                    <ContentLoader />
-                    <ContentLoader />
-                    <ContentLoader />
-                    <ContentLoader />
-                    <ContentLoader />
-                    <ContentLoader />
-                  </>
-                )}
-                {campaigns.map((campaign, index) => (
-                  <QuestGridItem key={index} data={campaign} />
-                ))}
-                <div className="empty-grid-item" />
-              </div>
-            </div>
-          );
-        }}
-      </CampaignConsumer>
+        <div className="grid-content">
+          {fetchingCampaigns && (
+            <>
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+            </>
+          )}
+          {campaigns.map((campaign, index) => (
+            <QuestGridItem key={index} data={campaign} />
+          ))}
+          <div className="empty-grid-item" />
+        </div>
+      </div>
     );
   };
 
@@ -89,15 +87,17 @@ export default () => {
     return (
       <div className="call-to-action primary-gradient">
         <img className="logo-circle" src={logoCircle} />
-        <div className="call-to-action-title text-black">Tap into tech early-adopters</div>
+        <div className="call-to-action-title text-black">
+          Tap into tech early-adopters
+        </div>
         <div className="call-to-action-desc">
           Reviewhunt enables tech makers to run review campaigns for their new
           products with unique quests and mission bounties so that they can
           easily build a strong early user base and community exposure.
         </div>
         <div className="row-align-center button-container">
-          <SimpleButton inverse text="Join Now" style={{marginRight: 10}}/>
-          <SimpleButton text="Read Pitch Deck" style={{marginLeft: 10}}/>
+          <SimpleButton inverse text="Join Now" style={{ marginRight: 10 }} />
+          <SimpleButton text="Read Pitch Deck" style={{ marginLeft: 10 }} />
         </div>
       </div>
     );
