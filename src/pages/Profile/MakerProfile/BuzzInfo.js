@@ -46,6 +46,7 @@ const BuzzInfo = ({ quest }) => {
 
   const { submitQuest } = useContext(HunterDashboardContext);
 
+  const [submitChannel, setSubmitChannel] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [proofImage, setProofImage] = useState([]);
   const [proofText, setProofText] = useState("");
@@ -71,7 +72,9 @@ const BuzzInfo = ({ quest }) => {
         rewarded when it makes an impact via the channel you shared.
       </div>
 
-      <div className="info-subheading text-black uppercase">How to submit the proof</div>
+      <div className="info-subheading text-black uppercase">
+        How to submit the proof
+      </div>
 
       <div className="info-description small-margin text-grey review">
         <div className="row-align-start">
@@ -98,16 +101,72 @@ const BuzzInfo = ({ quest }) => {
       </div>
 
       <div className="channel-submission-items">
-        <ChannelSubmissionItem text="Youtube" image={youtubeIcon} />
-        <ChannelSubmissionItem text="Instagram" image={instagramIcon} />
-        <ChannelSubmissionItem text="Twitter" image={twitterIcon} />
-        <ChannelSubmissionItem text="Steem DApps" image={steemIcon} />
-        <ChannelSubmissionItem text="Reddit" image={redditIcon} />
-        <ChannelSubmissionItem text="Twitch" image={twitchIcon} />
-        <ChannelSubmissionItem text="Medium" image={mediumIcon} />
-        <ChannelSubmissionItem text="Other Channels" image={otherIcon} />
+        <ChannelSubmissionItem
+          text="Youtube"
+          image={youtubeIcon}
+          onClick={() => {
+            setSubmitChannel("youtube");
+            setModalVisible(true);
+          }}
+        />
+        <ChannelSubmissionItem
+          text="Instagram"
+          image={instagramIcon}
+          onClick={() => {
+            setSubmitChannel("instagram");
+            setModalVisible(true);
+          }}
+        />
+        <ChannelSubmissionItem
+          text="Twitter"
+          image={twitterIcon}
+          onClick={() => {
+            setSubmitChannel("twitter");
+            setModalVisible(true);
+          }}
+        />
+        <ChannelSubmissionItem
+          text="Steem DApps"
+          image={steemIcon}
+          onClick={() => {
+            setSubmitChannel("steem");
+            setModalVisible(true);
+          }}
+        />
+        <ChannelSubmissionItem
+          text="Reddit"
+          image={redditIcon}
+          onClick={() => {
+            setSubmitChannel("reddit");
+            setModalVisible(true);
+          }}
+        />
+        <ChannelSubmissionItem
+          text="Twitch"
+          image={twitchIcon}
+          onClick={() => {
+            setSubmitChannel("twitch");
+            setModalVisible(true);
+          }}
+        />
+        <ChannelSubmissionItem
+          text="Medium"
+          image={mediumIcon}
+          onClick={() => {
+            setSubmitChannel("medium");
+            setModalVisible(true);
+          }}
+        />
+        <ChannelSubmissionItem
+          text="Other Channels"
+          image={otherIcon}
+          onClick={() => {
+            setSubmitChannel("other");
+            setModalVisible(true);
+          }}
+        />
       </div>
-      
+
       <Modal
         maskClosable={true}
         onCancel={() => setModalVisible(false)}
@@ -115,14 +174,23 @@ const BuzzInfo = ({ quest }) => {
         footer={null}
         style={{ width: 600 }}
         bodyStyle={{ padding: 60 }}
+        wrapClassName="profile-page"
       >
         <div className="submission-modal">
           <div className="text-black submission-modal-title uppercase">
-            Submit Quest Proof
+            Submit {submitChannel} Proof
           </div>
-          <div className="text-small text-black uppercase submission-modal-header">
-            Your screenshot must show
-          </div>
+
+          <TextInput
+            textArea
+            value={proofText}
+            setValue={v => {
+              setProofText(v);
+            }}
+            title={"Content URL"}
+            placeholder="Input URL"
+            containerStyle={{ marginTop: 20 }}
+          />
           <div className="row-space-between submission-modal-header">
             <div className="text-small text-black uppercase ">
               Upload Screenshot
@@ -134,15 +202,6 @@ const BuzzInfo = ({ quest }) => {
             images={proofImage}
             onChange={images => setProofImage(images)}
           />
-          <TextInput
-            textArea
-            value={proofText}
-            setValue={v => {
-              setProofText(v);
-            }}
-            title={"Additional Information (Optional)"}
-            containerStyle={{ marginTop: 20 }}
-          />
           <div className="text-small text-black uppercase submission-modal-header">
             Guidelines
           </div>
@@ -150,26 +209,37 @@ const BuzzInfo = ({ quest }) => {
             <div className="row-align-start">
               <div className="bullet-point">•</div>
               <div>
-                Your screenshot must inclde ALL the items addressed above. If
-                we’re failed to identify some (or all) of the items, your
-                submission will be rejected.
+                Buzz rewards have a set range of rewards, and it will be varied
+                based on our buzz quality measurement that considers your
+                channel size, potential reach, actual performance, etc. Please
+                note that we won’t be able to reward your buzz content when it
+                doesn’t meet our minimum level of buzz quality measurement
+                score.
               </div>
             </div>
             <div className="row-align-start">
               <div className="bullet-point">•</div>
               <div>
-                Please make sure your screenshot has a good resolution that
-                enables us to clearly identify all necessary information from
-                your screenshot. Too low resolution image will be rejected.
+                All the content MUST be visible to public. If yours is private
+                or visible only via the link you provided, your buzz content
+                won’t be rewarded.
               </div>
             </div>
             <div className="row-align-start">
               <div className="bullet-point">•</div>
               <div>
-                Do not cut of your screenshot. Please make sure you captured a
-                FULL screenshot on your device. • It is NOT possible to edit
-                your submission once you’ve made, so please make sure that you
-                have achieved all the guidelines addressed above.
+                Upload all buzz content that you’ve made at once if you’ve
+                performed via multiple channels. You are NOT able to add more
+                reviews once you’ve made your submission.
+              </div>
+            </div>
+
+            <div className="row-align-start">
+              <div className="bullet-point">•</div>
+              <div>
+                It is NOT possible to edit your submission once you’ve made, so
+                please make sure that you have achieved all the guidelines
+                addressed above.
               </div>
             </div>
           </div>
