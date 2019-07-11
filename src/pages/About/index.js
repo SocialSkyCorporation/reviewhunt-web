@@ -15,7 +15,7 @@ export default () => {
       <div className="padded-container about-gradient banner">
         <div className="reviewhunt">REVIEWHUNT</div>
         <div className="banner-title">Fun Quests. Early Users.</div>
-        <img className="laptop-screenshot" src={macImgTop} alt=""/>
+        <img className="laptop-screenshot" src={macImgTop} alt="" />
       </div>
 
       <div className="into-tech-container">
@@ -118,20 +118,26 @@ export default () => {
       </div>
 
       <div className="easy-build-container">
-      <div>
         <div className="easy-build-sentence-1">
           It’s never been easier to build
         </div>
         <div className="easy-build-sentence-2">
           early-user base, App Store reviews, Reddit threads, Tweets, Youtube
-          videos, blog posts, local channel contents, <br/>…
+          videos, blog posts, local channel contents, <br />…
         </div>
 
         <div className="easy-build-sentence-3">Ready to run your campaign?</div>
         <div className="row-align-center button-container">
-          <SimpleButton text="Join Now" style={{marginRight: 10}} borderColor={"#73fdea"}/>
-          <SimpleButton text="Read Pitch Deck" style={{marginLeft: 10}} borderColor={"#8b9699"} />
-        </div>
+          <SimpleButton
+            text="Join Now"
+            style={{ marginRight: 10 }}
+            borderColor={"#73fdea"}
+          />
+          <SimpleButton
+            text="Read Pitch Deck"
+            style={{ marginLeft: 10 }}
+            borderColor={"#8b9699"}
+          />
         </div>
       </div>
     </div>
