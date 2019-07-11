@@ -34,7 +34,8 @@ export default () => {
           text={t("home.learn_more")}
           style={{
             marginTop: 20,
-            marginBottom: 16
+            marginBottom: 16,
+            maxWidth: 180
           }}
         />
 
