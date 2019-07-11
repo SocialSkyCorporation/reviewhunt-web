@@ -234,13 +234,13 @@
     }
 
     .screenshot-img {
-      max-width: 50vw;
+      max-width: 500px;
       height: 368px;
       object-fit: contain;
 
       @include responsive(mobile) {
         max-width: 80vw;
-      height: 368px;
+        height: 368px;
       }
     }
 
