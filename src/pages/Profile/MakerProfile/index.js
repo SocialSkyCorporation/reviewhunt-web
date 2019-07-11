@@ -41,10 +41,11 @@ class Profile extends Component {
 
   renderBanner() {
     const { t } = this.props;
+    const { emailMe } = this.props.authContext;
     return (
       <div className="maker-profile padded-container primary-gradient banner-container">
         <div className="banner-header">{t("profile.my_account")}</div>
-        <div className="banner-subheader">Sebastian</div>
+        <div className="banner-subheader">{emailMe.name}</div>
         <div className="banner-line" />
 
         <div className="bold-span">
