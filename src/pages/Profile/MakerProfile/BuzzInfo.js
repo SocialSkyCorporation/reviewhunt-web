@@ -8,7 +8,30 @@ import QuestStepProgress from "components/QuestStepProgress";
 import HistoryMessage from "../HistoryMessage";
 import FullWidthButton from "components/FullWidthButton";
 import { Dropdown, TextInput, Screenshots } from "components/FormTypes";
-import HunterDashboardContext from "contexts/HunterDashboardContext"
+import HunterDashboardContext from "contexts/HunterDashboardContext";
+
+import youtubeIcon from "assets/images/youtube.svg";
+import instagramIcon from "assets/images/instagram.svg";
+import twitterIcon from "assets/images/twitter.svg";
+import steemIcon from "assets/images/steemit.svg";
+import redditIcon from "assets/images/reddit.svg";
+import twitchIcon from "assets/images/twitch.svg";
+import mediumIcon from "assets/images/medium.svg";
+import otherIcon from "assets/images/other.svg";
+
+const ChannelSubmissionItem = ({ image, text, onClick }) => {
+  return (
+    <div className="channel-submission-item">
+      <img src={image} alt="" />
+      <div className="channel-text text-black">{text}</div>
+      <SimpleButton
+        text="Submit"
+        onClick={onClick}
+        style={{ minWidth: 80, maxWidth: 80, marginTop: 24 }}
+      />
+    </div>
+  );
+};
 
 const BuzzInfo = ({ quest }) => {
   const { id } = quest;
@@ -48,11 +71,7 @@ const BuzzInfo = ({ quest }) => {
         rewarded when it makes an impact via the channel you shared.
       </div>
 
-      <div className="info-subheading text-black uppercase">
-        Accepting channels
-      </div>
-
-      <div className="info-subheading text-black">How to submit the proof</div>
+      <div className="info-subheading text-black uppercase">How to submit the proof</div>
 
       <div className="info-description small-margin text-grey review">
         <div className="row-align-start">
@@ -74,10 +93,21 @@ const BuzzInfo = ({ quest }) => {
         </div>
       </div>
 
-      <FullWidthButton
-        text="SUBMIT YOUR SCREENSHOT"
-        onClick={() => setModalVisible(true)}
-      />
+      <div className="info-subheading text-black uppercase">
+        Accepting channels
+      </div>
+
+      <div className="channel-submission-items">
+        <ChannelSubmissionItem text="Youtube" image={youtubeIcon} />
+        <ChannelSubmissionItem text="Instagram" image={instagramIcon} />
+        <ChannelSubmissionItem text="Twitter" image={twitterIcon} />
+        <ChannelSubmissionItem text="Steem DApps" image={steemIcon} />
+        <ChannelSubmissionItem text="Reddit" image={redditIcon} />
+        <ChannelSubmissionItem text="Twitch" image={twitchIcon} />
+        <ChannelSubmissionItem text="Medium" image={mediumIcon} />
+        <ChannelSubmissionItem text="Other Channels" image={otherIcon} />
+      </div>
+      
       <Modal
         maskClosable={true}
         onCancel={() => setModalVisible(false)}

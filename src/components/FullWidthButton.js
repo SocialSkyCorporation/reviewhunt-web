@@ -4,9 +4,7 @@ import PropTypes from "prop-types";
 const FullWidthButton = ({ text, style, onClick, icon }) => {
   return (
     <div className="full-width-button" style={style} onClick={onClick}>
-    {icon && <div className="icon">
-      {icon}
-    </div>}
+      {icon && <div className="icon">{icon}</div>}
       {text}
     </div>
   );

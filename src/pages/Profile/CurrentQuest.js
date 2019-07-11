@@ -16,7 +16,7 @@ import BuzzInfo from './MakerProfile/BuzzInfo';
 const CurrentQuest = props => {
   const { data, onBackPressed } = props;
   const { quests } = data;
-  let currentStep = 2;
+  let currentStep = 3;
   quests.push({ quest_type: "buzz", status: null });
 
   quests.forEach(({ status }, i) => {
