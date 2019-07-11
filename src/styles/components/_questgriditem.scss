@@ -2,9 +2,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 382px;
-  background: #000;
-  margin: 10px auto;
+  width: 377px;
+  margin: 10px;
   border: solid 1px #e5e5e5;
 
   @include responsive(mobile) {
@@ -44,11 +43,9 @@
   }
 
   .top-container {
-    // display: flex;
-    // flex: 1;
-    // max-height: 290px;
     height: 290px;
     background: #f5f5f5;
+    object-fit: cover;
   }
 
   .bottom-container {
