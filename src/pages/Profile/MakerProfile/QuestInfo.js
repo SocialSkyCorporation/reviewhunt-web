@@ -137,7 +137,7 @@ const QuestInfo = ({ quest }) => {
             </div>
           </div>
           <FullWidthButton
-            onClick={() => submitQuest(quest)}
+            onClick={() => submitQuest(quest, null, null, proofImage)}
             text="SUBMIT YOUR PROOF"
             style={{ marginTop: 30 }}
           />

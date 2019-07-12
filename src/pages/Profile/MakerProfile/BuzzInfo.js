@@ -49,7 +49,7 @@ const BuzzInfo = ({ quest }) => {
   const [submitChannel, setSubmitChannel] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [proofImage, setProofImage] = useState([]);
-  const [proofText, setProofText] = useState("");
+  const [urlText, setUrlText] = useState("");
   return (
     <div>
       <div className="info-number text-black uppercase">Buzz</div>
@@ -183,9 +183,9 @@ const BuzzInfo = ({ quest }) => {
 
           <TextInput
             textArea
-            value={proofText}
+            value={urlText}
             setValue={v => {
-              setProofText(v);
+              setUrlText(v);
             }}
             title={"Content URL"}
             placeholder="Input URL"
@@ -244,7 +244,9 @@ const BuzzInfo = ({ quest }) => {
             </div>
           </div>
           <FullWidthButton
-            onClick={() => submitQuest(quest)}
+            onClick={() =>
+              submitQuest(quest, submitChannel, urlText, proofImage)
+            }
             text="SUBMIT YOUR PROOF"
             style={{ marginTop: 30 }}
           />

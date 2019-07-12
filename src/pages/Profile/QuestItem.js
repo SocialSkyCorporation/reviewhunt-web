@@ -9,7 +9,14 @@ const QuestItem = (props) => {
   const {data, onClick} = props;
   const { product_name, quests, thumbnails, expires_at } = data;
 
-  const currentStep = 0;
+  let currentStep = 0;
+
+  quests.forEach(({ status }, i) => {
+    if (status !== null) {
+      currentStep++;
+    }
+  });
+
   const completed = currentStep > quests.length - 1;
   const ended = isExpired(expires_at);
 
@@ -37,7 +44,7 @@ const QuestItem = (props) => {
           </div>
 
           <div className="quest-step-progress-container">
-            <QuestStepProgress ended={ended} steps={quests} />
+            <QuestStepProgress ended={ended} steps={quests} currentStep={currentStep}/>
           </div>
 
         </div>

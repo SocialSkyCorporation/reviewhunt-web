@@ -16,8 +16,7 @@ import BuzzInfo from './MakerProfile/BuzzInfo';
 const CurrentQuest = props => {
   const { data, onBackPressed } = props;
   const { quests } = data;
-  let currentStep = 1;
-  quests.push({ quest_type: "buzz", status: null });
+  let currentStep = 0;
 
   quests.forEach(({ status }, i) => {
     if (status !== null) {
@@ -25,10 +24,14 @@ const CurrentQuest = props => {
     }
   });
 
+  currentStep = Math.min(quests.length - 1, currentStep);
+
   const [questInfoIndex, setQuestInfoIndex] = useState(currentStep);
 
   const quest = quests[questInfoIndex];
   const { quest_type } = quest;
+
+  console.log("QUEST TYPE IS", quest_type);
 
   return (
     <div className="current-quest">
@@ -50,7 +53,7 @@ const CurrentQuest = props => {
 
       <SimpleButton
         text="CHECK PRODUCT INFO"
-        style={{ marginTop: 15, marginBottom: 30 }}
+        style={{ marginTop: 15, marginBottom: 30, maxWidth: 180 }}
       />
 
       <div className="divider" />

@@ -15,6 +15,7 @@ import HunterDashboardContext from "contexts/HunterDashboardContext";
 const ReviewInfo = ({ quest }) => {
   const { id } = quest;
   const {
+    allowed_channels,
     bounty_base,
     title,
     criteria,
@@ -24,6 +25,9 @@ const ReviewInfo = ({ quest }) => {
   } = quest;
 
   const { submitQuest } = useContext(HunterDashboardContext);
+
+  const hasPlaystore = allowed_channels.includes("playstore");
+  const hasAppstore = allowed_channels.includes("appstore");
 
   const [modalVisible, setModalVisible] = useState(false);
   const [proofImage, setProofImage] = useState([]);
@@ -50,100 +54,107 @@ const ReviewInfo = ({ quest }) => {
         improved.
       </div>
 
-      <div className="divider-line" />
-
-      <div className="info-title text-black">App Store (iPhone)</div>
-      <div className="info-subheading text-black uppercase">
-        How to submit the screenshot
-      </div>
-      <div className="info-description small-margin text-grey review">
-        <div className="row-align-start">
-          <div className="bullet-point">1.</div>
-          <div>Launch the Settings app on your iPhone.</div>
-        </div>
-        <div className="row-align-start">
-          <div className="bullet-point">2.</div>
-          <div>Tap on iTunes and App Store.</div>
-        </div>
-        <div className="row-align-start">
-          <div className="bullet-point">3.</div>
-          <div>
-            Tap on your Apple ID at the very top and choose the View Apple ID
-            option in the popup window.
+      {hasAppstore && (
+        <>
+          <div className="divider-line" />
+          <div className="info-title text-black">App Store (iPhone)</div>
+          <div className="info-subheading text-black uppercase">
+            How to submit the screenshot
           </div>
-        </div>
-        <div className="row-align-start">
-          <div className="bullet-point">4.</div>
-          <div>Type in your password when prompted.</div>
-        </div>
-        <div className="row-align-start">
-          <div className="bullet-point">5.</div>
-          <div>Tap on Ratings and Reviews.</div>
-        </div>
-        <div className="row-align-start">
-          <div className="bullet-point">6.</div>
-          <div>
-            Position your review of this app in the middle, and take a full
-            screenshot of the page (with showing other app reviews you’ve made
-            together).
+          <div className="info-description small-margin text-grey review">
+            <div className="row-align-start">
+              <div className="bullet-point">1.</div>
+              <div>Launch the Settings app on your iPhone.</div>
+            </div>
+            <div className="row-align-start">
+              <div className="bullet-point">2.</div>
+              <div>Tap on iTunes and App Store.</div>
+            </div>
+            <div className="row-align-start">
+              <div className="bullet-point">3.</div>
+              <div>
+                Tap on your Apple ID at the very top and choose the View Apple
+                ID option in the popup window.
+              </div>
+            </div>
+            <div className="row-align-start">
+              <div className="bullet-point">4.</div>
+              <div>Type in your password when prompted.</div>
+            </div>
+            <div className="row-align-start">
+              <div className="bullet-point">5.</div>
+              <div>Tap on Ratings and Reviews.</div>
+            </div>
+            <div className="row-align-start">
+              <div className="bullet-point">6.</div>
+              <div>
+                Position your review of this app in the middle, and take a full
+                screenshot of the page (with showing other app reviews you’ve
+                made together).
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
-      <div>
-        <img className="info-quest-image" src={image} alt="" />
-      </div>
-
-      <FullWidthButton
-        icon={<img src={appstoreLogo}/>}
-        onClick={() => {
-          setSubmissionType("appstore");
-          setModalVisible(true);
-        }}
-        text="SUBMIT APP STORE REVIEW"
-        style={{ marginTop: 16 }}
-      />
-
-      <div className="divider-line" />
-
-      <div className="info-title text-black">Play Store (Android)</div>
-      <div className="info-description small-margin text-grey review">
-        <div className="row-align-start">
-          <div className="bullet-point">1.</div>
-          <div>On your Android phone, open the Google Play Store app.</div>
-        </div>
-        <div className="row-align-start">
-          <div className="bullet-point">2.</div>
-          <div>Go to the detail page of the app you reviewed.</div>
-        </div>
-        <div className="row-align-start">
-          <div className="bullet-point">3.</div>
-          <div>Scroll to the reviews section.</div>
-        </div>
-        <div className="row-align-start">
-          <div className="bullet-point">4.</div>
+          <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
           <div>
-            Position your review that is located on the top of the review
-            section, and take a full screenshot of the page.
+            <img className="info-quest-image" src={image} alt="" />
           </div>
-        </div>
-      </div>
 
-      <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
-      <div>
-        <img className="info-quest-image" src={image} alt="" />
-      </div>
+          <FullWidthButton
+            icon={<img src={appstoreLogo} />}
+            onClick={() => {
+              setSubmissionType("appstore");
+              setModalVisible(true);
+            }}
+            text="SUBMIT APP STORE REVIEW"
+            style={{ marginTop: 16 }}
+          />
+        </>
+      )}
 
-      <FullWidthButton
-        icon={<img src={playstoreLogo}/>}
-        onClick={() => {
-          setSubmissionType("playstore");
-          setModalVisible(true);
-        }}
-        text="SUBMIT PLAY STORE REVIEW"
-        style={{ marginTop: 16 }}
-      />
+      {hasPlaystore && (
+        <>
+          <div className="divider-line" />
+
+          <div className="info-title text-black">Play Store (Android)</div>
+          <div className="info-description small-margin text-grey review">
+            <div className="row-align-start">
+              <div className="bullet-point">1.</div>
+              <div>On your Android phone, open the Google Play Store app.</div>
+            </div>
+            <div className="row-align-start">
+              <div className="bullet-point">2.</div>
+              <div>Go to the detail page of the app you reviewed.</div>
+            </div>
+            <div className="row-align-start">
+              <div className="bullet-point">3.</div>
+              <div>Scroll to the reviews section.</div>
+            </div>
+            <div className="row-align-start">
+              <div className="bullet-point">4.</div>
+              <div>
+                Position your review that is located on the top of the review
+                section, and take a full screenshot of the page.
+              </div>
+            </div>
+          </div>
+
+          <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
+          <div>
+            <img className="info-quest-image" src={image} alt="" />
+          </div>
+
+          <FullWidthButton
+            icon={<img src={playstoreLogo} />}
+            onClick={() => {
+              setSubmissionType("playstore");
+              setModalVisible(true);
+            }}
+            text="SUBMIT PLAY STORE REVIEW"
+            style={{ marginTop: 16 }}
+          />
+        </>
+      )}
 
       <div className="skip-button hover-link">
         <div className="text-small text-grey row-align-center">
@@ -151,6 +162,7 @@ const ReviewInfo = ({ quest }) => {
           <Icon type="right" />
         </div>
       </div>
+
       <Modal
         maskClosable={true}
         onCancel={() => setModalVisible(false)}
@@ -231,7 +243,7 @@ const ReviewInfo = ({ quest }) => {
             </div>
           </div>
           <FullWidthButton
-            onClick={() => submitQuest(quest)}
+            onClick={() => submitQuest(quest, submissionType, null, proofImage)}
             text={`SUBMIT ${
               submissionType === "appstore" ? "APP STORE" : "PLAY STORE"
             } REVIEW`}

@@ -43,7 +43,6 @@ class AuthProvider extends React.Component {
         });
         const path = window.location.pathname;
         const query = window.location.search;
-        console.log("auth query", query);
 
         if (path === "/auth") {
           this.props.history.push(`/profile${query}`);

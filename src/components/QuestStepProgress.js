@@ -7,6 +7,7 @@ import buzzImgGrey from "assets/images/buzz-grey.svg";
 import buzzImgWhite from "assets/images/buzz-white.svg";
 import approvedImg from "assets/images/approved.svg";
 import pendingImg from "assets/images/pending.svg";
+import {questSortFunction} from 'utils/helpers/campaignHelper';
 
 const QuestStepProgress = props => {
   const {
@@ -24,7 +25,7 @@ const QuestStepProgress = props => {
       className={`quest-step-container ${!ended && completed && "completed"}`}
       style={containerStyle}
     >
-      {steps.map((step, index) => {
+      {steps.sort(questSortFunction).map((step, index) => {
         const { quest_type, status } = step;
         const isComplete = currentStep > index;
         const isClickable = status !== null;
@@ -46,7 +47,6 @@ const QuestStepProgress = props => {
         if (quest_type === "review") toolTipText = "Leave a review";
         else if (quest_type === "buzz") toolTipText = "Create a Buzz";
         else toolTipText = "Quest " + (index + 1);
-
 
         return (
           <div className="step-container" key={index}>

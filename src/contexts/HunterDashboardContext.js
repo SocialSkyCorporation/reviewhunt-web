@@ -40,20 +40,22 @@ class HunterDashboardProvider extends React.Component {
     }
   };
 
-  submitQuest = async (quest, channel, proof, img) => {
+  submitQuest = async (quest, channel, url, img) => {
     const { id, quest_type } = quest;
     const { currentCampaign } = this.state;
     console.log("current quest is", quest_type, id);
     this.setState({ submittingQuest: true });
     try {
-      const hunter_quest = {};
-      hunter_quest["quest_id"] = id;
-      hunter_quest["channel"] = channel;
-      hunter_quest["proof"] = proof;
-      hunter_quest["proof_image"] = img;
-      const result = await api.post(
+      const formData = new FormData();
+      formData.append("hunter_quest[quest_id]", id);
+      channel && formData.append("hunter_quest[channel]", channel);
+      url && formData.append("hunter_quest[proof_url]", url);
+      formData.append("hunter_quest[proof_image]", new Blob(img, {type: 'image/png'}));
+
+      const result = await api.uploadFormData(
+        "post",
         "/hunter_quests.json",
-        hunter_quest,
+        formData,
         true,
         TYPE_HUNTER
       );
