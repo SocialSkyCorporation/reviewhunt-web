@@ -18,8 +18,18 @@ const QuestGridItem = props => {
     product_name,
     short_description,
     current_participant_count,
-    total_bounty
+    total_bounty,
+    bounty_left
   } = data;
+
+  let percentLeft =
+    total_bounty > 0
+      ? Math.max(
+          0,
+          (Number.parseFloat(bounty_left) / Number.parseFloat(total_bounty)) *
+            100
+        )
+      : 0;
 
   return (
     <Link
@@ -30,13 +40,12 @@ const QuestGridItem = props => {
     >
       <div className="quest-grid-item">
         <div className="quest-badge">
-          <img src={questSvg} alt="" />
-          <p>{quest_count} QUESTS</p>
+          <p>{percentLeft}% Reward Left</p>
         </div>
 
         <img
           className="top-container"
-          src={thumbnails && thumbnails["x1"]}
+          src={thumbnails && thumbnails["x2"]}
           alt=""
         />
 
@@ -44,7 +53,10 @@ const QuestGridItem = props => {
 
         <div className="bottom-container">
           <div className="text-container">
+          <div className="row-align-center">
             <h1 className="title">{product_name}</h1>
+            <div className="category-badge">App</div>
+            </div>
             <p className="description two-lines">{short_description}</p>
           </div>
 
@@ -53,7 +65,7 @@ const QuestGridItem = props => {
               <img className="grid-item-icon" src={moneySvg} alt="" />
               <div className="bounty-text-container">
                 <div className="subheader text-black">
-                  ${numberWithCommas(Number.parseInt(total_bounty))}
+                 {numberWithCommas(Number.parseInt(total_bounty))} <span>HUNT</span>
                 </div>
                 <div className="subtext text-grey">Total Bounty Fund</div>
               </div>

@@ -2,8 +2,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 377px;
-  margin: 10px;
+  flex-grow: 1;
+  width: 356px;
+  height: 481px;
   border: solid 1px #e5e5e5;
 
   @include responsive(mobile) {
@@ -12,6 +13,15 @@
 
   & > div {
     line-height: 1;
+  }
+
+  .category-badge {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.625rem;
+    margin-left: 8px;
+    color: #fff;
+    background-color: #1890ff;
   }
 
   .quest-badge {
@@ -23,8 +33,7 @@
 
     top: 25px;
     left: 25px;
-    width: 109px;
-    height: 30px;
+    padding: 9px 8px;
     background-image: linear-gradient(75deg, #50fdc6, #3fcaff);
 
     .icon {
@@ -35,8 +44,7 @@
 
     p {
       margin: 0px;
-      margin-left: 10px;
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       font-weight: 500;
       color: #212121;
     }
@@ -81,6 +89,10 @@
       font-size: 1.125rem;
       font-weight: 400;
 
+      span {
+        font-size: 14px;
+      }
+
       @include responsive(mobile) {
         font-size: 1rem;
       }
@@ -113,7 +125,7 @@
     }
 
     .description {
-      font-size: 0.75rem;
+      font-size: 1rem;
       line-height: normal;
       letter-spacing: normal;
       white-space: nowrap;
@@ -148,6 +160,6 @@
 }
 
 .content-loading-item {
-  width: 382px;
-  height: 470px;
+  width: 356px;
+  height: 481px;
 }

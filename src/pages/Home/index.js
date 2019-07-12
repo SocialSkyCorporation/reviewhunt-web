@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { Select } from "antd";
-import imgMoney from "assets/images/money-circle.svg";
-import imgHunter from "assets/images/hunter-circle.svg";
+import imgMoney from "assets/images/money-circle-black.svg";
+import imgHunter from "assets/images/hunter-circle-black.svg";
 import QuestGridItem from "components/QuestGridItem";
 import SimpleButton from "components/SimpleButton";
 import { useTranslation, Trans } from "react-i18next";
@@ -25,9 +25,9 @@ export default () => {
         <h1>{t("app_title")}</h1>
         <h2>
           <Trans i18nKey="home.banner">
-            FUN QUESTS + BOUNTIES
+            QUESTS TO MAKE
             <br />
-            MAKE COOL PRODUCTS FLY HIGH
+            COOL PRODUCTS FLY HIGH
           </Trans>
         </h2>
         <SimpleButton
@@ -35,23 +35,33 @@ export default () => {
           style={{
             marginTop: 20,
             marginBottom: 16,
-            maxWidth: 180
+            maxWidth: 160
           }}
         />
 
         <div className="stat-container">
           <div className="stat-item">
-            <img src={imgMoney} alt="" />
-            <div className="stat-text">
-              <h1>$149,000</h1>
-              <h2>{t("home.total_bounty")}</h2>
+            <div className="text-big text-black">{t("home.total_bounty")}</div>
+            <div className="stat-item-text-container">
+              <img src={imgMoney} alt="" />
+              <div className="stat-text">
+                <h1>
+                  14,505,033 <span>HUNT</span>
+                </h1>
+                <h2>($14,554.35)</h2>
+              </div>
             </div>
           </div>
           <div className="stat-item">
-            <img src={imgHunter} alt="" />
-            <div className="stat-text">
-              <h1>1,054</h1>
-              <h2>{t("home.total_hunters")}</h2>
+            <div className="text-big text-black">{t("home.total_hunters")}</div>
+            <div className="stat-item-text-container">
+              <img src={imgHunter} alt="" />
+              <div className="stat-text">
+                <h1>
+                  1,054 <span>HUNTERS</span>
+                </h1>
+                <h2>(on 35 quests)</h2>
+              </div>
             </div>
           </div>
         </div>
@@ -64,21 +74,22 @@ export default () => {
       <div className="padded-container">
         <Select defaultValue={t("home.for_you")} style={{ marginBottom: 20 }} />
 
-        <div className="grid-content">
-          {fetchingCampaigns && (
-            <>
-              <ContentLoader />
-              <ContentLoader />
-              <ContentLoader />
-              <ContentLoader />
-              <ContentLoader />
-              <ContentLoader />
-            </>
-          )}
-          {campaigns.map((campaign, index) => (
-            <QuestGridItem key={index} data={campaign} />
-          ))}
-          <div className="empty-grid-item" />
+        <div className="grid-wrapper">
+          <div className="grid-content">
+            {fetchingCampaigns && (
+              <>
+                <ContentLoader />
+                <ContentLoader />
+                <ContentLoader />
+                <ContentLoader />
+                <ContentLoader />
+                <ContentLoader />
+              </>
+            )}
+            {campaigns.map((campaign, index) => (
+              <QuestGridItem key={index} data={campaign} />
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -87,18 +98,20 @@ export default () => {
   const callToAction = () => {
     return (
       <div className="call-to-action primary-gradient">
-        <img className="logo-circle" src={logoCircle} />
-        <div className="call-to-action-title text-black">
-          Tap into tech early-adopters
+        <div>
+          <img className="logo-circle" src={logoCircle} />
+          <div className="call-to-action-title text-black">
+            Gate to tap into tech early-adopters
+          </div>
+          <div className="row-align-center button-container">
+            <SimpleButton inverse text="Join Now" style={{ marginRight: 10 }} />
+            <SimpleButton text="Read Pitch Deck" style={{ marginLeft: 10 }} />
+          </div>
         </div>
         <div className="call-to-action-desc">
           Reviewhunt enables tech makers to run review campaigns for their new
           products with unique quests and mission bounties so that they can
           easily build a strong early user base and community exposure.
-        </div>
-        <div className="row-align-center button-container">
-          <SimpleButton inverse text="Join Now" style={{ marginRight: 10 }} />
-          <SimpleButton text="Read Pitch Deck" style={{ marginLeft: 10 }} />
         </div>
       </div>
     );
