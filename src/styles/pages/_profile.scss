@@ -10,6 +10,7 @@
     padding-bottom: 50px;
   }
 
+
   .maker-profile {
     padding-bottom: 40px;
   }
@@ -40,8 +41,7 @@
     background-color: #e5e5e5;
     border: 0px;
     border-radius: 0px;
-    padding: 6px 10px;
-    font-size: 0.875rem;
+    font-size: 1rem;
     color: #8b9699;
 
     &.select {
@@ -86,15 +86,15 @@
   .summary-item {
     display: flex;
     align-items: center;
-    margin-right: 5.3333vw;
+    margin-right: 58px;
 
     @include responsive(tablet) {
       min-width: 40%;
     }
 
     .summary-icon {
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       @include responsive(mobile) {
         width: 40px;
         height: 40px;
@@ -105,20 +105,20 @@
       margin-left: 14px;
 
       .summary-title {
-        font-size: 1rem;
+        font-size: 1.375rem;
         font-weight: 500;
         color: #212121;
         @include responsive(mobile) {
-          font-size: 0.75rem;
+          font-size: 1rem;
         }
       }
 
       .summary-subtitle {
-        font-size: 0.75rem;
+        font-size: 1.125rem;
         font-weight: normal;
         color: #0a0a0a;
         @include responsive(mobile) {
-          font-size: 0.5rem;
+          font-size: .875rem;
         }
       }
     }
@@ -150,6 +150,7 @@
       }
 
       .tab-item {
+        font-size: 1.125rem;
         margin-bottom: 16px;
         color: #8b9699;
 
@@ -168,10 +169,11 @@
       }
 
       .tab-sub-item {
+        font-size: 1.125rem;
         display: flex;
         align-items: center;
         color: #8b9699;
-        margin: 2px 0px;
+        margin: 4px 0px;
 
         &.selected {
           color: #0a0a0a;
@@ -209,14 +211,14 @@
 
     .content-title {
       min-width: 200px;
-      font-size: 14px;
+      font-size: 1.25rem;
       font-weight: normal;
       line-height: normal;
       letter-spacing: normal;
       margin-bottom: 30px;
       text-transform: uppercase;
 
-      &.social {
+      &.social, &.steemhunt {
         margin-bottom: 0px;
       }
     }
@@ -243,13 +245,14 @@
       }
 
       .profile-icon-text {
-        font-size: 12px;
+        font-size: 1rem;
       }
 
       .steem-connect-button {
         width: auto;
         margin-left: 60px;
         margin-top: 0px;
+        font-size: .875rem;
         @include responsive(mobile) {
           width: 100%;
           margin-left: auto;
@@ -295,8 +298,8 @@
           display: flex;
           align-self: flex-start;
           margin-top: 14.5px;
-          min-width: 200px;
-          font-size: 0.875rem;
+          min-width: 240px;
+          font-size: 1rem;
           color: #8b9699;
           text-transform: uppercase;
         }
@@ -341,8 +344,8 @@
         }
 
         .value {
-          height: 16px;
-          font-size: 0.875rem;
+          // height: 16px;
+          font-size: 1rem;
           font-weight: 500;
           color: #0a0a0a;
           overflow: hidden;
@@ -363,7 +366,7 @@
       }
 
       .cancel-button {
-        font-size: 0.75rem;
+        font-size: 1rem;
         margin-left: 46px;
         color: #ff4500;
         text-transform: uppercase;

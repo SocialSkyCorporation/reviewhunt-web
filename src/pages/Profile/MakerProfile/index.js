@@ -48,7 +48,7 @@ class Profile extends Component {
         <div className="banner-subheader">{emailMe.name}</div>
         <div className="banner-line" />
 
-        <div className="bold-span">
+        <div className="maker-stat-summary text-black">
           <div>
             <b>10</b> quests ran from <b>2</b> review campaigns
           </div>
@@ -60,7 +60,10 @@ class Profile extends Component {
           </div>
         </div>
 
-        <SimpleButton text="CREATE CAMPAIGN" style={{ marginTop: 20 }} />
+        <SimpleButton
+          text="CREATE CAMPAIGN"
+          style={{ marginTop: 20, maxWidth: 160 }}
+        />
       </div>
     );
   }
