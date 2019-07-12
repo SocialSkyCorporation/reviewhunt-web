@@ -70,7 +70,7 @@
 
     .stat-item {
       &:last-child {
-        margin-left: 4.98vw;
+        margin-left: 64px;
       }
     }
 
@@ -99,8 +99,14 @@
     display: inline;
   }
 
+
+  .grid-wrapper {
+  }
+
   .grid-content {
     display: grid;
+    align-self: center;
+    margin: auto;
     grid-template-columns: repeat(auto-fill, minmax(356px, 1fr));
     grid-column-gap: 26px;
     grid-row-gap: 26px;
@@ -112,17 +118,10 @@
   }
 
   .call-to-action {
-    padding: 50px 160px;
+    // padding: 50px 160px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    @include responsive(bigscreen) {
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
-      text-align: center;
-    }
 
     @include responsive(mobile) {
       padding: 50px 40px;
@@ -157,10 +156,6 @@
 
     .button-container {
       margin-top: 40px;
-      @include responsive(bigscreen) {
-        display: flex;
-        justify-content: center;
-      }
     }
   }
 }

@@ -18,7 +18,7 @@ export default () => {
         <img className="laptop-screenshot" src={macImgTop} alt="" />
       </div>
 
-      <div className="into-tech-container">
+      <div className="into-tech-container padded-container">
         <div className="tech-title text-grey">Tap into tech</div>
         <div className="tech-title text-black">early-adopters</div>
 
@@ -40,7 +40,7 @@ export default () => {
         </div>
       </div>
 
-      <div className="padded-container primary-gradient fly-high-container">
+      <div className="primary-gradient fly-high-container padded-container">
         <div className="fly-high-subheader text-black">
           Review campaign that
           <br />
@@ -118,6 +118,7 @@ export default () => {
       </div>
 
       <div className="easy-build-container">
+      <div>
         <div className="easy-build-sentence-1">
           It’s never been easier to build
         </div>
@@ -138,6 +139,7 @@ export default () => {
             style={{ marginLeft: 10 }}
             borderColor={"#8b9699"}
           />
+        </div>
         </div>
       </div>
     </div>

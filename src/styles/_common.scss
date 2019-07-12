@@ -143,6 +143,11 @@ hr {
   @include responsive(mobile) {
     padding: 60px 1.5rem;
   }
+
+  @include responsive(bigscreen) {
+    padding-left: calc((100% - 1120px)/2);
+    padding-right: calc((100% - 1120px)/2);
+  }
 }
 
 .primary-gradient {
@@ -584,7 +589,7 @@ hr {
   min-height: 44px;
   min-width: 160px;
   border: solid 1px #0a0a0a;
-  font-size: .875rem;
+  font-size: 0.875rem;
   text-align: center;
   color: #0a0a0a;
   text-transform: uppercase;
@@ -623,7 +628,7 @@ hr {
   }
 
   @include responsive(mobile) {
-    font-size: .75rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -717,11 +722,9 @@ hr {
   margin: 32px 0px;
 }
 
-
 .bullet-point {
   margin: 0 16px 0 8px;
 }
-
 
 .col-on-mobile {
   display: flex;

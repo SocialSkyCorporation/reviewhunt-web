@@ -15,6 +15,7 @@ class CampaignProvider extends React.Component {
     fetchingSubmittedQuests: false,
     campaigns: [],
     // currentCampaign: null,
+    submittedItems: [],
     joiningQuest: false
   };
 
@@ -28,8 +29,9 @@ class CampaignProvider extends React.Component {
 
     await this.setState({ fetchingSubmittedItems: true });
     try {
-      const items = await api.get(`/campaigns/${id}/submitted.json`);
-      console.log("quests", items);
+      const submittedItems = await api.get(`/campaigns/${id}/submitted.json`, {}, true, TYPE_MAKER);
+      // console.log("quests", items);
+      this.setState({submittedItems});
     } catch (e) {
       notification["error"]({
         message: extractErrorMessage(e)

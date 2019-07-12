@@ -52,11 +52,12 @@
   }
 
   .into-tech-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 160px 280px 80px;
+    padding-top: 160px;
 
     @include responsive(tablet) {
       padding: 80px 180px 80px;
@@ -74,6 +75,7 @@
     }
 
     .tech-description {
+      width: 70%;
       text-align: center;
       margin: 40px 0px;
     }
@@ -88,6 +90,11 @@
 
     @include responsive(mobile) {
       padding: 80px 40px 80px;
+    }
+
+    @include responsive(bigscreen) {
+      padding-left: calc((100% - 1120px) / 2);
+      padding-right: calc((100% - 1120px) / 2);
     }
 
     .fly-high-subheader {

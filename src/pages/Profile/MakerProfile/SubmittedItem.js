@@ -4,10 +4,11 @@ import SimpleButton from "components/SimpleButton";
 import approvedImg from 'assets/images/approved.svg';
 import rejectedImg from 'assets/images/rejected.svg';
 
-const SubmittedItem = ({noBorder, onClick, approved, rejected}) => {
+const SubmittedItem = ({data, noBorder, onClick, approved, rejected}) => {
+  const {image, proof_url, channel} = data;
   return (
     <div className="submitted-item" onClick={onClick}>
-      <img className="submitted-item-img" />
+      <img className="submitted-item-img" src={image} alt=""/>
       <div className="submitted-item-type text-small text-grey uppercase">
         Quest 1
       </div>
@@ -21,8 +22,13 @@ const SubmittedItem = ({noBorder, onClick, approved, rejected}) => {
           type="danger"
           className="submitted-item-button"
           text="Reject"
+          borderColor="rgba(245, 34, 45, 0.7)"
+          inverse
+          style={{minWidth: 120}}
         />
-        <SimpleButton className="submitted-item-button" text="Approve" />
+        <SimpleButton className="submitted-item-button" text="Approve"
+          style={{minWidth: 120}}
+         />
       </div>
       {!noBorder && <div className="bottom-divider" />}
       {approved && <img className="approved-rejected-icon" src={approvedImg} alt=""/>}

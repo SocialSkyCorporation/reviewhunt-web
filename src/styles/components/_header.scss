@@ -1,5 +1,8 @@
 .header {
   position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   top: 0px;
   left: 0px;
   width: 100%;
@@ -8,10 +11,10 @@
   background: transparent;
   padding: 22px 28px 0px 28px;
 
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  @include responsive(bigscreen) {
+    padding-left: calc((100% - 1120px)/2);
+    padding-right: calc((100% - 1120px)/2);
+  }
 
   .logo {
     width: 25px;

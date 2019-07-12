@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Menu, Modal, Select, Icon } from "antd";
 import ProgressBar from "components/ProgressBar";
@@ -39,9 +39,17 @@ const CampaignDashboard = ({
 }) => {
   const [current, setCurrent] = useState("pending");
   const [modalVisible, setModalVisible] = useState(false);
-  const { currentCampaign, fetchingSubmittedQuests } = useContext(
-    CampaignContext
-  );
+  const [currentSubmittedItem, setCurrentSubmittedItem] = useState({data: null});
+  const {
+    currentCampaign,
+    submittedItems,
+    fetchSubmittedQuests,
+    fetchingSubmittedQuests
+  } = useContext(CampaignContext);
+
+  useEffect(() => {
+    fetchSubmittedQuests(currentCampaign.id);
+  }, []);
 
   if (!currentCampaign) return null;
 
@@ -59,9 +67,12 @@ const CampaignDashboard = ({
         <div className="text-small text-grey">
           Transforms people nearby into fun barking dogs
         </div>
-        <div className="text-blue text-small hover-link" style={{marginTop: 8}}>
+        <div
+          className="text-blue text-small hover-link"
+          style={{ marginTop: 8 }}
+        >
           See campaign brief
-          <Icon type="right" style={{marginLeft: 4}}/>
+          <Icon type="right" style={{ marginLeft: 4 }} />
         </div>
         {/*<div
           className="row-align-center"
@@ -132,25 +143,19 @@ const CampaignDashboard = ({
             <CircularProgress />
           ) : (
             <>
-              {submittedQuests.map((submittedQuest, index) => (
-                <SubmittedItem
-                  onClick={() => setModalVisible(true)}
-                  key={submittedQuest.id}
-                />
-              ))}
-              <SubmittedItem
-                key={1}
-                onClick={() => setModalVisible(true)}
-                approved
-              />
-              <SubmittedItem
-                key={2}
-                onClick={() => setModalVisible(true)}
-                rejected
-              />
-              <SubmittedItem key={3} />
-              <SubmittedItem key={4} />
-              <SubmittedItem key={5} />
+              {submittedItems.map((submittedQuest, index) => {
+                console.log(submittedQuest);
+                return (
+                  <SubmittedItem
+                    onClick={() => {
+                      setCurrentSubmittedItem(submittedQuest);
+                      setModalVisible(true)}
+                    }
+                    data={submittedQuest}
+                    key={submittedQuest.id}
+                  />
+                );
+              })}
               <EmptySubmittedItem />
             </>
           )}
@@ -160,14 +165,15 @@ const CampaignDashboard = ({
           onCancel={() => setModalVisible(false)}
           visible={modalVisible}
           footer={null}
-          style={{ maxWidth: 300, minWidth: 255 }}
+          style={{ 
+            display: 'flex',
+          }}
           bodyStyle={{ paddingTop: 48 }}
+          wrapClassName="content-dashboard"
         >
-          <div>
-            <SubmittedItem noBorder />
+            <SubmittedItem noBorder data={currentSubmittedItem}/>
             <img className="prev-button" src={prevImg} />
             <img className="next-button" src={nextImg} />
-          </div>
         </Modal>
       </div>
     </>

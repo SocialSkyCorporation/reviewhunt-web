@@ -22,45 +22,51 @@ export default () => {
   const banner = () => {
     return (
       <div className="padded-container banner-content primary-gradient">
-        <h1>{t("app_title")}</h1>
-        <h2>
-          <Trans i18nKey="home.banner">
-            QUESTS TO MAKE
-            <br />
-            COOL PRODUCTS FLY HIGH
-          </Trans>
-        </h2>
-        <SimpleButton
-          text={t("home.learn_more")}
-          style={{
-            marginTop: 20,
-            marginBottom: 16,
-            maxWidth: 160
-          }}
-        />
+        <div className="big-screen-content">
+          <h1>{t("app_title")}</h1>
+          <h2>
+            <Trans i18nKey="home.banner">
+              QUESTS TO MAKE
+              <br />
+              COOL PRODUCTS FLY HIGH
+            </Trans>
+          </h2>
+          <SimpleButton
+            text={t("home.learn_more")}
+            style={{
+              marginTop: 20,
+              marginBottom: 16,
+              maxWidth: 160
+            }}
+          />
 
-        <div className="stat-container">
-          <div className="stat-item">
-            <div className="text-big text-black">{t("home.total_bounty")}</div>
-            <div className="stat-item-text-container">
-              <img src={imgMoney} alt="" />
-              <div className="stat-text">
-                <h1>
-                  14,505,033 <span>HUNT</span>
-                </h1>
-                <h2>($14,554.35)</h2>
+          <div className="stat-container">
+            <div className="stat-item">
+              <div className="text-big text-black">
+                {t("home.total_bounty")}
+              </div>
+              <div className="stat-item-text-container">
+                <img src={imgMoney} alt="" />
+                <div className="stat-text">
+                  <h1>
+                    14,505,033 <span>HUNT</span>
+                  </h1>
+                  <h2>($14,554.35)</h2>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="stat-item">
-            <div className="text-big text-black">{t("home.total_hunters")}</div>
-            <div className="stat-item-text-container">
-              <img src={imgHunter} alt="" />
-              <div className="stat-text">
-                <h1>
-                  1,054 <span>HUNTERS</span>
-                </h1>
-                <h2>(on 35 quests)</h2>
+            <div className="stat-item">
+              <div className="text-big text-black">
+                {t("home.total_hunters")}
+              </div>
+              <div className="stat-item-text-container">
+                <img src={imgHunter} alt="" />
+                <div className="stat-text">
+                  <h1>
+                    1,054 <span>HUNTERS</span>
+                  </h1>
+                  <h2>(on 35 quests)</h2>
+                </div>
               </div>
             </div>
           </div>
@@ -74,20 +80,22 @@ export default () => {
       <div className="padded-container">
         <Select defaultValue={t("home.for_you")} style={{ marginBottom: 20 }} />
 
-        <div className="grid-content">
-          {fetchingCampaigns && (
-            <>
-              <ContentLoader />
-              <ContentLoader />
-              <ContentLoader />
-              <ContentLoader />
-              <ContentLoader />
-              <ContentLoader />
-            </>
-          )}
-          {campaigns.map((campaign, index) => (
-            <QuestGridItem key={index} data={campaign} />
-          ))}
+        <div className="grid-wrapper">
+          <div className="grid-content">
+            {fetchingCampaigns && (
+              <>
+                <ContentLoader />
+                <ContentLoader />
+                <ContentLoader />
+                <ContentLoader />
+                <ContentLoader />
+                <ContentLoader />
+              </>
+            )}
+            {campaigns.map((campaign, index) => (
+              <QuestGridItem key={index} data={campaign} />
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -95,7 +103,7 @@ export default () => {
 
   const callToAction = () => {
     return (
-      <div className="call-to-action primary-gradient">
+      <div className="padded-container call-to-action primary-gradient">
         <div>
           <img className="logo-circle" src={logoCircle} />
           <div className="call-to-action-title text-black">
