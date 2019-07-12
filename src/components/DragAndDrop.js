@@ -32,6 +32,7 @@ const DragAndDrop = props => {
   const acceptSingleImage = images => {
     return [{ image: images[0], preview: URL.createObjectURL(images[0]) }];
   };
+  
   const {
     getRootProps,
     getInputProps,
@@ -164,6 +165,7 @@ const baseStyle = {
   alignItems: "center",
   justifyContent: "center",
   paddingTop: "32px",
+  minHeight: '200px',
   paddingBottom: "16px",
   marginTop: 5,
   borderWidth: 2,
