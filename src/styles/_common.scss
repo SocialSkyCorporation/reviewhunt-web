@@ -588,6 +588,7 @@ hr {
   text-align: center;
   color: #0a0a0a;
   text-transform: uppercase;
+  transition: transform 125ms ease;
 
   @include responsive(mobile) {
     min-width: 120px;
@@ -613,6 +614,7 @@ hr {
     color: #fff;
     background: #000;
     border: solid 1px #000;
+    transform: translateY(-1px);
     @include responsive(tablet) {
       border: solid 1px #0a0a0a;
       color: #0a0a0a;
