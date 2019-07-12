@@ -41,7 +41,7 @@
     }
 
     .product-users {
-      font-size: 0.875rem;
+      font-size: 1.125rem;
       color: #212121;
     }
 
@@ -82,7 +82,7 @@
       }
 
       .quest-text {
-        font-size: 0.75rem;
+        font-size: 0.875rem;
       }
 
       .step-divider {
@@ -130,14 +130,14 @@
 
     .title {
       font-family: "Comfortaa", cursive;
-      font-size: 1rem;
+      font-size: 1.5rem;
       font-weight: bold;
       color: #0a0a0a;
     }
 
     .show-more-desc {
       position: relative;
-      font-size: 0.875rem;
+      font-size: 1.125rem;
       line-height: 1.29;
       overflow: hidden;
       // white-space: nowrap;
@@ -193,6 +193,13 @@
       }
     }
 
+    .margin-right-text {
+      padding-right: 360px;
+      @include responsive(tablet) {
+        padding-right: 24px;
+      }
+    }
+
     .show-more-container {
       display: flex;
       margin-top: 12px;
@@ -221,13 +228,13 @@
       display: flex;
       justify-content: space-between;
       margin-top: 4px;
-      font-size: 0.875rem;
+      font-size: 1.125rem;
       color: #0a0a0a;
       font-weight: normal;
     }
 
     .please-note {
-      font-size: 0.75rem;
+      font-size: 1.125rem;
       line-height: 1.5;
       color: #8b9699;
       margin-top: 21px;
@@ -242,6 +249,12 @@
         max-width: 80vw;
         height: 368px;
       }
+    }
+
+    .quest-icon {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
     }
 
     .quest-carousel-item {
@@ -260,12 +273,19 @@
       }
 
       .quest-item-title {
-        font-size: 1.125rem;
+        font-size: 1.375rem;
         margin-top: 5px;
       }
 
       .bounty-text {
         font-size: 1.5rem;
+      }
+
+      .bounty-tag {
+        padding: 4px 12px;
+        border-radius: 4px;
+        margin-top: 15px;
+        font-size: 0.875rem;
       }
 
       .quest-description-container {
@@ -298,6 +318,10 @@
         }
       }
     }
+  }
+
+  .agree-check {
+    margin: 30px 0;
   }
 
   .url-icon-container {

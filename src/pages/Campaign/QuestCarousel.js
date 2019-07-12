@@ -17,11 +17,11 @@ const QuestCarouselItem = ({
         <div>
           <div className="quest-item-id text-black">QUEST {index + 1}</div>
           <div className="quest-item-title text-black">{title}</div>
+          <div className="bounty-tag primary-gradient text-black">${bounty_amount}</div>
         </div>
-        <div className="bounty-text text-black">${bounty_amount}</div>
       </div>
       <div className="quest-description-container">
-        <div className="quest-description text-grey">{description}</div>
+        <div className="quest-description text-grey text-small">{description}</div>
         <img className="quest-image" src={image} alt="" />
       </div>
     </div>

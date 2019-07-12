@@ -5,6 +5,7 @@ import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
 import { validateImage } from "utils/helpers/uploadHelpers";
 import { TYPE_MAKER } from "pages/Auth";
+import {questSortFunction} from 'utils/helpers/campaignHelper';
 
 const NewCampaignContext = React.createContext();
 
@@ -17,12 +18,6 @@ export const STEP_REVIEW_BUZZ = 2;
 export const STEP_CAMPAIGN_BUDGET = 3;
 export const STEP_CONFIRM = 4;
 export const STEP_CHECKOUT = 5;
-
-const questOrder = ["general_1", "general_2", "general_3", "review", "buzz"];
-
-function questSortFunction(a, b) {
-  return questOrder.indexOf(a.quest_type) - questOrder.indexOf(b.quest_type);
-}
 
 const initialState = {
   step: STEP_CREATE_CAMPAIGN,

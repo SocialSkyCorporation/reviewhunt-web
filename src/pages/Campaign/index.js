@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { Icon } from "antd";
 import { useTranslation } from "react-i18next";
 
 import ProgressBar from "components/ProgressBar";
@@ -15,10 +16,12 @@ import websiteImg from "assets/images/website.svg";
 
 import FullWidthButton from "components/FullWidthButton";
 import CircularProgress from "components/CircularProgress";
-import { scrollTop } from "utils/scroller";
+import { scrollBottom, scrollTop } from "utils/scroller";
 import CampaignContext from "contexts/CampaignContext";
+import { questSortFunction } from "utils/helpers/campaignHelper";
 
 export default props => {
+  const [agreed, setAgreed] = useState(false);
   const { t } = useTranslation();
   const {
     match: {
@@ -59,23 +62,22 @@ export default props => {
           <div className="product-name">{product_name}</div>
           <div className="line" />
           <div className="product-users">
-            {t("product.hunters_on_quest")}:{" "}
-            <b>{current_participant_count}</b>
+            {t("product.hunters_on_quest")}: <b>{current_participant_count}</b>
             <br />
-            {t("product.total_bounty")}: <b>${0}</b>
+            Campaign will be closed in: <b>17 days</b>
           </div>
         </div>
 
         <div className="quest-progress-container col-on-mobile">
           {quests &&
-            quests.map((item, index) => {
+            quests.sort(questSortFunction).map((item, index) => {
               const { bounty_max, quest_type } = item;
               const lastItem = index === quests.length - 1;
               return (
                 <div className="quest-step col-on-mobile" key={index}>
                   <div className="row-align-center">
                     <div className="step-image-container">
-                      <img src={questImg} alt="" />
+                      <img className="quest-icon" src={questImg} alt="" />
                     </div>
                     <div className="quest-step-text">
                       {quest_type === "buzz" && (
@@ -97,7 +99,13 @@ export default props => {
           <SimpleButton
             text={joined ? "JOINED" : t("product.join")}
             style={{ marginTop: 30 }}
-            onClick={() => joinCampaign(id)}
+            onClick={() => {
+              if (!agreed) {
+                scrollBottom();
+                return;
+              }
+              joinCampaign(id);
+            }}
             loading={joiningCampaign}
             inverse={joined}
           />
@@ -142,13 +150,12 @@ export default props => {
 
     return (
       <div className="padded-container product-info">
-        <div className="title">{t("product.information")}</div>
+        <div className="title uppercase">{t("product.information")}</div>
         <ScreenshotCarousel images={images} />
-        <div className="section-divider" />
         <CollapsibleText minHeight={100} text={description} />
 
         <div className="section-divider" />
-        <div className="title">{t("product.quests_reviews")}</div>
+        <div className="title uppercase">{t("product.quests_reviews")}</div>
 
         <ProgressBar
           height={29}
@@ -169,34 +176,78 @@ export default props => {
 
         <div className="section-divider" />
 
-        <div className="title">{t("product.please_note")}</div>
-        <div className="please-note">
-          • Kogi Cosby sweater ethical squid irony disrupt, organic tote bag
-          gluten-free XOXO wolf typewriter mixtape small batch. DIY pickled four
-          loko McSweeney's, Odd Future dreamcatcher plaid. PBR&B single-origin
-          coffee gluten-free McSweeney's banjo, bicycle rights food truck
-          gastropub vinyl four loko umami +1 narwhal chia. Fashion axe Banksy
-          chia umami artisan, bitters 90's fanny pack. Single-origi.
-          <br />
-          <br />
-          • Kogi Cosby sweater ethical squid irony disrupt, organic tote bag
-          gluten-free XOXO wolf typewriter mixtape small batch. DIY pickled four
-          loko McSweeney's, Odd Future dreamcatcher plaid. PBR&B single-origin
-          coffee gluten-free McSweeney's banjo, bicycle rights food truck
-          gastropub vinyl four loko umami +1 narwhal chia. Fashion axe Banksy
-          chia umami artisan, bitters 90's fanny pack. Single-origi.
-          <br />
-          <br />• Kogi Cosby sweater ethical squid irony disrupt, organic tote
-          bag gluten-free XOXO wolf typewriter mixtape small batch. DIY pickled
-          four loko McSweeney's, Odd Future dreamcatcher plaid. PBR&B
-          single-origin coffee gluten-free McSweeney's banjo, bicycle rights
-          food truck gastropub vinyl four loko umami +1 narwhal chia. Fashion
-          axe Banksy chia umami artisan, bitters 90's fanny pack. Single-origi.
+        <div className="title uppercase">{t("product.please_note")}</div>
+        <div className="please-note margin-right-text">
+          <div className="row-align-start">
+            <span className="bullet-point">•</span>
+            <div>
+              Your proofs of quest, review, and buzz participation will be
+              reviewed by our moderators, and your submission may be rejected if
+              it fails to meet the guidelines that we’ve described in each
+              quest, review, and buzz submission page. You won’t be able to
+              receive your rewards when your submission is rejected.
+            </div>
+          </div>
+          <div className="row-align-start">
+            <span className="bullet-point">•</span>
+            <div>
+              Buzz rewards have a set range of rewards, and it will be varied
+              based on our buzz quality measurement that considers your channel
+              size, potential reach, actual performance, etc. Please note that
+              we won’t be able to reward your buzz content when it doesn’t meet
+              our minimum level of buzz quality measurement score.{" "}
+            </div>
+          </div>
+          <div className="row-align-start">
+            <span className="bullet-point">•</span>
+            <div>
+              Your HUNT tokens will be distributed within a week after this
+              review campaign is finished. You can find your tokens via the
+              wallet tab on your profile page.
+            </div>
+          </div>
+          <div className="row-align-start">
+            <span className="bullet-point">•</span>
+            <div>
+              Do not submit someone else’s content, fake your screenshot proof,
+              or use the same proof via multiple alt accounts. We can
+              permanently blacklist your account immediately and refuse/withdraw
+              all your reward tokens when your actions are determined as an
+              abusing attempt.
+            </div>
+          </div>
         </div>
 
-        <FullWidthButton
-          style={{ marginTop: 16 }}
-          onClick={() => joinCampaign(id)}
+        <div
+          onClick={() => setAgreed(!agreed)}
+          className="row-align-center agree-check"
+        >
+          <Icon
+            type="check-circle"
+            style={{
+              fontSize: 34,
+              borderRadius: 17,
+              padding: 1,
+              backgroundColor: agreed ? "#000" : "#fff",
+              color: agreed ? "#fff" : "#8b9699",
+              marginRight: 15
+            }}
+          />
+          <div className="text-big text-grey">
+            I have read and agree to the guidelines described above.
+          </div>
+        </div>
+
+        <SimpleButton
+          inverse
+          style={{ marginTop: 16, maxWidth: 160 }}
+          onClick={() => {
+            if (!agreed) {
+              scrollBottom();
+              return;
+            }
+            joinCampaign(id);
+          }}
           text={joined ? "JOINED" : t("product.join")}
         />
       </div>

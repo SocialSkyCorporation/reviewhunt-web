@@ -17,6 +17,7 @@ export const scrollTo = function (element, to, duration) {
       currentTime = 0,
       increment = 20;
 
+
   var animateScroll = function(){
     currentTime += increment;
     var val = Math.easeInOutQuint(currentTime, start, change, duration);
@@ -29,6 +30,11 @@ export const scrollTo = function (element, to, duration) {
 };
 
 export const scrollTop = function() {
-  const leftPanel = document.getElementById('content-body');
-  scrollTo(leftPanel, 0, 0);
+  const body = document.getElementById('content-body');
+  scrollTo(body, 0, 0);
+}
+
+export const scrollBottom = function() {
+  const body = document.getElementById('content-body');
+  scrollTo(body, body.scrollHeight, 500);
 }

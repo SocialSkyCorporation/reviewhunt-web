@@ -74,22 +74,20 @@ export default () => {
       <div className="padded-container">
         <Select defaultValue={t("home.for_you")} style={{ marginBottom: 20 }} />
 
-        <div className="grid-wrapper">
-          <div className="grid-content">
-            {fetchingCampaigns && (
-              <>
-                <ContentLoader />
-                <ContentLoader />
-                <ContentLoader />
-                <ContentLoader />
-                <ContentLoader />
-                <ContentLoader />
-              </>
-            )}
-            {campaigns.map((campaign, index) => (
-              <QuestGridItem key={index} data={campaign} />
-            ))}
-          </div>
+        <div className="grid-content">
+          {fetchingCampaigns && (
+            <>
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+            </>
+          )}
+          {campaigns.map((campaign, index) => (
+            <QuestGridItem key={index} data={campaign} />
+          ))}
         </div>
       </div>
     );

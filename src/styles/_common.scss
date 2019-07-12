@@ -581,10 +581,10 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 34px;
-  min-width: 140px;
+  min-height: 44px;
+  min-width: 160px;
   border: solid 1px #0a0a0a;
-  font-size: 0.75rem;
+  font-size: .875rem;
   text-align: center;
   color: #0a0a0a;
   text-transform: uppercase;
@@ -647,9 +647,12 @@ hr {
 }
 
 .full-width-button {
-  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   text-align: center;
   background: #000;
   color: #fff;
@@ -711,6 +714,12 @@ hr {
   background-color: #e5e5e5;
   margin: 32px 0px;
 }
+
+
+.bullet-point {
+  margin: 0 16px 0 8px;
+}
+
 
 .col-on-mobile {
   display: flex;

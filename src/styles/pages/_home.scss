@@ -99,9 +99,6 @@
     display: inline;
   }
 
-  .grid-wrapper {
-  }
-
   .grid-content {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(356px, 1fr));

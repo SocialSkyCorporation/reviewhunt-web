@@ -21,7 +21,7 @@ const CollapsibleText = ({ text, minHeight = 50 }) => {
     <>
       <div
         id="show-more-desc"
-        className="show-more-desc"
+        className="show-more-desc margin-right-text"
         style={{ height: showVisible && collapsed ? minHeight : "auto" }}
       >
         {text}
