@@ -232,7 +232,8 @@ const closeIcon = {
 
 const descriptionStyle = {
   textAlign: "center",
-  marginTop: 8
+  marginTop: 8,
+  fontSize: 14
 };
 
 const selectedImgStyle = {

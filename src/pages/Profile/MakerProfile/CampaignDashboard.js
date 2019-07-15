@@ -194,7 +194,6 @@ const CampaignDashboard = ({
                   )
                 )
                 .map((submittedQuest, index) => {
-                  console.log(submittedQuest);
                   return (
                     <SubmittedItem
                       onClick={() => {

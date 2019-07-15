@@ -19,18 +19,38 @@ import twitchIcon from "assets/images/twitch.svg";
 import mediumIcon from "assets/images/medium.svg";
 import otherIcon from "assets/images/other.svg";
 
-const ChannelSubmissionItem = ({ image, text, onClick }) => {
+const ChannelSubmissionItem = ({ image, text, onClick, registered }) => {
   return (
-    <div className="channel-submission-item">
-      <img src={image} alt="" />
-      <div className="channel-text text-black">{text}</div>
-      <SimpleButton
+    <div className={`channel-submission-item ${!registered && "unregistered"}`}>
+      <div className="channel-submission-content">
+        <img src={image} alt="" />
+        <div className="channel-text text-black">{text}</div>
+        {registered ? (
+          <div className="channel-expected-earning text-green">
+            Your Expected Earnings
+            <br />
+            12.5K HUNT ($130.24)
+          </div>
+        ) : (
+          <div className="channel-expected-earning text-grey">
+            You didn't reigster
+            <br />
+            this channel
+          </div>
+        )}
+      </div>
+      <FullWidthButton
         text="Submit"
         onClick={onClick}
-        style={{ minWidth: 80, maxWidth: 80, marginTop: 24 }}
+        inverse={!registered}
+        style={registered ? {} : {borderTop: 'solid 1px #e5e5e5'}}
       />
     </div>
   );
+};
+
+ChannelSubmissionItem.defaultProps = {
+  registered: false
 };
 
 const BuzzInfo = ({ quest }) => {
@@ -108,6 +128,7 @@ const BuzzInfo = ({ quest }) => {
             setSubmitChannel("youtube");
             setModalVisible(true);
           }}
+          registered={true}
         />
         <ChannelSubmissionItem
           text="Instagram"
@@ -168,7 +189,7 @@ const BuzzInfo = ({ quest }) => {
       </div>
 
       <Modal
-        maskClosable={true}
+        maskClosable={false}
         onCancel={() => setModalVisible(false)}
         visible={modalVisible}
         footer={null}

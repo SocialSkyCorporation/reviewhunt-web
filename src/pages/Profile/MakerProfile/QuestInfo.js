@@ -77,7 +77,7 @@ const QuestInfo = ({ quest }) => {
         onClick={() => setModalVisible(true)}
       />
       <Modal
-        maskClosable={true}
+        maskClosable={false}
         onCancel={() => setModalVisible(false)}
         visible={modalVisible}
         footer={null}

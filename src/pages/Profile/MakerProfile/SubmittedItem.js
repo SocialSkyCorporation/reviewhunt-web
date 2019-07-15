@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import {Spin} from 'antd';
 import SimpleButton from "components/SimpleButton";
 import approvedImg from "assets/images/approved.svg";
 import rejectedImg from "assets/images/rejected.svg";
@@ -64,7 +65,8 @@ const SubmittedItem = ({
     proof_url,
     channel,
     quest_quest_type,
-    created_at
+    created_at,
+    submitting
   } = data;
 
   let description = null;
@@ -83,6 +85,7 @@ const SubmittedItem = ({
   }
 
   return (
+    <Spin spinning={submitting === true} tip="Loading...">
     <div className="submitted-item">
       <img className="submitted-item-img" src={image} alt="" />
       <div className="submitted-item-type text-grey uppercase">
@@ -133,6 +136,7 @@ const SubmittedItem = ({
         <img className="approved-rejected-icon" src={rejectedImg} alt="" />
       )}
     </div>
+    </Spin>
   );
 };
 

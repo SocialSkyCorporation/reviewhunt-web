@@ -164,7 +164,7 @@ const ReviewInfo = ({ quest }) => {
       </div>
 
       <Modal
-        maskClosable={true}
+        maskClosable={false}
         onCancel={() => setModalVisible(false)}
         visible={modalVisible}
         footer={null}

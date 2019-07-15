@@ -100,26 +100,28 @@ class Profile extends Component {
         <TabItem
           text="Create Campaign"
           selected={tabIndex === 0}
-          style={{ marginBottom: 0 }}
+          style={tabIndex === TAB_CREATE_CAMPAIGN ? { marginBottom: 0 } : {}}
           onClick={() => {
             resetState();
             this.setState({ tabIndex: 0, selectedCampaignId: -1 });
           }}
         />
 
-        <div>
-          {steps.map((s, index) => (
-            <TabSubItem
-              key={index}
-              selected={tabIndex === 0 && index === step}
-              onClick={() => {
-                setStep(index);
-                this.setState({ tabIndex: 0 });
-              }}
-              text={s}
-            />
-          ))}
-        </div>
+        {tabIndex === TAB_CREATE_CAMPAIGN && (
+          <div>
+            {steps.map((s, index) => (
+              <TabSubItem
+                key={index}
+                selected={tabIndex === 0 && index === step}
+                onClick={() => {
+                  setStep(index);
+                  this.setState({ tabIndex: 0 });
+                }}
+                text={s}
+              />
+            ))}
+          </div>
+        )}
 
         <TabItem
           text={"Campaigns"}

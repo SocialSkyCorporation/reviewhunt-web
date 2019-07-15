@@ -36,6 +36,7 @@ class AuthProvider extends React.Component {
     if (lastLoginType) {
       try {
         const emailMe = await getEmailMe(lastLoginType);
+        console.log("me", emailMe);
         await this.setState({
           emailMe,
           authenticating: false,

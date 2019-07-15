@@ -103,7 +103,8 @@ class CampaignProvider extends React.Component {
   approveSubmittedItem = index => {
     const { submittedItems } = this.state;
     const clonedItems = _.clone(submittedItems);
-    clonedItems[index]["status"] = "approved";
+    // clonedItems[index]["status"] = "approved";
+    clonedItems[index]["submitting"] = true;
     this.setState({ submittedItems: clonedItems });
   };
 
