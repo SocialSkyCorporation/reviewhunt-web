@@ -52,6 +52,8 @@ const SubmittedItem = ({
   data,
   noBorder,
   onClick,
+  onApproveClick,
+  onRejectClick,
   approved,
   rejected
 }) => {
@@ -88,7 +90,7 @@ const SubmittedItem = ({
       </div>
       {quest_quest_type === "buzz" ? (
         <Linkify>
-          <div className="submitted-item-title">https://google.com</div>
+          <div className="submitted-item-title">{proof_url}</div>
         </Linkify>
       ) : (
         <div className="submitted-item-title text-black">{quest_title}</div>
@@ -113,12 +115,14 @@ const SubmittedItem = ({
           text="Reject"
           borderColor="rgba(245, 34, 45, 0.7)"
           style={{ minWidth: 120 }}
+          onClick={onRejectClick}
         />
         <SimpleButton
           inverse
           className="submitted-item-button"
           text="Approve"
           style={{ minWidth: 120 }}
+          onClick={onApproveClick}
         />
       </div>
       {!noBorder && <div className="bottom-divider" />}

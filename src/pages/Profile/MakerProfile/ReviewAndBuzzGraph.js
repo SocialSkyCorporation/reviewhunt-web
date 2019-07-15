@@ -26,7 +26,14 @@ const IconValue = ({icon, title, value}) => {
   );
 };
 
+IconValue.defaultProps = {
+  value: 0
+}
+
+
 const GraphItem = ({ icon, title, value }) => {
+  if(value <= 0) return null;
+
   return (
     <div className="row-align-center col-on-mobile graph-item">
       <div className="row-align-center">
@@ -41,24 +48,31 @@ const GraphItem = ({ icon, title, value }) => {
   );
 };
 
-const ReviewAndBuzzGraph = ({}) => {
+GraphItem.defaultProps = {
+  value: 0
+}
+
+const ReviewAndBuzzGraph = ({channelCounts, totalCount}) => {
+  let totalReviewCount = channelCounts["appstore"] + channelCounts["playstore"];
+  totalReviewCount = Number.isNaN(totalReviewCount) && 0;
+
   return (
     <div className="review-buzz-graph">
       <div className="text-black text-small">
-        <b>172</b> new app store reviews were generated.
+        <b>{totalReviewCount}</b> new app store reviews were generated.
         <div className="row-align-center review-stat-icons">
-          <IconValue icon={appstoreImg} title={"App Store"} value={96}/>
-          <IconValue icon={playstoreImg} title={"Play Store"} value={74}/>
+          <IconValue icon={appstoreImg} title={"App Store"} value={channelCounts["appstore"]}/>
+          <IconValue icon={playstoreImg} title={"Play Store"} value={channelCounts["playstore"]}/>
         </div>
-        <b>239</b> new buzz contents are spread.
+        <b>{totalCount}</b> new buzz contents are spread.
         <div className="graph-items-container">
-          <GraphItem icon={youtubeIcon} title={"YouTube"} value={74} />
-          <GraphItem icon={instagramIcon} title={"Instagram"} value={45} />
-          <GraphItem icon={twitterIcon} title={"Twitter"} value={40} />
-          <GraphItem icon={steemitIcon} title={"Steemit"} value={24} />
-          <GraphItem icon={redditIcon} title={"Reddit"} value={22} />
-          <GraphItem icon={twitchIcon} title={"Twitch"} value={20} />
-          <GraphItem icon={othersIcon} title={"Others"} value={14} />
+          <GraphItem icon={youtubeIcon} title={"YouTube"} value={channelCounts["youtube"]} />
+          <GraphItem icon={instagramIcon} title={"Instagram"} value={channelCounts["instagram"]} />
+          <GraphItem icon={twitterIcon} title={"Twitter"} value={channelCounts["twitter"]} />
+          <GraphItem icon={steemitIcon} title={"Steemit"} value={channelCounts["steemit"]} />
+          <GraphItem icon={redditIcon} title={"Reddit"} value={channelCounts["reddit"]} />
+          <GraphItem icon={twitchIcon} title={"Twitch"} value={channelCounts["twitch"]} />
+          <GraphItem icon={othersIcon} title={"Others"} value={channelCounts["others"]} />
         </div>
       </div>
     </div>

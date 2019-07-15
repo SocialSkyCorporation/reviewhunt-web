@@ -12,6 +12,13 @@ import nextImg from "assets/images/next.svg";
 
 const { Option } = Select;
 
+const filterDictionary = {
+  all: ["general_1", "general_2", "general_3", "buzz", "review"],
+  quest: ["general_1", "general_2", "general_3"],
+  review: ["review"],
+  buzz: ["buzz"]
+};
+
 const StatItem = props => {
   const { title, value, totalValue } = props;
   return (
@@ -38,13 +45,16 @@ const CampaignDashboard = ({
   submittedQuests
 }) => {
   const [currentTab, setCurrentTab] = useState("pending");
+  const [currentFilter, setCurrentFilter] = useState("all");
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentSubmittedItem, setCurrentSubmittedItem] = useState(0);
+  const [currentItemIndex, setCurrentItemIndex] = useState(0);
   const {
     currentCampaign,
     submittedItems,
     fetchSubmittedQuests,
-    fetchingSubmittedQuests
+    fetchingSubmittedQuests,
+    approveSubmittedItem,
+    rejectSubmittedItem
   } = useContext(CampaignContext);
 
   useEffect(() => {
@@ -60,14 +70,29 @@ const CampaignDashboard = ({
   } = currentCampaign;
 
   const prevClicked = () => {
-    setCurrentSubmittedItem(Math.max(0, currentSubmittedItem - 1));
+    setCurrentItemIndex(Math.max(0, currentItemIndex - 1));
   };
 
   const nextClicked = () => {
-    setCurrentSubmittedItem(
-      Math.min(submittedItems.length - 1, currentSubmittedItem + 1)
+    setCurrentItemIndex(
+      Math.min(submittedItems.length - 1, currentItemIndex + 1)
     );
   };
+
+  let questsToApprove = 0;
+
+  let channelCounts = {};
+  let totalBuzzCount = 0;
+
+  submittedItems.forEach(item => {
+    if (item.status === "pending") questsToApprove++;
+    if (item.channel !== null && !channelCounts[item.channnel])
+      channelCounts[item.channel] = 0;
+    if (item.channel) {
+      totalBuzzCount++;
+      channelCounts[item.channel] += 1;
+    }
+  });
 
   return (
     <>
@@ -108,8 +133,8 @@ const CampaignDashboard = ({
           />
           <StatItem
             title="Quests to approve"
-            value={`$${numberWithCommas(bounty_left)}`}
-            totalValue={`$${numberWithCommas(total_bounty)}`}
+            value={questsToApprove}
+            totalValue={submittedItems.length}
           />
         </div>
 
@@ -121,7 +146,10 @@ const CampaignDashboard = ({
         </div>
         <div className="divider-line" style={{ marginTop: 5 }} />
 
-        <ReviewAndBuzzGraph />
+        <ReviewAndBuzzGraph
+          channelCounts={channelCounts}
+          totalCount={totalBuzzCount}
+        />
 
         <div
           className="text-small text-black uppercase"
@@ -141,7 +169,12 @@ const CampaignDashboard = ({
             <Menu.Item key="approved">Approved</Menu.Item>
             <Menu.Item key="rejected">Rejected</Menu.Item>
           </Menu>
-          <Select className="select-filter" defaultValue={"All"}>
+          <Select
+            className="select-filter"
+            defaultValue={currentFilter}
+            onChange={v => {
+              setCurrentFilter(v)}}
+          >
             <Option key="all">All</Option>
             <Option key="quest">Quest</Option>
             <Option key="review">Review</Option>
@@ -155,14 +188,21 @@ const CampaignDashboard = ({
             <>
               {submittedItems
                 .filter(item => item.status === currentTab)
+                .filter(item =>
+                  filterDictionary[currentFilter].includes(
+                    item.quest_quest_type
+                  )
+                )
                 .map((submittedQuest, index) => {
                   console.log(submittedQuest);
                   return (
                     <SubmittedItem
                       onClick={() => {
-                        setCurrentSubmittedItem(index);
+                        setCurrentItemIndex(index);
                         setModalVisible(true);
                       }}
+                      onApproveClick={() => approveSubmittedItem(index)}
+                      onRejectClick={() => rejectSubmittedItem(index)}
                       data={submittedQuest}
                       key={submittedQuest.id}
                       noBorder
@@ -186,12 +226,14 @@ const CampaignDashboard = ({
           <SubmittedItem
             fullScreen
             noBorder
-            data={submittedItems && submittedItems[currentSubmittedItem]}
+            data={submittedItems && submittedItems[currentItemIndex]}
+            onApproveClick={() => approveSubmittedItem(currentItemIndex)}
+            onRejectClick={() => rejectSubmittedItem(currentItemIndex)}
           />
-          {currentSubmittedItem > 0 && (
+          {currentItemIndex > 0 && (
             <img onClick={prevClicked} className="prev-button" src={prevImg} />
           )}
-          {currentSubmittedItem < submittedItems.length - 1 && (
+          {currentItemIndex < submittedItems.length - 1 && (
             <img onClick={nextClicked} className="next-button" src={nextImg} />
           )}
         </Modal>

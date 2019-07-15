@@ -29,9 +29,14 @@ class CampaignProvider extends React.Component {
 
     await this.setState({ fetchingSubmittedItems: true });
     try {
-      const submittedItems = await api.get(`/campaigns/${id}/submitted.json`, {}, true, TYPE_MAKER);
+      const submittedItems = await api.get(
+        `/campaigns/${id}/submitted.json`,
+        {},
+        true,
+        TYPE_MAKER
+      );
       // console.log("quests", items);
-      this.setState({submittedItems});
+      this.setState({ submittedItems });
     } catch (e) {
       notification["error"]({
         message: extractErrorMessage(e)
@@ -64,7 +69,7 @@ class CampaignProvider extends React.Component {
         message: extractErrorMessage(e)
       });
     } finally {
-      await this.setState({ fetchingCampaign: false});
+      await this.setState({ fetchingCampaign: false });
     }
   };
 
@@ -95,6 +100,20 @@ class CampaignProvider extends React.Component {
     }
   };
 
+  approveSubmittedItem = index => {
+    const { submittedItems } = this.state;
+    const clonedItems = _.clone(submittedItems);
+    clonedItems[index]["status"] = "approved";
+    this.setState({ submittedItems: clonedItems });
+  };
+
+  rejectSubmittedItem = index => {
+    const { submittedItems } = this.state;
+    const clonedItems = _.clone(submittedItems);
+    clonedItems[index]["status"] = "rejected";
+    this.setState({ submittedItems: clonedItems });
+  };
+
   render() {
     return (
       <Provider
@@ -105,6 +124,8 @@ class CampaignProvider extends React.Component {
           joinCampaign: this.joinCampaign,
           setCurrentCampaign: this.setCurrentCampaign,
           fetchSubmittedQuests: this.fetchSubmittedQuests,
+          approveSubmittedItem: this.approveSubmittedItem,
+          rejectSubmittedItem: this.rejectSubmittedItem
         }}
       >
         {this.props.children}
