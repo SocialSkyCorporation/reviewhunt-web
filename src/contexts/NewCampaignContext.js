@@ -192,10 +192,10 @@ class NewCampaignProvider extends Component {
   };
 
   createQuest = async (id, form, index) => {
+    console.log("creating quest");
     const { quests, campaignId } = this.state;
 
     const formData = new FormData();
-    console.log(form);
     this.setState({ loading: true });
     const image = form.image[0].image;
     let validated = form.image.length > 0 ? validateImage(image) : false;
@@ -236,17 +236,20 @@ class NewCampaignProvider extends Component {
     }
   };
 
-  saveQuest = async (id, form, index) => {
+  saveQuest = async (id, form, index, bulkSave = false) => {
+    console.log("saving quest");
     const { quests, campaignId } = this.state;
 
     const formData = new FormData();
-    let validated = form.image ? validateImage(form.image) : true;
+    let validated =
+      form.image && typeof form.image !== "string"
+        ? validateImage(form.image)
+        : true;
 
     if (validated) {
       for (const key in form) {
         if (key === "image") {
-          console.log(form[key]);
-          if (form[key]) {
+          if (form[key] && typeof form[key] !== "string") {
             formData.append(`quest[${key}]`, new Blob([form[key]]));
           }
         } else {
@@ -257,7 +260,7 @@ class NewCampaignProvider extends Component {
       try {
         await api.uploadFormData(
           "put",
-          `/campaigns/${campaignId}/quests.json`,
+          `/campaigns/${campaignId}/quests/${id}.json`,
           formData,
           true,
           TYPE_MAKER
@@ -266,10 +269,11 @@ class NewCampaignProvider extends Component {
         const questsClone = _.clone(quests);
         questsClone[index]["value"] = form;
         questsClone[index]["saved"] = true;
-        this.setState({ loading: false, quests: questsClone });
+        this.setState({ quests: questsClone });
       } catch (e) {
         notification["error"]({ message: extractErrorMessage(e) });
-        this.setState({ loading: false });
+      } finally {
+        !bulkSave && this.setState({ loading: false });
       }
     }
   };
@@ -340,16 +344,18 @@ class NewCampaignProvider extends Component {
     if (generalQuests.length > 2) return;
 
     this.setState({
-      quests: quests.concat({
-        id: null,
-        title: "",
-        description: "",
-        criteria: "",
-        quest_type: `general_${generalQuests.length + 1}`,
-        image: [],
-        bounty_amount: 0,
-        saved: false
-      }).sort(questSortFunction)
+      quests: quests
+        .concat({
+          id: null,
+          title: "",
+          description: "",
+          criteria: "",
+          quest_type: `general_${generalQuests.length + 1}`,
+          image: [],
+          bounty_amount: 0,
+          saved: false
+        })
+        .sort(questSortFunction)
     });
   };
 
@@ -529,6 +535,53 @@ class NewCampaignProvider extends Component {
     }
   };
 
+  saveAllGeneralQuests = async () => {
+    const { quests } = this.state;
+    const generalQuests = quests
+      .filter(filterGeneralQuests)
+      .sort(questSortFunction);
+
+
+    try {
+      this.setState({ loading: true });
+
+      for (const index in generalQuests) {
+        const quest = generalQuests[index];
+        const {
+          id,
+          title,
+          description,
+          criteria,
+          bounty_amount,
+          quest_type,
+          image
+        } = quest;
+
+        //if string, it's url else file
+        const uploadImage = typeof image === "string" ? image : image[0].image;
+
+        const form = {
+          title,
+          description,
+          criteria,
+          bounty_amount,
+          quest_type,
+          image: uploadImage
+        };
+        if (quest.id) {
+          await this.saveQuest(id, form, index, true);
+        } else {
+          await this.createQuest(id, form, index);
+        }
+      }
+
+      await this.setState({ loading: false });
+      this.setStep(STEP_REVIEW_BUZZ);
+    } catch (e) {
+      notification["error"]({ message: extractErrorMessage(e) });
+    } 
+  };
+
   render() {
     return (
       <Provider
@@ -549,7 +602,8 @@ class NewCampaignProvider extends Component {
           fetchCurrency: this.fetchCurrency,
           setCampaignData: this.setCampaignData,
           resetState: this.resetState,
-          saveReviewAndBuzz: this.saveReviewAndBuzz
+          saveReviewAndBuzz: this.saveReviewAndBuzz,
+          saveAllGeneralQuests: this.saveAllGeneralQuests
         }}
       >
         {this.props.children}

@@ -14,7 +14,7 @@ import { filterGeneralQuests } from "utils/helpers/campaignHelper";
 const { Panel } = Collapse;
 
 const Step2 = ({}) => {
-  const { activeKeys, quests, addQuest, setStep, updateState } = useContext(NewCampaignContext);
+  const { activeKeys, saveAllGeneralQuests, quests, addQuest, setStep, updateState } = useContext(NewCampaignContext);
   const generalQuests = quests.filter(filterGeneralQuests);
 
   return (
@@ -55,7 +55,7 @@ const Step2 = ({}) => {
         </div>
         <SimpleButton
           text={"Save and Next"}
-          onClick={() => setStep(STEP_REVIEW_BUZZ)}
+          onClick={() => saveAllGeneralQuests()}
         />
       </div>
     </div>
