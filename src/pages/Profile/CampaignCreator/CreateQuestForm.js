@@ -31,8 +31,6 @@ const CreateQuestForm = memo(
       image
     } = quests[index];
 
-    console.log(index, quests[index]);
-
     return (
       <div>
         <TextInput

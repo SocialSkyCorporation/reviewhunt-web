@@ -65,6 +65,7 @@ const initialState = {
   currencyInfo: {},
   fetchingEstimate: false,
   fetchingCurrency: false,
+  activeKeys: [],
   loading: false
 };
 

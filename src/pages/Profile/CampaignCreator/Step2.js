@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { Collapse, Icon, Modal } from "antd";
 import { TextInput, Screenshots, ProductLinks } from "components/FormTypes";
@@ -9,22 +9,19 @@ import NewCampaignContext, {
   STEP_CREATE_CAMPAIGN
 } from "contexts/NewCampaignContext";
 import addCircleImg from "assets/images/add-circle.svg";
-import {filterGeneralQuests} from 'utils/helpers/campaignHelper';
+import { filterGeneralQuests } from "utils/helpers/campaignHelper";
 
 const { Panel } = Collapse;
 
 const Step2 = ({}) => {
-  const { quests, addQuest, setStep } = useContext(NewCampaignContext);
+  const { activeKeys, quests, addQuest, setStep, updateState } = useContext(NewCampaignContext);
   const generalQuests = quests.filter(filterGeneralQuests);
-
-  console.log("general quests", generalQuests);
-
 
   return (
     <div className="campaign-step">
       <div className="text-grey">Step 2 of 5</div>
       <div className="step-title text-black">Design Quests</div>
-      <Collapse defaultActiveKey={["1"]}>
+      <Collapse defaultActiveKey={activeKeys} onChange={keys => updateState("activeKeys", keys)}>
         {generalQuests.map((quest, index) => {
           const { quest_type } = quest;
           if (quest_type !== "buzz" && quest_type !== "review") {
