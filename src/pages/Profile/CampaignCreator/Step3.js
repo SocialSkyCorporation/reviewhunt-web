@@ -19,8 +19,8 @@ const channelOptions = [
   { label: "Reddit", value: "reddit" },
   { label: "Medium", value: "medium" },
   { label: "Twitch", value: "twitch" },
-  { label: "Steemit (and other Steem DApps)", value: "steemit" },
-  { label: "Other local channels", value: "other" }
+  { label: "Steemit (and other Steem DApps)", value: "steem" },
+  { label: "Other local channels", value: "others" }
 ];
 
 const Step3 = ({}) => {
