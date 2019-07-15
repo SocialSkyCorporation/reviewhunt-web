@@ -5,9 +5,9 @@ import { getSteemMe, getEmailMe } from "utils/auth/authHelper";
 import { getToken, setToken, removeToken } from "utils/token";
 import { withRouter } from "react-router-dom";
 import api from "utils/api";
+import queryString from "query-string";
 import { extractErrorMessage } from "utils/errorMessage";
-import {getParams} from 'utils/helpers/urlHelper';
-
+import { getParams } from "utils/helpers/urlHelper";
 import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 
 const AuthContext = React.createContext();
@@ -29,12 +29,40 @@ class AuthProvider extends React.Component {
     socialChannels: []
   };
 
+  componentWillMount() {
+    let parsedURL = null;
+    if (this.props.location.search) {
+      try {
+        parsedURL = queryString.parse(this.props.location.search);
+        console.log("parsed", parsedURL);
+        const source = this.props.location.pathname
+          .split("/")
+          .filter(i => i)[1]
+          .toLowerCase();
+        //handle contents differently based on source
+        this.handleAuth(source, parsedURL);
+      } catch (e) {
+        console.log("URI Parse error", this.props.location.search);
+      }
+    }
+  }
+
   async componentDidMount() {
     await this.setState({ authenticating: true });
+
     const lastLoginType = getToken("last_login");
 
-    if (lastLoginType) {
-      try {
+    try {
+      const steemToken = getToken("steemconnect");
+      console.log("steem token", steemToken);
+      if (steemToken) {
+        this.setState({ steemconnectLoading: true });
+        const steemMe = await getSteemMe(steemToken);
+        console.log("steemMe", steemMe);
+        await this.setState({ steemconnectLoading: false, steemMe });
+      }
+
+      if (lastLoginType) {
         const emailMe = await getEmailMe(lastLoginType);
         console.log("me", emailMe);
         await this.setState({
@@ -50,12 +78,12 @@ class AuthProvider extends React.Component {
         } else {
           this.props.history.replace(`${window.location.pathname}${query}`);
         }
-      } catch (e) {
-        removeToken(lastLoginType);
-        this.handleError(e);
+      } else {
         this.setState({ authenticating: false });
       }
-    } else {
+    } catch (e) {
+      removeToken(lastLoginType);
+      this.handleError(e);
       this.setState({ authenticating: false });
     }
   }
@@ -169,8 +197,8 @@ class AuthProvider extends React.Component {
           this.setState({ steemconnectLoading: true, socialChannels });
 
           setToken("steemconnect", access_token);
-          const me = await getSteemMe(access_token);
-          this.setState({ me });
+          const steemMe = await getSteemMe(access_token);
+          this.setState({ steemMe });
         } catch (e) {
           this.handleError(e);
         }
@@ -188,8 +216,16 @@ class AuthProvider extends React.Component {
     const lastLoginType = getToken("last_login");
     if (lastLoginType) {
       removeToken(lastLoginType);
-      await this.setState({ emailMe: false });
+      await this.setState({ emailMe: null });
       this.props.history.replace("/auth");
+    }
+  };
+
+  disconnectSteem = async () => {
+    const steemToken = getToken("steemconnect");
+    if (steemToken) {
+      removeToken("steemconnect");
+      await this.setState({ steemMe: null });
     }
   };
 
@@ -206,7 +242,8 @@ class AuthProvider extends React.Component {
           deleteSocialItem: this.deleteSocialItem,
           setSocialChannels: this.setSocialChannels,
           setStatus: this.setStatus,
-          logout: this.logout
+          logout: this.logout,
+          disconnectSteem: this.disconnectSteem
         }}
       >
         {this.props.children}

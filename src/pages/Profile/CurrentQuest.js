@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Icon, Modal } from "antd";
 import backImg from "assets/images/back.svg";
@@ -9,9 +10,9 @@ import HistoryMessage from "./HistoryMessage";
 import FullWidthButton from "components/FullWidthButton";
 import { Dropdown, TextInput, Screenshots } from "components/FormTypes";
 import HunterDashboardContext from "contexts/HunterDashboardContext";
-import QuestInfo from './MakerProfile/QuestInfo';
-import ReviewInfo from './MakerProfile/ReviewInfo';
-import BuzzInfo from './MakerProfile/BuzzInfo';
+import QuestInfo from "./MakerProfile/QuestInfo";
+import ReviewInfo from "./MakerProfile/ReviewInfo";
+import BuzzInfo from "./MakerProfile/BuzzInfo";
 
 const CurrentQuest = props => {
   const { data, onBackPressed } = props;
@@ -30,8 +31,7 @@ const CurrentQuest = props => {
 
   const quest = quests[questInfoIndex];
   const { quest_type } = quest;
-
-  console.log("QUEST TYPE IS", quest_type);
+  const { currentCampaign } = useContext(HunterDashboardContext);
 
   return (
     <div className="current-quest">
@@ -51,10 +51,12 @@ const CurrentQuest = props => {
         Transforms people nearby into fun barking dogs
       </div>
 
-      <SimpleButton
-        text="CHECK PRODUCT INFO"
-        style={{ marginTop: 15, marginBottom: 30, maxWidth: 180 }}
-      />
+      <Link to={`/campaigns/${currentCampaign.id}`}>
+        <SimpleButton
+          text="CHECK PRODUCT INFO"
+          style={{ marginTop: 15, marginBottom: 30, maxWidth: 180 }}
+        />
+      </Link>
 
       <div className="divider" />
       <QuestStepProgress

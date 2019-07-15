@@ -4,7 +4,6 @@ import asyncComponent from "asyncComponent";
 import NotFound from "components/NotFound";
 import { AuthConsumer } from "contexts/AuthContext";
 import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
-import queryString from "query-string";
 import Header from "components/Header";
 import Footer from "components/Footer";
 import ProtectedRoute from "ProtectedRoute";
@@ -19,23 +18,6 @@ const HunterProfile = asyncComponent(() =>
 const MakerProfile = asyncComponent(() => import("pages/Profile/MakerProfile"));
 
 class Routes extends Component {
-  componentWillMount() {
-    let parsedURL = null;
-    if (this.props.location.search) {
-      try {
-        parsedURL = queryString.parse(this.props.location.search);
-        const source = this.props.location.pathname
-          .split("/")
-          .filter(i => i)[1]
-          .toLowerCase();
-        //handle contents differently based on source
-        this.props.handleAuth(source, parsedURL);
-      } catch (e) {
-        console.log("URI Parse error", this.props.location.search);
-      }
-    }
-  }
-
   componentWillUnmount() {}
 
   render() {

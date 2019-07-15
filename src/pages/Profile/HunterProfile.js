@@ -45,7 +45,7 @@ class HunterProfile extends Component {
     const { tabIndex } = this.props.profileContext;
     const { fetchCampaigns } = this.props.hunterDashboardContext;
 
-    if(tabIndex == TAB_QUEST) {
+    if (tabIndex == TAB_QUEST) {
       fetchCampaigns();
     }
   }
@@ -153,7 +153,12 @@ class HunterProfile extends Component {
   renderProfileTab() {
     const { editProfile, steemLogo } = this.state;
     const { t } = this.props;
-    const { emailMe, steemMe, steemconnectLoading } = this.props.authContext;
+    const {
+      emailMe,
+      steemMe,
+      steemconnectLoading,
+      disconnectSteem
+    } = this.props.authContext;
     const countryArray = countries.filter(
       country => country.code === emailMe.country_code
     );
@@ -170,7 +175,7 @@ class HunterProfile extends Component {
                 <div className="profile-icon-container row-align-center">
                   <img
                     className="profile-icon"
-                    src="https://picsum.photos/34"
+                    src={`${process.env.REACT_APP_STEEMCONNECT_IMG_HOST}/@${steemMe.user}?s=80`}
                     alt=""
                   />
                   <div className="profile-icon-text text-black">
@@ -180,6 +185,7 @@ class HunterProfile extends Component {
               </div>
               <div>
                 <SimpleButton
+                  onClick={() => disconnectSteem()}
                   className="steem-connect-button"
                   text={t("disconnect").toUpperCase()}
                 />
@@ -189,14 +195,16 @@ class HunterProfile extends Component {
             <div>
               <div className="row-align-center row-space-between col-on-mobile">
                 <div>
-                  <div className="content-title steemhunt text-black">STEEMHUNT (STEEM) ACCOUNT</div>
+                  <div className="content-title steemhunt text-black">
+                    STEEMHUNT (STEEM) ACCOUNT
+                  </div>
                   <div className="profile-icon-container profile-icon-text text-grey">
                     Connect your Reviewhunt account to your Steem account for
                     syncing the HUNT transactions.
                   </div>
                 </div>
                 <div>
-                  <a href={getLoginURL()}>
+                  <a href={steemconnectLoading ? null : getLoginURL()}>
                     <SimpleButton
                       className="steem-connect-button"
                       onMouseOver={() =>

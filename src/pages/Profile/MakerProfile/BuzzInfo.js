@@ -40,8 +40,14 @@ const ChannelSubmissionItem = ({ image, text, onClick, registered }) => {
         )}
       </div>
       <FullWidthButton
-        text="Submit"
-        onClick={onClick}
+        text={registered ? "Submit" : "Register"}
+        onClick={() => {
+          if(!registered) {
+            //redirect to onboarding
+            return;
+          }
+          onClick()
+        }}
         inverse={!registered}
         style={registered ? {} : {borderTop: 'solid 1px #e5e5e5'}}
       />
