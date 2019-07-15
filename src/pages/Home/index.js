@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { Select } from "antd";
+import {Link} from 'react-router-dom';
 import imgMoney from "assets/images/money-circle-black.svg";
 import imgHunter from "assets/images/hunter-circle-black.svg";
 import QuestGridItem from "components/QuestGridItem";
@@ -31,6 +32,7 @@ export default () => {
               COOL PRODUCTS FLY HIGH
             </Trans>
           </h2>
+          <Link to="/about">
           <SimpleButton
             text={t("home.learn_more")}
             style={{
@@ -39,6 +41,7 @@ export default () => {
               maxWidth: 160
             }}
           />
+          </Link>
 
           <div className="stat-container">
             <div className="stat-item">

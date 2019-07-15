@@ -2,17 +2,17 @@
   .laptop-screenshot {
     display: flex;
     align-self: center;
-    width: 784px;
-    height: 451px;
+    width: 784px !important;
+    height: auto;
     object-fit: contain;
 
     @include responsive(tablet) {
-      width: 500px;
+      width: 500px !important;
       height: auto;
     }
 
     @include responsive(mobile) {
-      width: 300px;
+      width: 300px !important;
       height: auto;
     }
   }

@@ -15,6 +15,7 @@ const ProfileRow = ({
   editMode,
   type,
   password,
+  children,
   onDeletePressed
 }) => {
   const [textValue, setTextValue] = useState(value);
@@ -33,16 +34,18 @@ const ProfileRow = ({
               <Select
                 defaultValue={value}
                 className="value-container select gray-bg-select text-grey"
-              />
+              >
+              {children}
+              </Select>
             )}
             {type === TYPE_PASSWORD && (
               <div className="password-container">
-                <Input
+                <Input.Password
                   className="value-container text-grey"
                   placeholder={t('current_password')}
                   onChange={onChange}
                 />
-                <Input
+                <Input.Password
                   className="value-container password text-grey"
                   placeholder={t('new_password')}
                   onChange={onChange}

@@ -100,29 +100,35 @@ class Profile extends Component {
         <TabItem
           text="Create Campaign"
           selected={tabIndex === 0}
-          style={tabIndex === TAB_CREATE_CAMPAIGN ? { marginBottom: 0 } : {}}
+          style={tabIndex === TAB_CREATE_CAMPAIGN || selectedCampaignId ? { marginBottom: 0 } : {}}
           onClick={() => {
             resetState();
-            this.setState({ tabIndex: 0, selectedCampaignId: -1 });
+            this.setState({ tabIndex: 0, selectedCampaignId: null });
           }}
         />
 
-        {tabIndex === TAB_CREATE_CAMPAIGN && (
+        {(tabIndex === TAB_CREATE_CAMPAIGN || selectedCampaignId !== null) && (
           <div>
             {steps.map((s, index) => (
               <TabSubItem
                 key={index}
-                selected={tabIndex === 0 && index === step}
+                selected={
+                  (tabIndex === 0 && index === step) ||
+                  (tabIndex === TAB_CAMPAIGNS &&
+                    selectedCampaignId !== null &&
+                    index === step)
+                }
                 onClick={() => {
                   setStep(index);
-                  this.setState({ tabIndex: 0 });
+                  if(!selectedCampaignId) {
+                    this.setState({ tabIndex: 0 });
+                  }
                 }}
                 text={s}
               />
             ))}
           </div>
         )}
-
         <TabItem
           text={"Campaigns"}
           selected={tabIndex === 1}
@@ -145,12 +151,12 @@ class Profile extends Component {
         <TabItem
           text={"History"}
           selected={tabIndex === 2}
-          onClick={() => this.setState({ tabIndex: 2, selectedCampaignId: -1 })}
+          onClick={() => this.setState({ tabIndex: 2, selectedCampaignId: null })}
         />
         <TabItem
           text={"Setting"}
           selected={tabIndex === 3}
-          onClick={() => this.setState({ tabIndex: 3, selectedCampaignId: -1 })}
+          onClick={() => this.setState({ tabIndex: 3, selectedCampaignId: null })}
         />
         <TabItem
           text={"Logout"}
@@ -207,7 +213,7 @@ class Profile extends Component {
     const { status } = currentCampaign;
 
     //TEST
-    if (true || status === "running") {
+    if (status === "running") {
       return (
         <CampaignDashboard
           onEditDescClicked={() => {

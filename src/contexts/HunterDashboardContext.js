@@ -1,8 +1,9 @@
 import React from "react";
-import { notification } from "antd";
+import { Modal, notification } from "antd";
 import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
+import _ from 'lodash';
 
 const HunterDashboardContext = React.createContext();
 
@@ -59,7 +60,16 @@ class HunterDashboardProvider extends React.Component {
         true,
         TYPE_HUNTER
       );
-      console.log(result);
+
+      const campaignCopy = _.clone(currentCampaign);
+      campaignCopy.quests.forEach((_quest, _index) => {
+        if(_quest.id === result.id) {
+          Object.assign(_quest, result);
+        }
+      })
+
+      this.setState({currentCampaign: campaignCopy});
+      Modal.destroyAll();
     } catch (e) {
       notification["error"]({
         message: extractErrorMessage(e)

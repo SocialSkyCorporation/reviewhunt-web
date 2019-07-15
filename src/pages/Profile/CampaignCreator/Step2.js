@@ -9,18 +9,23 @@ import NewCampaignContext, {
   STEP_CREATE_CAMPAIGN
 } from "contexts/NewCampaignContext";
 import addCircleImg from "assets/images/add-circle.svg";
+import {filterGeneralQuests} from 'utils/helpers/campaignHelper';
 
 const { Panel } = Collapse;
 
 const Step2 = ({}) => {
   const { quests, addQuest, setStep } = useContext(NewCampaignContext);
+  const generalQuests = quests.filter(filterGeneralQuests);
+
+  console.log("general quests", generalQuests);
+
+
   return (
     <div className="campaign-step">
       <div className="text-grey">Step 2 of 5</div>
       <div className="step-title text-black">Design Quests</div>
       <Collapse defaultActiveKey={["1"]}>
-        {quests.map((quest, index) => {
-          console.log("quest", quest);
+        {generalQuests.map((quest, index) => {
           const { quest_type } = quest;
           if (quest_type !== "buzz" && quest_type !== "review") {
             return (
@@ -36,7 +41,7 @@ const Step2 = ({}) => {
         })}
       </Collapse>
 
-      {quests.length < 3 && (
+      {generalQuests.length < 3 && (
         <div className="add-more-quest hover-link" onClick={addQuest}>
           <img src={addCircleImg} alt="" />
           <div className="add-more-text">Add more quest</div>

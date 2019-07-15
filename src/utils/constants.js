@@ -13,6 +13,13 @@ export const monthsShort = [
   "Dec"
 ];
 
+export const productTypes = [
+  "Mobile App",
+  "Website",
+  "Game",
+  "Gadget"
+]
+
 export const monthsLong = [
   "January",
   "February",

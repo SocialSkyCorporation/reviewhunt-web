@@ -5,7 +5,8 @@ import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
 import { validateImage } from "utils/helpers/uploadHelpers";
 import { TYPE_MAKER } from "pages/Auth";
-import {questSortFunction} from 'utils/helpers/campaignHelper';
+import { questSortFunction } from "utils/helpers/campaignHelper";
+import { filterGeneralQuests } from "utils/helpers/campaignHelper";
 
 const NewCampaignContext = React.createContext();
 
@@ -52,7 +53,7 @@ const initialState = {
   channelsCriteria: "",
   totalBudgetAmount: 1000,
   maxRewardAmount: 10,
-  campaignId: 5,
+  campaignId: null,
   estimate: {
     total_bounty: 0,
     average_bounty_per_hunter: 0,
@@ -61,8 +62,7 @@ const initialState = {
     buzz_content_count: 0,
     total_reach: 0
   },
-  currencyInfo: {
-  },
+  currencyInfo: {},
   fetchingEstimate: false,
   fetchingCurrency: false,
   loading: false
@@ -335,19 +335,20 @@ class NewCampaignProvider extends Component {
   addQuest = () => {
     console.log("adding quest");
     const { quests } = this.state;
-    if (quests.length > 2) return;
+    const generalQuests = quests.filter(filterGeneralQuests);
+    if (generalQuests.length > 2) return;
 
     this.setState({
-      quests: this.state.quests.concat({
+      quests: quests.concat({
         id: null,
         title: "",
         description: "",
         criteria: "",
-        quest_type: "general",
+        quest_type: `general_${generalQuests.length + 1}`,
         image: [],
         bounty_amount: 0,
         saved: false
-      })
+      }).sort(questSortFunction)
     });
   };
 
@@ -445,7 +446,7 @@ class NewCampaignProvider extends Component {
           true,
           TYPE_MAKER
         );
-        this.setState({questReview: reviewResult});
+        this.setState({ questReview: reviewResult });
       }
       if (questBuzz["allowed_channels"].length > 0) {
         console.log(questBuzz);
@@ -476,7 +477,7 @@ class NewCampaignProvider extends Component {
           TYPE_MAKER
         );
 
-        await this.setState({questBuzz: buzzResult});
+        await this.setState({ questBuzz: buzzResult });
       }
       this.setStep(STEP_CAMPAIGN_BUDGET);
     } catch (e) {
@@ -506,15 +507,15 @@ class NewCampaignProvider extends Component {
     }
   };
 
-  fetchCurrency = async (currency) => {
+  fetchCurrency = async currency => {
     console.log("fetching currency", currency);
     this.setState({ fetchingCurrency: true });
-    const { campaignId} = this.state;
+    const { campaignId } = this.state;
 
     try {
       const currencyInfo = await api.put(
         `/campaigns/${campaignId}/set_currency.json`,
-        {currency},
+        { currency },
         true,
         TYPE_MAKER
       );

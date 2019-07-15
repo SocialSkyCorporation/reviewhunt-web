@@ -29,6 +29,8 @@ import { TYPE_HUNTER } from "pages/Auth";
 import { extractErrorMessage } from "utils/errorMessage";
 import CircularProgress from "components/CircularProgress";
 
+const {Option} = Select;
+
 const TAB_PROFILE = 0;
 const TAB_CHANNELS = 1;
 const TAB_QUEST = 2;
@@ -252,7 +254,11 @@ class HunterProfile extends Component {
             value={country}
             editMode={editProfile}
             type={TYPE_DROPDOWN}
-          />
+          >
+            {countries.map((c, i) => (
+              <Option key={c.code}>{c.value}</Option>
+            ))}
+          </ProfileRow>
           <ProfileRow
             title={t("password")}
             value="password"

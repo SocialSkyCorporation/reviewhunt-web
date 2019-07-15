@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { TextInput, Screenshots } from "components/FormTypes";
 import SimpleButton from "components/SimpleButton";
 import NewCampaignContext from "contexts/NewCampaignContext";
+import { filterGeneralQuests } from "utils/helpers/campaignHelper";
 
 const CreateQuestForm = memo(
   ({ index }) => {
@@ -29,6 +30,8 @@ const CreateQuestForm = memo(
       bounty_amount,
       image
     } = quests[index];
+
+    console.log(index, quests[index]);
 
     return (
       <div>
@@ -65,7 +68,7 @@ const CreateQuestForm = memo(
           maxCharacters={560}
         />
         <div className="save-delete-container">
-          {quests.length !== 1 && (
+          {quests.filter(filterGeneralQuests).length - 1 === index && (
             <div
               className="text-grey delete-button hover-link"
               onClick={() => deleteQuest(index, id)}
