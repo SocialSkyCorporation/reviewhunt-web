@@ -28,7 +28,7 @@ const QuestStepProgress = props => {
       {steps.sort(questSortFunction).map((step, index) => {
         const { quest_type, status } = step;
         const isComplete = currentStep > index;
-        const isClickable = status !== null;
+        const isClickable = status !== null || currentStep === index;
         const animationDisabled =
           currentStep !== clickedIndex &&
           clickedIndex === index &&
