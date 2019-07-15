@@ -37,9 +37,9 @@ const CampaignDashboard = ({
   onEditDescClicked,
   submittedQuests
 }) => {
-  const [current, setCurrent] = useState("pending");
+  const [currentTab, setCurrentTab] = useState("pending");
   const [modalVisible, setModalVisible] = useState(false);
-  const [currentSubmittedItem, setCurrentSubmittedItem] = useState({data: null});
+  const [currentSubmittedItem, setCurrentSubmittedItem] = useState(0);
   const {
     currentCampaign,
     submittedItems,
@@ -58,6 +58,16 @@ const CampaignDashboard = ({
     total_bounty,
     current_participant_count
   } = currentCampaign;
+
+  const prevClicked = () => {
+    setCurrentSubmittedItem(Math.max(0, currentSubmittedItem - 1));
+  };
+
+  const nextClicked = () => {
+    setCurrentSubmittedItem(
+      Math.min(submittedItems.length - 1, currentSubmittedItem + 1)
+    );
+  };
 
   return (
     <>
@@ -122,9 +132,9 @@ const CampaignDashboard = ({
 
         <div className="row-align-center menu-container">
           <Menu
-            onClick={e => setCurrent(e.key)}
+            onClick={e => setCurrentTab(e.key)}
             mode="horizontal"
-            selectedKeys={[current]}
+            selectedKeys={[currentTab]}
             style={{ flex: 1 }}
           >
             <Menu.Item key="pending">Pending</Menu.Item>
@@ -143,20 +153,22 @@ const CampaignDashboard = ({
             <CircularProgress />
           ) : (
             <>
-              {submittedItems.map((submittedQuest, index) => {
-                console.log(submittedQuest);
-                return (
-                  <SubmittedItem
-                    onClick={() => {
-                      setCurrentSubmittedItem(submittedQuest);
-                      setModalVisible(true)}
-                    }
-                    data={submittedQuest}
-                    key={submittedQuest.id}
-                  />
-                );
-              })}
-              <EmptySubmittedItem />
+              {submittedItems
+                .filter(item => item.status === currentTab)
+                .map((submittedQuest, index) => {
+                  console.log(submittedQuest);
+                  return (
+                    <SubmittedItem
+                      onClick={() => {
+                        setCurrentSubmittedItem(index);
+                        setModalVisible(true);
+                      }}
+                      data={submittedQuest}
+                      key={submittedQuest.id}
+                      noBorder
+                    />
+                  );
+                })}
             </>
           )}
         </div>
@@ -165,15 +177,23 @@ const CampaignDashboard = ({
           onCancel={() => setModalVisible(false)}
           visible={modalVisible}
           footer={null}
-          style={{ 
-            display: 'flex',
+          style={{
+            display: "flex"
           }}
           bodyStyle={{ paddingTop: 48 }}
           wrapClassName="content-dashboard"
         >
-            <SubmittedItem noBorder data={currentSubmittedItem}/>
-            <img className="prev-button" src={prevImg} />
-            <img className="next-button" src={nextImg} />
+          <SubmittedItem
+            fullScreen
+            noBorder
+            data={submittedItems && submittedItems[currentSubmittedItem]}
+          />
+          {currentSubmittedItem > 0 && (
+            <img onClick={prevClicked} className="prev-button" src={prevImg} />
+          )}
+          {currentSubmittedItem < submittedItems.length - 1 && (
+            <img onClick={nextClicked} className="next-button" src={nextImg} />
+          )}
         </Modal>
       </div>
     </>

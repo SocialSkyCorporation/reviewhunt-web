@@ -28,7 +28,7 @@ export const daysAgoToString = function(daysAgo) {
 }
 
 export const toTimeAgo = function(dateString) {
-  return moment(dateString + 'Z').fromNow();
+  return moment(dateString).fromNow();
 }
 
 export const isExpired = date => {
