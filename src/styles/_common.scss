@@ -547,6 +547,10 @@ hr {
   color: #3fcaff;
 }
 
+.text-green {
+  color: #0ab06a;
+}
+
 .text-warning {
   color: #ff597a;
 }
@@ -661,8 +665,9 @@ hr {
   font-weight: 300;
   font-size: 0.875rem;
   text-align: center;
-  background: #000;
-  color: #fff;
+  text-transform: uppercase;
+  // background: #000;
+  // color: #fff;
 
   &:hover {
     cursor: pointer;

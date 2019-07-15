@@ -38,7 +38,7 @@ const Step3 = ({}) => {
 
   return (
     <div className="campaign-step">
-      <div className="text-grey text-small">Step 3 of 5</div>
+      <div className="text-grey">Step 3 of 5</div>
       <div className="step-title text-black">Review and Buzz</div>
 
       <div className="review-checkbox-container">
@@ -58,9 +58,9 @@ const Step3 = ({}) => {
             <div className="url-icon-circle">
               <img src={appstoreImg} alt="" />
             </div>
-            {campaignInfo.appstore ? (
-              <a className="url-href" href={campaignInfo.appstore}>
-                {campaignInfo.appstore}
+            {campaignInfo.urls.appstore ? (
+              <a className="url-href" href={campaignInfo.urls.appstore}>
+                {campaignInfo.urls.appstore}
               </a>
             ) : (
               <div className="row-align-center">
@@ -81,8 +81,8 @@ const Step3 = ({}) => {
             <div className="url-icon-circle">
               <img src={playstoreImg} alt="" />
             </div>
-            {campaignInfo.playstore ? (
-              <a className="url-href" href={campaignInfo.appstore}>
+            {campaignInfo.urls.playstore ? (
+              <a className="url-href" href={campaignInfo.urls.playstore}>
                 {campaignInfo.playstore}
               </a>
             ) : (

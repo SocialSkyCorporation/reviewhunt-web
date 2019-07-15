@@ -39,12 +39,12 @@ const NameValue = ({ title, value, minKeyWidth }) => {
   return (
     <div className="row-align-center title-value-item">
       <div
-        className="text-small text-grey text-name"
+        className="text-grey text-name"
         style={{ minWidth: minKeyWidth }}
       >
         {title}
       </div>
-      <div className="text-small text-black">{value}</div>
+      <div className="text-black">{value}</div>
     </div>
   );
 };
@@ -93,7 +93,7 @@ const Step6 = ({}) => {
           <div className="text-black text-big payment-summary-title">
             BARK APP
           </div>
-          <div className="text-small">
+          <div>
             <div>3 quests</div>
             <div>App Store and Play Store reviews</div>
             <div>Buzz content</div>
@@ -101,7 +101,7 @@ const Step6 = ({}) => {
         </div>
       </div>
 
-      <div className="checkout-header text-black uppercase text-small">
+      <div className="checkout-header text-black uppercase">
         Maker information
       </div>
       <NameValue title={"Name"} value={"YoungHwi Cho"} minKeyWidth={160} />
@@ -111,7 +111,7 @@ const Step6 = ({}) => {
         value={"admin@hunt.town"}
         minKeyWidth={160}
       />
-      <div className="checkout-header text-black uppercase text-small">
+      <div className="checkout-header text-black uppercase">
         Amount to pay
       </div>
       <NameValue
@@ -132,7 +132,7 @@ const Step6 = ({}) => {
         final amount.
       </div>
 
-      <div className="checkout-header payment text-black uppercase text-small">
+      <div className="checkout-header payment text-black uppercase">
         Choose payment option
       </div>
 

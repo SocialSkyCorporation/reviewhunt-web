@@ -29,11 +29,11 @@ const RewardDetailRow = props => {
   return (
     <div>
       <div className="reward-detail-row row-align-center">
-        <div className="reward-row-tag text-small uppercase text-grey">
+        <div className="reward-row-tag uppercase text-grey">
           {title}
         </div>
         <div className="reward-row-content">{props.children}</div>
-        <div className="text-small text-black">{numberWithCommas(bounty)}</div>
+        <div className="text-black">{numberWithCommas(bounty)}</div>
       </div>
       <div className="divider" />
     </div>
@@ -46,7 +46,7 @@ const IconDetail = props => {
     <div className="icon-detail-item row-align-center">
       <img className="icon-detail-logo" src={image} alt="" />
       <div className="icon-detail-text">
-        <div className="text-small text-grey">{title}</div>
+        <div className="text-grey">{title}</div>
         <div className="text-big text-black">{numberWithCommas(value)}</div>
       </div>
     </div>
@@ -75,7 +75,7 @@ const Step4 = ({}) => {
 
   return (
     <div className="campaign-step">
-      <div className="text-grey text-small">Step 4 of 5</div>
+      <div className="text-grey">Step 4 of 5</div>
       <div className="step-title text-black">Set Campaign Budget</div>
       <BudgetSlider
         title={"Total budget amount"}
@@ -103,7 +103,7 @@ const Step4 = ({}) => {
       />
 
       <div className="reward-details">
-        <div className="text-black text-big reward-details-text">
+        <div className="text-black reward-details-text">
           Reward Details
         </div>
 
@@ -119,7 +119,7 @@ const Step4 = ({}) => {
                     title={questDictionary[quest_type]}
                     bounty={`$${bounty_max}`}
                   >
-                    <div className="text-black text-small">{title}</div>
+                    <div className="text-black">{title}</div>
                   </RewardDetailRow>
                 );
               case "review":
@@ -135,12 +135,12 @@ const Step4 = ({}) => {
                           <div className="url-icon-circle">
                             <img src={appstoreImg} alt="" />
                           </div>
-                          {campaignInfo.appstore ? (
+                          {campaignInfo.urls.appstore ? (
                             <a
                               className="url-href"
-                              href={campaignInfo.appstore}
+                              href={campaignInfo.urls.appstore}
                             >
-                              {campaignInfo.appstore}
+                              {campaignInfo.urls.appstore}
                             </a>
                           ) : (
                             <div className="row-align-center">
@@ -164,12 +164,12 @@ const Step4 = ({}) => {
                             <div className="url-icon-circle">
                               <img src={playstoreImg} alt="" />
                             </div>
-                            {campaignInfo.playstore ? (
+                            {campaignInfo.urls.playstore ? (
                               <a
                                 className="url-href"
-                                href={campaignInfo.appstore}
+                                href={campaignInfo.urls.playstore}
                               >
-                                {campaignInfo.playstore}
+                                {campaignInfo.urls.playstore}
                               </a>
                             ) : (
                               <div className="row-align-center">
@@ -198,7 +198,7 @@ const Step4 = ({}) => {
                   <RewardDetailRow key={quest_type} title={"Buzz Content"} bounty={`$10 - $${maxRewardAmount}`}>
                     {allowed_channels.map((channel, index) => {
                       return (
-                        <div key={index} className="text-black text-small">
+                        <div key={index} className="text-black">
                           {channel}
                         </div>
                       );
@@ -211,7 +211,7 @@ const Step4 = ({}) => {
         )}
 
         <div>
-          <div className="max-result-text text-grey text-small">MAX RESULT</div>
+          <div className="max-result-text text-grey">MAX RESULT</div>
           {fetchingEstimate ? (
             <Icon type="loading" style={{ marginTop: 8 }} />
           ) : (

@@ -1,7 +1,7 @@
 .campaign-creator {
   .campaign-step {
     .step-title {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       text-transform: uppercase;
       margin-top: 5px;
     }
@@ -10,14 +10,14 @@
     }
 
     .title-input-header {
-      font-size: 0.875rem;
+      font-size: 1rem;
       text-transform: uppercase;
     }
 
     .title-input-box {
       width: 100%;
       min-height: 28px;
-      font-size: 0.875rem;
+      font-size: 1rem;
       border-radius: 0px;
       padding: 0px 15px;
       margin-top: 5px;
@@ -26,7 +26,7 @@
     .title-text-area {
       width: 100%;
       min-height: 28px;
-      font-size: 0.875rem;
+      font-size: 1rem;
       border-radius: 0px;
       padding: 10px 15px;
       margin-top: 5px;
@@ -38,6 +38,7 @@
 
       input {
         border-left-width: 0px;
+        font-size: 1rem;
       }
 
       span {
@@ -50,7 +51,7 @@
       margin-top: 16px;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.875rem;
+      font-size: 1rem;
 
       &.step5,
       &.step6 {
@@ -115,7 +116,6 @@
     }
 
     .url-href {
-      font-size: 0.875rem;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -125,7 +125,6 @@
     }
 
     .url-desc {
-      font-size: 0.875rem;
       margin-left: 8px;
     }
 
@@ -156,7 +155,6 @@
       margin-top: 25px;
 
       .budget-title {
-        font-size: 0.875rem;
       }
 
       .budget-value {
@@ -225,6 +223,7 @@
     .reward-details-text {
       text-transform: uppercase;
       margin-bottom: 30px;
+      font-size: 1.25rem;
     }
 
     .max-result-text {
@@ -313,7 +312,11 @@
   }
 
   .text-info {
-    font-size: 0.625rem;
+    font-size: .875rem;
+  }
+
+  .ant-collapse-header, .ant-checkbox-wrapper {
+    font-size: 1rem;
   }
 
   .payment-option {
@@ -323,7 +326,6 @@
     align-items: center;
     border: solid 1px #0a0a0a;
     padding: 17px;
-    font-size: .875rem;
 
     img {
       margin-right: 8px;

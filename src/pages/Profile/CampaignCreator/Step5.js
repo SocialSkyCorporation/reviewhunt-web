@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Icon } from "antd";
 import CampaignPreview from "./CampaignPreview";
 import SimpleButton from "components/SimpleButton";
-import NewCampaignContext, {STEP_CAMPAIGN_BUDGET} from "contexts/NewCampaignContext";
+import NewCampaignContext, {STEP_CHECKOUT, STEP_CAMPAIGN_BUDGET} from "contexts/NewCampaignContext";
 
 const Step5 = ({}) => {
   const dummyRef = useRef(null);
@@ -12,7 +12,7 @@ const Step5 = ({}) => {
 
   return (
     <div className="campaign-step">
-      <div className="text-grey text-small">Step 5 of 5</div>
+      <div className="text-grey">Step 5 of 5</div>
       <div className="step-title text-black">CONFIRM YOUR CAMPAIGN</div>
       <div ref={dummyRef} style={{ ...dummyStyle, width: "100%" }} />
       <CampaignPreview dummyRef={dummyRef} setDummyStyle={setDummyStyle} />
@@ -21,7 +21,7 @@ const Step5 = ({}) => {
           <Icon type="left" />
           <div>Back</div>
         </div>
-        <SimpleButton text={"Proceed to Checkout"} />
+        <SimpleButton text={"Proceed to Checkout"} onClick={() => setStep(STEP_CHECKOUT)}/>
       </div>
     </div>
   );

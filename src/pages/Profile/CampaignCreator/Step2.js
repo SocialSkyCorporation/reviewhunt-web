@@ -16,7 +16,7 @@ const Step2 = ({}) => {
   const { quests, addQuest, setStep } = useContext(NewCampaignContext);
   return (
     <div className="campaign-step">
-      <div className="text-grey text-small">Step 2 of 5</div>
+      <div className="text-grey">Step 2 of 5</div>
       <div className="step-title text-black">Design Quests</div>
       <Collapse defaultActiveKey={["1"]}>
         {quests.map((quest, index) => {
