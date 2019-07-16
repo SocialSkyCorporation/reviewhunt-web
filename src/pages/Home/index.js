@@ -81,10 +81,7 @@ export default () => {
   const content = () => {
     return (
       <div className="grid-wrapper">
-        <Select
-          defaultValue={t("home.for_you")}
-          style={{ marginBottom: 20, marginLeft: 40 }}
-        />
+        <Select className="grid-dropdown" defaultValue={t("home.for_you")} />
         <div className="grid-content">
           {fetchingCampaigns && (
             <>
@@ -99,9 +96,10 @@ export default () => {
           {campaigns.map((campaign, index) => (
             <QuestGridItem key={index} data={campaign} />
           ))}
-          <div className="empty-grid-item"/>
-          <div className="empty-grid-item"/>
 
+          {/*placeholder for flex-wrap, align center*/}
+          <div className="empty-grid-item" />
+          <div className="empty-grid-item" />
         </div>
       </div>
     );

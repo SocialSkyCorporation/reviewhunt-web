@@ -8,9 +8,14 @@ import SimpleButton from "components/SimpleButton";
 import NewCampaignContext, {
   STEP_CAMPAIGN_BUDGET
 } from "contexts/NewCampaignContext";
+import AuthContext from "contexts/AuthContext";
 import QRCode from "qrcode.react";
 import { CardElement, Elements, injectStripe } from "react-stripe-elements";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
+import {
+  filterReviewQuests,
+  filterBuzzQuests
+} from "utils/helpers/campaignHelper";
 
 const PAYMENT_USD = "USD";
 const PAYMENT_KRW = "KRW";
@@ -26,7 +31,7 @@ class _CardForm extends React.Component {
       >
         <label>Card Details</label>
         <div className="card-form">
-            <CardElement />
+          <CardElement />
           <button>Pay</button>
         </div>
       </form>
@@ -38,10 +43,7 @@ const CardForm = injectStripe(_CardForm);
 const NameValue = ({ title, value, minKeyWidth }) => {
   return (
     <div className="row-align-center title-value-item">
-      <div
-        className="text-grey text-name"
-        style={{ minWidth: minKeyWidth }}
-      >
+      <div className="text-grey text-name" style={{ minWidth: minKeyWidth }}>
         {title}
       </div>
       <div className="text-black">{value}</div>
@@ -53,13 +55,13 @@ const PaymentOption = ({ type, className, selected, onClick }) => {
   let text = "";
   let src = "";
 
-  if (type === "USD") {
+  if (type === PAYMENT_USD) {
     text = "Pay in USD";
     src = usdImg;
-  } else if (type === "KRW") {
+  } else if (type === PAYMENT_KRW) {
     text = "Pay in KRW";
     src = krwImg;
-  } else {
+  } else if (type === PAYMENT_BTC) {
     text = "Pay in Crypto";
     src = btcImg;
   }
@@ -77,9 +79,35 @@ const PaymentOption = ({ type, className, selected, onClick }) => {
 
 const Step6 = ({}) => {
   const [paymentOption, setPaymentOption] = useState(null);
-  const { currencyInfo, fetchingCurrency, fetchCurrency, setStep } = useContext(
-    NewCampaignContext
-  );
+  const {
+    campaignInfo,
+    currencyInfo,
+    fetchingCurrency,
+    fetchCurrency,
+    totalBudgetAmount,
+    setStep,
+    quests
+  } = useContext(NewCampaignContext);
+  const { emailMe } = useContext(AuthContext);
+  const { email, company_name, name } = emailMe;
+
+  const { product_name, images, quest_count, buzz } = campaignInfo;
+  const reviewQuests = quests.filter(filterReviewQuests);
+  const buzzQuests = quests.filter(filterBuzzQuests);
+  let hasAppstoreReview = false;
+  let hasPlaystoreReview = false;
+
+  reviewQuests.forEach(r => {
+    if (r.channel === "appstore") {
+      hasAppstoreReview = true;
+    } else if (r.channel === "playstore") {
+      hasPlaystoreReview = true;
+    }
+  });
+
+  const totalBudget = totalBudgetAmount;
+  const platformFee = totalBudget * 0.08;
+  const conversionFee = totalBudget * 0.12;
 
   return (
     <div className="campaign-step">
@@ -88,15 +116,19 @@ const Step6 = ({}) => {
       </div>
 
       <div className="checkout-summary row-align-center">
-        <img />
+        <img src={images[0]} alt=""/>
         <div>
           <div className="text-black text-big payment-summary-title">
-            BARK APP
+            {product_name}
           </div>
           <div>
-            <div>3 quests</div>
-            <div>App Store and Play Store reviews</div>
-            <div>Buzz content</div>
+            <div>{quest_count ? quest_count : 0} quests</div>
+            {hasAppstoreReview && !hasPlaystoreReview && <div>App Store</div>}
+            {hasPlaystoreReview && !hasAppstoreReview && <div>Play Store</div>}
+            {hasAppstoreReview && hasPlaystoreReview && (
+              <div>App Store and Play Store reviews</div>
+            )}
+            {buzzQuests.length > 0 && <div>Buzz content</div>}
           </div>
         </div>
       </div>
@@ -104,25 +136,23 @@ const Step6 = ({}) => {
       <div className="checkout-header text-black uppercase">
         Maker information
       </div>
-      <NameValue title={"Name"} value={"YoungHwi Cho"} minKeyWidth={160} />
-      <NameValue title={"Company name"} value={"HUNT"} minKeyWidth={160} />
+      <NameValue title={"Name"} value={name} minKeyWidth={160} />
       <NameValue
-        title={"Email address"}
-        value={"admin@hunt.town"}
+        title={"Company name"}
+        value={company_name}
         minKeyWidth={160}
       />
-      <div className="checkout-header text-black uppercase">
-        Amount to pay
-      </div>
+      <NameValue title={"Email address"} value={email} minKeyWidth={160} />
+      <div className="checkout-header text-black uppercase">Amount to pay</div>
       <NameValue
         title={"Total budget to reward hunters"}
-        value={"$10,500"}
+        value={`$${numberWithCommas(totalBudget)}`}
         minKeyWidth={280}
       />
-      <NameValue title={"Platform fee (8%)"} value={"$840"} minKeyWidth={280} />
+      <NameValue title={"Platform fee (8%)"} value={`$${numberWithCommas(platformFee)}`} minKeyWidth={280} />
       <NameValue
         title={"Accounting / Conversion fee (12%)"}
-        value={"$1,260"}
+        value={`$${numberWithCommas(conversionFee)}`}
         minKeyWidth={280}
       />
       <div className="divider-line" />
@@ -139,7 +169,7 @@ const Step6 = ({}) => {
       <div className="row-space-around">
         <PaymentOption
           onClick={() => {
-            if(paymentOption === PAYMENT_USD) return;
+            if (paymentOption === PAYMENT_USD) return;
             fetchCurrency(PAYMENT_USD);
             setPaymentOption(PAYMENT_USD);
           }}
@@ -148,7 +178,7 @@ const Step6 = ({}) => {
         />
         <PaymentOption
           onClick={() => {
-            if(paymentOption === PAYMENT_KRW) return;
+            if (paymentOption === PAYMENT_KRW) return;
             fetchCurrency(PAYMENT_KRW);
             setPaymentOption(PAYMENT_KRW);
           }}
@@ -158,7 +188,7 @@ const Step6 = ({}) => {
         />
         <PaymentOption
           onClick={() => {
-            if(paymentOption === PAYMENT_BTC) return;
+            if (paymentOption === PAYMENT_BTC) return;
             fetchCurrency(PAYMENT_BTC);
             setPaymentOption(PAYMENT_BTC);
           }}
@@ -189,7 +219,9 @@ const Step6 = ({}) => {
                   />
                   <NameValue
                     title={"입금액 (KRW 환산)"}
-                    value={`${numberWithCommas(Number(currencyInfo.amount).toFixed(2))} KRW`}
+                    value={`${numberWithCommas(
+                      Number(currencyInfo.amount).toFixed(2)
+                    )} KRW`}
                     minKeyWidth={120}
                   />
                   <div className="text-info text-grey">
@@ -204,7 +236,9 @@ const Step6 = ({}) => {
               {currencyInfo.currency === PAYMENT_BTC && (
                 <div className="payment-btc">
                   <QRCode value={currencyInfo.address} />
-                  <div className="text-btc">{numberWithCommas(currencyInfo.amount)} BTC</div>
+                  <div className="text-btc">
+                    {numberWithCommas(currencyInfo.amount)} BTC
+                  </div>
                   <div className="text-black">{currencyInfo.address}</div>
                   <div
                     className="text-info text-info"

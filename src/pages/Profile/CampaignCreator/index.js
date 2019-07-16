@@ -22,7 +22,7 @@ export default props => {
   const { data } = props;
   const { step, loading, setCampaignData } = useContext(NewCampaignContext);
   
-  useBeforeunload(event => event.preventDefault());
+  // useBeforeunload(event => event.preventDefault());
 
   useEffect(() => {
     //if data is passed, it means it's being edited

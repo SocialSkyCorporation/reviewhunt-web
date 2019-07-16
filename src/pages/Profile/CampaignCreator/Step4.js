@@ -33,7 +33,7 @@ const RewardDetailRow = props => {
           {title}
         </div>
         <div className="reward-row-content">{props.children}</div>
-        <div className="text-black">{numberWithCommas(bounty)}</div>
+        <div className="text-black">{bounty}</div>
       </div>
       <div className="divider" />
     </div>
@@ -117,7 +117,7 @@ const Step4 = ({}) => {
                   <RewardDetailRow
                     key={quest_type}
                     title={questDictionary[quest_type]}
-                    bounty={`$${bounty_max}`}
+                    bounty={`$${numberWithCommas(bounty_max)}`}
                   >
                     <div className="text-black">{title}</div>
                   </RewardDetailRow>
@@ -127,7 +127,7 @@ const Step4 = ({}) => {
                   <RewardDetailRow
                     key={quest_type}
                     title={"App Review"}
-                    bounty={"$5"}
+                    bounty={"$5.0"}
                   >
                     <div className="col">
                       <div>

@@ -49,6 +49,7 @@ export default props => {
   const banner = () => {
     const {
       current_participant_count,
+      product_type,
       product_name,
       quests,
       urls,
@@ -58,7 +59,7 @@ export default props => {
     return (
       <div className="padded-container banner-container primary-gradient">
         <div>
-          <div className="product-category">APP</div>
+          <div className="product-category">{product_type.toUpperCase()}</div>
           <div className="product-name">{product_name}</div>
           <div className="line" />
           <div className="product-users">
