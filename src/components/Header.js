@@ -17,13 +17,13 @@ export default () => {
     <AuthConsumer>
       {({ emailMe }) => (
         <div className="header">
-          <Link to="/">
+          <a href="/">
             <img
               className="logo"
               src={isAboutPage ? imgLogoTeal : imgLogo}
               alt="logo"
             />
-          </Link>
+          </a>
 
           <div className="header-right">
             <Link className={headerItemClassName} to="/about">
@@ -45,12 +45,12 @@ export default () => {
                 </Link>
               </>
             ) : (
-              <Link className={`header-item account ${isAboutPage && 'about'}`} to="/profile">
+              <a className={`header-item account ${isAboutPage && 'about'}`} href="/profile">
                 <div className="row-align-center">
                   <img className="profile-icon" src={faceImg} alt="" />
                   <div>{emailMe.name}</div>
                 </div>
-              </Link>
+              </a>
             )}
           </div>
         </div>
