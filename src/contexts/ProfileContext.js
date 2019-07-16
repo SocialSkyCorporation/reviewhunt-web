@@ -9,6 +9,7 @@ const { Provider, Consumer } = ProfileContext;
 class ProfileProvider extends React.Component {
   state = {
     tabIndex: 0,
+    campaignId: null,
     editProfile: false
   };
 
@@ -16,6 +17,7 @@ class ProfileProvider extends React.Component {
     const query = getParams(window.location);
     if (!_.isEmpty(query)) {
       await this.setState({ ...query });
+      console.log("query updated", query);
       this.updateLocation();
     }
   }
@@ -30,12 +32,18 @@ class ProfileProvider extends React.Component {
     this.updateLocation();
   };
 
+  setCampaignId = async campaignId => {
+    await this.setState({ campaignId });
+    this.updateLocation();
+  }
+
   render() {
     return (
       <Provider
         value={{
           ...this.state,
           setTabIndex: this.setTabIndex,
+          setCampaignId: this.setCampaignId,
           updateLocation: this.updateLocation
         }}
       >

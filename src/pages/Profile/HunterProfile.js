@@ -43,7 +43,6 @@ class HunterProfile extends Component {
   };
 
   componentDidMount() {
-    console.log("hunter mounted");
     const { tabIndex } = this.props.profileContext;
     const { fetchCampaigns } = this.props.hunterDashboardContext;
 
