@@ -22,7 +22,6 @@ const QuestGridItem = props => {
     total_bounty,
     bounty_left
   } = data;
-  console.log(data);
 
   let percentLeft =
     total_bounty > 0

@@ -8,7 +8,8 @@
   margin: 13px;
 
   @include responsive(mobile) {
-    width: 90vw;
+    min-width: 80vw;
+    margin: 13px 0px;
   }
 
   & > div {

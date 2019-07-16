@@ -37,6 +37,11 @@
     flex-direction: row;
     margin-top: 18px;
 
+    @include responsive(mobile) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
     img {
       width: 50px;
       height: 50px;
@@ -71,6 +76,10 @@
     .stat-item {
       &:last-child {
         margin-left: 64px;
+    @include responsive(mobile) {
+      margin-left: 0px;
+      margin-top: 40px;
+    }
       }
     }
 
@@ -105,12 +114,12 @@
     padding: 60px 128px;
 
     @include responsive(mobile) {
-      padding: 60px 1.5rem;
+      padding: 60px 24px;
     }
 
     @include responsive(tablet) {
-      padding-left: 80px;
-      padding-right: 80px;
+      padding-left: 40px;
+      padding-right: 40px;
     }
 
     @include responsive(bigscreen) {
@@ -119,14 +128,28 @@
     }
   }
 
+  .grid-dropdown {
+    margin-left: 26px;
+    margin-bottom: 20px;
+    
+    @include responsive(tablet) {
+      margin-left: 16px;
+    }
+
+    @include responsive(mobile) {
+      margin-left: 0px;
+    }
+  }
+
   .grid-content {
-    // max-width: 1172px;
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
     margin-left: 26px;
-    // width: 100%;
+    @include responsive(tablet) {
+      margin-left: 0px;
+    }
   }
 
   .call-to-action {
