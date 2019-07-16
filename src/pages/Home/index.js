@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { Select } from "antd";
-import {Link} from 'react-router-dom';
+import { Link } from "react-router-dom";
 import imgMoney from "assets/images/money-circle-black.svg";
 import imgHunter from "assets/images/hunter-circle-black.svg";
 import QuestGridItem from "components/QuestGridItem";
@@ -33,14 +33,14 @@ export default () => {
             </Trans>
           </h2>
           <Link to="/about">
-          <SimpleButton
-            text={t("home.learn_more")}
-            style={{
-              marginTop: 20,
-              marginBottom: 16,
-              maxWidth: 160
-            }}
-          />
+            <SimpleButton
+              text={t("home.learn_more")}
+              style={{
+                marginTop: 20,
+                marginBottom: 16,
+                maxWidth: 160
+              }}
+            />
           </Link>
 
           <div className="stat-container">
@@ -80,25 +80,28 @@ export default () => {
 
   const content = () => {
     return (
-      <div className="padded-container">
-        <Select defaultValue={t("home.for_you")} style={{ marginBottom: 20 }} />
+      <div className="grid-wrapper">
+        <Select
+          defaultValue={t("home.for_you")}
+          style={{ marginBottom: 20, marginLeft: 40 }}
+        />
+        <div className="grid-content">
+          {fetchingCampaigns && (
+            <>
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+              <ContentLoader />
+            </>
+          )}
+          {campaigns.map((campaign, index) => (
+            <QuestGridItem key={index} data={campaign} />
+          ))}
+          <div className="empty-grid-item"/>
+          <div className="empty-grid-item"/>
 
-        <div className="grid-wrapper">
-          <div className="grid-content">
-            {fetchingCampaigns && (
-              <>
-                <ContentLoader />
-                <ContentLoader />
-                <ContentLoader />
-                <ContentLoader />
-                <ContentLoader />
-                <ContentLoader />
-              </>
-            )}
-            {campaigns.map((campaign, index) => (
-              <QuestGridItem key={index} data={campaign} />
-            ))}
-          </div>
         </div>
       </div>
     );
@@ -106,7 +109,7 @@ export default () => {
 
   const callToAction = () => {
     return (
-      <div className="padded-container call-to-action primary-gradient">
+      <div className="padded-container call-to-action primary-gradient col-on-tablet">
         <div>
           <img className="logo-circle" src={logoCircle} />
           <div className="call-to-action-title text-black">

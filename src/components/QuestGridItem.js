@@ -16,11 +16,13 @@ const QuestGridItem = props => {
     thumbnails,
     quest_count,
     product_name,
+    product_type,
     short_description,
     current_participant_count,
     total_bounty,
     bounty_left
   } = data;
+  console.log(data);
 
   let percentLeft =
     total_bounty > 0
@@ -37,25 +39,30 @@ const QuestGridItem = props => {
         setCurrentCampaign(data);
       }}
       to={`/campaigns/${id}`}
+      className="quest-grid-item"
     >
-      <div className="quest-grid-item">
+      <div>
         <div className="quest-badge">
           <p>{percentLeft}% Reward Left</p>
         </div>
 
-        <img
-          className="top-container"
-          src={thumbnails && thumbnails["x2"]}
-          alt=""
-        />
+        <div className="top-container">
+          <img className="thumbnail" src={thumbnails && thumbnails["x2"]} alt="" />
+        </div>
 
         <ProgressBar height={10} progress={20} dark />
 
         <div className="bottom-container">
           <div className="text-container">
-          <div className="row-align-center">
-            <h1 className="title">{product_name}</h1>
-            <div className="category-badge">App</div>
+            <div className="row-align-center">
+              <h1 className="title">{product_name}</h1>
+              <div
+                className={`category-badge ${product_type
+                  .replace(" ", "")
+                  .toLowerCase()}`}
+              >
+                {product_type}
+              </div>
             </div>
             <p className="description two-lines">{short_description}</p>
           </div>
@@ -65,7 +72,8 @@ const QuestGridItem = props => {
               <img className="grid-item-icon" src={moneySvg} alt="" />
               <div className="bounty-text-container">
                 <div className="subheader text-black">
-                 {numberWithCommas(Number.parseInt(total_bounty))} <span>HUNT</span>
+                  {numberWithCommas(Number.parseInt(total_bounty))}{" "}
+                  <span>HUNT</span>
                 </div>
                 <div className="subtext text-grey">Total Bounty Fund</div>
               </div>

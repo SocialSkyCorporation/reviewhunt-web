@@ -99,22 +99,34 @@
     display: inline;
   }
 
-
   .grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 60px 128px;
+
+    @include responsive(mobile) {
+      padding: 60px 1.5rem;
+    }
+
+    @include responsive(tablet) {
+      padding-left: 80px;
+      padding-right: 80px;
+    }
+
+    @include responsive(bigscreen) {
+      padding-left: calc((100% - 1172px) / 2);
+      padding-right: calc((100% - 1172px) / 2);
+    }
   }
 
   .grid-content {
-    display: grid;
-    align-self: center;
-    margin: auto;
-    grid-template-columns: repeat(auto-fill, minmax(356px, 1fr));
-    grid-column-gap: 26px;
-    grid-row-gap: 26px;
-    background-color: #fff;
-
-    @include responsive(tablet) {
-      justify-content: center;
-    }
+    // max-width: 1172px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    margin-left: 26px;
+    // width: 100%;
   }
 
   .call-to-action {

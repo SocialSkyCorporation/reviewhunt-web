@@ -140,8 +140,17 @@ hr {
 .padded-container {
   padding: 60px 160px;
 
+  &.home-grid {
+    padding: 60px 102px;
+  }
+
   @include responsive(mobile) {
     padding: 60px 1.5rem;
+  }
+
+  @include responsive(tablet) {
+    padding-left: 80px;
+    padding-right: 80px;
   }
 
   @include responsive(bigscreen) {
@@ -736,6 +745,15 @@ hr {
   flex: 1;
 
   @include responsive(mobile) {
+    flex-direction: column;
+  }
+}
+
+.col-on-tablet {
+  display: flex;
+  flex: 1;
+
+  @include responsive(tablet) {
     flex-direction: column;
   }
 }
