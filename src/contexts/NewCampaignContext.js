@@ -65,8 +65,9 @@ const initialState = {
   currencyInfo: {},
   fetchingEstimate: false,
   fetchingCurrency: false,
-  activeKeys: [],
-  loading: false
+  activeKeys: ["1"],
+  loading: false,
+  formDirty: false
 };
 
 class NewCampaignProvider extends Component {
@@ -363,14 +364,14 @@ class NewCampaignProvider extends Component {
     const { campaignInfo } = this.state;
     const infoClone = _.clone(campaignInfo);
     infoClone[key] = value;
-    this.setState({ campaignInfo: infoClone });
+    this.setState({ campaignInfo: infoClone, formDirty: true });
   };
 
   updateStateSingleQuest = async (index, key, value) => {
     const { quests } = this.state;
     const questsClone = _.clone(quests);
     questsClone[index][key] = value;
-    await this.setState({ quests: questsClone });
+    await this.setState({ quests: questsClone, formDirty: true });
   };
 
   updateReviewAndBuzz = (type, e) => {
@@ -390,7 +391,7 @@ class NewCampaignProvider extends Component {
           1
         );
       }
-      this.setState({ questReview: reviewClone });
+      this.setState({ questReview: reviewClone, formDirty: true });
     } else if (type === "buzz") {
       if (e.target.checked) {
         buzzClone["allowed_channels"] = buzzClone["allowed_channels"].concat(
@@ -402,7 +403,7 @@ class NewCampaignProvider extends Component {
           1
         );
       }
-      this.setState({ questBuzz: buzzClone });
+      this.setState({ questBuzz: buzzClone, formDirty: true });
     }
   };
 
@@ -541,7 +542,6 @@ class NewCampaignProvider extends Component {
       .filter(filterGeneralQuests)
       .sort(questSortFunction);
 
-
     try {
       this.setState({ loading: true });
 
@@ -579,7 +579,7 @@ class NewCampaignProvider extends Component {
       this.setStep(STEP_REVIEW_BUZZ);
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
-    } 
+    }
   };
 
   render() {

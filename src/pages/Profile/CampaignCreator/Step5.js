@@ -21,7 +21,7 @@ const Step5 = ({}) => {
           <Icon type="left" />
           <div>Back</div>
         </div>
-        <SimpleButton text={"Proceed to Checkout"} onClick={() => setStep(STEP_CHECKOUT)}/>
+        <SimpleButton text={"Proceed to Checkout"} onClick={() => setStep(STEP_CHECKOUT)} style={{minWidth: 200}}/>
       </div>
     </div>
   );

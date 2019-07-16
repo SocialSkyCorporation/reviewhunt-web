@@ -1,5 +1,5 @@
 import React, { useContext, Component } from "react";
-import { Select } from "antd";
+import { Select, notification } from "antd";
 import TabItem, { TabSubItem } from "../TabItem";
 import QuestItem from "../QuestItem";
 import CurrentQuest from "../CurrentQuest";
@@ -11,6 +11,7 @@ import SimpleButton from "components/SimpleButton";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { withTranslation } from "react-i18next";
 import CampaignCreator from "../CampaignCreator";
+import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 import {
   withAuthContext,
   withNewCampaignContext,
@@ -49,6 +50,34 @@ class Profile extends Component {
   renderBanner() {
     const { t } = this.props;
     const { emailMe } = this.props.authContext;
+    const { campaigns } = emailMe;
+    const { resetState } = this.props.newCampaignContext;
+    const { setCurrentCampaign } = this.props.campaignContext;
+    const {
+      tabIndex,
+      campaignId,
+      setCampaignId,
+      setTabIndex
+    } = this.props.profileContext;
+
+    let numberOfQuests = 0;
+    let numberOfCampaigns = campaigns.length;
+    let numberOfHunters = 0;
+    let reviewCreditSpent = 0;
+
+    campaigns.forEach(
+      ({
+        quests_count,
+        current_participant_count,
+        total_bounty,
+        bounty_left
+      }) => {
+        numberOfQuests += quests_count;
+        numberOfHunters += current_participant_count;
+        reviewCreditSpent += total_bounty - bounty_left;
+      }
+    );
+
     return (
       <div className="maker-profile padded-container primary-gradient banner-container">
         <div className="banner-header">{t("profile.my_account")}</div>
@@ -57,17 +86,26 @@ class Profile extends Component {
 
         <div className="maker-stat-summary text-black">
           <div>
-            <b>10</b> quests ran from <b>2</b> review campaigns
+            <b>{numberOfQuests}</b> quests ran from <b>{numberOfCampaigns}</b>{" "}
+            review campaigns
           </div>
           <div>
-            <b>2,205</b> hunters have joined your quest
+            <b>{numberOfHunters}</b> hunters have joined your quest
           </div>
           <div>
-            A total of <b>$20,500</b> review credit spent.
+            A total of <b>${numberWithCommas(reviewCreditSpent)}</b> review
+            credit spent.
           </div>
         </div>
 
         <SimpleButton
+          onClick={() => {
+            if (tabIndex == TAB_CREATE_CAMPAIGN) return;
+            resetState();
+            setTabIndex(TAB_CREATE_CAMPAIGN);
+            setCurrentCampaign(null);
+            setCampaignId(null);
+          }}
           text="CREATE CAMPAIGN"
           style={{ marginTop: 20, maxWidth: 160 }}
         />
@@ -94,7 +132,11 @@ class Profile extends Component {
     const { t } = this.props;
     const { logout, emailMe } = this.props.authContext;
     const { step, setStep } = this.props.newCampaignContext;
-    const { fetchCampaign } = this.props.campaignContext;
+    const {
+      setCurrentCampaign,
+      currentCampaign,
+      fetchCampaign
+    } = this.props.campaignContext;
     const { resetState } = this.props.newCampaignContext;
     const { campaigns } = emailMe;
 
@@ -107,24 +149,33 @@ class Profile extends Component {
       "Checkout"
     ];
 
+    const isNewCampaign =
+      tabIndex == TAB_CREATE_CAMPAIGN &&
+      this.props.newCampaignContext.campaignId === null;
+
+    const editingCampaign =
+      tabIndex == TAB_CAMPAIGNS &&
+      currentCampaign &&
+      currentCampaign.status === "draft";
+
+    const shouldShowSubItems = isNewCampaign || editingCampaign;
+
     return (
       <div className="tabs">
         <TabItem
           text="Create Campaign"
           selected={tabIndex == TAB_CREATE_CAMPAIGN}
-          style={
-            tabIndex == TAB_CREATE_CAMPAIGN || campaignId
-              ? { marginBottom: 0 }
-              : {}
-          }
+          style={shouldShowSubItems ? { marginBottom: 0 } : {}}
           onClick={() => {
+            if (tabIndex == TAB_CREATE_CAMPAIGN) return;
             resetState();
             setTabIndex(TAB_CREATE_CAMPAIGN);
+            setCurrentCampaign(null);
             setCampaignId(null);
           }}
         />
 
-        {(tabIndex == TAB_CREATE_CAMPAIGN || campaignId !== null) && (
+        {shouldShowSubItems && (
           <div>
             {steps.map((s, index) => (
               <TabSubItem
@@ -136,6 +187,17 @@ class Profile extends Component {
                     index === step)
                 }
                 onClick={() => {
+                  if (
+                    !currentCampaign &&
+                    !this.props.newCampaignContext.campaignId
+                  ) {
+                    notification["warn"]({
+                      message:
+                        'You must complete the "Product Description" tab before continuing.'
+                    });
+
+                    return;
+                  }
                   setStep(index);
                   if (!campaignId) {
                     setTabIndex(TAB_CREATE_CAMPAIGN);
@@ -156,9 +218,7 @@ class Profile extends Component {
           {campaigns.map((campaign, index) => (
             <TabSubItem
               key={campaign.id}
-              selected={
-                tabIndex == TAB_CAMPAIGNS && campaign.id == campaignId
-              }
+              selected={tabIndex == TAB_CAMPAIGNS && campaign.id == campaignId}
               onClick={() => {
                 fetchCampaign(campaign.id);
                 setTabIndex(TAB_CAMPAIGNS);
@@ -239,7 +299,7 @@ class Profile extends Component {
     const { status } = currentCampaign;
 
     //TEST
-    if (status === "running") {
+    if (true || status === "running") {
       return (
         <CampaignDashboard
           onEditDescClicked={() => {
