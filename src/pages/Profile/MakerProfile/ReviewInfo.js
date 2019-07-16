@@ -11,6 +11,8 @@ import HistoryMessage from "../HistoryMessage";
 import FullWidthButton from "components/FullWidthButton";
 import { Dropdown, TextInput, Screenshots } from "components/FormTypes";
 import HunterDashboardContext from "contexts/HunterDashboardContext";
+import appstoreReviewImg from 'assets/images/apple-review@2x.jpg';
+import playstoreReviewImg from 'assets/images/google-review@2x.jpg';
 
 const ReviewInfo = ({ quest }) => {
   const { id } = quest;
@@ -97,7 +99,7 @@ const ReviewInfo = ({ quest }) => {
 
           <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
           <div>
-            <img className="info-quest-image" src={image} alt="" />
+            <img className="info-quest-image" src={appstoreReviewImg} alt="" />
           </div>
 
           <FullWidthButton
@@ -141,7 +143,7 @@ const ReviewInfo = ({ quest }) => {
 
           <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
           <div>
-            <img className="info-quest-image" src={image} alt="" />
+            <img className="info-quest-image" src={playstoreReviewImg} alt="" />
           </div>
 
           <FullWidthButton
