@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Input, Icon } from "antd";
+import { Input, Icon, Select } from "antd";
 import PropTypes from "prop-types";
 import {
   TextInput,
@@ -12,6 +12,9 @@ import NewCampaignContext from "contexts/NewCampaignContext";
 import websiteImg from "assets/images/website.svg";
 import appstoreImg from "assets/images/appstore.svg";
 import playstoreImg from "assets/images/playstore.svg";
+import { productTypes } from "utils/constants";
+
+const { Option } = Select;
 
 const Step1 = ({}) => {
   const { createCampaign, campaignInfo, updateCampaignInfo } = useContext(
@@ -19,6 +22,7 @@ const Step1 = ({}) => {
   );
 
   const {
+    product_type,
     product_name,
     short_description,
     description,
@@ -32,9 +36,14 @@ const Step1 = ({}) => {
       <div className="step-title text-black">PRODUCT DESCRIPTION</div>
       <Dropdown
         title="Product Category"
-        value="App"
+        value={product_type}
+        onChange={value => updateCampaignInfo("product_type", value)}
         style={{ marginTop: 5 }}
-      ></Dropdown>
+      >
+        {productTypes.map(type => (
+          <Option key={type}>{type}</Option>
+        ))}
+      </Dropdown>
       <TextInput
         title={"Product Name"}
         value={product_name}

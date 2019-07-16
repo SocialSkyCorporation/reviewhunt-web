@@ -24,6 +24,7 @@ const initialState = {
   step: STEP_CREATE_CAMPAIGN,
   // step: STEP_CREATE_CAMPAIGN,
   campaignInfo: {
+    product_type: "",
     product_name: "",
     short_description: "",
     description: "",
@@ -137,6 +138,7 @@ class NewCampaignProvider extends Component {
       notification["error"]({
         message: "At least 1 image needs to be provided"
       });
+      return;
     }
 
     await this.setState({ loading: true });

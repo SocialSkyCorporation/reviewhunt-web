@@ -60,7 +60,7 @@ export const TextInput = memo(
   ({ value: prevValue }, { value: nextValue }) => prevValue === nextValue
 );
 
-export const Dropdown = ({ title, value, children, style }) => {
+export const Dropdown = ({ title, value, children, style, onChange }) => {
   return (
     <div className="title-input-container">
       {title && (
@@ -70,6 +70,7 @@ export const Dropdown = ({ title, value, children, style }) => {
       )}
       <Select
         defaultValue={value}
+        onChange={onChange}
         className="value-container select gray-bg-select text-grey"
         style={style}
       >
