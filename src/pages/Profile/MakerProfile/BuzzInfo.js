@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { Icon, Modal } from "antd";
+import { Icon, Spin, Modal } from "antd";
 import backImg from "assets/images/back.svg";
 import clockImg from "assets/images/clock.svg";
 import SimpleButton from "components/SimpleButton";
@@ -42,14 +42,14 @@ const ChannelSubmissionItem = ({ image, text, onClick, registered }) => {
       <FullWidthButton
         text={registered ? "Submit" : "Register"}
         onClick={() => {
-          if(!registered) {
+          if (!registered) {
             //redirect to onboarding
             return;
           }
-          onClick()
+          onClick();
         }}
         inverse={!registered}
-        style={registered ? {} : {borderTop: 'solid 1px #e5e5e5'}}
+        style={registered ? {} : { borderTop: "solid 1px #e5e5e5" }}
       />
     </div>
   );
@@ -70,10 +70,11 @@ const BuzzInfo = ({ quest }) => {
     image
   } = quest;
 
-  const { submitQuest } = useContext(HunterDashboardContext);
+  const { updateState, submittingQuest, submitModalVisible, submitQuest } = useContext(
+    HunterDashboardContext
+  );
 
   const [submitChannel, setSubmitChannel] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
   const [proofImage, setProofImage] = useState([]);
   const [urlText, setUrlText] = useState("");
   return (
@@ -132,7 +133,7 @@ const BuzzInfo = ({ quest }) => {
           image={youtubeIcon}
           onClick={() => {
             setSubmitChannel("youtube");
-            setModalVisible(true);
+            updateState("submitModalVisible", true);
           }}
           registered={true}
         />
@@ -141,7 +142,7 @@ const BuzzInfo = ({ quest }) => {
           image={instagramIcon}
           onClick={() => {
             setSubmitChannel("instagram");
-            setModalVisible(true);
+            updateState("submitModalVisible", true);
           }}
         />
         <ChannelSubmissionItem
@@ -149,7 +150,7 @@ const BuzzInfo = ({ quest }) => {
           image={twitterIcon}
           onClick={() => {
             setSubmitChannel("twitter");
-            setModalVisible(true);
+            updateState("submitModalVisible", true);
           }}
         />
         <ChannelSubmissionItem
@@ -157,7 +158,7 @@ const BuzzInfo = ({ quest }) => {
           image={steemIcon}
           onClick={() => {
             setSubmitChannel("steem");
-            setModalVisible(true);
+            updateState("submitModalVisible", true);
           }}
         />
         <ChannelSubmissionItem
@@ -165,7 +166,7 @@ const BuzzInfo = ({ quest }) => {
           image={redditIcon}
           onClick={() => {
             setSubmitChannel("reddit");
-            setModalVisible(true);
+            updateState("submitModalVisible", true);
           }}
         />
         <ChannelSubmissionItem
@@ -173,7 +174,7 @@ const BuzzInfo = ({ quest }) => {
           image={twitchIcon}
           onClick={() => {
             setSubmitChannel("twitch");
-            setModalVisible(true);
+            updateState("submitModalVisible", true);
           }}
         />
         <ChannelSubmissionItem
@@ -181,7 +182,7 @@ const BuzzInfo = ({ quest }) => {
           image={mediumIcon}
           onClick={() => {
             setSubmitChannel("medium");
-            setModalVisible(true);
+            updateState("submitModalVisible", true);
           }}
         />
         <ChannelSubmissionItem
@@ -189,20 +190,21 @@ const BuzzInfo = ({ quest }) => {
           image={otherIcon}
           onClick={() => {
             setSubmitChannel("other");
-            setModalVisible(true);
+            updateState("submitModalVisible", true);
           }}
         />
       </div>
 
       <Modal
         maskClosable={false}
-        onCancel={() => setModalVisible(false)}
-        visible={modalVisible}
+        onCancel={() => updateState("submitModalVisible", false)}
+        visible={submitModalVisible}
         footer={null}
         style={{ width: 600 }}
         bodyStyle={{ padding: 60 }}
         wrapClassName="profile-page"
       >
+        <Spin spinning={submittingQuest} tip="Loading...">
         <div className="submission-modal">
           <div className="text-black submission-modal-title uppercase">
             Submit {submitChannel} Proof
@@ -278,6 +280,7 @@ const BuzzInfo = ({ quest }) => {
             style={{ marginTop: 30 }}
           />
         </div>
+        </Spin>
       </Modal>
     </div>
   );

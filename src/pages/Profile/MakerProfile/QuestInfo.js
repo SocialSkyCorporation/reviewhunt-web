@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { Icon, Modal } from "antd";
+import { Icon, Spin, Modal } from "antd";
 import backImg from "assets/images/back.svg";
 import clockImg from "assets/images/clock.svg";
 import SimpleButton from "components/SimpleButton";
@@ -24,11 +24,10 @@ const QuestInfo = ({ quest }) => {
   let tag =
     bounty_max === bounty_base ? bounty_base : `${bounty_base} - ${bounty_max}`;
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [proofImage, setProofImage] = useState([]);
   const [proofText, setProofText] = useState("");
 
-  const { submitQuest } = useContext(HunterDashboardContext);
+  const { updateState, submittingQuest, submitModalVisible, submitQuest } = useContext(HunterDashboardContext);
 
   return (
     <div>
@@ -75,17 +74,18 @@ const QuestInfo = ({ quest }) => {
       <img className="info-quest-image" src={image} alt="" />
       <FullWidthButton
         text="SUBMIT YOUR SCREENSHOT"
-        onClick={() => setModalVisible(true)}
+        onClick={() => updateState("submitModalVisible", true)}
       />
       <Modal
         maskClosable={false}
-        onCancel={() => setModalVisible(false)}
-        visible={modalVisible}
+        onCancel={() => updateState("submitModalVisible", false)}
+        visible={submitModalVisible}
         footer={null}
         style={{ width: 600 }}
         bodyStyle={{ padding: 60 }}
         wrapClassName="profile-page"
       >
+        <Spin spinning={submittingQuest} tip="Loading...">
         <div className="submission-modal">
           <div className="text-black submission-modal-title uppercase">
             Submit Quest Proof
@@ -143,6 +143,7 @@ const QuestInfo = ({ quest }) => {
             style={{ marginTop: 30 }}
           />
         </div>
+        </Spin>
       </Modal>
     </div>
   );

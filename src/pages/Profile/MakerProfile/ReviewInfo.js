@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { Icon, Modal } from "antd";
+import { Icon, Spin, Modal } from "antd";
 import backImg from "assets/images/back.svg";
 import clockImg from "assets/images/clock.svg";
 import appstoreLogo from "assets/images/appstore-logo.svg";
@@ -11,8 +11,8 @@ import HistoryMessage from "../HistoryMessage";
 import FullWidthButton from "components/FullWidthButton";
 import { Dropdown, TextInput, Screenshots } from "components/FormTypes";
 import HunterDashboardContext from "contexts/HunterDashboardContext";
-import appstoreReviewImg from 'assets/images/apple-review@2x.jpg';
-import playstoreReviewImg from 'assets/images/google-review@2x.jpg';
+import appstoreReviewImg from "assets/images/apple-review@2x.jpg";
+import playstoreReviewImg from "assets/images/google-review@2x.jpg";
 
 const ReviewInfo = ({ quest }) => {
   const { id } = quest;
@@ -26,12 +26,16 @@ const ReviewInfo = ({ quest }) => {
     image
   } = quest;
 
-  const { submitQuest } = useContext(HunterDashboardContext);
+  const {
+    updateState,
+    submittingQuest,
+    submitModalVisible,
+    submitQuest
+  } = useContext(HunterDashboardContext);
 
   const hasPlaystore = allowed_channels.includes("playstore");
   const hasAppstore = allowed_channels.includes("appstore");
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [proofImage, setProofImage] = useState([]);
   const [proofText, setProofText] = useState("");
   const [submissionType, setSubmissionType] = useState("");
@@ -106,7 +110,7 @@ const ReviewInfo = ({ quest }) => {
             icon={<img src={appstoreLogo} />}
             onClick={() => {
               setSubmissionType("appstore");
-              setModalVisible(true);
+              updateState("submitModalVisible", true);
             }}
             text="SUBMIT APP STORE REVIEW"
             style={{ marginTop: 16 }}
@@ -150,7 +154,7 @@ const ReviewInfo = ({ quest }) => {
             icon={<img src={playstoreLogo} />}
             onClick={() => {
               setSubmissionType("playstore");
-              setModalVisible(true);
+              updateState("submitModalVisible", true);
             }}
             text="SUBMIT PLAY STORE REVIEW"
             style={{ marginTop: 16 }}
@@ -167,91 +171,96 @@ const ReviewInfo = ({ quest }) => {
 
       <Modal
         maskClosable={false}
-        onCancel={() => setModalVisible(false)}
-        visible={modalVisible}
+        onCancel={() => updateState("submitModalVisible", false)}
+        visible={submitModalVisible}
         footer={null}
         style={{ width: 600 }}
         bodyStyle={{ padding: 60 }}
         wrapClassName="profile-page"
       >
-        <div className="submission-modal">
-          <div className="text-black submission-modal-title uppercase">
-            Submit {submissionType === "appstore" ? "App Store" : "Play Store"}{" "}
-            Review
-          </div>
+        <Spin spinning={submittingQuest} tip="Loading...">
+          <div className="submission-modal">
+            <div className="text-black submission-modal-title uppercase">
+              Submit{" "}
+              {submissionType === "appstore" ? "App Store" : "Play Store"}{" "}
+              Review
+            </div>
 
-          <div className="row-space-between submission-modal-header">
-            <div className="text-small text-black uppercase ">
-              Upload Screenshot
+            <div className="row-space-between submission-modal-header">
+              <div className="text-small text-black uppercase ">
+                Upload Screenshot
+              </div>
+              <div className="text-small text-grey">Max 5 MB</div>
             </div>
-            <div className="text-small text-grey">Max 5 MB</div>
-          </div>
-          <Screenshots
-            single
-            images={proofImage}
-            onChange={images => setProofImage(images)}
-          />
+            <Screenshots
+              single
+              images={proofImage}
+              onChange={images => setProofImage(images)}
+            />
 
-          <div className="text-small text-black uppercase submission-modal-header">
-            Guidelines
+            <div className="text-small text-black uppercase submission-modal-header">
+              Guidelines
+            </div>
+            <div className="text-small text-grey submission-modal-desc submission-modal-guidelines">
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  ONLY the screenshot page that is described above will be
+                  accepted. If you take your proof in other ways, your
+                  submission will be rejected.
+                </div>
+              </div>
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  Your review of this app must be shown FULLY, and should be
+                  well positioned in the middle of your screenshot. If some part
+                  of your review is cut or missing, it will be rejected.
+                </div>
+              </div>
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  Please make sure your screenshot has a good resolution that
+                  enables us to clearly identify all necessary information from
+                  your screenshot. Too low resolution image will be rejected.
+                </div>
+              </div>
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  Do not cut of your screenshot. Please make sure you captured a
+                  FULL screenshot on your device.
+                </div>
+              </div>
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  It is NOT possible to edit your submission once you’ve made,
+                  so please make sure that you have achieved all the guidelines
+                  addressed above.
+                </div>
+              </div>
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  Upload both App Store and Play Store reviews at once if you’ve
+                  performed via the both channels. You are NOT able to add more
+                  reviews once you’ve made your submission.
+                </div>
+              </div>
+            </div>
+            <FullWidthButton
+              onClick={() =>
+                submitQuest(quest, submissionType, null, proofImage)
+              }
+              text={`SUBMIT ${
+                submissionType === "appstore" ? "APP STORE" : "PLAY STORE"
+              } REVIEW`}
+              style={{ marginTop: 30 }}
+            />
           </div>
-          <div className="text-small text-grey submission-modal-desc submission-modal-guidelines">
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                ONLY the screenshot page that is described above will be
-                accepted. If you take your proof in other ways, your submission
-                will be rejected.
-              </div>
-            </div>
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                Your review of this app must be shown FULLY, and should be well
-                positioned in the middle of your screenshot. If some part of
-                your review is cut or missing, it will be rejected.
-              </div>
-            </div>
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                Please make sure your screenshot has a good resolution that
-                enables us to clearly identify all necessary information from
-                your screenshot. Too low resolution image will be rejected.
-              </div>
-            </div>
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                Do not cut of your screenshot. Please make sure you captured a
-                FULL screenshot on your device.
-              </div>
-            </div>
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                It is NOT possible to edit your submission once you’ve made, so
-                please make sure that you have achieved all the guidelines
-                addressed above.
-              </div>
-            </div>
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                Upload both App Store and Play Store reviews at once if you’ve
-                performed via the both channels. You are NOT able to add more
-                reviews once you’ve made your submission.
-              </div>
-            </div>
-          </div>
-          <FullWidthButton
-            onClick={() => submitQuest(quest, submissionType, null, proofImage)}
-            text={`SUBMIT ${
-              submissionType === "appstore" ? "APP STORE" : "PLAY STORE"
-            } REVIEW`}
-            style={{ marginTop: 30 }}
-          />
-        </div>
+        </Spin>
       </Modal>
     </div>
   );

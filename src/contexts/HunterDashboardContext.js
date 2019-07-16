@@ -14,8 +14,13 @@ class HunterDashboardProvider extends React.Component {
     campaigns: [],
     currentCampaign: null,
     fetchingQuest: false,
-    submittingQuest: false
+    submittingQuest: false,
+    submitModalVisible: false
   };
+
+  updateState = (key, value) => {
+    this.setState({[key]: value});
+  }
 
   fetchCampaigns = async () => {
     const { fetchingQuest } = this.state;
@@ -68,8 +73,7 @@ class HunterDashboardProvider extends React.Component {
         }
       })
 
-      this.setState({currentCampaign: campaignCopy});
-      Modal.destroyAll();
+      this.setState({currentCampaign: campaignCopy, submitModalVisible: false});
     } catch (e) {
       notification["error"]({
         message: extractErrorMessage(e)
@@ -90,7 +94,8 @@ class HunterDashboardProvider extends React.Component {
           ...this.state,
           fetchCampaigns: this.fetchCampaigns,
           setCurrentCampaign: this.setCurrentCampaign,
-          submitQuest: this.submitQuest
+          submitQuest: this.submitQuest,
+          updateState: this.updateState
         }}
       >
         {this.props.children}
