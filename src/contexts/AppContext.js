@@ -1,19 +1,37 @@
 import React from "react";
+import { notification } from "antd";
+import api from "utils/api";
+import { extractErrorMessage } from "utils/errorMessage";
+
 const AppContext = React.createContext();
 const { Provider, Consumer } = AppContext;
 
 class AppProvider extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    huntPerUsd: 0
+  };
 
-    this.state = {
-      isLoading: false,
-    };
+  componentDidMount() {
+    this.fetchHuntPrice();
+    this.fetchInterval = setInterval(() => {
+      this.fetchHuntPrice();
+    }, 1000 * 60);
   }
 
-  componentWillMount() {}
+  componentWillUnmount() {
+    clearInterval(this.fetchInterval);
+  }
 
-  componentWillUnmount() {}
+  fetchHuntPrice = async () => {
+    try {
+      const result = await api.get("/prices.json");
+      const { price_hunt } = result;
+      this.setState({ huntPerUsd: price_hunt });
+    } catch (e) {
+      notification["error"]({ message: extractErrorMessage(e) });
+      clearInterval(this.fetchInterval);
+    }
+  };
 
   render() {
     return (
