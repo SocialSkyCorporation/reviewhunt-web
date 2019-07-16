@@ -298,8 +298,7 @@ class Profile extends Component {
 
     const { status } = currentCampaign;
 
-    //TEST
-    if (true || status === "running") {
+    if (status === "paid") {
       return (
         <CampaignDashboard
           onEditDescClicked={() => {
@@ -313,7 +312,7 @@ class Profile extends Component {
           submittedQuests={submittedQuests}
         />
       );
-    } else {
+    } else if (status === "draft") {
       return <CampaignCreator data={currentCampaign} />;
     }
   }

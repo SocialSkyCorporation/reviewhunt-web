@@ -117,6 +117,8 @@ class NewCampaignProvider extends Component {
       urls
     };
 
+    quests.forEach(q => q.saved = true);
+
     this.setState({
       ...campaign,
       campaignInfo,
@@ -243,7 +245,7 @@ class NewCampaignProvider extends Component {
 
     const formData = new FormData();
     let validated =
-      form.image && typeof form.image !== "string"
+      form.image && typeof form.image === "object"
         ? validateImage(form.image)
         : true;
 
