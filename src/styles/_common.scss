@@ -140,17 +140,13 @@ hr {
 .padded-container {
   padding: 60px 160px;
 
-  &.home-grid {
-    padding: 60px 102px;
-  }
-
   @include responsive(mobile) {
     padding: 60px 1.5rem;
   }
 
   @include responsive(tablet) {
-    padding-left: 80px;
-    padding-right: 80px;
+    padding-left: 60px;
+    padding-right: 60px;
   }
 
   @include responsive(bigscreen) {

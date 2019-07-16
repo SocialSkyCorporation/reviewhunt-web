@@ -4,23 +4,25 @@ import leftArrowImg from "assets/images/left-circle.svg";
 import rightArrowImg from "assets/images/right-circle.svg";
 
 const QuestCarouselItem = ({
-  bounty_amount,
+  bounty_base,
+  bounty_max,
   index,
   image,
   description,
   criteria,
   title
 }) => {
+  const bounty = bounty_max !== bounty_base ? `$${bounty_base} - $${bounty_max}` : `$${bounty_max}`;
   return (
     <div className="quest-carousel-item">
       <div className="row-align-center row-space-between">
         <div>
           <div className="quest-item-id text-black">QUEST {index + 1}</div>
           <div className="quest-item-title text-black">{title}</div>
-          <div className="bounty-tag primary-gradient text-black">${bounty_amount}</div>
+          <div className="bounty-tag primary-gradient text-black">{bounty}</div>
         </div>
       </div>
-      <div className="quest-description-container">
+      <div className="row-space-between quest-description-container">
         <div className="quest-description text-grey text-small">{description}</div>
         <img className="quest-image" src={image} alt="" />
       </div>
@@ -42,7 +44,7 @@ const QuestCarousel = props => {
 
   const settings = {
     className: "slider variable-width",
-    adaptiveHeight: true,
+    adaptiveHeight: false,
     dots: false,
     infinite: false,
     arrows: false,

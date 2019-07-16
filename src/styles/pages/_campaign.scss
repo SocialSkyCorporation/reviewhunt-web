@@ -159,7 +159,7 @@
     .carousel-container {
       position: relative;
       margin: 20px 0px 30px;
-      height: 395px;
+      height: 480px;
       @include responsive(mobile) {
         margin: 20px 0px 80px;
       }
@@ -243,7 +243,7 @@
     .screenshot-img {
       max-width: 500px;
       margin-right: 20px;
-      height: 368px;
+      height: 480px;
       object-fit: contain;
 
       @include responsive(mobile) {
@@ -259,9 +259,10 @@
     }
 
     .quest-carousel-item {
+      position: relative;
       padding: 30px;
-      width: 464px;
-      height: 395px;
+      width: 600px;
+      height: 480px;
       border: solid 1px #e5e5e5;
       margin-right: 10px;
 
@@ -307,9 +308,8 @@
         }
 
         .quest-image {
-          width: auto;
-          max-width: 300px;
-          height: auto;
+          width: 202px;
+          max-height: 300px;
           margin-left: 30px;
           object-fit: contain;
 

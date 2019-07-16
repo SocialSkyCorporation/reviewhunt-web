@@ -15,7 +15,7 @@ class Carousel extends Component {
   render() {
     const settings = {
       className: "slider variable-width",
-      adaptiveHeight: true,
+      adaptiveHeight: false,
       dots: false,
       arrows: false,
       infinite: false,
