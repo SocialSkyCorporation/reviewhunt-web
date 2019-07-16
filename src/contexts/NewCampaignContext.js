@@ -43,7 +43,7 @@ const initialState = {
       criteria: "",
       quest_type: "general",
       image: [],
-      bounty_amount: 0,
+      bounty_max: 0,
       saved: false
     }
   ],
@@ -86,6 +86,7 @@ class NewCampaignProvider extends Component {
   setCampaignData = campaign => {
     const { questReview, questBuzz } = this.state;
     const {
+      product_type,
       product_name,
       short_description,
       description,
@@ -111,6 +112,7 @@ class NewCampaignProvider extends Component {
 
     const campaignInfo = {
       ...initialState.campaignInfo,
+      product_type,
       product_name,
       short_description,
       description,
@@ -230,7 +232,7 @@ class NewCampaignProvider extends Component {
         const { id } = result;
         const questsClone = _.clone(quests);
         questsClone[index]["id"] = id;
-        questsClone[index]["value"] = form;
+        questsClone[index]["value"] = result;
         questsClone[index]["saved"] = true;
         this.setState({ loading: false, quests: questsClone });
       } catch (e) {

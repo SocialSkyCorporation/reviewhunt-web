@@ -111,22 +111,23 @@ export default props => {
 
   const banner = () => {
     const {
-      current_participant_count,
+      product_type,
       product_name,
       urls,
-      joined
+      joined,
     } = campaignInfo;
+
 
     return (
       <div className="padded-container banner-container primary-gradient">
         <div>
-          <div className="product-category">APP</div>
+          <div className="product-category">{product_type.toUpperCase()}</div>
           <div className="product-name">{product_name}</div>
           <div className="line" />
           <div className="product-users">
-            {t("product.hunters_on_quest")}: <b>{current_participant_count}</b>
+            {t("product.hunters_on_quest")}: <b>0</b>
             <br />
-            {t("product.total_bounty")}: <b>${0}</b>
+            Campaign will be closed in: <b>30 days</b>
           </div>
         </div>
 
