@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from "react";
+import { useBeforeunload } from 'react-beforeunload';
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -20,6 +21,8 @@ import _ from "lodash";
 export default props => {
   const { data } = props;
   const { step, loading, setCampaignData } = useContext(NewCampaignContext);
+  
+  useBeforeunload(event => event.preventDefault());
 
   useEffect(() => {
     //if data is passed, it means it's being edited
