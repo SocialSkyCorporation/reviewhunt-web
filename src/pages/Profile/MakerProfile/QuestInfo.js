@@ -13,6 +13,7 @@ import HunterDashboardContext from "contexts/HunterDashboardContext";
 const QuestInfo = ({ quest }) => {
   const { id } = quest;
   const {
+    quest_type,
     bounty_base,
     title,
     criteria,
@@ -31,7 +32,7 @@ const QuestInfo = ({ quest }) => {
 
   return (
     <div>
-      <div className="info-number text-black">QUEST {quest.quest_type}</div>
+      <div className="info-number text-black">QUEST {quest_type.replace(/\D/g, "")}</div>
       <div className="info-title text-black">{title}</div>
 
       <div className="quest-tag">Quest Bounty - ${tag}</div>

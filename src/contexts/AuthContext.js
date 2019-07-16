@@ -54,11 +54,9 @@ class AuthProvider extends React.Component {
 
     try {
       const steemToken = getToken("steemconnect");
-      console.log("steem token", steemToken);
       if (steemToken) {
         this.setState({ steemconnectLoading: true });
         const steemMe = await getSteemMe(steemToken);
-        console.log("steemMe", steemMe);
         await this.setState({ steemconnectLoading: false, steemMe });
       }
 

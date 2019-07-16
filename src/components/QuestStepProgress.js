@@ -7,7 +7,7 @@ import buzzImgGrey from "assets/images/buzz-grey.svg";
 import buzzImgWhite from "assets/images/buzz-white.svg";
 import approvedImg from "assets/images/approved.svg";
 import pendingImg from "assets/images/pending.svg";
-import {questSortFunction} from 'utils/helpers/campaignHelper';
+import { questSortFunction } from "utils/helpers/campaignHelper";
 
 const QuestStepProgress = props => {
   const {
@@ -20,6 +20,9 @@ const QuestStepProgress = props => {
   } = props;
   const [clickedIndex, setClickedIndex] = useState(currentStep);
 
+  let buzzShouldGlow = false;
+  let buzzFilled = false;
+
   return (
     <div
       className={`quest-step-container ${!ended && completed && "completed"}`}
@@ -27,26 +30,32 @@ const QuestStepProgress = props => {
     >
       {steps.sort(questSortFunction).map((step, index) => {
         const { quest_type, status } = step;
-        const isComplete = currentStep > index;
+        let isComplete = currentStep > index;
         const isClickable = status !== null || currentStep === index;
         const animationDisabled =
-          currentStep !== clickedIndex &&
-          clickedIndex === index &&
+          (status !== null ||
+            (currentStep !== clickedIndex && clickedIndex === index)) &&
           "animation-disabled";
-        const isCurrentQuest = index === currentStep || clickedIndex === index;
+        let isCurrentQuest = index === currentStep || clickedIndex === index;
         let toolTipText = "";
         let statusImg = null;
 
-        if(status === "pending") statusImg = pendingImg;
-        else if(status === "request_edit") statusImg = pendingImg;
-        else if(status === "approved") statusImg = approvedImg;
-        else if(status === "rejected") statusImg = pendingImg;
-
-
+        if (status === "pending") statusImg = pendingImg;
+        else if (status === "request_edit") statusImg = pendingImg;
+        else if (status === "approved") statusImg = approvedImg;
+        else if (status === "rejected") statusImg = pendingImg;
 
         if (quest_type === "review") toolTipText = "Leave a review";
         else if (quest_type === "buzz") toolTipText = "Create a Buzz";
         else toolTipText = "Quest " + (index + 1);
+
+        //current is review, next exists, and next is buzz
+        if (quest_type === "buzz") {
+          isComplete =
+            status !== null &&
+            steps[index - 1] &&
+            steps[index - 1]["quest_type"] === "review";
+        }
 
         return (
           <div className="step-container" key={index}>
@@ -102,7 +111,8 @@ const QuestStepProgress = props => {
                   )}
                   <img
                     className={`quest-step-icon ${(quest_type === "review" ||
-                      quest_type === "buzz") && "review"}`}
+                      quest_type === "buzz") &&
+                      "review"}`}
                     src={statusImg}
                     alt=""
                   />
@@ -111,7 +121,8 @@ const QuestStepProgress = props => {
             </Tooltip>
             {index !== steps.length - 1 && (
               <div
-                className={`step-divider ${currentStep > index && "complete"}`}
+                className={`step-divider ${(isComplete || isCurrentQuest) &&
+                  "complete"}`}
               />
             )}
           </div>
