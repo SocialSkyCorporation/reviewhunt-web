@@ -69,6 +69,13 @@
     margin: 0px 8px;
   }
 
+  .please-note-warning {
+    padding: 15px;
+    border: solid 1px #f5222d;
+    background-color: #fff1f0;
+    margin-top: 10px;
+  }
+
   .buzz-channel-item {
     position: relative;
     display: flex;
@@ -96,6 +103,12 @@
     .buzz-channel-icon {
       width: 30px;
       height: 30px;
+    }
+
+    .buzz-delete-icon {
+      width: 30px;
+      height: 30px;
+      margin-left: 15px;
     }
 
     .buzz-channel-text {

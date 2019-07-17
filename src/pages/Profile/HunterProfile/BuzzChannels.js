@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Avatar, Input, Select, Icon, notification } from "antd";
 import { isWebUri } from "valid-url";
@@ -12,29 +12,41 @@ import twitchIcon from "assets/images/twitch.svg";
 import mediumIcon from "assets/images/medium.svg";
 import otherIcon from "assets/images/other.svg";
 import approvedIcon from "assets/images/approved.svg";
+import deleteIcon from "assets/images/delete.svg";
 
 const { Option } = Select;
 
 const ChannelItem = props => {
-  const { icon, verified } = props;
+  const { icon, verified, editMode } = props;
 
   return (
     <div className="buzz-channel-item col-on-mobile row-align-start">
       <div className="row-align-center buzz-channel-container">
         <div className="buzz-icon-container">
           <img className="buzz-channel-icon" src={icon} alt="" />
-          {true && <img className="overlapped-approved-icon" src={approvedIcon} alt="" />}
+          {verified && (
+            <img
+              className="overlapped-approved-icon"
+              src={approvedIcon}
+              alt=""
+            />
+          )}
         </div>
         <div className="buzz-channel-text">Instagram</div>
       </div>
 
       <div className="buzz-summary">
-        <div className="buzz-link">
-          <a target="__blank">https://www.instagram.com/andrew___cho</a>
+        <div className="row-align-center">
+          <div className="buzz-link">
+            <a target="__blank">https://www.instagram.com/andrew___cho</a>
+          </div>
+          {editMode && (
+            <img className="buzz-delete-icon" src={deleteIcon} alt="" />
+          )}
         </div>
 
         <div className="buzz-stat-container text-small text-grey">
-          {true && (
+          {verified && (
             <div className="row-align-center">
               <img src={approvedIcon} alt="" />
               <div className="approved-text">Verified channel</div>
@@ -56,6 +68,7 @@ const ChannelItem = props => {
 };
 
 const BuzzChannels = ({}) => {
+  const [editMode, setEditMode] = useState(false);
   const setUrlInput = () => {};
   const urlInput = "";
   const setSocialChannels = () => {};
@@ -135,13 +148,19 @@ const BuzzChannels = ({}) => {
       <div className="row-align-center text-blue text-small">
         <div className="hover-link">Refresh data</div>
         <div className="splitter">|</div>
-        <div className="hover-link">Manage channels</div>
+        <div className="hover-link" onClick={() => setEditMode(!editMode)}>
+          {editMode ? "Done" : "Manage channels"}
+        </div>
       </div>
 
-      <ChannelItem icon={instagramIcon} />
-      <ChannelItem icon={youtubeIcon} />
-      <ChannelItem icon={instagramIcon} />
-      <ChannelItem icon={instagramIcon} />
+      {editMode && <div className="please-note-warning text-grey text-small">
+Please note that your channel data will also be removed when you delete the channel, which is to calculate your top hunter performance score.
+        </div>}
+
+      <ChannelItem icon={instagramIcon} editMode={editMode} />
+      <ChannelItem icon={youtubeIcon} editMode={editMode} />
+      <ChannelItem icon={instagramIcon} editMode={editMode} />
+      <ChannelItem icon={instagramIcon} editMode={editMode} />
     </div>
   );
 };
