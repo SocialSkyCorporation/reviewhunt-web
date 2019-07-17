@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import { Icon, Select, notification } from "antd";
 import moneyImg from "assets/images/money-circle.svg";
 import crownImg from "assets/images/crown-circle.svg";
-import TabItem from "./TabItem";
+import TabItem from "../TabItem";
 import ProfileRow, {
   TYPE_DROPDOWN,
-  // TYPE_SOCIAL,
   TYPE_PASSWORD
-} from "./ProfileRow";
-import QuestItem from "./QuestItem";
-import CurrentQuest from "./CurrentQuest";
+} from "../ProfileRow";
+import QuestItem from "../QuestItem";
+import CurrentQuest from "../CurrentQuest";
 import ProgressBar from "components/ProgressBar";
 import SimpleButton from "components/SimpleButton";
 import { AuthConsumer } from "contexts/AuthContext";
@@ -25,16 +24,17 @@ import { withTranslation } from "react-i18next";
 import { countries } from "utils/constants";
 import api from "utils/api";
 import Wallet from "./Wallet";
+import BuzzChannels from "./BuzzChannels";
 import { TYPE_HUNTER } from "pages/Auth";
 import { extractErrorMessage } from "utils/errorMessage";
 import CircularProgress from "components/CircularProgress";
 
-const {Option} = Select;
+const { Option } = Select;
 
 const TAB_PROFILE = 0;
-const TAB_CHANNELS = 1;
-const TAB_QUEST = 2;
-const TAB_WALLET = 3;
+const TAB_QUEST = 1;
+const TAB_WALLET = 2;
+const TAB_CHANNELS = 3;
 
 class HunterProfile extends Component {
   state = {
@@ -97,7 +97,6 @@ class HunterProfile extends Component {
 
   renderTabs() {
     const { t } = this.props;
-    const { logout } = this.props.authContext;
     const { fetchCampaigns } = this.props.hunterDashboardContext;
     const { setTabIndex, tabIndex } = this.props.profileContext;
 
@@ -133,7 +132,14 @@ class HunterProfile extends Component {
             setTabIndex(TAB_WALLET);
           }}
         />
-        <TabItem text={"Logout"} selected={tabIndex === 4} onClick={logout} />
+        <TabItem
+          text={"Buzz Channels"}
+          selected={tabIndex == TAB_CHANNELS}
+          onClick={() => {
+            if (tabIndex == TAB_CHANNELS) return;
+            setTabIndex(TAB_CHANNELS);
+          }}
+        />
       </div>
     );
   }
@@ -144,9 +150,9 @@ class HunterProfile extends Component {
     return (
       <div className="tab-content">
         {tabIndex == TAB_PROFILE && this.renderProfileTab()}
-        {tabIndex == TAB_CHANNELS && this.renderChannelsTab()}
         {tabIndex == TAB_QUEST && this.renderQuestTab()}
         {tabIndex == TAB_WALLET && this.renderWallet()}
+        {tabIndex == TAB_CHANNELS && this.renderChannelsTab()}
       </div>
     );
   }
@@ -172,7 +178,7 @@ class HunterProfile extends Component {
           {steemMe ? (
             <div className="row-align-center row-space-between col-on-mobile steem-connected-container">
               <div>
-                <div className="text-black">{t("steem_steemhunt")}</div>
+                <div className="content-title text-black">{t("steem_steemhunt")}</div>
                 <div className="profile-icon-container row-align-center">
                   <img
                     className="profile-icon"
@@ -291,13 +297,7 @@ class HunterProfile extends Component {
 
   renderChannelsTab() {
     const { t } = this.props;
-    return (
-      <div className="content-quest">
-        <div className="content-title text-black">
-          {t("profile.your_channels").toUpperCase()}
-        </div>
-      </div>
-    );
+    return <BuzzChannels />;
   }
 
   renderQuestTab() {
@@ -339,7 +339,6 @@ class HunterProfile extends Component {
         <Select className="category-select" defaultValue={t("all")} />
         {campaigns.map((campaign, index) => {
           const { id } = campaign;
-          console.log(campaign);
           return (
             <QuestItem
               key={id}
@@ -358,7 +357,7 @@ class HunterProfile extends Component {
 
   render() {
     return (
-      <div className="profile-page">
+      <div className="profile-page hunter-profile">
         {this.renderBanner()}
         {this.renderContent()}
         <div />

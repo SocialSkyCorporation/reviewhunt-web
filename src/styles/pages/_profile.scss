@@ -626,9 +626,46 @@
       color: blue;
     }
   }
+
+  .buzz-estimation-container {
+    border: solid 1px #0ab06a;
+    background-color: #f7ffee;
+    padding: 20px;
+
+    .estimation-text {
+      font-size: 1.25rem;
+    }
+
+    .registered-channel-text {
+      margin-top: 32px;
+    }
+
+    .buzz-channel-stats {
+      border-left: solid 2px #8b9699;
+      padding-left: 14px;
+      margin-top: 10px;
+      font-size: .875rem;
+      line-height: 1.43;
+    }
+
+    span {
+      color: #f5222d;
+    }
+
+    a {
+      color: #003cd3;
+      text-decoration: underline;
+    }
+
+  }
 }
 
 .ant-modal {
+   width: 760px !important;
+
+  .ant-modal-content {
+    width: 760px;
+  }
   .submission-modal {
     .submission-modal-title {
       font-size: 1.5rem;

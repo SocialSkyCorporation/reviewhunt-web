@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
+import Linkify from "react-linkify";
 import { Icon, Spin, Modal } from "antd";
 import backImg from "assets/images/back.svg";
 import clockImg from "assets/images/clock.svg";
@@ -70,9 +71,12 @@ const BuzzInfo = ({ quest }) => {
     image
   } = quest;
 
-  const { updateState, submittingQuest, submitModalVisible, submitQuest } = useContext(
-    HunterDashboardContext
-  );
+  const {
+    updateState,
+    submittingQuest,
+    submitModalVisible,
+    submitQuest
+  } = useContext(HunterDashboardContext);
 
   const [submitChannel, setSubmitChannel] = useState("");
   const [proofImage, setProofImage] = useState([]);
@@ -200,86 +204,113 @@ const BuzzInfo = ({ quest }) => {
         onCancel={() => updateState("submitModalVisible", false)}
         visible={submitModalVisible}
         footer={null}
-        style={{ width: 600 }}
+        width={'auto'}
         bodyStyle={{ padding: 60 }}
         wrapClassName="profile-page"
       >
         <Spin spinning={submittingQuest} tip="Loading...">
-        <div className="submission-modal">
-          <div className="text-black submission-modal-title uppercase">
-            Submit {submitChannel} Proof
-          </div>
+          <div className="submission-modal">
+            <div className="text-black submission-modal-title uppercase">
+              Submit {submitChannel} Content
+            </div>
 
-          <TextInput
-            textArea
-            value={urlText}
-            setValue={v => {
-              setUrlText(v);
-            }}
-            title={"Content URL"}
-            placeholder="Input URL"
-            containerStyle={{ marginTop: 20 }}
-          />
-          <div className="row-space-between submission-modal-header">
-            <div className="text-small text-black uppercase ">
-              Upload Screenshot
-            </div>
-            <div className="text-small text-grey">Max 5 MB</div>
-          </div>
-          <Screenshots
-            single
-            images={proofImage}
-            onChange={images => setProofImage(images)}
-          />
-          <div className="text-small text-black uppercase submission-modal-header">
-            Guidelines
-          </div>
-          <div className="text-small text-grey submission-modal-desc submission-modal-guidelines">
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                Buzz rewards have a set range of rewards, and it will be varied
-                based on our buzz quality measurement that considers your
-                channel size, potential reach, actual performance, etc. Please
-                note that we won’t be able to reward your buzz content when it
-                doesn’t meet our minimum level of buzz quality measurement
-                score.
+            <div className="buzz-estimation-container">
+              <div className="text-green estimation-text">
+                Your Reward Estimation: 15.2K HUNT($105.2)
               </div>
-            </div>
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                All the content MUST be visible to public. If yours is private
-                or visible only via the link you provided, your buzz content
-                won’t be rewarded.
+              <div className="text-grey">
+                This estimated reward for your [{submitChannel}] channel is our
+                recommended reeward amount based on our channel evaluation
+                algorithm. However, please note that{" "}
+                <span>
+                  the final amount will be made by the maker’s decision.
+                </span>
               </div>
-            </div>
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                Upload all buzz content that you’ve made at once if you’ve
-                performed via multiple channels. You are NOT able to add more
-                reviews once you’ve made your submission.
+              <div className="text-black registered-channel-text">Your registered channel</div>
+              <Linkify>
+                <div>https://google.com</div>
+              </Linkify>
+              <div className="buzz-channel-stats text-grey">
+                Followers: 12,450
+                <br />
+                Total number of posts: 105
+                <br />
+                Average likes: 105.2
+                <br />
+                Average comments: 15.6
               </div>
             </div>
 
-            <div className="row-align-start">
-              <div className="bullet-point">•</div>
-              <div>
-                It is NOT possible to edit your submission once you’ve made, so
-                please make sure that you have achieved all the guidelines
-                addressed above.
+            <TextInput
+              textArea
+              value={urlText}
+              setValue={v => {
+                setUrlText(v);
+              }}
+              title={"Content URL"}
+              placeholder="Input URL"
+              containerStyle={{ marginTop: 20 }}
+            />
+            <div className="row-space-between submission-modal-header">
+              <div className="text-small text-black uppercase ">
+                Upload Screenshot
+              </div>
+              <div className="text-small text-grey">Max 5 MB</div>
+            </div>
+            <Screenshots
+              single
+              images={proofImage}
+              onChange={images => setProofImage(images)}
+            />
+            <div className="text-small text-black uppercase submission-modal-header">
+              Guidelines
+            </div>
+            <div className="text-small text-grey submission-modal-desc submission-modal-guidelines">
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  Buzz rewards have a set range of rewards, and it will be
+                  varied based on our buzz quality measurement that considers
+                  your channel size, potential reach, actual performance, etc.
+                  Please note that we won’t be able to reward your buzz content
+                  when it doesn’t meet our minimum level of buzz quality
+                  measurement score.
+                </div>
+              </div>
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  All the content MUST be visible to public. If yours is private
+                  or visible only via the link you provided, your buzz content
+                  won’t be rewarded.
+                </div>
+              </div>
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  Upload all buzz content that you’ve made at once if you’ve
+                  performed via multiple channels. You are NOT able to add more
+                  reviews once you’ve made your submission.
+                </div>
+              </div>
+
+              <div className="row-align-start">
+                <div className="bullet-point">•</div>
+                <div>
+                  It is NOT possible to edit your submission once you’ve made,
+                  so please make sure that you have achieved all the guidelines
+                  addressed above.
+                </div>
               </div>
             </div>
+            <FullWidthButton
+              onClick={() =>
+                submitQuest(quest, submitChannel, urlText, proofImage)
+              }
+              text="SUBMIT YOUR PROOF"
+              style={{ marginTop: 30 }}
+            />
           </div>
-          <FullWidthButton
-            onClick={() =>
-              submitQuest(quest, submitChannel, urlText, proofImage)
-            }
-            text="SUBMIT YOUR PROOF"
-            style={{ marginTop: 30 }}
-          />
-        </div>
         </Spin>
       </Modal>
     </div>

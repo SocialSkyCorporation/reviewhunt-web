@@ -225,54 +225,7 @@ $opacity-black: rgba(0, 0, 0, 0.6);
 			margin-top: 20px;
 		}
 
-		.ant-input-group-addon {
-			border-radius: 0px;
-			border: 0px solid #8b9699 !important;
-			// border-left-color: transparent !important;
-			background-color: #50fdc6;
-			background-image: linear-gradient(82deg, #50fdc6, #3fcaff);
-
-			&:hover {
-				cursor: pointer;
-			}
-		}
-
-		.delete-input > * > .ant-input-group-addon {
-			background: #fa4400;
-			svg {
-				fill: #fff;
-			}
-		}
-
-		.ant-select-selection,
-		select,
-		input {
-			border-radius: 0px;
-			background: #2f2f2f;
-			border: 1px solid #8b9699 !important;
-			font-size: 0.875rem;
-			color: #fff;
-
-			&::placeholder {
-				color: #8b9699;
-			}
-		}
-
-		input {
-			border-right-color: transparent !important;
-		}
-
-		.ant-select-selection {
-			width: 130px;
-			color: #8b9699;
-			margin-right: 16px;
-
-			@include responsive(mobile) {
-				width: 100%;
-				margin-right: 0px;
-				margin-bottom: 8px;
-			}
-		}
+	
 
 		.channel-text {
 			min-width: 146px;

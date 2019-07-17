@@ -5,10 +5,13 @@ import hunterSvg from "assets/images/hunter-single.svg";
 import questSvg from "assets/images/quest-single.svg";
 import ProgressBar from "components/ProgressBar";
 import CampaignContext from "contexts/CampaignContext";
+import AppContext from "contexts/AppContext";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 
 const QuestGridItem = props => {
+
   const { setCurrentCampaign } = useContext(CampaignContext);
+  const { huntPerUsd } = useContext(AppContext);
 
   const { data } = props;
   const {
@@ -71,7 +74,7 @@ const QuestGridItem = props => {
               <img className="grid-item-icon" src={moneySvg} alt="" />
               <div className="bounty-text-container">
                 <div className="subheader text-black">
-                  {numberWithCommas(Number.parseInt(total_bounty))}{" "}
+                  {numberWithCommas(huntPerUsd * total_bounty)}{" "}
                   <span>HUNT</span>
                 </div>
                 <div className="subtext text-grey">Total Bounty Fund</div>

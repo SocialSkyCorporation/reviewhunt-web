@@ -150,8 +150,8 @@ hr {
   }
 
   @include responsive(bigscreen) {
-    padding-left: calc((100% - 1120px)/2);
-    padding-right: calc((100% - 1120px)/2);
+    padding-left: calc((100% - 1120px) / 2);
+    padding-right: calc((100% - 1120px) / 2);
   }
 }
 
@@ -753,6 +753,7 @@ hr {
     flex-direction: column;
   }
 }
+
 
 @-moz-keyframes spin {
   100% {

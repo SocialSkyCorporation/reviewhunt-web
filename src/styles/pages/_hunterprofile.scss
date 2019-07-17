@@ -1,0 +1,133 @@
+.hunter-profile {
+  .channel-add-container {
+    margin-top: 50px;
+    margin-bottom: 40px;
+    .ant-input-group-addon {
+      border-radius: 0px;
+      border: 1px solid #8b9699 !important;
+      border-left: none !important;
+      background-color: #e5e5e5;
+      color: #3fcaff;
+      font-size: 1rem;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .delete-input > * > .ant-input-group-addon {
+      background: #fa4400;
+      svg {
+        fill: #fff;
+      }
+    }
+
+    .ant-select-selection,
+    select,
+    input {
+      height: 44px;
+      border-radius: 0px;
+      background-color: #e5e5e5;
+      border: 1px solid #8b9699 !important;
+      color: #8b9699;
+      font-size: 1rem;
+
+      &::placeholder {
+        color: #8b9699;
+      }
+    }
+
+    .ant-select-selection-selected-value {
+      margin-top: 6px;
+    }
+
+    input {
+      border-right-color: transparent !important;
+    }
+
+    .ant-select {
+      margin-right: 16px;
+    }
+
+    .ant-select-selection {
+      width: 220px;
+      color: #8b9699;
+
+      @include responsive(mobile) {
+        width: 100%;
+        margin-right: 0px;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .registered-channels-text {
+    font-size: 1.25rem;
+  }
+
+  .splitter {
+    margin: 0px 8px;
+  }
+
+  .buzz-channel-item {
+    position: relative;
+    display: flex;
+    margin-top: 30px;
+    // background: blue;
+
+    .buzz-icon-container {
+      position: relative;
+      .overlapped-approved-icon {
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+      }
+    }
+
+    .approved-text {
+      color: #7ed321;
+      margin-left: 4px;
+    }
+
+    .buzz-channel-container {
+      width: 270px;
+    }
+
+    .buzz-channel-icon {
+      width: 30px;
+      height: 30px;
+    }
+
+    .buzz-channel-text {
+      margin-left: 10px;
+    }
+
+    .buzz-summary {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .buzz-link {
+      width: 100%;
+      background-color: #f4f4f4;
+      padding: 5px 15px;
+    }
+
+    a {
+      color: #003cd3;
+      text-decoration: underline;
+    }
+
+    .buzz-stat-container {
+      border-left: solid 2px #8b9699;
+      margin-top: 20px;
+      padding-left: 14px;
+      line-height: 1.43;
+
+      span {
+        color: #000;
+      }
+    }
+  }
+}
