@@ -253,7 +253,7 @@ class Auth extends Component {
 				<FancyCanvas ref={v => (this.canvas = v)} />
 				<div className="auth-page">
 					<a href="/">
-						<img src={RHLogo} alt="" />
+						<img className="rh-logo" src={RHLogo} alt="" />
 					</a>
 					<div className="join-text text-off-white">{title}</div>
 					<div
