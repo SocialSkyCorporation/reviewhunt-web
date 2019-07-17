@@ -12,3 +12,9 @@ export function getParams(location) {
 export function updateLocation(params) {
   history.push(`?${params}`);
 }
+
+export function getRouteName(location) {
+  const splitPath = location.pathname.split("/");
+
+  return splitPath.length > 1 ? splitPath[1] : "/";
+}

@@ -25,11 +25,11 @@ import {
   STEP_CREATE_QUESTS
 } from "contexts/NewCampaignContext";
 
-const TAB_CREATE_CAMPAIGN = 0;
-const TAB_CAMPAIGNS = 1;
-const TAB_HISTORY = 2;
-const TAB_SETTINGS = 3;
-const TAB_CHECKOUT = 4;
+const TAB_CREATE_CAMPAIGN = "create_campaign";
+const TAB_CAMPAIGNS = "campaigns";
+const TAB_HISTORY = "history";
+const TAB_SETTINGS = "settings";
+const TAB_CHECKOUT = "checkout";
 
 class Profile extends Component {
   state = {
@@ -42,7 +42,7 @@ class Profile extends Component {
     const { tabIndex, campaignId } = this.props.profileContext;
     const { fetchCampaign } = this.props.campaignContext;
 
-    if (tabIndex == TAB_CAMPAIGNS && campaignId !== null) {
+    if (tabIndex === TAB_CAMPAIGNS && campaignId !== null) {
       fetchCampaign(campaignId);
     }
   }
@@ -100,7 +100,7 @@ class Profile extends Component {
 
         <SimpleButton
           onClick={() => {
-            if (tabIndex == TAB_CREATE_CAMPAIGN) return;
+            if (tabIndex === TAB_CREATE_CAMPAIGN) return;
             resetState();
             setTabIndex(TAB_CREATE_CAMPAIGN);
             setCurrentCampaign(null);
@@ -150,11 +150,11 @@ class Profile extends Component {
     ];
 
     const isNewCampaign =
-      tabIndex == TAB_CREATE_CAMPAIGN &&
+      tabIndex === TAB_CREATE_CAMPAIGN &&
       this.props.newCampaignContext.campaignId === null;
 
     const editingCampaign =
-      tabIndex == TAB_CAMPAIGNS &&
+      tabIndex === TAB_CAMPAIGNS &&
       currentCampaign &&
       currentCampaign.status === "draft";
 
@@ -164,10 +164,10 @@ class Profile extends Component {
       <div className="tabs">
         <TabItem
           text="Create Campaign"
-          selected={tabIndex == TAB_CREATE_CAMPAIGN}
+          selected={tabIndex === TAB_CREATE_CAMPAIGN}
           style={shouldShowSubItems ? { marginBottom: 0 } : {}}
           onClick={() => {
-            if (tabIndex == TAB_CREATE_CAMPAIGN) return;
+            if (tabIndex === TAB_CREATE_CAMPAIGN) return;
             resetState();
             setTabIndex(TAB_CREATE_CAMPAIGN);
             setCurrentCampaign(null);
@@ -181,8 +181,8 @@ class Profile extends Component {
               <TabSubItem
                 key={index}
                 selected={
-                  (tabIndex == TAB_CREATE_CAMPAIGN && index === step) ||
-                  (tabIndex == TAB_CAMPAIGNS &&
+                  (tabIndex === TAB_CREATE_CAMPAIGN && index === step) ||
+                  (tabIndex === TAB_CAMPAIGNS &&
                     campaignId !== null &&
                     index === step)
                 }
@@ -210,7 +210,7 @@ class Profile extends Component {
         )}
         <TabItem
           text={"Campaigns"}
-          selected={tabIndex == TAB_CAMPAIGNS}
+          selected={tabIndex === TAB_CAMPAIGNS}
           style={{ marginBottom: 0 }}
         />
 
@@ -218,7 +218,7 @@ class Profile extends Component {
           {campaigns.map((campaign, index) => (
             <TabSubItem
               key={campaign.id}
-              selected={tabIndex == TAB_CAMPAIGNS && campaign.id == campaignId}
+              selected={tabIndex === TAB_CAMPAIGNS && campaign.id == campaignId}
               onClick={() => {
                 fetchCampaign(campaign.id);
                 setTabIndex(TAB_CAMPAIGNS);
@@ -230,7 +230,7 @@ class Profile extends Component {
         </div>
         <TabItem
           text={"History"}
-          selected={tabIndex == TAB_HISTORY}
+          selected={tabIndex === TAB_HISTORY}
           onClick={() => {
             setTabIndex(TAB_HISTORY);
             setCampaignId(null);
@@ -238,7 +238,7 @@ class Profile extends Component {
         />
         <TabItem
           text={"Setting"}
-          selected={tabIndex == TAB_SETTINGS}
+          selected={tabIndex === TAB_SETTINGS}
           onClick={() => {
             setTabIndex(TAB_SETTINGS);
             setCampaignId(null);
@@ -246,7 +246,7 @@ class Profile extends Component {
         />
         <TabItem
           text={"Logout"}
-          selected={tabIndex == 4}
+          selected={tabIndex === 4}
           onClick={() => logout()}
         />
       </div>
@@ -258,11 +258,11 @@ class Profile extends Component {
 
     return (
       <div className="tab-content">
-        {tabIndex == TAB_CREATE_CAMPAIGN && this.renderCampaignCreator()}
-        {tabIndex == TAB_CAMPAIGNS && this.renderCampaignsTab()}
-        {tabIndex == TAB_HISTORY && this.renderHistoryTab()}
-        {tabIndex == TAB_SETTINGS && this.renderSettings()}
-        {tabIndex == TAB_CHECKOUT && this.renderCheckout()}
+        {tabIndex === TAB_CREATE_CAMPAIGN && this.renderCampaignCreator()}
+        {tabIndex === TAB_CAMPAIGNS && this.renderCampaignsTab()}
+        {tabIndex === TAB_HISTORY && this.renderHistoryTab()}
+        {tabIndex === TAB_SETTINGS && this.renderSettings()}
+        {tabIndex === TAB_CHECKOUT && this.renderCheckout()}
       </div>
     );
   }

@@ -5,17 +5,23 @@ import { getSteemMe, getEmailMe } from "utils/auth/authHelper";
 import { getToken, setToken, removeToken } from "utils/token";
 import { withRouter } from "react-router-dom";
 import api from "utils/api";
+import _ from 'lodash';
 import queryString from "query-string";
 import { extractErrorMessage } from "utils/errorMessage";
-import { getParams } from "utils/helpers/urlHelper";
+import {
+  getParams,
+  setParams,
+  updateLocation,
+  getRouteName
+} from "utils/helpers/urlHelper";
 import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 
 const AuthContext = React.createContext();
 const { Provider, Consumer } = AuthContext;
 
-const STATUS_SIGNUP = 0;
-const STATUS_LOGIN = 1;
-const STATUS_ONBOARDING = 2;
+const STATUS_SIGNUP = "signup";
+const STATUS_LOGIN = "login";
+const STATUS_ONBOARDING = "onboarding";
 
 class AuthProvider extends React.Component {
   state = {
@@ -31,18 +37,17 @@ class AuthProvider extends React.Component {
 
   componentWillMount() {
     let parsedURL = null;
-    if (this.props.location.search) {
+    const source = getRouteName(this.props.location);
+
+    if (this.props.location.search && source === "auth") {
       try {
         parsedURL = queryString.parse(this.props.location.search);
         console.log("parsed", parsedURL);
-        const source = this.props.location.pathname
-          .split("/")
-          .filter(i => i)[1]
-          .toLowerCase();
+        console.log("source", source);
         //handle contents differently based on source
         this.handleAuth(source, parsedURL);
       } catch (e) {
-        console.log("URI Parse error", this.props.location.search);
+        console.log("URI Parse error", this.props.location.search, e);
       }
     }
   }
@@ -57,9 +62,11 @@ class AuthProvider extends React.Component {
       if (steemToken) {
         this.setState({ steemconnectLoading: true });
         const steemMe = await getSteemMe(steemToken);
+        console.log("steem me", steemMe);
         await this.setState({ steemconnectLoading: false, steemMe });
       }
 
+      console.log("last login type", lastLoginType);
       if (lastLoginType) {
         const emailMe = await getEmailMe(lastLoginType);
         console.log("me", emailMe);
@@ -77,7 +84,11 @@ class AuthProvider extends React.Component {
           this.props.history.replace(`${window.location.pathname}${query}`);
         }
       } else {
-        this.setState({ authenticating: false });
+        await this.setState({ authenticating: false });
+        const query = getParams(window.location);
+        if (!_.isEmpty(query) && getRouteName(window.location) === "auth") {
+          await this.setState({ ...query });
+        }
       }
     } catch (e) {
       removeToken(lastLoginType);
@@ -177,13 +188,7 @@ class AuthProvider extends React.Component {
 
   handleAuth = async (source, obj) => {
     switch (source) {
-      case "reddit":
-        const { code } = obj;
-        getKarma(code);
-        break;
-      case "youtube":
-        break;
-      case "instagram":
+      case "auth":
         break;
       case "steemconnect":
         const { access_token, state } = obj;
@@ -206,13 +211,16 @@ class AuthProvider extends React.Component {
     }
   };
 
-  setStatus = status => {
-    this.setState({ status });
+  setStatus = async status => {
+    await this.setState({ status });
+    const url = setParams({ status });
+    updateLocation(url);
   };
 
   logout = async () => {
     const lastLoginType = getToken("last_login");
     if (lastLoginType) {
+      removeToken("last_login");
       removeToken(lastLoginType);
       await this.setState({ emailMe: null });
       this.props.history.replace("/auth");

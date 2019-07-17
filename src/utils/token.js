@@ -20,6 +20,7 @@ export function setToken(key, token) {
 }
 
 export function removeToken(key) {
+  console.log("removing token", key);
   return window.safeStorage.removeItem(key);
 }
 

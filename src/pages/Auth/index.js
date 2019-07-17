@@ -206,6 +206,7 @@ class Auth extends Component {
 				? () => setStatus(STATUS_LOGIN)
 				: () => setStatus(STATUS_SIGNUP);
 
+
 		return (
 			<div className="login-button-container grey-border">
 				<div className="text-grey">
@@ -221,10 +222,15 @@ class Auth extends Component {
 	render() {
 		const { tabIndex } = this.state;
 		const { t } = this.props;
-		const { status, loading, authenticating, emailMe } = this.props.authContext;
+		const { status, setStatus, loading, authenticating, emailMe } = this.props.authContext;
 		const onHunterTab = tabIndex === TAB_HUNTER;
 
 		const triggerCanvas = () => this.canvas.randomSplat();
+
+		if(status === STATUS_ONBOARDING && !emailMe) {
+			setStatus(STATUS_LOGIN);
+			return null;
+		}
 
 		const title =
 			(status === STATUS_ONBOARDING && (
@@ -298,7 +304,9 @@ class Auth extends Component {
 							{this.renderInputs()}
 						</div>
 					) : (
-						<Onboarding triggerCanvas={triggerCanvas} />
+					<>
+						{status === STATUS_ONBOARDING && <Onboarding triggerCanvas={triggerCanvas} />}
+						</>
 					)}
 					{status !== STATUS_ONBOARDING && this.renderAccountText()}
 				</div>

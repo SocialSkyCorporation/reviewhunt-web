@@ -31,10 +31,10 @@ import CircularProgress from "components/CircularProgress";
 
 const { Option } = Select;
 
-const TAB_PROFILE = 0;
-const TAB_QUEST = 1;
-const TAB_WALLET = 2;
-const TAB_CHANNELS = 3;
+const TAB_PROFILE = "profile";
+const TAB_QUEST = "quest";
+const TAB_WALLET = "wallet";
+const TAB_CHANNELS = "channels";
 
 class HunterProfile extends Component {
   state = {
@@ -46,7 +46,7 @@ class HunterProfile extends Component {
     const { tabIndex } = this.props.profileContext;
     const { fetchCampaigns } = this.props.hunterDashboardContext;
 
-    if (tabIndex == TAB_QUEST) {
+    if (tabIndex === TAB_QUEST) {
       fetchCampaigns();
     }
   }
@@ -104,20 +104,20 @@ class HunterProfile extends Component {
       <div className="tabs">
         <TabItem
           text={t("profile_tab")}
-          selected={tabIndex == TAB_PROFILE}
+          selected={tabIndex === TAB_PROFILE}
           onClick={() => {
-            if (tabIndex == TAB_PROFILE) return;
+            if (tabIndex === TAB_PROFILE) return;
             setTabIndex(TAB_PROFILE);
           }}
         />
         {/*<TabItem
           text={"Channels"}
-          selected={tabIndex === 1}
+          selected={tabIndex ==== 1}
           onClick={() => this.setState({ tabIndex: 1 })}
         />*/}
         <TabItem
           text={t("profile.quest_dashboard")}
-          selected={tabIndex == TAB_QUEST}
+          selected={tabIndex === TAB_QUEST}
           onClick={() => {
             if (tabIndex === TAB_QUEST) return;
             setTabIndex(TAB_QUEST);
@@ -126,17 +126,17 @@ class HunterProfile extends Component {
         />
         <TabItem
           text={t("profile.wallet")}
-          selected={tabIndex == TAB_WALLET}
+          selected={tabIndex === TAB_WALLET}
           onClick={() => {
-            if (tabIndex == TAB_WALLET) return;
+            if (tabIndex === TAB_WALLET) return;
             setTabIndex(TAB_WALLET);
           }}
         />
         <TabItem
           text={"Buzz Channels"}
-          selected={tabIndex == TAB_CHANNELS}
+          selected={tabIndex === TAB_CHANNELS}
           onClick={() => {
-            if (tabIndex == TAB_CHANNELS) return;
+            if (tabIndex === TAB_CHANNELS) return;
             setTabIndex(TAB_CHANNELS);
           }}
         />
@@ -149,10 +149,10 @@ class HunterProfile extends Component {
 
     return (
       <div className="tab-content">
-        {tabIndex == TAB_PROFILE && this.renderProfileTab()}
-        {tabIndex == TAB_QUEST && this.renderQuestTab()}
-        {tabIndex == TAB_WALLET && this.renderWallet()}
-        {tabIndex == TAB_CHANNELS && this.renderChannelsTab()}
+        {tabIndex === TAB_PROFILE && this.renderProfileTab()}
+        {tabIndex === TAB_QUEST && this.renderQuestTab()}
+        {tabIndex === TAB_WALLET && this.renderWallet()}
+        {tabIndex === TAB_CHANNELS && this.renderChannelsTab()}
       </div>
     );
   }

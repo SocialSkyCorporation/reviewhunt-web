@@ -1,5 +1,5 @@
 import React from "react";
-import { setParams, getParams, updateLocation } from "utils/helpers/urlHelper";
+import { setParams, getParams, getRouteName, updateLocation } from "utils/helpers/urlHelper";
 import queryString from "query-string";
 import _ from "lodash";
 
@@ -15,9 +15,8 @@ class ProfileProvider extends React.Component {
 
   async componentDidMount() {
     const query = getParams(window.location);
-    if (!_.isEmpty(query)) {
+    if (!_.isEmpty(query) && getRouteName(window.location) === "profile") {
       await this.setState({ ...query });
-      console.log("query updated", query);
       this.updateLocation();
     }
   }
