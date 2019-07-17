@@ -21,7 +21,7 @@ const MakerSignup = ({
 	const { t } = useTranslation();
 
 	return (
-		<>
+		<form>
 			<Input
 				className="auth-form-input"
 				placeholder={t("company")}
@@ -31,6 +31,7 @@ const MakerSignup = ({
 					setFormData("nameOfCompany", nameOfCompany);
 					triggerCanvas();
 				}}
+				autoComplete="organization"
 				disabled={loading}
 			/>
 			<Input
@@ -42,6 +43,7 @@ const MakerSignup = ({
 					setFormData("fullName", fullName);
 					triggerCanvas();
 				}}
+				autoComplete="name"
 				disabled={loading}
 			/>
 			<Input
@@ -53,6 +55,7 @@ const MakerSignup = ({
 					setFormData("emailAddress", emailAddress);
 					triggerCanvas();
 				}}
+				autoComplete="username"
 				disabled={loading}
 			/>
 			<Input.Password
@@ -64,6 +67,7 @@ const MakerSignup = ({
 					setFormData("password", password);
 					triggerCanvas();
 				}}
+				autoComplete="new-password"
 				disabled={loading}
 			/>
 			<Input.Password
@@ -75,6 +79,7 @@ const MakerSignup = ({
 					setFormData("confirmPassword", confirmPassword);
 					triggerCanvas();
 				}}
+				autoComplete="new-password"
 				disabled={loading}
 			/>
 			<Select
@@ -83,6 +88,7 @@ const MakerSignup = ({
 				onChange={businessCategory =>
 					setFormData("businessCategory", businessCategory)
 				}
+				autoComplete=""
 				disabled={loading}
 			>
 				{businessCategories.map((b, i) => (
@@ -107,7 +113,7 @@ const MakerSignup = ({
 			>
 				{loading ? <Icon type="loading" /> : t("auth.signup_maker")}
 			</div>
-		</>
+		</form>
 	);
 };
 

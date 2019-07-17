@@ -22,10 +22,11 @@ const HunterSignup = ({
 	const { t } = useTranslation();
 
 	return (
-		<>
+		<form>
 			<Input
 				className="auth-form-input"
 				placeholder={t("full_name")}
+				autoComplete="name"
 				value={fullName}
 				onChange={e => {
 					const fullName = e.nativeEvent.target.value;
@@ -38,6 +39,7 @@ const HunterSignup = ({
 				className="auth-form-input"
 				placeholder={t("email")}
 				value={emailAddress}
+				autoComplete="username"
 				onChange={e => {
 					const emailAddress = e.nativeEvent.target.value;
 					setFormData("emailAddress", emailAddress);
@@ -49,6 +51,7 @@ const HunterSignup = ({
 				className="auth-form-input"
 				placeholder={t("password")}
 				value={password}
+				autoComplete="new-password"
 				onChange={e => {
 					const password = e.nativeEvent.target.value;
 					setFormData("password", password);
@@ -60,6 +63,7 @@ const HunterSignup = ({
 				className="auth-form-input"
 				placeholder={t("confirm_password")}
 				value={confirmPassword}
+				autoComplete="new-password"
 				onChange={e => {
 					const confirmPassword = e.nativeEvent.target.value;
 					setFormData("confirmPassword", confirmPassword);
@@ -76,6 +80,7 @@ const HunterSignup = ({
 					onChange={countryOfResidence =>
 						setFormData("countryOfResidence", countryOfResidence)
 					}
+					autoComplete="country"
 					value={countryOfResidence}
 					disabled={loading}
 				>
@@ -89,6 +94,7 @@ const HunterSignup = ({
 					onChange={gender => setFormData("gender", gender)}
 					value={gender}
 					disabled={loading}
+					autoComplete="sex"
 				>
 					{genders.map((g, i) => (
 						<Option key={i} value={g}>
@@ -102,6 +108,7 @@ const HunterSignup = ({
 						onChange={year => setFormData("year", year)}
 						value={year}
 						disabled={loading}
+						autoComplete="bday-year"
 					>
 						{years.map((y, i) => (
 							<Option key={i} value={y}>
@@ -127,7 +134,7 @@ const HunterSignup = ({
 			>
 				{loading ? <Icon type="loading" /> : t("auth.signup_hunter")}
 			</div>
-		</>
+		</form>
 	);
 };
 

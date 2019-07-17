@@ -13,10 +13,11 @@ const LoginForm = ({
   const { t } = useTranslation();
 
   return (
-    <>
+    <form>
       <Input
         className="auth-form-input"
         placeholder={t("email")}
+        autoComplete="username"
         onChange={e => {
           setFormData("emailAddress", e.target.value);
           triggerCanvas();
@@ -26,6 +27,7 @@ const LoginForm = ({
       <Input.Password
         className="auth-form-input"
         placeholder={t("password")}
+        autoComplete="current_password"
         onChange={e => {
           setFormData("password", e.target.value);
           triggerCanvas();
@@ -38,7 +40,7 @@ const LoginForm = ({
       >
         {t("login")}
       </div>
-    </>
+    </form>
   );
 };
 
