@@ -9,8 +9,9 @@ export function numberWithCommas(x) {
     .split(".");
     
   if (str.length > 1) {
+    console.log(str);
     str[1] = str[1].replace(/,/g, "");
-    str.join(".");
+    str = str.join(".");
   } else {
     str = str[0];
   }

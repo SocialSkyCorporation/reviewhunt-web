@@ -7,14 +7,31 @@ import QuestGridItem from "components/QuestGridItem";
 import SimpleButton from "components/SimpleButton";
 import { useTranslation, Trans } from "react-i18next";
 import CampaignContext from "contexts/CampaignContext";
+import AppContext from "contexts/AppContext";
 import ContentLoader from "components/ContentLoader";
 import logoCircle from "assets/images/logo-circle.svg";
+import { numberWithCommas } from 'utils/helpers/numberFormatHelper';
 
 export default () => {
   const { t } = useTranslation();
   const { campaigns, fetchCampaigns, fetchingCampaigns } = useContext(
     CampaignContext
   );
+  const {huntPerUsd} = useContext(
+    AppContext
+  );
+
+  let totalHunters = 0;
+  let totalBountyFund = 0;
+  let totalQuests = 0;
+
+
+  campaigns.forEach((campaign) => {
+    const {quest_count, total_bounty, current_participant_count} = campaign;
+    totalQuests += quest_count;
+    totalBountyFund += parseFloat(total_bounty);
+    totalHunters += current_participant_count;
+  })
 
   useEffect(() => {
     fetchCampaigns();
@@ -52,9 +69,9 @@ export default () => {
                 <img src={imgMoney} alt="" />
                 <div className="stat-text">
                   <h1>
-                    14,505,033 <span>HUNT</span>
+                    {numberWithCommas((totalBountyFund / huntPerUsd).toFixed(0))} <span>HUNT</span>
                   </h1>
-                  <h2>($14,554.35)</h2>
+                  <h2>(${numberWithCommas(totalBountyFund)})</h2>
                 </div>
               </div>
             </div>
@@ -66,9 +83,9 @@ export default () => {
                 <img src={imgHunter} alt="" />
                 <div className="stat-text">
                   <h1>
-                    1,054 <span>HUNTERS</span>
+                    {numberWithCommas(totalHunters)} <span>HUNTERS</span>
                   </h1>
-                  <h2>(on 35 quests)</h2>
+                  <h2>(on {numberWithCommas(totalQuests)} quests)</h2>
                 </div>
               </div>
             </div>
