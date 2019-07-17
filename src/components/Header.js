@@ -11,11 +11,11 @@ export default () => {
   const pathname = window.location.pathname;
   const isAboutPage = pathname.indexOf("/about") > -1;
 
-  const headerItemClassName = `header-item ${isAboutPage && 'about'}`;
+  const headerItemClassName = `header-item ${isAboutPage && "about"}`;
 
   return (
     <AuthConsumer>
-      {({ emailMe }) => (
+      {({ emailMe, authenticating }) => (
         <div className="header">
           <a href="/">
             <img
@@ -30,27 +30,34 @@ export default () => {
               {t("header.about")}
             </Link>
 
-            {!emailMe ? (
+            {!authenticating && (
               <>
-                <Link className={headerItemClassName}  to="/auth">
-                  {t("header.login")}
-                </Link>
+                {!emailMe ? (
+                  <>
+                    <Link className={headerItemClassName} to="/auth">
+                      {t("header.login")}
+                    </Link>
 
-                <Link className={headerItemClassName}  to="/auth">
-                  {t("header.join")}
-                </Link>
+                    <Link className={headerItemClassName} to="/auth">
+                      {t("header.join")}
+                    </Link>
 
-                <Link className={headerItemClassName} to="/profile">
-                  {t("header.profile")}
-                </Link>
+                    <Link className={headerItemClassName} to="/profile">
+                      {t("header.profile")}
+                    </Link>
+                  </>
+                ) : (
+                  <a
+                    className={`header-item account ${isAboutPage && "about"}`}
+                    href="/profile"
+                  >
+                    <div className="row-align-center">
+                      <img className="profile-icon" src={faceImg} alt="" />
+                      <div>{emailMe.name}</div>
+                    </div>
+                  </a>
+                )}
               </>
-            ) : (
-              <a className={`header-item account ${isAboutPage && 'about'}`} href="/profile">
-                <div className="row-align-center">
-                  <img className="profile-icon" src={faceImg} alt="" />
-                  <div>{emailMe.name}</div>
-                </div>
-              </a>
             )}
           </div>
         </div>

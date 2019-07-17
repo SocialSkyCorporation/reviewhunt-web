@@ -129,9 +129,9 @@
   }
 
   .grid-dropdown {
-    margin-left: 26px;
+    margin-left: 36px;
     margin-bottom: 20px;
-    
+
     @include responsive(tablet) {
       margin-left: 16px;
     }
@@ -146,7 +146,6 @@
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
-    margin-left: 26px;
     @include responsive(tablet) {
       margin-left: 0px;
     }
