@@ -5,7 +5,7 @@ import { getSteemMe, getEmailMe } from "utils/auth/authHelper";
 import { getToken, setToken, removeToken } from "utils/token";
 import { withRouter } from "react-router-dom";
 import api from "utils/api";
-import _ from 'lodash';
+import _ from "lodash";
 import queryString from "query-string";
 import { extractErrorMessage } from "utils/errorMessage";
 import {
@@ -77,24 +77,25 @@ class AuthProvider extends React.Component {
         });
         const path = window.location.pathname;
         const query = window.location.search;
-
-        if (path === "/auth") {
+        const queryObj = getParams(window.location);
+        if (!_.isEmpty(queryObj) && getRouteName(window.location) === "auth") {
+          await this.setState({ ...queryObj });
+          console.log("updated query", this.state);
+        } else if (path === "/auth") {
           this.props.history.push(`/profile${query}`);
         } else {
           this.props.history.replace(`${window.location.pathname}${query}`);
         }
       } else {
         await this.setState({ authenticating: false });
-        const query = getParams(window.location);
-        if (!_.isEmpty(query) && getRouteName(window.location) === "auth") {
-          await this.setState({ ...query });
-        }
       }
     } catch (e) {
       removeToken(lastLoginType);
       this.handleError(e);
       this.setState({ authenticating: false });
     }
+
+    
   }
 
   handleError = e => {

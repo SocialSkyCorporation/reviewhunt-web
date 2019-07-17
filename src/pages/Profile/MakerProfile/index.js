@@ -25,11 +25,11 @@ import {
   STEP_CREATE_QUESTS
 } from "contexts/NewCampaignContext";
 
-const TAB_CREATE_CAMPAIGN = "create_campaign";
-const TAB_CAMPAIGNS = "campaigns";
-const TAB_HISTORY = "history";
-const TAB_SETTINGS = "settings";
-const TAB_CHECKOUT = "checkout";
+export const TAB_CREATE_CAMPAIGN = "create_campaign";
+export const TAB_CAMPAIGNS = "campaigns";
+export const TAB_HISTORY = "history";
+export const TAB_SETTINGS = "settings";
+export const TAB_CHECKOUT = "checkout";
 
 class Profile extends Component {
   state = {

@@ -31,10 +31,10 @@ import CircularProgress from "components/CircularProgress";
 
 const { Option } = Select;
 
-const TAB_PROFILE = "profile";
-const TAB_QUEST = "quest";
-const TAB_WALLET = "wallet";
-const TAB_CHANNELS = "channels";
+export const TAB_PROFILE = "profile";
+export const TAB_QUEST = "quest";
+export const TAB_WALLET = "wallet";
+export const TAB_CHANNELS = "channels";
 
 class HunterProfile extends Component {
   state = {
