@@ -133,11 +133,19 @@ export default () => {
             text="Join Now"
             style={{ marginRight: 10 }}
             borderColor={"#73fdea"}
+            backgroundColor={"#000"}
+            hoverColor={"#73fdea"}
+            hoverTextColor={"#000"}
+            color={"#73fdea"}
           />
           <SimpleButton
             text="Read Pitch Deck"
             style={{ marginLeft: 10 }}
             borderColor={"#8b9699"}
+            backgroundColor={"#000"}
+            hoverColor={"#8b9699"}
+            color={"#8b9699"}
+            hoverTextColor={"#000"}
           />
         </div>
         </div>

@@ -57,7 +57,7 @@ FullWidthButton.defaultProps = {
   icon: null,
   borderColor: "#000",
   backgroundColor: "#000",
-  backgroundColor: "#0a0a0a",
+  hoverColor: "#0a0a0a",
   borderWidth: 1,
   color: "#fff",
   onMouseOut: () => {},

@@ -32,7 +32,9 @@ class AuthProvider extends React.Component {
     authenticating: true,
     status: STATUS_LOGIN,
     userType: TYPE_HUNTER,
-    socialChannels: []
+    socialChannels: [],
+    refreshingBuzz: false,
+    savingChannels: false
   };
 
   componentWillMount() {
@@ -94,8 +96,6 @@ class AuthProvider extends React.Component {
       this.handleError(e);
       this.setState({ authenticating: false });
     }
-
-    
   }
 
   handleError = e => {
@@ -176,15 +176,156 @@ class AuthProvider extends React.Component {
       .catch(this.handleError);
   };
 
-  setSocialChannels = socialChannels => {
-    this.setState({ socialChannels });
+  getSocialChannels = async () => {
+    console.log("getting social channels");
+    this.setState({ loading: true });
+    api
+      .get("/buzz_channels/mine.json", {}, true, TYPE_HUNTER)
+      .then(socialChannels => {
+        console.log(socialChannels);
+        socialChannels.forEach(channel => (channel.estimating = false));
+        this.setState({ socialChannels });
+      })
+      .catch(this.handleError)
+      .finally(() => this.setState({ loading: false }));
   };
 
-  deleteSocialItem = index => {
+  evaluateChannel = async index => {
     const { socialChannels } = this.state;
-    let newChannels = Object.assign([], socialChannels);
-    newChannels.splice(index, 1);
-    this.setState({ socialChannels: newChannels });
+    const { url, value } = socialChannels[index];
+
+    api
+      .get(`/buzz_channels/check.json?channel=${value}&url=${url}`)
+      .then(result => {
+        const socialChannelsClone = _.clone(socialChannels);
+        socialChannelsClone[index] = {
+          ...socialChannelsClone[index],
+          ...result,
+          estimating: false
+        };
+        this.setState({ socialChannels: socialChannelsClone });
+      })
+      .catch(e => {
+        notification["error"]({
+          message: extractErrorMessage(e)
+        });
+        const socialChannelsClone = _.clone(socialChannels);
+        socialChannelsClone.splice(1, index);
+        this.setState({ socialChannels: socialChannelsClone });
+      });
+  };
+
+  addSocialChannel = async channel => {
+    const { socialChannels } = this.state;
+    await this.setState({ socialChannels: socialChannels.concat(channel) });
+    let newChannels = _.clone(this.state.socialChannels);
+    const index = this.state.socialChannels.length - 1;
+    try {
+      const result = await api.post(
+        "/buzz_channels.json",
+        {
+          buzz_channel: {
+            channel_type: channel.value,
+            url: channel.url
+          }
+        },
+        true,
+        TYPE_HUNTER
+      );
+      newChannels[index] = result;
+    } catch (e) {
+      this.handleError(e);
+      newChannels.splice(index, 1);
+    } finally {
+      this.setState({ socialChannels: newChannels });
+    }
+  };
+
+  setSocialChannels = async socialChannels => {
+    await this.setState({ socialChannels });
+    this.evaluateChannel(this.state.socialChannels.length - 1);
+  };
+
+  deleteSocialChannel = async index => {
+    const { socialChannels } = this.state;
+
+    console.log("deleting social channel");
+
+    let newChannels = _.clone(socialChannels);
+    newChannels[index]["estimating"] = true;
+
+    try {
+      const { id } = socialChannels[index];
+      if (id) {
+        const { status } = await api.delete(
+          `/buzz_channels/${id}.json`,
+          {},
+          true,
+          TYPE_HUNTER
+        );
+        if (status === "DELETED") {
+          newChannels.splice(index, 1);
+          this.setState({ socialChannels: newChannels });
+        } else {
+          newChannels[index]["estimating"] = true;
+        }
+      } else {
+        newChannels.splice(index, 1);
+      }
+    } catch (e) {
+      this.handleError(e);
+    } finally {
+      await this.setState({ socialChannels: newChannels });
+    }
+  };
+
+  //used for onboarding
+  saveSocialChannels = async () => {
+    const { socialChannels } = this.state;
+    console.log("saving social channels");
+    this.setState({ savingChannels: true });
+    try {
+      for (const channel of socialChannels) {
+        const form = {
+          buzz_channel: {
+            channel_type: channel.value,
+            url: channel.url
+          }
+        };
+        await api.post("/buzz_channels.json", form, true, TYPE_HUNTER);
+      }
+      this.props.history.replace("/profile");
+    } catch (e) {
+      this.handleError(e);
+    } finally {
+      this.setState({ savingChannels: false });
+    }
+  };
+
+  refreshBuzz = async () => {
+    console.log("refreshing buzz");
+    const { socialChannels } = this.state;
+    const socialChannelsClone = _.clone(socialChannels);
+
+    this.setState({ refreshingBuzz: true });
+    try {
+      for (const index in socialChannels) {
+        const channel = socialChannels[index];
+        const result = await api.put(
+          `/buzz_channels/${channel.id}/refresh.json`,
+          {},
+          true,
+          TYPE_HUNTER
+        );
+        socialChannelsClone[index] = result;
+      }
+
+      this.setState({ socialChannels: socialChannelsClone });
+    } catch (e) {
+      this.handleError(e);
+    } finally {
+      this.setState({ refreshingBuzz: false });
+    }
   };
 
   handleAuth = async (source, obj) => {
@@ -246,11 +387,15 @@ class AuthProvider extends React.Component {
           setFormData: this.setFormData,
           handleSignup: this.handleSignup,
           handleLogin: this.handleLogin,
-          deleteSocialItem: this.deleteSocialItem,
+          deleteSocialChannel: this.deleteSocialChannel,
           setSocialChannels: this.setSocialChannels,
           setStatus: this.setStatus,
           logout: this.logout,
-          disconnectSteem: this.disconnectSteem
+          disconnectSteem: this.disconnectSteem,
+          saveSocialChannels: this.saveSocialChannels,
+          getSocialChannels: this.getSocialChannels,
+          addSocialChannel: this.addSocialChannel,
+          refreshBuzz: this.refreshBuzz
         }}
       >
         {this.props.children}

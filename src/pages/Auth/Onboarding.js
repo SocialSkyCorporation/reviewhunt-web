@@ -1,92 +1,124 @@
-import React, { useState, useContext } from "react";
-import { Avatar, Input, Select, Icon, notification } from "antd";
+import React, { useState, useEffect, useContext, useMemo } from "react";
+import { Avatar, Input, Select, Spin, Icon, notification } from "antd";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import steemLogo from "assets/images/steem-logo.svg";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { getLoginURL } from "utils/token";
-import AuthContext from "contexts/AuthContext.js";
+import AuthContext from "contexts/AuthContext";
+import AppContext from "contexts/AppContext";
 import { useTranslation } from "react-i18next";
 import { isWebUri } from "valid-url";
-
-import youtubeIcon from "assets/images/youtube-grey.svg";
-import instagramIcon from "assets/images/instagram-grey.svg";
-import twitterIcon from "assets/images/twitter-grey.svg";
-import steemIcon from "assets/images/steem-grey.svg";
-import redditIcon from "assets/images/reddit-grey.svg";
-import twitchIcon from "assets/images/twitch-grey.svg";
-import mediumIcon from "assets/images/medium-grey.svg";
-import otherIcon from "assets/images/other-grey.svg";
+import { availableChannels } from "utils/constants";
+import SimpleButton from "components/SimpleButton";
 import approvedIcon from "assets/images/approved.svg";
 import deleteIcon from "assets/images/delete.svg";
+import { numberWithCommas } from "utils/helpers/numberFormatHelper";
+import _ from "lodash";
 
 const { Option } = Select;
 
-const ChannelItem = props => {
-	const { icon, verified } = props;
+function ChannelItem(props) {
+	const { index, data, onDeleteClicked } = props;
+	const { huntPerUsd } = useContext(AppContext);
+	const {
+		value,
+		label,
+		greyIcon,
+		channel_type,
+		url,
+		name,
+		user_name,
+		profile_image,
+		estimating,
+		engagement_rate,
+		follower_count,
+		price_per_content
+	} = data;
 
-	return (
-		<div className="buzz-channel-item col-on-mobile row-align-start">
-			<div className="row-align-center buzz-channel-container">
-				<div className="buzz-icon-container">
-					<img className="buzz-channel-icon" src={icon} alt="" />
-					{verified && (
+	let huntReward = null;
+	let usdReward = null;
+
+	if (price_per_content && !estimating) {
+		huntReward = numberWithCommas(
+			(parseFloat(price_per_content) / huntPerUsd).toFixed(2)
+		);
+		usdReward = numberWithCommas(parseFloat(price_per_content).toFixed(2));
+	}
+
+	return useMemo(() => {
+		return (
+			<div className="buzz-channel-item col-on-mobile row-align-start">
+				<div className="row-align-center buzz-channel-container">
+					<div className="buzz-icon-container">
 						<img
-							className="overlapped-approved-icon"
-							src={approvedIcon}
+							className="buzz-channel-icon"
+							src={profile_image ? profile_image : greyIcon}
 							alt=""
 						/>
-					)}
-				</div>
-				<div className="buzz-channel-text text-grey">Instagram</div>
-			</div>
-
-			<div className="buzz-summary">
-				<div className="row-align-center">
-					<div className="buzz-link">
-						<a target="__blank">https://www.instagram.com/andrew___cho</a>
 					</div>
-					<img className="buzz-delete-icon" src={deleteIcon} alt="" />
+					<div>
+						<div className="buzz-channel-text text-grey">{channel_type || value}</div>
+						<div className="buzz-channel-text text-white">
+							{name || user_name}
+						</div>
+					</div>
 				</div>
 
-				<div className="buzz-stat-container text-small text-grey">
-					{verified && (
-						<div className="row-align-center">
-							<img src={approvedIcon} alt="" />
-							<div className="approved-text">Verified channel</div>
+				<div className="buzz-summary">
+					<div className="row-align-center">
+						<div className="buzz-link">
+							<a target="__blank">{url}</a>
 						</div>
-					)}
-					Followers: 12,450
-					<br />
-					Total number of posts: 105
-					<br />
-					Average likes: 105.2
-					<br />
-					Average comments: 15.6
-					<br />
-					<span>Earning per post (estimation): 1.5K HUNT ($10.5)</span>
+						{!estimating && (
+							<img
+								onClick={onDeleteClicked}
+								className="buzz-delete-icon"
+								src={deleteIcon}
+								alt=""
+							/>
+						)}
+					</div>
+
+					<div className="buzz-stat-container text-small text-grey">
+						<Spin spinning={estimating} tip="Estimating...">
+							<div>
+								Followers: {follower_count || 0}
+								<br />
+								Engagement Rate:{" "}
+								{engagement_rate ? (engagement_rate * 100).toFixed(2) : 0}%
+								<br />
+								Earning per post (estimation):{" "}
+								<span>
+									{huntReward || 0} HUNT (${usdReward || 0})
+								</span>
+							</div>
+						</Spin>
+					</div>
 				</div>
 			</div>
-		</div>
-	);
-};
+		);
+	}, [price_per_content, huntPerUsd]);
+}
 
 const Onboarding = ({ triggerCanvas, history }) => {
-	const [selectValue, setSelectValue] = useState("channels");
-	const [urlInput, setUrlInput] = useState("");
+	const [selectValue, setSelectValue] = useState("Channels");
+	const [urlInput, setUrlInput] = useState("https://instagram.com/sebayaki");
 	const { t } = useTranslation();
 	const {
 		steemMe,
 		steemconnectLoading,
 		socialChannels,
-		deleteSocialItem,
+		saveSocialChannels,
+		deleteSocialChannel,
 		setSocialChannels,
+		getSocialChannels,
 		name
 	} = useContext(AuthContext);
 
-	const persistState = {
-		socialChannels
-	};
+	useEffect(() => {
+		getSocialChannels();
+	}, []);
 
 	return (
 		<div>
@@ -109,23 +141,23 @@ const Onboarding = ({ triggerCanvas, history }) => {
 					<div className="channel-add-container row-space-between">
 						<div className="col-on-mobile">
 							<Select
-								value={t(selectValue)}
+								value={selectValue}
 								className="select-channel delete"
 								onChange={c => setSelectValue(c)}
 							>
-								<Option value="instagram">{t("instagram")}</Option>
-								<Option value="twitter">{t("twitter")}</Option>
-								<Option value="medium">{t("medium")}</Option>
-								<Option value="reddit">{t("reddit")}</Option>
-								<Option value="twitch">{t("twitch")}</Option>
-								<Option value="youtube">{t("youtube")}</Option>
-								<Option value="others">{t("others")}</Option>
+								{availableChannels.map(({ label, value }, index) => {
+									return (
+										<Option key={value} value={value}>
+											{label}
+										</Option>
+									);
+								})}
 							</Select>
 							<Input
 								addonAfter={
 									<div
 										onClick={() => {
-											if (selectValue === "channels" || urlInput === "") return;
+											if (selectValue === "Channels" || urlInput === "") return;
 											else if (!isWebUri(urlInput)) {
 												notification["error"]({
 													message:
@@ -133,14 +165,21 @@ const Onboarding = ({ triggerCanvas, history }) => {
 												});
 												return;
 											}
+
+											const value = _.find(availableChannels, [
+												"value",
+												selectValue
+											]);
+
 											setSocialChannels(
 												socialChannels.concat({
-													channel: selectValue,
-													url: urlInput
+													...value,
+													url: urlInput,
+													estimating: true
 												})
 											);
 
-											setSelectValue("channels");
+											setSelectValue("Channels");
 											setUrlInput("");
 										}}
 									>
@@ -157,29 +196,26 @@ const Onboarding = ({ triggerCanvas, history }) => {
 						</div>
 					</div>
 
-					{socialChannels.map((s, i) => (
+					{socialChannels.map((data, i) => (
 						<ChannelItem
 							key={i}
 							onDeleteClicked={() => {
-								deleteSocialItem(i);
+								deleteSocialChannel(i);
 							}}
 							index={i}
-							data={s}
+							data={data}
 							triggerCanvas={triggerCanvas}
 						/>
 					))}
 
-					<ChannelItem icon={instagramIcon} />
-					<ChannelItem icon={youtubeIcon} />
-					<ChannelItem icon={instagramIcon} />
-					<ChannelItem icon={instagramIcon} />
-
-					<div
+					<SimpleButton
 						className="simple-button gradient-button primary-gradient"
-						onClick={() => {}}
-					>
-						{t("confirm").toUpperCase()}
-					</div>
+						onClick={() => {
+							saveSocialChannels();
+						}}
+						hoverColor={"#50fdc6"}
+						text={t("confirm").toUpperCase()}
+					/>
 
 					<div
 						className="skip-button text-blue hover-link"

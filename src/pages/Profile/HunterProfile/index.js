@@ -99,6 +99,7 @@ class HunterProfile extends Component {
     const { t } = this.props;
     const { fetchCampaigns } = this.props.hunterDashboardContext;
     const { setTabIndex, tabIndex } = this.props.profileContext;
+    const { getSocialChannels } = this.props.authContext;
 
     return (
       <div className="tabs">

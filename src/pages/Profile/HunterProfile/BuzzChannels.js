@@ -1,81 +1,142 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
-import { Avatar, Input, Select, Icon, notification } from "antd";
+import { Avatar, Spin, Input, Select, Icon, notification } from "antd";
 import { isWebUri } from "valid-url";
+import AuthContext from "contexts/AuthContext";
+import AppContext from "contexts/AppContext";
+import CircularProgress from "components/CircularProgress";
 import Linkify from "react-linkify";
-import youtubeIcon from "assets/images/youtube.svg";
-import instagramIcon from "assets/images/instagram.svg";
-import twitterIcon from "assets/images/twitter.svg";
-import steemIcon from "assets/images/steemit.svg";
-import redditIcon from "assets/images/reddit.svg";
-import twitchIcon from "assets/images/twitch.svg";
-import mediumIcon from "assets/images/medium.svg";
-import otherIcon from "assets/images/other.svg";
 import approvedIcon from "assets/images/approved.svg";
 import deleteIcon from "assets/images/delete.svg";
+import { availableChannels } from "utils/constants";
+import { numberWithCommas } from "utils/helpers/numberFormatHelper";
+import _ from "lodash";
 
 const { Option } = Select;
 
-const ChannelItem = props => {
-  const { icon, verified, editMode } = props;
+function ChannelItem(props) {
+  const { index, data, onDeleteClicked, editMode } = props;
+  const { huntPerUsd } = useContext(AppContext);
+  const { refreshingBuzz } = useContext(AuthContext);
+  const {
+    url,
+    icon,
+    estimating,
+    channel_type,
+    profile_image,
+    name,
+    user_name,
+    engagement_rate,
+    follower_count,
+    is_verified,
+    price_per_content
+  } = data;
 
-  return (
-    <div className="buzz-channel-item col-on-mobile row-align-start">
-      <div className="row-align-center buzz-channel-container">
-        <div className="buzz-icon-container">
-          <img className="buzz-channel-icon" src={icon} alt="" />
-          {verified && (
+  let huntReward = null;
+  let usdReward = null;
+
+  if (price_per_content && !refreshingBuzz) {
+    huntReward = numberWithCommas(
+      (parseFloat(price_per_content) / huntPerUsd).toFixed(2)
+    );
+    usdReward = numberWithCommas(parseFloat(price_per_content).toFixed(2));
+  }
+
+  return useMemo(() => {
+    return (
+      <div className="buzz-channel-item col-on-mobile row-align-start">
+        <div className="row-align-center buzz-channel-container">
+          <div className="buzz-icon-container">
             <img
-              className="overlapped-approved-icon"
-              src={approvedIcon}
+              className="buzz-channel-icon"
+              src={
+                profile_image
+                  ? profile_image
+                  : icon
+              }
               alt=""
             />
-          )}
-        </div>
-        <div className="buzz-channel-text">Instagram</div>
-      </div>
-
-      <div className="buzz-summary">
-        <div className="row-align-center">
-          <div className="buzz-link">
-            <a target="__blank">https://www.instagram.com/andrew___cho</a>
+            {is_verified && (
+              <img
+                className="overlapped-approved-icon"
+                src={approvedIcon}
+                alt=""
+              />
+            )}
           </div>
-          {editMode && (
-            <img className="buzz-delete-icon" src={deleteIcon} alt="" />
-          )}
+          <div>
+          <div className="buzz-channel-text text-grey">{channel_type}</div>
+          <div className="buzz-channel-text text-black">{name || user_name}</div>
+          </div>
         </div>
 
-        <div className="buzz-stat-container text-small text-grey">
-          {verified && (
-            <div className="row-align-center">
-              <img src={approvedIcon} alt="" />
-              <div className="approved-text">Verified channel</div>
+        <div className="buzz-summary">
+          <div className="row-align-center">
+            <div className="buzz-link">
+              <a target="__blank">{url}</a>
             </div>
-          )}
-          Followers: 12,450
-          <br />
-          Total number of posts: 105
-          <br />
-          Average likes: 105.2
-          <br />
-          Average comments: 15.6
-          <br />
-          <span>Earning per post (estimation): 1.5K HUNT ($10.5)</span>
+            {editMode && (
+              <img
+                onClick={onDeleteClicked}
+                className="buzz-delete-icon"
+                src={deleteIcon}
+                alt=""
+              />
+            )}
+          </div>
+
+          <div className="buzz-stat-container text-small text-grey">
+            <Spin spinning={estimating || refreshingBuzz} tip="Estimating...">
+              <div>
+                {is_verified && (
+                  <div className="row-align-center">
+                    <img src={approvedIcon} alt="" />
+                    <div className="approved-text">Verified channel</div>
+                  </div>
+                )}
+                Followers: {follower_count || 0}
+                <br />
+                Engagement Rate:{" "}
+                {engagement_rate ? (engagement_rate * 100).toFixed(2) : 0}%
+                <br />
+                Earning per post (estimation):{" "}
+                <span>
+                  {huntReward || 0} HUNT (${usdReward || 0})
+                </span>
+              </div>
+            </Spin>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
-
+    );
+  }, [price_per_content, huntPerUsd, refreshingBuzz, editMode]);
+}
 const BuzzChannels = ({}) => {
   const [editMode, setEditMode] = useState(false);
-  const setUrlInput = () => {};
-  const urlInput = "";
-  const setSocialChannels = () => {};
-  const setSelectValue = () => {};
-  const selectValue = "";
-  const socialChannels = [];
+  const [selectValue, setSelectValue] = useState("Channels");
+  const [urlInput, setUrlInput] = useState("https://instagram.com/sebayaki");
 
+  const {
+    loading,
+    refreshBuzz,
+    socialChannels,
+    addSocialChannel,
+    setSocialChannels,
+    getSocialChannels,
+    deleteSocialChannel
+  } = useContext(AuthContext);
+
+  useEffect(() => {
+    getSocialChannels();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="content-quest">
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div className="content-quest">
       <div className="content-title text-black uppercase">
@@ -94,23 +155,23 @@ const BuzzChannels = ({}) => {
         <div className="row-space-between">
           <div className="col-on-mobile">
             <Select
-              value={"Add Channels"}
+              value={selectValue}
               className="select-channel delete"
               onChange={c => setSelectValue(c)}
             >
-              <Option value="instagram">Instagram</Option>
-              <Option value="twitter">Instagram</Option>
-              <Option value="medium">Medium</Option>
-              <Option value="reddit">Reddit</Option>
-              <Option value="twitch">Twitch</Option>
-              <Option value="youtube">YouTube</Option>
-              <Option value="others">Others</Option>
+              {availableChannels.map(({ label, value }, index) => {
+                return (
+                  <Option key={value} value={value}>
+                    {label}
+                  </Option>
+                );
+              })}
             </Select>
             <Input
               addonAfter={
                 <div
                   onClick={() => {
-                    if (selectValue === "channels" || urlInput === "") return;
+                    if (selectValue === "Channels" || urlInput === "") return;
                     else if (!isWebUri(urlInput)) {
                       notification["error"]({
                         message:
@@ -118,14 +179,19 @@ const BuzzChannels = ({}) => {
                       });
                       return;
                     }
-                    setSocialChannels(
-                      socialChannels.concat({
-                        channel: selectValue,
-                        url: urlInput
-                      })
-                    );
 
-                    setSelectValue("channels");
+                    const value = _.find(availableChannels, [
+                      "value",
+                      selectValue
+                    ]);
+
+                    addSocialChannel({
+                        ...value,
+                        url: urlInput,
+                        estimating: true
+                    })
+
+                    setSelectValue("Channels");
                     setUrlInput("");
                   }}
                 >
@@ -146,21 +212,31 @@ const BuzzChannels = ({}) => {
         Registered Channels
       </div>
       <div className="row-align-center text-blue text-small">
-        <div className="hover-link">Refresh data</div>
+        <div className="hover-link" onClick={refreshBuzz}>
+          Refresh data
+        </div>
         <div className="splitter">|</div>
         <div className="hover-link" onClick={() => setEditMode(!editMode)}>
           {editMode ? "Done" : "Manage channels"}
         </div>
       </div>
 
-      {editMode && <div className="please-note-warning text-grey text-small">
-Please note that your channel data will also be removed when you delete the channel, which is to calculate your top hunter performance score.
-        </div>}
-
-      <ChannelItem icon={instagramIcon} editMode={editMode} />
-      <ChannelItem icon={youtubeIcon} editMode={editMode} />
-      <ChannelItem icon={instagramIcon} editMode={editMode} />
-      <ChannelItem icon={instagramIcon} editMode={editMode} />
+      {editMode && (
+        <div className="please-note-warning text-grey text-small">
+          Please note that your channel data will also be removed when you
+          delete the channel, which is to calculate your top hunter performance
+          score.
+        </div>
+      )}
+      {socialChannels.map((data, i) => (
+        <ChannelItem
+          key={i}
+          onDeleteClicked={() => deleteSocialChannel(i)}
+          index={i}
+          data={data}
+          editMode={editMode}
+        />
+      ))}
     </div>
   );
 };

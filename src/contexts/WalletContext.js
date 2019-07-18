@@ -1,6 +1,6 @@
 import React from "react";
 import api from "utils/api";
-import Web3 from "pages/Profile/Wallet/Web3";
+import Web3 from "pages/Profile/HunterProfile/Wallet/Web3";
 import { notification } from "antd";
 import { extractErrorMessage } from "utils/errorMessage";
 import { getToken, setToken, getLoginURL } from "utils/token";

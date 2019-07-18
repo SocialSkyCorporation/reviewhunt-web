@@ -52,6 +52,7 @@ export default () => {
           <Link to="/about">
             <SimpleButton
               text={t("home.learn_more")}
+              backgroundColor="transparent"
               style={{
                 marginTop: 20,
                 marginBottom: 16,
@@ -132,7 +133,7 @@ export default () => {
           </div>
           <div className="row-align-center button-container">
             <SimpleButton inverse text="Join Now" style={{ marginRight: 10 }} />
-            <SimpleButton text="Read Pitch Deck" style={{ marginLeft: 10 }} />
+            <SimpleButton text="Read Pitch Deck" style={{ marginLeft: 10 }} backgroundColor="transparent" />
           </div>
         </div>
         <div className="call-to-action-desc">

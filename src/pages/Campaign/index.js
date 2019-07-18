@@ -98,6 +98,7 @@ export default props => {
 
         <div className="row-align-center">
           <SimpleButton
+            backgroundColor="transparent"
             text={joined ? "JOINED" : t("product.join")}
             style={{ marginTop: 30 }}
             onClick={() => {

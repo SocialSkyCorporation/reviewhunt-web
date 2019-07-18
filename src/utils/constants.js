@@ -13,12 +13,52 @@ export const monthsShort = [
   "Dec"
 ];
 
-export const productTypes = [
-  "Mobile App",
-  "Website",
-  "Game",
-  "Gadget"
-]
+export const availableChannels = [
+  {
+    value: "Instagram",
+    label: "Instagram",
+    greyIcon: require("assets/images/instagram-grey.svg"),
+    icon: require("assets/images/instagram.svg")
+  },
+  {
+    value: "Youtube",
+    label: "YouTube",
+    greyIcon: require("assets/images/youtube-grey.svg"),
+    icon: require("assets/images/youtube.svg")
+  },
+  {
+    value: "Twitter",
+    label: "Twitter",
+    greyIcon: require("assets/images/twitter-grey.svg"),
+    icon: require("assets/images/twitter.svg")
+  },
+  {
+    value: "Steem",
+    label: "Steem dApps",
+    greyIcon: require("assets/images/steem-grey.svg"),
+    icon: require("assets/images/steemit.svg")
+  },
+  {
+    value: "Medium",
+    label: "Medium",
+    greyIcon: require("assets/images/medium-grey.svg"),
+    icon: require("assets/images/medium.svg")
+  },
+  {
+    value: "Twitch",
+    label: "Twitch",
+    greyIcon: require("assets/images/twitch-grey.svg"),
+    icon: require("assets/images/twitch.svg")
+  },
+  {
+    value: "Others",
+    label: "Others",
+    greyIcon: require("assets/images/other-grey.svg"),
+    icon: require("assets/images/other.svg")
+  }
+];
+
+export const productTypes = ["Mobile App", "Website", "Game", "Gadget"];
 
 export const monthsLong = [
   "January",
@@ -311,7 +351,8 @@ export const businessCategories = [
   "Others"
 ];
 
-export const years = [...new Array(100)].map((item, index) => 2010 - index + "");
+export const years = [...new Array(100)].map(
+  (item, index) => 2010 - index + ""
+);
 
 export const days = [...new Array(31)].map((item, index) => index + 1 + "");
-

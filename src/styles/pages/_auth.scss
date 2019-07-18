@@ -164,6 +164,7 @@
 		width: 100%;
 		border: none;
 		margin-top: 32px;
+		font-size: 1rem;
 
 		&:hover {
 			background: $primary;
@@ -200,10 +201,16 @@
 		.channel-add-container {
 			margin-top: 10px;
 			margin-bottom: 40px;
+
+			.ant-input-group-wrapper {
+				height: 42px;
+				border: 1px solid #8b9699 !important;
+			}
+
 			.ant-input-group-addon {
 				border-radius: 0px;
-				border: 1px solid #8b9699 !important;
-				border-left: none !important;
+				height: 40px;
+				border: none;
 				background-color: #2f2f2f;
 				color: #3fcaff;
 				font-size: 1rem;
@@ -220,19 +227,26 @@
 				}
 			}
 
+
 			.ant-select-selection,
 			select,
 			input {
-				height: 44px;
+				height: 40px;
 				border-radius: 0px;
 				background-color: #2f2f2f;
-				border: 1px solid #8b9699 !important;
+				border: none;
 				color: #8b9699;
 				font-size: 1rem;
 
 				&::placeholder {
 					color: #8b9699;
 				}
+			}
+
+			.ant-select-selection,
+			select {
+				height: 42px;
+				border: 1px solid #8b9699 !important;
 			}
 
 			.ant-select-selection-selected-value {
@@ -285,6 +299,7 @@
 			.buzz-channel-icon {
 				width: 30px;
 				height: 30px;
+				border-radius: 15px;
 			}
 
 			.buzz-delete-icon {
@@ -305,8 +320,8 @@
 
 			.buzz-link {
 				width: 100%;
-				  border: solid 1px #8b9699;
-  background-color: #2f2f2f;
+				border: solid 1px #8b9699;
+				background-color: #2f2f2f;
 				padding: 5px 15px;
 			}
 
@@ -319,9 +334,8 @@
 				margin-top: 20px;
 				padding-left: 14px;
 				line-height: 1.43;
-
 				span {
-					color: #000;
+					font-weight: bold;
 				}
 			}
 		}
@@ -358,6 +372,7 @@
 		.skip-button {
 			margin: 14px 0px;
 			text-align: center;
+			font-size: 1rem;
 		}
 
 		.divider {

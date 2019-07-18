@@ -3,31 +3,42 @@ import { Icon } from "antd";
 import PropTypes from "prop-types";
 
 const SimpleButton = props => {
-	const [hover, setHover] = useState(false);
 	const {
 		type,
 		onMouseOver,
 		onMouseOut,
 		onClick,
 		text,
+		borderColor,
+		borderWidth,
+		backgroundColor,
+		hoverColor,
+		hoverTextColor,
+		color,
 		style,
 		icon,
 		className,
 		loading,
-		borderColor,
 		inverse
 	} = props;
 
-	const buttonStyle = { borderColor, color: borderColor, ...style };
+	const [hover, setHover] = useState(false);
+	const buttonStyle = {
+		borderWidth,
+		backgroundColor,
+		borderColor,
+		color,
+		...style
+	};
 
 	const inverseStyle = inverse
-		? { backgroundColor: borderColor, color: "#fff" }
+		? { backgroundColor: color, color: backgroundColor }
 		: {};
 
 	const hoverStyle = hover
 		? {
-				backgroundColor: borderColor,
-				color: "#fff"
+				backgroundColor: hoverColor,
+				color: inverse ? backgroundColor : hoverTextColor, 
 		  }
 		: {};
 
@@ -41,9 +52,9 @@ const SimpleButton = props => {
 				setHover(false);
 				onMouseOut(e);
 			}}
-			className={`simple-button ${type} ${className} ${inverse && "inverse"}`}
+			className={`simple-button ${type} ${className}`}
 			onClick={onClick}
-			style={{ ...buttonStyle, ...inverseStyle, ...hoverStyle }}
+      style={{ ...buttonStyle, ...inverseStyle, ...hoverStyle, ...style }}
 		>
 			<div className="row-align-center simple-button-text">
 				{icon}
@@ -65,6 +76,11 @@ SimpleButton.defaultProps = {
 	onMouseOut: () => {},
 	loading: false,
 	inverse: false,
-	borderColor: "#000"
+	borderColor: "#000",
+	backgroundColor: "#fff",
+	hoverColor: "#0a0a0a",
+	hoverTextColor: "#fff",
+	borderWidth: 1,
+	color: "#000"
 };
 export default SimpleButton;

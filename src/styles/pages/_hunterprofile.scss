@@ -2,10 +2,15 @@
   .channel-add-container {
     margin-top: 50px;
     margin-bottom: 40px;
+
+    .ant-input-group-wrapper {
+      height: 42px;
+      border: 1px solid #8b9699 !important;
+    }
+
     .ant-input-group-addon {
       border-radius: 0px;
-      border: 1px solid #8b9699 !important;
-      border-left: none !important;
+      border: none !important;
       background-color: #e5e5e5;
       color: #3fcaff;
       font-size: 1rem;
@@ -14,6 +19,7 @@
         cursor: pointer;
       }
     }
+
 
     .delete-input > * > .ant-input-group-addon {
       background: #fa4400;
@@ -25,16 +31,22 @@
     .ant-select-selection,
     select,
     input {
-      height: 44px;
+      height: 40px;
       border-radius: 0px;
       background-color: #e5e5e5;
-      border: 1px solid #8b9699 !important;
+      border: none;
       color: #8b9699;
       font-size: 1rem;
 
       &::placeholder {
         color: #8b9699;
       }
+    }
+    
+    .ant-select-selection,
+    select {
+      height: 42px;
+      border: 1px solid #8b9699 !important;
     }
 
     .ant-select-selection-selected-value {
@@ -97,12 +109,13 @@
     }
 
     .buzz-channel-container {
-      width: 270px;
+      min-width: 270px;
     }
 
     .buzz-channel-icon {
       width: 30px;
       height: 30px;
+      border-radius: 15px;
     }
 
     .buzz-delete-icon {
