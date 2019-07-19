@@ -9,7 +9,6 @@ import AppContext from "contexts/AppContext";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 
 const QuestGridItem = props => {
-
   const { setCurrentCampaign } = useContext(CampaignContext);
   const { huntPerUsd } = useContext(AppContext);
 
@@ -30,8 +29,10 @@ const QuestGridItem = props => {
     total_bounty > 0
       ? Math.max(
           0,
-          (Number.parseFloat(bounty_left) / Number.parseFloat(total_bounty)) *
+          (
+            (Number.parseFloat(bounty_left) / Number.parseFloat(total_bounty)) *
             100
+          ).toFixed(2)
         )
       : 0;
 
@@ -49,7 +50,11 @@ const QuestGridItem = props => {
         </div>
 
         <div className="top-container">
-          <img className="thumbnail" src={thumbnails && thumbnails["x2"]} alt="" />
+          <img
+            className="thumbnail"
+            src={thumbnails && thumbnails["x2"]}
+            alt=""
+          />
         </div>
 
         <ProgressBar height={10} progress={20} dark />
@@ -74,7 +79,7 @@ const QuestGridItem = props => {
               <img className="grid-item-icon" src={moneySvg} alt="" />
               <div className="bounty-text-container">
                 <div className="subheader text-black">
-                  {numberWithCommas(huntPerUsd * total_bounty)}{" "}
+                  {numberWithCommas((huntPerUsd * total_bounty).toFixed(2))}{" "}
                   <span>HUNT</span>
                 </div>
                 <div className="subtext text-grey">Total Bounty Fund</div>

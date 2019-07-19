@@ -14,7 +14,7 @@ import { numberWithCommas } from 'utils/helpers/numberFormatHelper';
 
 export default () => {
   const { t } = useTranslation();
-  const { campaigns, fetchCampaigns, fetchingCampaigns } = useContext(
+  const { campaigns, getCampaigns, fetchingCampaigns } = useContext(
     CampaignContext
   );
   const {huntPerUsd} = useContext(
@@ -34,7 +34,7 @@ export default () => {
   })
 
   useEffect(() => {
-    fetchCampaigns();
+    getCampaigns();
   }, []);
 
   const banner = () => {

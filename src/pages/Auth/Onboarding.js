@@ -33,17 +33,17 @@ function ChannelItem(props) {
 		estimating,
 		engagement_rate,
 		follower_count,
-		price_per_content
+		reward_estimation
 	} = data;
 
 	let huntReward = null;
 	let usdReward = null;
 
-	if (price_per_content && !estimating) {
+	if (reward_estimation && !estimating) {
 		huntReward = numberWithCommas(
-			(parseFloat(price_per_content) / huntPerUsd).toFixed(2)
+			(parseFloat(reward_estimation) / huntPerUsd).toFixed(2)
 		);
-		usdReward = numberWithCommas(parseFloat(price_per_content).toFixed(2));
+		usdReward = numberWithCommas(parseFloat(reward_estimation).toFixed(2));
 	}
 
 	return useMemo(() => {
@@ -58,7 +58,9 @@ function ChannelItem(props) {
 						/>
 					</div>
 					<div>
-						<div className="buzz-channel-text text-grey">{channel_type || value}</div>
+						<div className="buzz-channel-text text-grey">
+							{channel_type || value}
+						</div>
 						<div className="buzz-channel-text text-white">
 							{name || user_name}
 						</div>
@@ -98,7 +100,7 @@ function ChannelItem(props) {
 				</div>
 			</div>
 		);
-	}, [price_per_content, huntPerUsd]);
+	}, [reward_estimation, huntPerUsd]);
 }
 
 const Onboarding = ({ triggerCanvas, history }) => {
@@ -112,13 +114,8 @@ const Onboarding = ({ triggerCanvas, history }) => {
 		saveSocialChannels,
 		deleteSocialChannel,
 		setSocialChannels,
-		getSocialChannels,
 		name
 	} = useContext(AuthContext);
-
-	useEffect(() => {
-		getSocialChannels();
-	}, []);
 
 	return (
 		<div>

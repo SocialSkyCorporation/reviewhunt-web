@@ -3,7 +3,7 @@ import { Modal, notification } from "antd";
 import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 import api from "utils/api";
 import { extractErrorMessage } from "utils/errorMessage";
-import _ from 'lodash';
+import _ from "lodash";
 
 const HunterDashboardContext = React.createContext();
 
@@ -15,14 +15,16 @@ class HunterDashboardProvider extends React.Component {
     currentCampaign: null,
     fetchingQuest: false,
     submittingQuest: false,
-    submitModalVisible: false
+    submitModalVisible: false,
+    fetchingSubmittedQuests: false,
+    submittedQuests: []
   };
 
   updateState = (key, value) => {
-    this.setState({[key]: value});
-  }
+    this.setState({ [key]: value });
+  };
 
-  fetchCampaigns = async () => {
+  getCampaigns = async () => {
     const { fetchingQuest } = this.state;
     if (fetchingQuest) return;
 
@@ -46,17 +48,26 @@ class HunterDashboardProvider extends React.Component {
     }
   };
 
-  submitQuest = async (quest, channel, url, img) => {
-    const { id, quest_type } = quest;
-    const { currentCampaign } = this.state;
-    console.log("current quest is", quest_type, id);
+  submitQuest = async (quest, channel, contentUrl, img) => {
+    const { currentCampaign, submittedQuests } = this.state;
+
+    // console.log("submitting", channel);
     this.setState({ submittingQuest: true });
     try {
       const formData = new FormData();
-      formData.append("hunter_quest[quest_id]", id);
-      channel && formData.append("hunter_quest[channel]", channel);
-      url && formData.append("hunter_quest[proof_url]", url);
-      formData.append("hunter_quest[proof_image]", new Blob(img, {type: 'image/png'}));
+      formData.append("hunter_quest[quest_id]", quest.id);
+      channel &&
+        formData.append(
+          "hunter_quest[channel]",
+          channel.channel_type.toLowerCase()
+        );
+      contentUrl && formData.append("hunter_quest[proof_url]", contentUrl);
+      quest.quest_type === "buzz" &&
+        formData.append("hunter_quest[buzz_channel_id]", channel.id);
+      formData.append(
+        "hunter_quest[proof_image]",
+        new Blob(img, { type: "image/png" })
+      );
 
       const result = await api.uploadFormData(
         "post",
@@ -68,12 +79,16 @@ class HunterDashboardProvider extends React.Component {
 
       const campaignCopy = _.clone(currentCampaign);
       campaignCopy.quests.forEach((_quest, _index) => {
-        if(_quest.id === result.id) {
+        if (_quest.id === result.id) {
           Object.assign(_quest, result);
         }
-      })
+      });
 
-      this.setState({currentCampaign: campaignCopy, submitModalVisible: false});
+      this.setState({
+        currentCampaign: campaignCopy,
+        submittedQuests: submittedQuests.concat(result),
+        submitModalVisible: false
+      });
     } catch (e) {
       notification["error"]({
         message: extractErrorMessage(e)
@@ -87,13 +102,29 @@ class HunterDashboardProvider extends React.Component {
     this.setState({ currentCampaign });
   };
 
+  getQuestSubmissions = async id => {
+    this.setState({ fetchingSubmittedQuests: true });
+    api
+      .get(`/hunter_quests.json?quest_id=${id}`, {}, true, TYPE_HUNTER)
+      .then(submittedQuests => this.setState({ submittedQuests }))
+      .catch(e => {
+        notification["error"]({
+          message: extractErrorMessage(e)
+        });
+      })
+      .finally(() => {
+        this.setState({ fetchingSubmittedQuests: false });
+      });
+  };
+
   render() {
     return (
       <Provider
         value={{
           ...this.state,
-          fetchCampaigns: this.fetchCampaigns,
+          getCampaigns: this.getCampaigns,
           setCurrentCampaign: this.setCurrentCampaign,
+          getQuestSubmissions: this.getQuestSubmissions,
           submitQuest: this.submitQuest,
           updateState: this.updateState
         }}

@@ -46,7 +46,7 @@ class CampaignProvider extends React.Component {
     }
   };
 
-  fetchCampaigns = async () => {
+  getCampaigns = async () => {
     const { fetchingCampaigns } = this.state;
     if (fetchingCampaigns) return;
 
@@ -120,7 +120,7 @@ class CampaignProvider extends React.Component {
       <Provider
         value={{
           ...this.state,
-          fetchCampaigns: this.fetchCampaigns,
+          getCampaigns: this.getCampaigns,
           fetchCampaign: this.fetchCampaign,
           joinCampaign: this.joinCampaign,
           setCurrentCampaign: this.setCurrentCampaign,

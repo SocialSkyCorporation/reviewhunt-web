@@ -44,10 +44,10 @@ class HunterProfile extends Component {
 
   componentDidMount() {
     const { tabIndex } = this.props.profileContext;
-    const { fetchCampaigns } = this.props.hunterDashboardContext;
+    const { getCampaigns } = this.props.hunterDashboardContext;
 
     if (tabIndex === TAB_QUEST) {
-      fetchCampaigns();
+      getCampaigns();
     }
   }
 
@@ -97,7 +97,7 @@ class HunterProfile extends Component {
 
   renderTabs() {
     const { t } = this.props;
-    const { fetchCampaigns } = this.props.hunterDashboardContext;
+    const { getCampaigns } = this.props.hunterDashboardContext;
     const { setTabIndex, tabIndex } = this.props.profileContext;
     const { getSocialChannels } = this.props.authContext;
 
@@ -122,7 +122,7 @@ class HunterProfile extends Component {
           onClick={() => {
             if (tabIndex === TAB_QUEST) return;
             setTabIndex(TAB_QUEST);
-            fetchCampaigns();
+            getCampaigns();
           }}
         />
         <TabItem

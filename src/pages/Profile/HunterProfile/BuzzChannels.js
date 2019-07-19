@@ -29,17 +29,17 @@ function ChannelItem(props) {
     engagement_rate,
     follower_count,
     is_verified,
-    price_per_content
+    reward_estimation
   } = data;
 
   let huntReward = null;
   let usdReward = null;
 
-  if (price_per_content && !refreshingBuzz) {
+  if (reward_estimation && !refreshingBuzz) {
     huntReward = numberWithCommas(
-      (parseFloat(price_per_content) / huntPerUsd).toFixed(2)
+      (parseFloat(reward_estimation) / huntPerUsd).toFixed(2)
     );
-    usdReward = numberWithCommas(parseFloat(price_per_content).toFixed(2));
+    usdReward = numberWithCommas(parseFloat(reward_estimation).toFixed(2));
   }
 
   return useMemo(() => {
@@ -109,7 +109,7 @@ function ChannelItem(props) {
         </div>
       </div>
     );
-  }, [price_per_content, huntPerUsd, refreshingBuzz, editMode]);
+  }, [reward_estimation, huntPerUsd, refreshingBuzz, editMode]);
 }
 const BuzzChannels = ({}) => {
   const [editMode, setEditMode] = useState(false);

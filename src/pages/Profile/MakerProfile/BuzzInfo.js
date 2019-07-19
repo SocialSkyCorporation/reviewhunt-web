@@ -1,36 +1,63 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import Linkify from "react-linkify";
 import { Icon, Spin, Modal } from "antd";
 import backImg from "assets/images/back.svg";
 import clockImg from "assets/images/clock.svg";
+import approvedImg from "assets/images/approved.svg";
 import SimpleButton from "components/SimpleButton";
 import QuestStepProgress from "components/QuestStepProgress";
 import HistoryMessage from "../HistoryMessage";
 import FullWidthButton from "components/FullWidthButton";
 import { Dropdown, TextInput, Screenshots } from "components/FormTypes";
 import HunterDashboardContext from "contexts/HunterDashboardContext";
+import AuthContext from "contexts/AuthContext";
+import AppContext from "contexts/AppContext";
+import CircularProgress from "components/CircularProgress";
+import { availableChannels } from "utils/constants";
+import { numberWithCommas } from "utils/helpers/numberFormatHelper";
+import { filterAllowedChannels } from "utils/helpers/campaignHelper";
+import _ from "lodash";
 
-import youtubeIcon from "assets/images/youtube.svg";
-import instagramIcon from "assets/images/instagram.svg";
-import twitterIcon from "assets/images/twitter.svg";
-import steemIcon from "assets/images/steemit.svg";
-import redditIcon from "assets/images/reddit.svg";
-import twitchIcon from "assets/images/twitch.svg";
-import mediumIcon from "assets/images/medium.svg";
-import otherIcon from "assets/images/other.svg";
+const ChannelSubmissionItem = ({
+  data,
+  text,
+  onClick,
+  registered,
+  submitted
+}) => {
+  const { reward_estimation, profile_image, channel_type, submitting } = data;
+  const { huntPerUsd } = useContext(AppContext);
 
-const ChannelSubmissionItem = ({ image, text, onClick, registered }) => {
+  const image = _.find(availableChannels, ["value", channel_type]).greyIcon;
+
+  const usdPrice = numberWithCommas(parseFloat(reward_estimation).toFixed(2));
+  const huntPrice = numberWithCommas(
+    (parseFloat(reward_estimation) / huntPerUsd).toFixed(2)
+  );
+
   return (
     <div className={`channel-submission-item ${!registered && "unregistered"}`}>
+      {submitted && (
+        <div className="complete-overlay">
+          <img src={approvedImg} alt="" />
+        </div>
+      )}
       <div className="channel-submission-content">
-        <img src={image} alt="" />
-        <div className="channel-text text-black">{text}</div>
+        {profile_image && (
+          <img className="channel-icon-right-corner" src={image} alt="" />
+        )}
+        <img
+          className="channel-submission-icon"
+          src={profile_image || image}
+          alt=""
+        />
+        <div className="channel-text text-black">{channel_type}</div>
         {registered ? (
           <div className="channel-expected-earning text-green">
             Your Expected Earnings
             <br />
-            12.5K HUNT ($130.24)
+            {huntPrice} HUNT (${usdPrice})
           </div>
         ) : (
           <div className="channel-expected-earning text-grey">
@@ -41,13 +68,13 @@ const ChannelSubmissionItem = ({ image, text, onClick, registered }) => {
         )}
       </div>
       <FullWidthButton
-        text={registered ? "Submit" : "Register"}
+        text={submitted ? "Completed" : "Submit"}
         onClick={() => {
           if (!registered) {
             //redirect to onboarding
             return;
           }
-          onClick();
+          onClick(data);
         }}
         inverse={!registered}
         style={registered ? {} : { borderTop: "solid 1px #e5e5e5" }}
@@ -68,6 +95,7 @@ const BuzzInfo = ({ quest }) => {
     criteria,
     bounty_max,
     description,
+    allowed_channels,
     image
   } = quest;
 
@@ -75,12 +103,61 @@ const BuzzInfo = ({ quest }) => {
     updateState,
     submittingQuest,
     submitModalVisible,
-    submitQuest
+    submitQuest,
+    submittedQuests,
+    fetchingSubmittedQuests,
+    getQuestSubmissions
   } = useContext(HunterDashboardContext);
+
+  const { loading, getSocialChannels, socialChannels } = useContext(
+    AuthContext
+  );
+
+  const { huntPerUsd } = useContext(AppContext);
+
 
   const [submitChannel, setSubmitChannel] = useState("");
   const [proofImage, setProofImage] = useState([]);
   const [urlText, setUrlText] = useState("");
+
+  let huntReward = 0;
+  let usdReward = 0;
+
+  let tag =
+    bounty_max === bounty_base
+      ? `$${bounty_base}`
+      : `$${bounty_base} - $${bounty_max}`;
+
+  if (submitChannel) {
+    huntReward = numberWithCommas(
+      (parseFloat(submitChannel.reward_estimation) / huntPerUsd).toFixed(2)
+    );
+    usdReward = numberWithCommas(
+      parseFloat(submitChannel.reward_estimation).toFixed(2)
+    );
+  }
+
+  const allowedChannels = useMemo(() => {
+    return filterAllowedChannels(socialChannels, allowed_channels).map(
+      (channel, index) => {
+        const { id } = channel;
+        return (
+          <ChannelSubmissionItem
+            key={id}
+            text="Youtube"
+            data={channel}
+            onClick={data => {
+              setSubmitChannel(data);
+              updateState("submitModalVisible", true);
+            }}
+            submitted={_.find(submittedQuests, ["buzz_channel_id", id])}
+            registered={true}
+          />
+        );
+      }
+    );
+  }, [allowed_channels, socialChannels, submittedQuests]);
+
   return (
     <div>
       <div className="info-number text-black uppercase">Buzz</div>
@@ -88,7 +165,7 @@ const BuzzInfo = ({ quest }) => {
         Introduce this product via your social/community channel.
       </div>
 
-      <div className="quest-tag">Quest Bounty - $0 to $100</div>
+      <div className="quest-tag">Quest Bounty - {tag}</div>
 
       {/*   <HistoryMessage
         type="confirm"
@@ -128,116 +205,66 @@ const BuzzInfo = ({ quest }) => {
       </div>
 
       <div className="info-subheading text-black uppercase">
-        Accepting channels
+        Submit Buzz Content
       </div>
 
-      <div className="channel-submission-items">
-        <ChannelSubmissionItem
-          text="Youtube"
-          image={youtubeIcon}
-          onClick={() => {
-            setSubmitChannel("youtube");
-            updateState("submitModalVisible", true);
-          }}
-          registered={true}
-        />
-        <ChannelSubmissionItem
-          text="Instagram"
-          image={instagramIcon}
-          onClick={() => {
-            setSubmitChannel("instagram");
-            updateState("submitModalVisible", true);
-          }}
-        />
-        <ChannelSubmissionItem
-          text="Twitter"
-          image={twitterIcon}
-          onClick={() => {
-            setSubmitChannel("twitter");
-            updateState("submitModalVisible", true);
-          }}
-        />
-        <ChannelSubmissionItem
-          text="Steem DApps"
-          image={steemIcon}
-          onClick={() => {
-            setSubmitChannel("steem");
-            updateState("submitModalVisible", true);
-          }}
-        />
-        <ChannelSubmissionItem
-          text="Reddit"
-          image={redditIcon}
-          onClick={() => {
-            setSubmitChannel("reddit");
-            updateState("submitModalVisible", true);
-          }}
-        />
-        <ChannelSubmissionItem
-          text="Twitch"
-          image={twitchIcon}
-          onClick={() => {
-            setSubmitChannel("twitch");
-            updateState("submitModalVisible", true);
-          }}
-        />
-        <ChannelSubmissionItem
-          text="Medium"
-          image={mediumIcon}
-          onClick={() => {
-            setSubmitChannel("medium");
-            updateState("submitModalVisible", true);
-          }}
-        />
-        <ChannelSubmissionItem
-          text="Other Channels"
-          image={otherIcon}
-          onClick={() => {
-            setSubmitChannel("other");
-            updateState("submitModalVisible", true);
-          }}
-        />
+      <div className="text-grey buzz-warning-text">
+        Please see the channels you’ve added when you joined this review
+        campaign.{" "}
+        <span className="text-warning">
+          You MUST submit all the channels below that you’ve declared initially.
+          If not, you will get panelty point that may limit your Reviewhunt
+          activities.
+        </span>
       </div>
+
+      {loading || fetchingSubmittedQuests ? (
+        <CircularProgress fullPage={false} />
+      ) : (
+        <div className="channel-submission-items">{allowedChannels}</div>
+      )}
 
       <Modal
         maskClosable={false}
         onCancel={() => updateState("submitModalVisible", false)}
         visible={submitModalVisible}
         footer={null}
-        width={'auto'}
+        width={"auto"}
         bodyStyle={{ padding: 60 }}
         wrapClassName="profile-page"
       >
         <Spin spinning={submittingQuest} tip="Loading...">
           <div className="submission-modal">
             <div className="text-black submission-modal-title uppercase">
-              Submit {submitChannel} Content
+              Submit {submitChannel.channel_type} Content
             </div>
 
             <div className="buzz-estimation-container">
               <div className="text-green estimation-text">
-                Your Reward Estimation: 15.2K HUNT($105.2)
+                Your Reward Estimation: {huntReward} HUNT(${usdReward})
               </div>
               <div className="text-grey">
-                This estimated reward for your [{submitChannel}] channel is our
-                recommended reeward amount based on our channel evaluation
-                algorithm. However, please note that{" "}
+                This estimated reward for your [{submitChannel.channel_type}]
+                channel is our recommended reeward amount based on our channel
+                evaluation algorithm. However, please note that{" "}
                 <span>
                   the final amount will be made by the maker’s decision.
                 </span>
               </div>
-              <div className="text-black registered-channel-text">Your registered channel</div>
-              <Linkify>
-                <div>https://google.com</div>
-              </Linkify>
+              <div className="text-black registered-channel-text">
+                Your registered channel
+              </div>
+              <a href={submitChannel.url} target="__blank">
+                {submitChannel.url}
+              </a>
               <div className="buzz-channel-stats text-grey">
-                Followers: 12,450
+                Followers: {submitChannel.follower_count}
                 <br />
-                Total number of posts: 105
+                Engagement Rate:{" "}
+                {(submitChannel.engagement_rate * 100).toFixed(2)}
                 <br />
-                Average likes: 105.2
-                <br />
-                Average comments: 15.6
+                Earning per post (estimation): {huntReward} HUNT ($
+                {usdReward})
               </div>
             </div>
 

@@ -570,7 +570,12 @@
       margin-left: -7.5px;
     }
 
+    .buzz-warning-text {
+      margin: 10px 0px;
+    }
+
     .channel-submission-item {
+      position: relative;
       display: flex;
       flex-direction: column;
       width: 254px;
@@ -578,6 +583,38 @@
       background-color: #e5e5e5;
       margin: 7.5px;
       line-height: 1.29;
+
+      .complete-overlay {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 254px;
+        height: 254px;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, .5);
+
+        img {
+          width: 30px;
+          height: 30px;
+        }
+      }
+
+      .channel-icon-right-corner {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        object-fit: contain;
+      }
+
+      .channel-submission-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        object-fit: contain;
+      }
 
       &.unregistered {
         background-color: #fff;

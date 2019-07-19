@@ -252,7 +252,7 @@ const ReviewInfo = ({ quest }) => {
             </div>
             <FullWidthButton
               onClick={() =>
-                submitQuest(quest, submissionType, null, proofImage)
+                submitQuest(quest, {channel_type: submissionType}, null, proofImage)
               }
               text={`SUBMIT ${
                 submissionType === "appstore" ? "APP STORE" : "PLAY STORE"

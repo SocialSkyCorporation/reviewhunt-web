@@ -15,42 +15,49 @@ export const monthsShort = [
 
 export const availableChannels = [
   {
+    key: "instagram",
     value: "Instagram",
     label: "Instagram",
     greyIcon: require("assets/images/instagram-grey.svg"),
     icon: require("assets/images/instagram.svg")
   },
   {
+    key: "youtube",
     value: "Youtube",
     label: "YouTube",
     greyIcon: require("assets/images/youtube-grey.svg"),
     icon: require("assets/images/youtube.svg")
   },
   {
+    key: "twitter",
     value: "Twitter",
     label: "Twitter",
     greyIcon: require("assets/images/twitter-grey.svg"),
     icon: require("assets/images/twitter.svg")
   },
   {
+    key: "steem",
     value: "Steem",
     label: "Steem dApps",
     greyIcon: require("assets/images/steem-grey.svg"),
     icon: require("assets/images/steemit.svg")
   },
   {
+    key: "medium",
     value: "Medium",
     label: "Medium",
     greyIcon: require("assets/images/medium-grey.svg"),
     icon: require("assets/images/medium.svg")
   },
   {
+    key: "twitch",
     value: "Twitch",
     label: "Twitch",
     greyIcon: require("assets/images/twitch-grey.svg"),
     icon: require("assets/images/twitch.svg")
   },
   {
+    key: "others",
     value: "Others",
     label: "Others",
     greyIcon: require("assets/images/other-grey.svg"),

@@ -310,6 +310,7 @@ class AuthProvider extends React.Component {
     this.setState({ refreshingBuzz: true });
     try {
       for (const index in socialChannels) {
+        console.log("refreshing", socialChannels[index]);
         const channel = socialChannels[index];
         const result = await api.put(
           `/buzz_channels/${channel.id}/refresh.json`,
