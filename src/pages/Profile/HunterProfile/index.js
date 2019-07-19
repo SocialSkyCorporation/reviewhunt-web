@@ -3,10 +3,7 @@ import { Icon, Select, notification } from "antd";
 import moneyImg from "assets/images/money-circle.svg";
 import crownImg from "assets/images/crown-circle.svg";
 import TabItem from "../TabItem";
-import ProfileRow, {
-  TYPE_DROPDOWN,
-  TYPE_PASSWORD
-} from "../ProfileRow";
+import ProfileRow, { TYPE_DROPDOWN, TYPE_PASSWORD } from "../ProfileRow";
 import QuestItem from "../QuestItem";
 import CurrentQuest from "../CurrentQuest";
 import ProgressBar from "components/ProgressBar";
@@ -28,6 +25,7 @@ import BuzzChannels from "./BuzzChannels";
 import { TYPE_HUNTER } from "pages/Auth";
 import { extractErrorMessage } from "utils/errorMessage";
 import CircularProgress from "components/CircularProgress";
+import _ from "lodash";
 
 const { Option } = Select;
 
@@ -44,7 +42,10 @@ class HunterProfile extends Component {
 
   componentDidMount() {
     const { tabIndex } = this.props.profileContext;
-    const { getCampaigns } = this.props.hunterDashboardContext;
+    const {
+      getCampaigns,
+      getQuestSubmissions
+    } = this.props.hunterDashboardContext;
 
     if (tabIndex === TAB_QUEST) {
       getCampaigns();
@@ -54,6 +55,32 @@ class HunterProfile extends Component {
   renderBanner() {
     const { t } = this.props;
     const { emailMe } = this.props.authContext;
+    const { fetchingQuest, campaigns } = this.props.hunterDashboardContext;
+
+    let rewardEarned = fetchingQuest ? (
+      <Icon type="loading" />
+    ) : (
+      <div>
+        {_.reduce(
+          campaigns,
+          (totalSum, campaign) => {
+            return (
+              totalSum +
+              _.reduce(
+                campaign.quests,
+                (sum, quest) => {
+                  return sum + parseFloat(quest.bounty_paid);
+                },
+                0
+              )
+            );
+          },
+          0
+        )}{" "}
+        <span>HUNT</span>
+      </div>
+    );
+
     return (
       <div className="padded-container primary-gradient banner-container">
         <div className="banner-header">
@@ -75,7 +102,7 @@ class HunterProfile extends Component {
           <div className="summary-item">
             <img className="summary-icon" src={moneyImg} alt="" />
             <div className="text-container">
-              <div className="summary-title">$5,055</div>
+              <div className="summary-title">{rewardEarned}</div>
               <div className="summary-subtitle">
                 {t("profile.earned_bounty")}
               </div>
@@ -179,7 +206,9 @@ class HunterProfile extends Component {
           {steemMe ? (
             <div className="row-align-center row-space-between col-on-mobile steem-connected-container">
               <div>
-                <div className="content-title text-black">{t("steem_steemhunt")}</div>
+                <div className="content-title text-black">
+                  {t("steem_steemhunt")}
+                </div>
                 <div className="profile-icon-container row-align-center">
                   <img
                     className="profile-icon"

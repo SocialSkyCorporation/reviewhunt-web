@@ -164,7 +164,7 @@ const Onboarding = ({ triggerCanvas, history }) => {
 											}
 
 											const value = _.find(availableChannels, [
-												"value",
+												"key",
 												selectValue
 											]);
 

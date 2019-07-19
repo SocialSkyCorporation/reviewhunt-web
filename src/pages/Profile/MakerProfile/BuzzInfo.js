@@ -29,13 +29,14 @@ const ChannelSubmissionItem = ({
   const { reward_estimation, profile_image, channel_type, submitting } = data;
   const { huntPerUsd } = useContext(AppContext);
 
-  const image = _.find(availableChannels, ["value", channel_type]).greyIcon;
+  const image = _.find(availableChannels, ["key", channel_type]).greyIcon;
 
   const usdPrice = numberWithCommas(parseFloat(reward_estimation).toFixed(2));
   const huntPrice = numberWithCommas(
     (parseFloat(reward_estimation) / huntPerUsd).toFixed(2)
   );
 
+  
   return (
     <div className={`channel-submission-item ${!registered && "unregistered"}`}>
       {submitted && (
@@ -52,7 +53,7 @@ const ChannelSubmissionItem = ({
           src={profile_image || image}
           alt=""
         />
-        <div className="channel-text text-black">{channel_type}</div>
+        <div className="channel-text text-black">{_.capitalize(channel_type)}</div>
         {registered ? (
           <div className="channel-expected-earning text-green">
             Your Expected Earnings
@@ -115,6 +116,9 @@ const BuzzInfo = ({ quest }) => {
 
   const { huntPerUsd } = useContext(AppContext);
 
+  useEffect(() => {
+    getSocialChannels();
+  }, [])
 
   const [submitChannel, setSubmitChannel] = useState("");
   const [proofImage, setProofImage] = useState([]);
@@ -136,6 +140,8 @@ const BuzzInfo = ({ quest }) => {
       parseFloat(submitChannel.reward_estimation).toFixed(2)
     );
   }
+
+
 
   const allowedChannels = useMemo(() => {
     return filterAllowedChannels(socialChannels, allowed_channels).map(

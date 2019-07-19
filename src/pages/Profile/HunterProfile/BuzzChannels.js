@@ -159,9 +159,9 @@ const BuzzChannels = ({}) => {
               className="select-channel delete"
               onChange={c => setSelectValue(c)}
             >
-              {availableChannels.map(({ label, value }, index) => {
+              {availableChannels.map(({ label, key }, index) => {
                 return (
-                  <Option key={value} value={value}>
+                  <Option key={key} value={key}>
                     {label}
                   </Option>
                 );
@@ -181,7 +181,7 @@ const BuzzChannels = ({}) => {
                     }
 
                     const value = _.find(availableChannels, [
-                      "value",
+                      "key",
                       selectValue
                     ]);
 

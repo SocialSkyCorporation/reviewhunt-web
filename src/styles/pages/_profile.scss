@@ -118,6 +118,10 @@
         @include responsive(mobile) {
           font-size: 1rem;
         }
+
+        span {
+          font-size: .875rem;
+        }
       }
 
       .summary-subtitle {

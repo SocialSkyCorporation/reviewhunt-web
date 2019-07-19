@@ -182,7 +182,6 @@ class AuthProvider extends React.Component {
     api
       .get("/buzz_channels/mine.json", {}, true, TYPE_HUNTER)
       .then(socialChannels => {
-        console.log(socialChannels);
         socialChannels.forEach(channel => (channel.estimating = false));
         this.setState({ socialChannels });
       })

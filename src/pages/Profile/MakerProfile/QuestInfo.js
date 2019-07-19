@@ -50,7 +50,7 @@ const QuestInfo = ({ quest }) => {
       <div className="info-number text-black">
         QUEST {quest_type.replace(/\D/g, "")}
       </div>
-      <div className="info-title text-black">{title}</div>
+      <div className="info-title text-black uppercase">{title}</div>
 
       <div className="quest-tag">Quest Bounty - ${tag}</div>
 

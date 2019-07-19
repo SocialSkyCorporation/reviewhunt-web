@@ -118,7 +118,7 @@
 			border-right-width: 0px !important;
 			border-right-style: none;
 			border-radius: 0px;
-			font-size: 0.875rem;
+			font-size: 1rem;
 			color: #fff;
 
 			svg {
@@ -426,11 +426,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 304px;
-		height: 34px;
+		width: 720px;
+		height: 48px;
 		background: $opacity-black;
 		margin-top: 20px;
-		font-size: 0.75rem;
 
 		@include responsive(tablet) {
 			border: none;

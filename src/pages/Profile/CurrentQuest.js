@@ -50,7 +50,6 @@ const CurrentQuest = props => {
   const { getSocialChannels } = useContext(AuthContext);
 
   useEffect(() => {
-    getSocialChannels();
     getQuestSubmissions(id);
   }, []);
 
@@ -93,7 +92,7 @@ const CurrentQuest = props => {
         {quest_type === "buzz" && <BuzzInfo quest={quest} />}
       </div>
     ),
-    [quest, currentCampaign, submittedQuests]
+    [quest, currentCampaign]
   );
 };
 
