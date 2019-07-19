@@ -50,6 +50,7 @@ class HunterDashboardProvider extends React.Component {
 
   submitQuest = async (quest, channel, contentUrl, img) => {
     const { currentCampaign, submittedQuests } = this.state;
+    console.log("img", img);
 
     // console.log("submitting", channel);
     this.setState({ submittingQuest: true });
@@ -66,7 +67,7 @@ class HunterDashboardProvider extends React.Component {
         formData.append("hunter_quest[buzz_channel_id]", channel.id);
       formData.append(
         "hunter_quest[proof_image]",
-        new Blob([img], { type: "image/png" })
+        new Blob([img[0]], { type: "image/png" })
       );
 
       const result = await api.uploadFormData(

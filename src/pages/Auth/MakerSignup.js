@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Input, Icon, Select } from "antd";
 import PropTypes from "prop-types";
 import { useTranslation, Trans } from "react-i18next";
 import { businessCategories } from "utils/constants";
 
+import {
+	OptimizedInput,
+	OptimizedSelect,
+	OptimizedInputPassword
+} from "./OptimizedFormTypes";
+
 const { Option } = Select;
+
 
 const MakerSignup = ({
 	triggerCanvas,
@@ -22,7 +29,7 @@ const MakerSignup = ({
 
 	return (
 		<form>
-			<Input
+			<OptimizedInput
 				className="auth-form-input"
 				placeholder={t("company")}
 				value={nameOfCompany}
@@ -34,7 +41,7 @@ const MakerSignup = ({
 				autoComplete="organization"
 				disabled={loading}
 			/>
-			<Input
+			<OptimizedInput
 				className="auth-form-input"
 				placeholder={t("full_name")}
 				value={fullName}
@@ -46,7 +53,7 @@ const MakerSignup = ({
 				autoComplete="name"
 				disabled={loading}
 			/>
-			<Input
+			<OptimizedInput
 				className="auth-form-input"
 				placeholder={t("email")}
 				value={emailAddress}
@@ -58,7 +65,7 @@ const MakerSignup = ({
 				autoComplete="username"
 				disabled={loading}
 			/>
-			<Input.Password
+			<OptimizedInputPassword
 				className="auth-form-input"
 				placeholder={t("password")}
 				value={password}
@@ -70,7 +77,7 @@ const MakerSignup = ({
 				autoComplete="new-password"
 				disabled={loading}
 			/>
-			<Input.Password
+			<OptimizedInputPassword
 				className="auth-form-input"
 				placeholder={t("confirm_password")}
 				value={confirmPassword}
@@ -82,7 +89,7 @@ const MakerSignup = ({
 				autoComplete="new-password"
 				disabled={loading}
 			/>
-			<Select
+			<OptimizedSelect
 				placeholder={t("business_category")}
 				value={businessCategory}
 				onChange={businessCategory =>
@@ -96,7 +103,7 @@ const MakerSignup = ({
 						{b}
 					</Option>
 				))}
-			</Select>
+			</OptimizedSelect>
 			<div className="policy-agree-text text-grey">
 				<Trans i18nKey="auth.agreement">
 					By signing up, you agree to our

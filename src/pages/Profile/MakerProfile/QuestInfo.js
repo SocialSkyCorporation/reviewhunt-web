@@ -91,8 +91,9 @@ const QuestInfo = ({ quest }) => {
       <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
       <img className="info-quest-image" src={image} alt="" />
       <FullWidthButton
-        text="SUBMIT YOUR SCREENSHOT"
+        text="JOIN QUEST"
         onClick={() => updateState("submitModalVisible", true)}
+        style={{maxWidth: 240}}
       />
       <Modal
         maskClosable={false}

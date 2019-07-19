@@ -112,8 +112,8 @@ const ReviewInfo = ({ quest }) => {
               setSubmissionType("appstore");
               updateState("submitModalVisible", true);
             }}
-            text="SUBMIT APP STORE REVIEW"
-            style={{ marginTop: 16 }}
+            text="JOIN APP STORE REVIEW"
+            style={{ marginTop: 16, maxWidth: 260 }}
           />
         </>
       )}
@@ -156,8 +156,8 @@ const ReviewInfo = ({ quest }) => {
               setSubmissionType("playstore");
               updateState("submitModalVisible", true);
             }}
-            text="SUBMIT PLAY STORE REVIEW"
-            style={{ marginTop: 16 }}
+            text="JOIN PLAY STORE REVIEW"
+            style={{ marginTop: 16, maxWidth: 260 }}
           />
         </>
       )}

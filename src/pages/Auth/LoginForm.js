@@ -3,6 +3,12 @@ import { Input } from "antd";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
+import {
+  OptimizedInput,
+  OptimizedInputPassword
+} from "./OptimizedFormTypes";
+
+
 const LoginForm = ({
   triggerCanvas,
   emailAddress,
@@ -14,7 +20,7 @@ const LoginForm = ({
 
   return (
     <form>
-      <Input
+      <OptimizedInput
         className="auth-form-input"
         placeholder={t("email")}
         autoComplete="username"
@@ -24,7 +30,7 @@ const LoginForm = ({
         }}
         value={emailAddress}
       />
-      <Input.Password
+      <OptimizedInputPassword
         className="auth-form-input"
         placeholder={t("password")}
         autoComplete="current_password"

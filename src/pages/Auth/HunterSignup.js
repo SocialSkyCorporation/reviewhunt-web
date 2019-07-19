@@ -4,6 +4,12 @@ import { Icon, Input, Select } from "antd";
 import { useTranslation, Trans } from "react-i18next";
 import { countries, years, genders } from "utils/constants";
 
+import {
+	OptimizedInput,
+	OptimizedSelect,
+	OptimizedInputPassword
+} from "./OptimizedFormTypes";
+
 const { Option } = Select;
 
 const HunterSignup = ({
@@ -23,7 +29,7 @@ const HunterSignup = ({
 
 	return (
 		<form>
-			<Input
+			<OptimizedInput
 				className="auth-form-input"
 				placeholder={t("full_name")}
 				autoComplete="name"
@@ -35,7 +41,7 @@ const HunterSignup = ({
 				}}
 				disabled={loading}
 			/>
-			<Input
+			<OptimizedInput
 				className="auth-form-input"
 				placeholder={t("email")}
 				value={emailAddress}
@@ -47,7 +53,7 @@ const HunterSignup = ({
 				}}
 				disabled={loading}
 			/>
-			<Input.Password
+			<OptimizedInputPassword
 				className="auth-form-input"
 				placeholder={t("password")}
 				value={password}
@@ -59,7 +65,7 @@ const HunterSignup = ({
 				}}
 				disabled={loading}
 			/>
-			<Input.Password
+			<OptimizedInputPassword
 				className="auth-form-input"
 				placeholder={t("confirm_password")}
 				value={confirmPassword}
@@ -76,7 +82,7 @@ const HunterSignup = ({
 					{t("auth.general_information")}
 				</div>
 
-				<Select
+				<OptimizedSelect
 					onChange={countryOfResidence =>
 						setFormData("countryOfResidence", countryOfResidence)
 					}
@@ -89,8 +95,8 @@ const HunterSignup = ({
 							{c.value}
 						</Option>
 					))}
-				</Select>
-				<Select
+				</OptimizedSelect>
+				<OptimizedSelect
 					onChange={gender => setFormData("gender", gender)}
 					value={gender}
 					disabled={loading}
@@ -101,10 +107,10 @@ const HunterSignup = ({
 							{g}
 						</Option>
 					))}
-				</Select>
+				</OptimizedSelect>
 				<div className="form-section-title text-grey">{t("auth.dob")}</div>
 				<div className="row-space-around">
-					<Select
+					<OptimizedSelect
 						onChange={year => setFormData("year", year)}
 						value={year}
 						disabled={loading}
@@ -115,7 +121,7 @@ const HunterSignup = ({
 								{y}
 							</Option>
 						))}
-					</Select>
+					</OptimizedSelect>
 				</div>
 			</div>
 			<div className="policy-agree-text text-grey">
