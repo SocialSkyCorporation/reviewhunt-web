@@ -66,7 +66,7 @@ class HunterDashboardProvider extends React.Component {
         formData.append("hunter_quest[buzz_channel_id]", channel.id);
       formData.append(
         "hunter_quest[proof_image]",
-        new Blob(img, { type: "image/png" })
+        new Blob([img], { type: "image/png" })
       );
 
       const result = await api.uploadFormData(

@@ -163,6 +163,7 @@ export default props => {
             text={joined ? "JOINED" : t("product.join")}
             style={{ marginTop: 30 }}
             inverse={joined}
+            backgroundColor="transparent"
           />
           <div className="row-align-center url-icon-container">
             {urls["appstore"] && (
