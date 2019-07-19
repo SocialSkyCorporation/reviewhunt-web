@@ -50,7 +50,12 @@ class HunterDashboardProvider extends React.Component {
 
   submitQuest = async (quest, channel, contentUrl, img) => {
     const { currentCampaign, submittedQuests } = this.state;
-    console.log("img", img);
+    if (img.length == 0) {
+      notification["error"]({
+        message: "At least one image is required."
+      });
+      return;
+    }
 
     // console.log("submitting", channel);
     this.setState({ submittingQuest: true });
