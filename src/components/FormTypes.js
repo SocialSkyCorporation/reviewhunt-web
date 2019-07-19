@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, useMemo } from "react";
 import { Icon, Select, Slider, Input } from "antd";
 import PropTypes from "prop-types";
 import DragAndDrop from "components/DragAndDrop";
@@ -6,17 +6,17 @@ import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 
 const { TextArea } = Input;
 
-export const TextInput = memo(
-  ({
-    title,
-    containerStyle,
-    textArea,
-    textAreaHeight,
-    value,
-    maxCharacters,
-    setValue,
-    placeholder
-  }) => {
+export const TextInput = ({
+  title,
+  containerStyle,
+  textArea,
+  textAreaHeight,
+  value,
+  maxCharacters,
+  setValue,
+  placeholder
+}) => {
+  return useMemo(() => {
     return (
       <div className="title-input-container" style={containerStyle}>
         <div className="row-space-between title-input-header text-grey">
@@ -56,45 +56,48 @@ export const TextInput = memo(
         )}
       </div>
     );
-  },
-  ({ value: prevValue }, { value: nextValue }) => prevValue === nextValue
-);
+  }, [value]);
+};
 
 export const Dropdown = ({ title, value, children, style, onChange }) => {
-  return (
-    <div className="title-input-container">
-      {title && (
-        <div className="row-space-between title-input-header text-grey">
-          <div>{title}</div>
-        </div>
-      )}
-      <Select
-        defaultValue={value}
-        onChange={onChange}
-        className="value-container select gray-bg-select text-grey"
-        style={style}
-      >
-        {children}
-      </Select>
-    </div>
-  );
+  return useMemo(() => {
+    return (
+      <div className="title-input-container">
+        {title && (
+          <div className="row-space-between title-input-header text-grey">
+            <div>{title}</div>
+          </div>
+        )}
+        <Select
+          defaultValue={value}
+          onChange={onChange}
+          className="value-container select gray-bg-select text-grey"
+          style={style}
+        >
+          {children}
+        </Select>
+      </div>
+    );
+  }, [value]);
 };
 
 export const Screenshots = ({ onChange, images, title, single, maxBytes }) => {
-  return (
-    <div className="title-input-container">
-      <div className="row-space-between title-input-header text-grey">
-        <div>{title}</div>
-        {maxBytes && <div>Max {maxBytes / Math.pow(10, 6)} MB</div>}
+  return useMemo(() => {
+    return (
+      <div className="title-input-container">
+        <div className="row-space-between title-input-header text-grey">
+          <div>{title}</div>
+          {maxBytes && <div>Max {maxBytes / Math.pow(10, 6)} MB</div>}
+        </div>
+        <DragAndDrop
+          single={single}
+          maxBytes={maxBytes}
+          images={images}
+          onChange={onChange}
+        />
       </div>
-      <DragAndDrop
-        single={single}
-        maxBytes={maxBytes}
-        images={images}
-        onChange={onChange}
-      />
-    </div>
-  );
+    );
+  }, [images]);
 };
 
 export const BudgetSlider = ({ title, value, max, min, step, onChange }) => {
