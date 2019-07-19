@@ -173,7 +173,8 @@ const CampaignDashboard = ({
             className="select-filter"
             defaultValue={currentFilter}
             onChange={v => {
-              setCurrentFilter(v)}}
+              setCurrentFilter(v);
+            }}
           >
             <Option key="all">All</Option>
             <Option key="quest">Quest</Option>
@@ -204,7 +205,6 @@ const CampaignDashboard = ({
                       onRejectClick={() => rejectSubmittedItem(index)}
                       data={submittedQuest}
                       key={submittedQuest.id}
-                      noBorder
                     />
                   );
                 })}

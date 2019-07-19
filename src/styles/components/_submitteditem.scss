@@ -37,6 +37,25 @@
     margin: 30px 0px;
   }
 
+  &:nth-last-child(-n + 2) {
+    .bottom-divider {
+      display: none;
+    }
+  }
+
+  @include responsive(ipadpro) {
+    &:nth-last-child(-n + 2) {
+      .bottom-divider {
+        display: inline-block;
+      }
+    }
+    &:nth-last-child(-n + 1) {
+      .bottom-divider {
+        display: none;
+      }
+    }
+  }
+
   .fullscreen-img {
     position: absolute;
     width: 44px;

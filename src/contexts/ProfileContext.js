@@ -10,7 +10,7 @@ import _ from "lodash";
 import { getToken } from "utils/token";
 import { TYPE_HUNTER, TYPE_MAKER } from "pages/Auth";
 import { TAB_PROFILE } from "pages/Profile/HunterProfile";
-import { TAB_CAMPAIGNS } from "pages/Profile/MakerProfile";
+import { TAB_CREATE_CAMPAIGN } from "pages/Profile/MakerProfile";
 
 const ProfileContext = React.createContext();
 const { Provider, Consumer } = ProfileContext;
@@ -19,9 +19,8 @@ class ProfileProvider extends React.Component {
   constructor() {
     super();
 
-    const lastLoginType = getToken("last_login");
     this.state = {
-      tabIndex: lastLoginType === TYPE_HUNTER ? TAB_PROFILE : TAB_CAMPAIGNS,
+      tabIndex: null,
       campaignId: null,
       editProfile: false
     };
@@ -31,7 +30,6 @@ class ProfileProvider extends React.Component {
     const query = getParams(window.location);
     if (!_.isEmpty(query) && getRouteName(window.location) === "profile") {
       await this.setState({ ...query });
-      console.log("new state", this.state);
       this.updateLocation();
     }
   }

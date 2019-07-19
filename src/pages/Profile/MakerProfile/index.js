@@ -30,6 +30,7 @@ export const TAB_CAMPAIGNS = "campaigns";
 export const TAB_HISTORY = "history";
 export const TAB_SETTINGS = "settings";
 export const TAB_CHECKOUT = "checkout";
+const tabs = [TAB_CREATE_CAMPAIGN, TAB_CAMPAIGNS, TAB_HISTORY, TAB_SETTINGS, TAB_CHECKOUT];
 
 class Profile extends Component {
   state = {
@@ -39,11 +40,15 @@ class Profile extends Component {
   };
 
   componentDidMount() {
-    const { tabIndex, campaignId } = this.props.profileContext;
+    const { setTabIndex, tabIndex, campaignId } = this.props.profileContext;
     const { fetchCampaign } = this.props.campaignContext;
+
+    console.log("tab index", tabIndex);
 
     if (tabIndex === TAB_CAMPAIGNS && campaignId !== null) {
       fetchCampaign(campaignId);
+    } else if (!tabs.includes(tabIndex)) {
+      setTabIndex(TAB_CREATE_CAMPAIGN);
     }
   }
 
@@ -108,6 +113,7 @@ class Profile extends Component {
           }}
           text="CREATE CAMPAIGN"
           style={{ marginTop: 20, maxWidth: 160 }}
+          backgroundColor="transparent"
         />
       </div>
     );

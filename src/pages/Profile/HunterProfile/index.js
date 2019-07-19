@@ -33,6 +33,7 @@ export const TAB_PROFILE = "profile";
 export const TAB_QUEST = "quest";
 export const TAB_WALLET = "wallet";
 export const TAB_CHANNELS = "channels";
+const tabs = [TAB_PROFILE, TAB_QUEST, TAB_WALLET, TAB_CHANNELS];
 
 class HunterProfile extends Component {
   state = {
@@ -41,14 +42,18 @@ class HunterProfile extends Component {
   };
 
   componentDidMount() {
-    const { tabIndex } = this.props.profileContext;
+    const {setTabIndex, tabIndex } = this.props.profileContext;
     const {
       getCampaigns,
       getQuestSubmissions
     } = this.props.hunterDashboardContext;
 
+    console.log("tab index", tabIndex);
+
     if (tabIndex === TAB_QUEST) {
       getCampaigns();
+    } else if(!tabs.includes(tabIndex)) {
+      setTabIndex(TAB_PROFILE);
     }
   }
 
@@ -270,7 +275,7 @@ class HunterProfile extends Component {
           )}
         </div>
 
-        <div className="content-profile">
+        <form className="content-profile">
           <div className="content-title text-black">
             {t("profile.basic_information").toUpperCase()}
           </div>
@@ -278,17 +283,21 @@ class HunterProfile extends Component {
             title={t("name")}
             value={emailMe.name}
             editMode={editProfile}
+            autoComplete={"name"}
+
           />
           <ProfileRow
             title={t("email")}
             value={emailMe.email}
             editMode={editProfile}
+            autoComplete={"username email"}
           />
           <ProfileRow
             title={t("country")}
             value={country}
             editMode={editProfile}
             type={TYPE_DROPDOWN}
+            autoComplete={"country"}
           >
             {countries.map((c, i) => (
               <Option key={c.code}>{c.value}</Option>
@@ -320,7 +329,7 @@ class HunterProfile extends Component {
               </div>
             )}
           </div>
-        </div>
+        </form>
       </div>
     );
   }

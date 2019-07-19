@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {Spin} from 'antd';
+import { Spin } from "antd";
 import SimpleButton from "components/SimpleButton";
 import approvedImg from "assets/images/approved.svg";
 import rejectedImg from "assets/images/rejected.svg";
@@ -8,7 +8,7 @@ import greenStarEmpty from "assets/images/green-star.svg";
 import greenStar from "assets/images/green-star-filled.svg";
 import fullScreenImg from "assets/images/fullscreen-dark.svg";
 import Linkify from "react-linkify";
-import {toTimeAgo} from 'utils/date';
+import { toTimeAgo } from "utils/date";
 
 const questTypeDictionary = {
   general_1: "Quest 1",
@@ -85,58 +85,60 @@ const SubmittedItem = ({
   }
 
   return (
-    <Spin spinning={submitting === true} tip="Loading...">
     <div className="submitted-item">
-      <img className="submitted-item-img" src={image} alt="" />
-      <div className="submitted-item-type text-grey uppercase">
-        {questTypeDictionary[quest_quest_type]}
-      </div>
-      {quest_quest_type === "buzz" ? (
-        <Linkify>
-          <div className="submitted-item-title">{proof_url}</div>
-        </Linkify>
-      ) : (
-        <div className="submitted-item-title text-black">{quest_title}</div>
-      )}
-      <div className="text-grey">{hunter_name}</div>
-      <div className="text-grey">{toTimeAgo(created_at)}</div>
-      {!fullScreen && (
-        <img
-          onClick={onClick}
-          className="fullscreen-img"
-          src={fullScreenImg}
-          alt=""
-        />
-      )}
+      <Spin spinning={submitting === true} tip="Loading...">
+        <img className="submitted-item-img" src={image} alt="" />
+        <div className="submitted-item-type text-grey uppercase">
+          {questTypeDictionary[quest_quest_type]}
+        </div>
+        {quest_quest_type === "buzz" ? (
+          <Linkify>
+            <div className="submitted-item-title">{proof_url}</div>
+          </Linkify>
+        ) : (
+          <div className="submitted-item-title text-black">{quest_title}</div>
+        )}
+        <div className="text-grey">{hunter_name}</div>
+        <div className="text-grey">{toTimeAgo(created_at)}</div>
+        {!fullScreen && (
+          <img
+            onClick={onClick}
+            className="fullscreen-img"
+            src={fullScreenImg}
+            alt=""
+          />
+        )}
 
-      {description}
+        {description}
 
-      <div className="row-space-between" style={{ marginTop: 16 }}>
-        <SimpleButton
-          type="danger"
-          className="submitted-item-button"
-          text="Reject"
-          borderColor="rgba(245, 34, 45, 0.7)"
-          style={{ minWidth: 120 }}
-          onClick={onRejectClick}
-        />
-        <SimpleButton
-          inverse
-          className="submitted-item-button"
-          text="Approve"
-          style={{ minWidth: 120 }}
-          onClick={onApproveClick}
-        />
-      </div>
-      {!noBorder && <div className="bottom-divider" />}
-      {approved && (
-        <img className="approved-rejected-icon" src={approvedImg} alt="" />
-      )}
-      {rejected && (
-        <img className="approved-rejected-icon" src={rejectedImg} alt="" />
-      )}
+        <div className="row-space-between" style={{ marginTop: 16 }}>
+          <SimpleButton
+            type="danger"
+            className="submitted-item-button"
+            text="Reject"
+            borderColor="rgba(245, 34, 45, 0.7)"
+            hoverColor="rgba(245, 34, 45, 0.7)"
+            color="rgba(245, 34, 45, 0.7)"
+            style={{ minWidth: 120 }}
+            onClick={onRejectClick}
+          />
+          <SimpleButton
+            inverse
+            className="submitted-item-button"
+            text="Approve"
+            style={{ minWidth: 120 }}
+            onClick={onApproveClick}
+          />
+        </div>
+        <div className="bottom-divider" />
+        {approved && (
+          <img className="approved-rejected-icon" src={approvedImg} alt="" />
+        )}
+        {rejected && (
+          <img className="approved-rejected-icon" src={rejectedImg} alt="" />
+        )}
+      </Spin>
     </div>
-    </Spin>
   );
 };
 

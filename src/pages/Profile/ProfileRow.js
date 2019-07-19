@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Input, Modal, Select } from "antd";
 import deleteImg from "assets/images/delete.svg";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const TYPE_DROPDOWN = "DROPDOWN";
 const TYPE_PASSWORD = "PASSWORD";
@@ -16,11 +16,12 @@ const ProfileRow = ({
   type,
   password,
   children,
-  onDeletePressed
+  onDeletePressed,
+  autoComplete
 }) => {
   const [textValue, setTextValue] = useState(value);
   const [modalVisible, setModalVisible] = useState(false);
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   const onChange = e => setTextValue(e.nativeEvent.target.value);
 
@@ -35,20 +36,24 @@ const ProfileRow = ({
                 defaultValue={value}
                 className="value-container select gray-bg-select text-grey"
               >
-              {children}
+                {children}
               </Select>
             )}
             {type === TYPE_PASSWORD && (
               <div className="password-container">
                 <Input.Password
+                  type="password"
                   className="value-container text-grey"
-                  placeholder={t('current_password')}
+                  placeholder={t("current_password")}
                   onChange={onChange}
+                  autoComplete="new-password"
                 />
                 <Input.Password
+                  type="password"
                   className="value-container password text-grey"
-                  placeholder={t('new_password')}
+                  placeholder={t("new_password")}
                   onChange={onChange}
+                  autoComplete="new-password"
                 />
               </div>
             )}
@@ -58,6 +63,7 @@ const ProfileRow = ({
                   className="value-container text-grey"
                   value={textValue}
                   onChange={onChange}
+                  autoComplete={autoComplete}
                 />
                 <img
                   className="social-delete-button"
@@ -72,6 +78,7 @@ const ProfileRow = ({
                 value={textValue}
                 className="value-container"
                 onChange={onChange}
+                autoComplete={autoComplete}
               />
             )}
           </>
@@ -82,17 +89,19 @@ const ProfileRow = ({
       <div className="divider" />
       <div>
         <Modal
-          title={t('delete_channel')}
+          title={t("delete_channel")}
           visible={modalVisible}
           onOk={() => {
             setModalVisible(false);
             onDeletePressed();
           }}
           onCancel={() => setModalVisible(false)}
-          okText={t('ok')}
-          cancelText={t('cancel')}
+          okText={t("ok")}
+          cancelText={t("cancel")}
         >
-          <p>{t('confirm_delete')} {value}?</p>
+          <p>
+            {t("confirm_delete")} {value}?
+          </p>
         </Modal>
       </div>
     </div>
