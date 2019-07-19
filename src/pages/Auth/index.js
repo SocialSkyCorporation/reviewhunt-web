@@ -239,10 +239,10 @@ class Auth extends Component {
 
 		const title =
 			(status === STATUS_ONBOARDING && `Welcome ${emailMe.name}!`) ||
+			(status === STATUS_LOGIN && "Welcome back") ||
 			(status === STATUS_SIGNUP && onHunterTab
 				? t("auth.join_hunter")
-				: t("auth.join_maker")) ||
-			(status === STATUS_LOGIN && t("auth.welcome_back"));
+				: t("auth.join_maker"));
 
 		const description =
 			(status === STATUS_ONBOARDING && t("auth.onboarding_desc")) ||
