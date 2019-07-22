@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Select, notification } from "antd";
+import { Icon, Select, notification, Spin } from "antd";
 import moneyImg from "assets/images/money-circle.svg";
 import crownImg from "assets/images/crown-circle.svg";
 import TabItem from "../TabItem";
@@ -42,7 +42,7 @@ class HunterProfile extends Component {
   };
 
   componentDidMount() {
-    const {setTabIndex, tabIndex } = this.props.profileContext;
+    const { setTabIndex, tabIndex } = this.props.profileContext;
     const {
       getCampaigns,
       getQuestSubmissions
@@ -52,7 +52,7 @@ class HunterProfile extends Component {
 
     if (tabIndex === TAB_QUEST) {
       getCampaigns();
-    } else if(!tabs.includes(tabIndex)) {
+    } else if (!tabs.includes(tabIndex)) {
       setTabIndex(TAB_PROFILE);
     }
   }
@@ -191,16 +191,29 @@ class HunterProfile extends Component {
   }
 
   renderProfileTab() {
-    const { editProfile, steemLogo } = this.state;
+    const { steemLogo } = this.state;
     const { t } = this.props;
     const {
       emailMe,
+      emailMeUpdate,
       steemMe,
       steemconnectLoading,
-      disconnectSteem
+      disconnectSteem,
+      updateEmailForm,
+      updateUserInformation,
+      editProfile,
+      updateState,
+      updatingUserInformation
     } = this.props.authContext;
+
+    let valueToShow = emailMe;
+
+    if (emailMeUpdate && editProfile) {
+      valueToShow = emailMeUpdate;
+    }
+
     const countryArray = countries.filter(
-      country => country.code === emailMe.country_code
+      country => country.code === valueToShow.country_code
     );
     const country =
       countryArray && countryArray.length > 0 && countryArray[0].value;
@@ -275,61 +288,83 @@ class HunterProfile extends Component {
           )}
         </div>
 
-        <form className="content-profile">
-          <div className="content-title text-black">
-            {t("profile.basic_information").toUpperCase()}
-          </div>
-          <ProfileRow
-            title={t("name")}
-            value={emailMe.name}
-            editMode={editProfile}
-            autoComplete={"name"}
-
-          />
-          <ProfileRow
-            title={t("email")}
-            value={emailMe.email}
-            editMode={editProfile}
-            autoComplete={"username email"}
-          />
-          <ProfileRow
-            title={t("country")}
-            value={country}
-            editMode={editProfile}
-            type={TYPE_DROPDOWN}
-            autoComplete={"country"}
-          >
-            {countries.map((c, i) => (
-              <Option key={c.code}>{c.value}</Option>
-            ))}
-          </ProfileRow>
-          <ProfileRow
-            title={t("password")}
-            value="password"
-            editMode={editProfile}
-            type={TYPE_PASSWORD}
-            password={true}
-          />
-
-          <div className="button-container">
-            <SimpleButton
-              onClick={() => this.setState({ editProfile: !editProfile })}
-              text={
-                editProfile
-                  ? t("submit").toUpperCase()
-                  : t("profile.edit_profile").toUpperCase()
+        <Spin spinning={updatingUserInformation} tip="Updating...">
+          <form className="content-profile">
+            <div className="content-title text-black">
+              {t("profile.basic_information").toUpperCase()}
+            </div>
+            <ProfileRow
+              title={t("name")}
+              value={valueToShow.name}
+              editMode={editProfile}
+              onChange={e => updateEmailForm("name", e.target.value)}
+              autoComplete={"name"}
+            />
+            <ProfileRow
+              title={t("email")}
+              value={valueToShow.email}
+              editMode={editProfile}
+              autoComplete={"username email"}
+              onChange={e => updateEmailForm("email", e.target.value)}
+            />
+            <ProfileRow
+              title={t("country")}
+              value={country}
+              editMode={editProfile}
+              type={TYPE_DROPDOWN}
+              autoComplete={"country"}
+              onChange={country => updateEmailForm("country_code", country)}
+            >
+              {countries.map((c, i) => (
+                <Option key={c.code}>{c.value}</Option>
+              ))}
+            </ProfileRow>
+            <ProfileRow
+              title={t("password")}
+              value="password"
+              editMode={editProfile}
+              type={TYPE_PASSWORD}
+              password={true}
+              onChangePassword={e =>
+                updateEmailForm("old_password", e.target.value)
+              }
+              onChangePasswordConfirm={e =>
+                updateEmailForm("new_password", e.target.value)
               }
             />
-            {editProfile && (
-              <div
-                className="cancel-button"
-                onClick={() => this.setState({ editProfile: false })}
-              >
-                {t("cancel").toUpperCase()}
-              </div>
-            )}
-          </div>
-        </form>
+
+            <div className="button-container">
+              <SimpleButton
+                onClick={() => {
+                  if (editProfile) {
+                    updateUserInformation();
+                  } else {
+                    updateState("editProfile", !editProfile);
+                  }
+                }}
+                text={
+                  editProfile
+                    ? t("submit").toUpperCase()
+                    : t("profile.edit_profile").toUpperCase()
+                }
+              />
+              {editProfile && (
+                <div
+                  className="cancel-button"
+                  onClick={() => {
+                    this.props.authContext.updateState(
+                      "emailMeUpdate",
+                      emailMe
+                    );
+                    updateState("editProfile", false);
+                  }}
+                >
+                  {t("cancel").toUpperCase()}
+                </div>
+              )}
+            </div>
+          </form>
+        </Spin>
       </div>
     );
   }

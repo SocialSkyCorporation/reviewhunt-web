@@ -22,9 +22,10 @@ class ProfileProvider extends React.Component {
 
     this.state = {
       tabIndex: null,
+      editProfile: false,
       campaignId: null,
-      editProfile: false
     };
+    
     this.unlisten = props.history.listen(async (location, action) => {
       const query = getParams(location);
       if (!_.isEmpty(query) && getRouteName(window.location) === "profile") {
@@ -33,12 +34,19 @@ class ProfileProvider extends React.Component {
     });
   }
 
+  updateState = async (key, value) => {
+    await this.setState({ [key]: value }, () => {
+    this.updateLocation();
+    });
+  };
+
   componentWillUnmount() {
     this.unlisten();
   }
 
   async componentDidMount() {
     const query = getParams(window.location);
+    console.log(query);
     if (!_.isEmpty(query) && getRouteName(window.location) === "profile") {
       await this.setState({ ...query });
       this.updateLocation();
@@ -67,7 +75,8 @@ class ProfileProvider extends React.Component {
           ...this.state,
           setTabIndex: this.setTabIndex,
           setCampaignId: this.setCampaignId,
-          updateLocation: this.updateLocation
+          updateLocation: this.updateLocation,
+          updateState: this.updateState
         }}
       >
         {this.props.children}

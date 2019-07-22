@@ -13,24 +13,24 @@ import pendingImg from "assets/images/pending.svg";
 
 const MAX_STARS = 5;
 
-const HistoryMessage = ({ type, rating, containerStyle }) => {
+const HistoryMessage = ({ status, rating, containerStyle }) => {
 
 	let img = "";
 	let message = "";
 
-	if (type === "approved") {
+	if (status === "approved") {
 		img = <img src={checkImg} alt="" />;
 		message = "Your submission was confirmed. You will earn x HUNT after this campaign is all finished";
-	} else if (type === "rejected") {
+	} else if (status === "rejected") {
 		img = <img src={rejectImg} alt="" />;
 		message = "Your submission - [URL] was not approved (if you want to appeal, use #reviewhunt-appeal channel in our Discord group (https://discord.gg/84zsT4m).";
-	} else if (type === "bounty_paid") {
+	} else if (status === "bounty_paid") {
 		img = <img src={moneyImg} alt="" />;
 		message = "1,506 HUNT has been distributed to your wallet from your submission - [URL]."
-	} else if (type === "pending") {
+	} else if (status === "pending") {
 		img = <img src={pendingImg} alt="" />;
 		message = "Your content - [URL] was submitted, and it’s waiting for moderation."
-	} else if (type === "star") {
+	} else if (status === "star") {
 		const numFilledStars = rating / 2;
 		const hasHalfStar = !Number.isInteger(numFilledStars);
 
@@ -65,7 +65,7 @@ const HistoryMessage = ({ type, rating, containerStyle }) => {
 };
 
 HistoryMessage.propTypes = {
-	type: PropTypes.string,
+	status: PropTypes.string,
 	message: PropTypes.string,
 	containerStyle: PropTypes.object,
 	rating: PropTypes.number

@@ -136,7 +136,7 @@ class Profile extends Component {
       setTabIndex
     } = this.props.profileContext;
     const { t } = this.props;
-    const { logout, emailMe } = this.props.authContext;
+    const { emailMe } = this.props.authContext;
     const { step, setStep } = this.props.newCampaignContext;
     const {
       setCurrentCampaign,
@@ -250,11 +250,7 @@ class Profile extends Component {
             setCampaignId(null);
           }}
         />
-        <TabItem
-          text={"Logout"}
-          selected={tabIndex === 4}
-          onClick={() => logout()}
-        />
+        
       </div>
     );
   }

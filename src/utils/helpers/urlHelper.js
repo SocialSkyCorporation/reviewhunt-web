@@ -6,7 +6,7 @@ export function setParams(params) {
 }
 
 export function getParams(location) {
-  return queryString.parse(location.search);
+  return queryString.parse(location.search, { parseNumbers: true, parseBooleans: true });
 }
 
 export function updateLocation(params) {

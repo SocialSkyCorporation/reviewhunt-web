@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Input, Modal, Select } from "antd";
 import deleteImg from "assets/images/delete.svg";
 import { useTranslation } from "react-i18next";
+import {OptimizedInput, OptimizedInputPassword, OptimizedSelect} from 'pages/Auth/OptimizedFormTypes';
 
 const TYPE_DROPDOWN = "DROPDOWN";
 const TYPE_PASSWORD = "PASSWORD";
@@ -16,52 +17,52 @@ const ProfileRow = ({
   type,
   password,
   children,
+  onChange,
   onDeletePressed,
+  onChangePassword,
+  onChangePasswordConfirm,
   autoComplete
 }) => {
-  const [textValue, setTextValue] = useState(value);
   const [modalVisible, setModalVisible] = useState(false);
   const { t } = useTranslation();
-
-  const onChange = e => setTextValue(e.nativeEvent.target.value);
 
   return (
     <div className="profile-row">
       <div className="text-container">
         <div className="title">{title}</div>
-        {editMode ? (
+        {editMode == true ? (
           <>
             {type === TYPE_DROPDOWN && (
-              <Select
+              <OptimizedSelect
                 defaultValue={value}
                 className="value-container select gray-bg-select text-grey"
               >
                 {children}
-              </Select>
+              </OptimizedSelect>
             )}
             {type === TYPE_PASSWORD && (
               <div className="password-container">
-                <Input.Password
+                <OptimizedInputPassword
                   type="password"
                   className="value-container text-grey"
                   placeholder={t("current_password")}
-                  onChange={onChange}
+                  onChange={onChangePassword}
                   autoComplete="new-password"
                 />
-                <Input.Password
+                <OptimizedInputPassword
                   type="password"
                   className="value-container password text-grey"
                   placeholder={t("new_password")}
-                  onChange={onChange}
+                  onChange={onChangePasswordConfirm}
                   autoComplete="new-password"
                 />
               </div>
             )}
             {type === TYPE_SOCIAL && (
               <div className="social-container">
-                <Input
+                <OptimizedInput
                   className="value-container text-grey"
-                  value={textValue}
+                  value={value}
                   onChange={onChange}
                   autoComplete={autoComplete}
                 />
@@ -74,8 +75,8 @@ const ProfileRow = ({
               </div>
             )}
             {type === TYPE_INPUT && (
-              <Input
-                value={textValue}
+              <OptimizedInput
+                value={value}
                 className="value-container"
                 onChange={onChange}
                 autoComplete={autoComplete}
@@ -111,7 +112,7 @@ const ProfileRow = ({
 ProfileRow.propTypes = {
   title: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  editMode: PropTypes.bool,
+  editMode: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   type: PropTypes.string,
   password: PropTypes.bool
 };

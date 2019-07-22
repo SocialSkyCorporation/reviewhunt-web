@@ -28,13 +28,16 @@ class AuthProvider extends React.Component {
     steemconnectLoading: false,
     steemMe: null,
     emailMe: null,
+    emailMeUpdate: null,
     loading: false,
     authenticating: true,
     status: STATUS_LOGIN,
     userType: TYPE_HUNTER,
     socialChannels: [],
     refreshingBuzz: false,
-    savingChannels: false
+    savingChannels: false,
+    updatingUserInformation: false,
+    editProfile: false
   };
 
   componentWillMount() {
@@ -61,10 +64,10 @@ class AuthProvider extends React.Component {
 
     try {
       const steemToken = getToken("steemconnect");
+      console.log("steem token", steemToken);
       if (steemToken) {
         this.setState({ steemconnectLoading: true });
         const steemMe = await getSteemMe(steemToken);
-        console.log("steem me", steemMe);
         await this.setState({ steemconnectLoading: false, steemMe });
       }
 
@@ -74,17 +77,20 @@ class AuthProvider extends React.Component {
         console.log("me", emailMe);
         await this.setState({
           emailMe,
+          emailMeUpdate: emailMe,
           authenticating: false,
           userType: lastLoginType
         });
         const path = window.location.pathname;
+        console.log("path", path);
         const query = window.location.search;
         const queryObj = getParams(window.location);
-        if (!_.isEmpty(queryObj) && getRouteName(window.location) === "auth") {
+        if (!_.isEmpty(queryObj) && path.indexOf("/steemconnect") > -1) {
           await this.setState({ ...queryObj });
           console.log("updated query", this.state);
+          this.props.history.replace(`/profile`);
         } else if (path === "/auth") {
-          this.props.history.push(`/profile${query}`);
+          this.props.history.replace(`/profile${query}`);
         } else {
           this.props.history.replace(`${window.location.pathname}${query}`);
         }
@@ -114,6 +120,7 @@ class AuthProvider extends React.Component {
       authenticating: false,
       loading: false,
       emailMe,
+      emailMeUpdate: emailMe,
       userType: type
     });
     this.props.history.replace("/profile");
@@ -331,16 +338,11 @@ class AuthProvider extends React.Component {
   handleAuth = async (source, obj) => {
     switch (source) {
       case "auth":
-        break;
-      case "steemconnect":
         const { access_token, state } = obj;
 
         try {
           const stateValue = JSON.parse(state);
           const { path, socialChannels } = stateValue;
-          this.props.history.replace(path);
-          this.setState({ steemconnectLoading: true, socialChannels });
-
           setToken("steemconnect", access_token);
           const steemMe = await getSteemMe(access_token);
           this.setState({ steemMe });
@@ -364,7 +366,7 @@ class AuthProvider extends React.Component {
     if (lastLoginType) {
       removeToken("last_login");
       removeToken(lastLoginType);
-      await this.setState({ emailMe: null });
+      await this.setState({ emailMe: null, emailMeUpdate: null });
       this.props.history.replace("/auth");
     }
   };
@@ -375,6 +377,70 @@ class AuthProvider extends React.Component {
       removeToken("steemconnect");
       await this.setState({ steemMe: null });
     }
+  };
+
+  updateUserInformation = async () => {
+    const { userType, emailMeUpdate } = this.state;
+    console.log("updating user info", userType, emailMeUpdate);
+
+    const { old_password, new_password } = emailMeUpdate;
+
+    let endpointPrefix = "";
+    let shouldUpdatePassword = false;
+    let body = {};
+
+    if (userType === TYPE_HUNTER) {
+      endpointPrefix = `/hunters`;
+      const { email, name, country_code, langauge } = emailMeUpdate;
+      body = { hunter: { email, name, country_code, langauge } };
+    } else if (userType === TYPE_MAKER) {
+      endpointPrefix = `/makers`;
+      const { email, company_name, name, business_category } = emailMeUpdate;
+      body = { maker: { email, company_name, name, business_category } };
+    }
+
+    this.setState({ updatingUserInformation: true });
+
+    try {
+      if (old_password && new_password) {
+        const result = await api.patch(
+          `${endpointPrefix}/update_password.json`,
+          { old_password, new_password },
+          true,
+          userType
+        );
+        const { api_key } = result;
+        setToken(userType, api_key);
+        await this.setState({ emailMe: result });
+      }
+
+      const updateResult = await api.put(
+        `${endpointPrefix}/me.json`,
+        body,
+        true,
+        userType
+      );
+
+      const { api_key } = updateResult;
+      setToken(userType, api_key);
+      console.log(updateResult);
+      await this.setState({ emailMe: updateResult });
+    } catch (e) {
+      this.handleError(e);
+    } finally {
+      this.setState({ updatingUserInformation: false, editProfile: false });
+    }
+  };
+
+  updateEmailForm = async (key, value) => {
+    const { emailMeUpdate } = this.state;
+    const emailMeClone = _.clone(emailMeUpdate);
+    emailMeClone[key] = value;
+    this.setState({ emailMeUpdate: emailMeClone });
+  };
+
+  updateState = (key, value) => {
+    this.setState({ [key]: value });
   };
 
   render() {
@@ -395,7 +461,10 @@ class AuthProvider extends React.Component {
           saveSocialChannels: this.saveSocialChannels,
           getSocialChannels: this.getSocialChannels,
           addSocialChannel: this.addSocialChannel,
-          refreshBuzz: this.refreshBuzz
+          refreshBuzz: this.refreshBuzz,
+          updateUserInformation: this.updateUserInformation,
+          updateEmailForm: this.updateEmailForm,
+          updateState: this.updateState
         }}
       >
         {this.props.children}

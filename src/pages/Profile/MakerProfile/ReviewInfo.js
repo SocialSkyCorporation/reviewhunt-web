@@ -23,7 +23,8 @@ const ReviewInfo = ({ quest }) => {
     criteria,
     bounty_max,
     description,
-    image
+    image,
+    status
   } = quest;
 
   const {
@@ -49,11 +50,9 @@ const ReviewInfo = ({ quest }) => {
 
       <div className="quest-tag">Quest Bounty - $5 per review</div>
 
-      {/*   <HistoryMessage
-        type="confirm"
-        message={"Your quest submission was confirmed."}
+      <HistoryMessage
+        status={status}
       />
-    */}
 
       <div className="info-description text-grey">
         Have you enjoyed the app? Please write a review on the App Store or Play

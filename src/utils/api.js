@@ -49,7 +49,7 @@ function request(
     headers["Authorization"] = "Token token=" + token;
   }
 
-  if (["GET", "DELETE"].indexOf(method) > -1) {
+  if (["GET", "DELETE", "PATCH"].indexOf(method) > -1) {
     qs = "?" + getQueryString(params || {});
   } else {
     // POST or PUT
@@ -122,5 +122,12 @@ export default {
     tokenType = "",
     callback = defaultCallback
   ) => request("DELETE", path, params, shouldAuthenticate, tokenType, callback),
+  patch: (
+    path,
+    params,
+    shouldAuthenticate = false,
+    tokenType = "",
+    callback = defaultCallback
+  ) => request("PATCH", path, params, shouldAuthenticate, tokenType, callback),
   uploadFormData
 };
