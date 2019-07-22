@@ -106,7 +106,7 @@ class HunterDashboardProvider extends React.Component {
 
   setCurrentCampaign = currentCampaign => {
     this.setState({ currentCampaign });
-  };
+  };    
 
   getQuestSubmissions = async id => {
     this.setState({ fetchingSubmittedQuests: true });

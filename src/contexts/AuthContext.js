@@ -64,10 +64,10 @@ class AuthProvider extends React.Component {
 
     try {
       const steemToken = getToken("steemconnect");
-      console.log("steem token", steemToken);
       if (steemToken) {
         this.setState({ steemconnectLoading: true });
         const steemMe = await getSteemMe(steemToken);
+        console.log("steem me", steemMe);
         await this.setState({ steemconnectLoading: false, steemMe });
       }
 
@@ -380,7 +380,7 @@ class AuthProvider extends React.Component {
   };
 
   updateUserInformation = async () => {
-    const { userType, emailMeUpdate } = this.state;
+    const { userType, emailMeUpdate, emailMe } = this.state;
     console.log("updating user info", userType, emailMeUpdate);
 
     const { old_password, new_password } = emailMeUpdate;
@@ -411,7 +411,7 @@ class AuthProvider extends React.Component {
         );
         const { api_key } = result;
         setToken(userType, api_key);
-        await this.setState({ emailMe: result });
+        await this.setState({ emailMe: { ...emailMe, ...result } });
       }
 
       const updateResult = await api.put(
@@ -424,7 +424,7 @@ class AuthProvider extends React.Component {
       const { api_key } = updateResult;
       setToken(userType, api_key);
       console.log(updateResult);
-      await this.setState({ emailMe: updateResult });
+      await this.setState({ emailMe: { ...emailMe, ...updateResult } });
     } catch (e) {
       this.handleError(e);
     } finally {

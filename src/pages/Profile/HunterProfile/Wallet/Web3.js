@@ -1,14 +1,21 @@
-import React, { Component } from 'react';
-import { Modal, notification } from 'antd';
-import metaMaskImage from 'assets/images/wallet/img-no-metamask@3x.png';
-import initializeWeb3 from 'web3.js';
-import { WalletConsumer } from 'contexts/WalletContext';
+import React, { useContext, Component } from "react";
+import { Modal, notification } from "antd";
+import metaMaskImage from "assets/images/wallet/img-no-metamask@3x.png";
+import initializeWeb3 from "web3.js";
+import WalletContext from "contexts/WalletContext";
+import AuthContext from "contexts/AuthContext";
 
-export default ({ setRef }) => (
-  <WalletConsumer>
-    {context => <Web3 setRef={setRef} context={context} />}
-  </WalletConsumer>
-);
+export default ({ setRef }) => {
+  const walletContext = useContext(WalletContext);
+  const authContext = useContext(AuthContext);
+  return (
+    <Web3
+      setRef={setRef}
+      walletContext={walletContext}
+      authContext={authContext}
+    />
+  );
+};
 
 class Web3 extends Component {
   componentDidMount() {
@@ -19,20 +26,20 @@ class Web3 extends Component {
   async validEthereumNetwork() {
     if (this.web3 === null) {
       Modal.error({
-        title: 'Please install Metamask',
-        className: 'metamask-install-modal',
+        title: "Please install Metamask",
+        className: "metamask-install-modal",
         autoFocusButton: null,
         maskClosable: true,
         content: (
-          <div className={'metamask-install-body'}>
+          <div className={"metamask-install-body"}>
             <p>
               You need to use Metamask to connect your own Ether wallet address.
             </p>
             <img src={metaMaskImage} alt="Metamask" className="fox" />
           </div>
         ),
-        okText: 'Get Metamask',
-        onOk: () => window.open('https://metamask.io/', '_blank')
+        okText: "Get Metamask",
+        onOk: () => window.open("https://metamask.io/", "_blank")
       });
       return false;
     }
@@ -44,15 +51,15 @@ class Web3 extends Component {
       }
 
       if (ethAccounts.length === 0) {
-        notification['error']({ message: 'You need to login on Metamask.' });
+        notification["error"]({ message: "You need to login on Metamask." });
         return false;
       }
     }
 
     const ethNetwork = await this.web3.eth.net.getNetworkType();
-    if (ethNetwork !== 'main') {
+    if (ethNetwork !== "main") {
       Modal.error({
-        title: 'Incorrect Network',
+        title: "Incorrect Network",
         content: `You are currently in ${ethNetwork} network. Please change your network to Main Ethereum Network.`
       });
 
@@ -68,14 +75,17 @@ class Web3 extends Component {
     }
 
     const ethAccounts = await this.web3.eth.getAccounts();
+    const { steemMe } = this.props.authContext;
+    const { setEthAddress } = this.props.walletContext;
+    console.log(this.props);
 
     Modal.success({
-      title: 'Connect External Wallet',
-      className: 'metamask-install-modal',
+      title: "Connect External Wallet",
+      className: "metamask-install-modal",
       autoFocusButton: null,
       maskClosable: true,
       content: (
-        <div className={'metamask-install-body'}>
+        <div className={"metamask-install-body"}>
           <p>
             You can connect your own Ether wallet address by using MetaMask.
           </p>
@@ -98,11 +108,11 @@ class Web3 extends Component {
           </ul>
         </div>
       ),
-      okText: 'Connect to Metamask',
+      okText: "Connect to Metamask",
       onOk: async () => {
-        const { me, setEthAddress } = this.props.authContext;
-
-        const message = `Connect this Ethereum address to your Steem account, ${me}. (Timestamp: ${new Date().getTime()})`;
+        const message = `Connect this Ethereum address to your Steem account, ${
+          steemMe.name
+        }. (Timestamp: ${new Date().getTime()})`;
 
         const signature = await this.web3.eth.personal.sign(
           message,

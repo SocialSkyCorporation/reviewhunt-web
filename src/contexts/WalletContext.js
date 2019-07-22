@@ -8,6 +8,8 @@ import { format } from "utils/utils";
 import steemConnectAPI from "utils/steemConnectAPI";
 import steem from "steem";
 
+const dummy_data = require("test_hunt_transactions.json");
+
 const WalletContext = React.createContext();
 const { Provider, Consumer } = WalletContext;
 const NETWORK = "https://etherscan.io";
@@ -21,8 +23,10 @@ class WalletProvider extends React.Component {
       balances: {},
       totalClaimed: 0.0,
       ethAddress: null,
-      transactions: [],
-      withdrawals: [],
+      // transactions: [],
+      // withdrawals: [],
+      transactions: dummy_data.transactions,
+      withdrawals: dummy_data.withdrawals,
       isLoading: false,
       isUpdating: false,
       me: null,

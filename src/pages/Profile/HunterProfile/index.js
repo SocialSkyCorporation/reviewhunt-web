@@ -352,10 +352,7 @@ class HunterProfile extends Component {
                 <div
                   className="cancel-button"
                   onClick={() => {
-                    this.props.authContext.updateState(
-                      "emailMeUpdate",
-                      emailMe
-                    );
+                    updateState("emailMeUpdate", emailMe);
                     updateState("editProfile", false);
                   }}
                 >
