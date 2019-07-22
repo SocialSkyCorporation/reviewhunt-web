@@ -34,7 +34,6 @@ const tabs = [TAB_CREATE_CAMPAIGN, TAB_CAMPAIGNS, TAB_HISTORY, TAB_SETTINGS, TAB
 
 class Profile extends Component {
   state = {
-    editProfile: false,
     socialChannels: [],
     steemLogo: steemLogoBlack
   };

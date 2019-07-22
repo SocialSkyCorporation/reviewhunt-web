@@ -13,7 +13,7 @@ import pendingImg from "assets/images/pending.svg";
 
 const MAX_STARS = 5;
 
-const HistoryMessage = ({ status, rating, containerStyle }) => {
+const HistoryMessage = ({ type, status, rating, containerStyle }) => {
 
 	let img = "";
 	let message = "";

@@ -56,6 +56,7 @@ const QuestInfo = ({ quest }) => {
       <div className="quest-tag">Quest Bounty - ${tag}</div>
 
       <HistoryMessage
+        type="general"
         status={status}
       />
 
