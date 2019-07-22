@@ -40,7 +40,7 @@ const QuestStepProgress = props => {
         let toolTipText = "";
         let statusImg = null;
 
-        if (status === "pending") statusImg = pendingImg;
+        if (status === "submitted") statusImg = pendingImg;
         else if (status === "request_edit") statusImg = pendingImg;
         else if (status === "approved") statusImg = approvedImg;
         else if (status === "rejected") statusImg = pendingImg;

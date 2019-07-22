@@ -41,7 +41,7 @@ const initialState = {
       title: "",
       description: "",
       criteria: "",
-      quest_type: "general",
+      quest_type: "general_1",
       image: [],
       bounty_max: 0,
       saved: false
@@ -120,7 +120,7 @@ class NewCampaignProvider extends Component {
       urls
     };
 
-    quests.forEach(q => q.saved = true);
+    // quests.forEach(q => (q.saved = true));
 
     this.setState({
       ...campaign,
@@ -198,9 +198,19 @@ class NewCampaignProvider extends Component {
     this.setState({ step });
   };
 
-  createQuest = async (id, form, index) => {
+  createQuest = async (id, form, index, bulkSave = false) => {
     console.log("creating quest");
     const { quests, campaignId } = this.state;
+
+    if (form.quest_type.indexOf("general") > -1 && form.image.length === 0) {
+      const err = "Proof example image is required.";
+      if (bulkSave) {
+        throw new Error(err);
+      } else {
+        notification["error"]({ message: err });
+      }
+      return;
+    }
 
     const formData = new FormData();
     this.setState({ loading: true });
@@ -209,7 +219,10 @@ class NewCampaignProvider extends Component {
     if (validated) {
       for (const key in form) {
         if (key === "image") {
-          formData.append(`quest[image]`, new Blob([image]));
+          formData.append(
+            `quest[image]`,
+            new Blob([image], { type: "image/png" })
+          );
         } else {
           formData.append(`quest[${key}]`, form[key]);
         }
@@ -221,6 +234,10 @@ class NewCampaignProvider extends Component {
         : `/campaigns/${campaignId}/quests.json`;
 
       try {
+        let questsClone = _.clone(quests);
+        questsClone[index]["saving"] = true;
+        await this.setState({ quests: questsClone });
+
         const result = await api.uploadFormData(
           method,
           endpoint,
@@ -229,12 +246,13 @@ class NewCampaignProvider extends Component {
           TYPE_MAKER
         );
 
+        console.log("quest created", result);
+
         const { id } = result;
-        const questsClone = _.clone(quests);
-        questsClone[index]["id"] = id;
-        questsClone[index]["value"] = result;
-        questsClone[index]["saved"] = true;
-        this.setState({ loading: false, quests: questsClone });
+        questsClone[index] = result;
+        questsClone[index]["saving"] = false;
+        questsClone[index]["saved"] = false;
+        this.setState({ quests: questsClone });
       } catch (e) {
         notification["error"]({ message: extractErrorMessage(e) });
       } finally {
@@ -244,20 +262,24 @@ class NewCampaignProvider extends Component {
   };
 
   saveQuest = async (id, form, index, bulkSave = false) => {
-    console.log("saving quest");
+    console.log("saving quest", form);
     const { quests, campaignId } = this.state;
 
     const formData = new FormData();
     let validated =
-      form.image && typeof form.image === "object"
-        ? validateImage(form.image)
+      form.image && form.image.length > 0
+        ? validateImage(form.image[0].image)
         : true;
 
     if (validated) {
       for (const key in form) {
         if (key === "image") {
           if (form[key] && typeof form[key] !== "string") {
-            formData.append(`quest[${key}]`, new Blob([form[key]]));
+            const image = form.image[0].image;
+            formData.append(
+              `quest[image]`,
+              new Blob([image], { type: "image/png" })
+            );
           }
         } else {
           formData.append(`quest[${key}]`, form[key]);
@@ -265,7 +287,11 @@ class NewCampaignProvider extends Component {
       }
 
       try {
-        await api.uploadFormData(
+        let questsClone = _.clone(quests);
+        questsClone[index]["saving"] = true;
+        await this.setState({ quests: questsClone });
+        
+        const result = await api.uploadFormData(
           "put",
           `/campaigns/${campaignId}/quests/${id}.json`,
           formData,
@@ -273,8 +299,8 @@ class NewCampaignProvider extends Component {
           TYPE_MAKER
         );
 
-        const questsClone = _.clone(quests);
-        questsClone[index]["value"] = form;
+        questsClone[index] = result;
+        questsClone[index]["saving"] = false;
         questsClone[index]["saved"] = true;
         this.setState({ quests: questsClone });
       } catch (e) {
@@ -548,6 +574,8 @@ class NewCampaignProvider extends Component {
       .filter(filterGeneralQuests)
       .sort(questSortFunction);
 
+    console.log("SAVING", generalQuests);
+
     try {
       this.setState({ loading: true });
 
@@ -564,7 +592,6 @@ class NewCampaignProvider extends Component {
         } = quest;
 
         //if string, it's url else file
-        const uploadImage = typeof image === "string" ? image : image[0].image;
 
         const form = {
           title,
@@ -572,12 +599,12 @@ class NewCampaignProvider extends Component {
           criteria,
           bounty_amount,
           quest_type,
-          image: uploadImage
+          image
         };
         if (quest.id) {
           await this.saveQuest(id, form, index, true);
         } else {
-          await this.createQuest(id, form, index);
+          await this.createQuest(id, form, index, true);
         }
       }
 
@@ -585,6 +612,8 @@ class NewCampaignProvider extends Component {
       this.setStep(STEP_REVIEW_BUZZ);
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
+    } finally {
+      this.setState({ loading: false });
     }
   };
 

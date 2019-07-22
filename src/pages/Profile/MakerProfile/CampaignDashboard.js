@@ -44,7 +44,7 @@ const CampaignDashboard = ({
   onEditDescClicked,
   submittedQuests
 }) => {
-  const [currentTab, setCurrentTab] = useState("pending");
+  const [currentTab, setCurrentTab] = useState("submitted");
   const [currentFilter, setCurrentFilter] = useState("all");
   const [modalVisible, setModalVisible] = useState(false);
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
@@ -85,7 +85,7 @@ const CampaignDashboard = ({
   let totalBuzzCount = 0;
 
   submittedItems.forEach(item => {
-    if (item.status === "pending") questsToApprove++;
+    if (item.status === "submitted") questsToApprove++;
     if (item.channel !== null && !channelCounts[item.channnel])
       channelCounts[item.channel] = 0;
     if (item.channel) {
@@ -165,7 +165,7 @@ const CampaignDashboard = ({
             selectedKeys={[currentTab]}
             style={{ flex: 1 }}
           >
-            <Menu.Item key="pending">Pending</Menu.Item>
+            <Menu.Item key="submitted">Pending</Menu.Item>
             <Menu.Item key="approved">Approved</Menu.Item>
             <Menu.Item key="rejected">Rejected</Menu.Item>
           </Menu>

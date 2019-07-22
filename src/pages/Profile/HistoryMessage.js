@@ -18,6 +18,10 @@ const HistoryMessage = ({ type, status, rating, containerStyle }) => {
 	let img = "";
 	let message = "";
 
+	if(!status) {
+		return null;
+	}
+
 	if (status === "approved") {
 		img = <img src={checkImg} alt="" />;
 		message = "Your submission was confirmed. You will earn x HUNT after this campaign is all finished";
@@ -27,7 +31,7 @@ const HistoryMessage = ({ type, status, rating, containerStyle }) => {
 	} else if (status === "bounty_paid") {
 		img = <img src={moneyImg} alt="" />;
 		message = "1,506 HUNT has been distributed to your wallet from your submission - [URL]."
-	} else if (status === "pending") {
+	} else if (status === "submitted") {
 		img = <img src={pendingImg} alt="" />;
 		message = "Your content - [URL] was submitted, and it’s waiting for moderation."
 	} else if (status === "star") {

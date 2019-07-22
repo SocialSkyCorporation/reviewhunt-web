@@ -50,9 +50,7 @@ const ReviewInfo = ({ quest }) => {
 
       <div className="quest-tag">Quest Bounty - $5 per review</div>
 
-      <HistoryMessage
-        status={status}
-      />
+      <HistoryMessage status={status} />
 
       <div className="info-description text-grey">
         Have you enjoyed the app? Please write a review on the App Store or Play
@@ -107,7 +105,7 @@ const ReviewInfo = ({ quest }) => {
             <img className="info-quest-image" src={appstoreReviewImg} alt="" />
           </div>
 
-          {!joined && (
+          {status !== "joined" && (
             <FullWidthButton
               icon={<img src={appstoreLogo} />}
               onClick={() => {
@@ -127,7 +125,7 @@ const ReviewInfo = ({ quest }) => {
             />
           )}
 
-          {joined && (
+          {status === "joined" && (
             <>
               <FullWidthButton
                 disabled
@@ -138,7 +136,7 @@ const ReviewInfo = ({ quest }) => {
                   setJoined(true);
                 }}
                 text={`SUBMISSION ENDING IN ${timer}`}
-                style={{ marginTop: 16 }}
+                style={{ marginTop: 16, maxWidth: 260 }}
                 borderColor="transparent"
                 color="rgba(245, 34, 45, 0.7)"
                 backgroundColor="#fff"
@@ -150,7 +148,7 @@ const ReviewInfo = ({ quest }) => {
                   setJoined(true);
                 }}
                 text={`SUBMIT QUEST`}
-                style={{}}
+                style={{ marginTop: 16, maxWidth: 260 }}
               />
             </>
           )}

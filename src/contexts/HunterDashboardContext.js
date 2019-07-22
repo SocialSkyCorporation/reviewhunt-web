@@ -17,6 +17,7 @@ class HunterDashboardProvider extends React.Component {
     submittingQuest: false,
     submitModalVisible: false,
     fetchingSubmittedQuests: false,
+    joiningQuest: false,
     submittedQuests: []
   };
 
@@ -48,6 +49,44 @@ class HunterDashboardProvider extends React.Component {
     }
   };
 
+  joinQuest = async (questId, channel, buzzChannelId) => {
+    const { currentCampaign } = this.state;
+    this.setState({ joiningQuest: true });
+
+    try {
+      const result = await api.post(
+        "/hunter_quests.json",
+        {
+          hunter_quest: {
+            quest_id: questId,
+            channel,
+            buzz_channel_id: buzzChannelId
+          }
+        },
+        true,
+        TYPE_HUNTER
+      );
+
+      const campaignCopy = _.clone(currentCampaign);
+      campaignCopy.quests.forEach((_quest, _index) => {
+        if (_quest.id === result.id) {
+          Object.assign(_quest, result);
+        }
+      });
+
+      this.setState({
+        currentCampaign: campaignCopy
+      });
+      console.log("joined", result);
+    } catch (e) {
+      notification["error"]({
+        message: extractErrorMessage(e)
+      });
+    } finally {
+      this.setState({ joiningQuest: false });
+    }
+  };
+
   submitQuest = async (quest, channel, contentUrl, img) => {
     const { currentCampaign, submittedQuests } = this.state;
     if (img.length == 0) {
@@ -72,7 +111,7 @@ class HunterDashboardProvider extends React.Component {
         formData.append("hunter_quest[buzz_channel_id]", channel.id);
       formData.append(
         "hunter_quest[proof_image]",
-        new Blob([img[0]], { type: "image/png" })
+        new Blob([img[0].image], { type: "image/png" })
       );
 
       const result = await api.uploadFormData(
@@ -106,7 +145,7 @@ class HunterDashboardProvider extends React.Component {
 
   setCurrentCampaign = currentCampaign => {
     this.setState({ currentCampaign });
-  };    
+  };
 
   getQuestSubmissions = async id => {
     this.setState({ fetchingSubmittedQuests: true });
@@ -132,7 +171,8 @@ class HunterDashboardProvider extends React.Component {
           setCurrentCampaign: this.setCurrentCampaign,
           getQuestSubmissions: this.getQuestSubmissions,
           submitQuest: this.submitQuest,
-          updateState: this.updateState
+          updateState: this.updateState,
+          joinQuest: this.joinQuest
         }}
       >
         {this.props.children}

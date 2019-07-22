@@ -117,7 +117,7 @@ const Step4 = ({}) => {
                   <RewardDetailRow
                     key={quest_type}
                     title={questDictionary[quest_type]}
-                    bounty={`$${numberWithCommas(bounty_max)}`}
+                    bounty={bounty_max ? `$${numberWithCommas(bounty_max)}` : 0}
                   >
                     <div className="text-black">{title}</div>
                   </RewardDetailRow>
@@ -150,7 +150,7 @@ const Step4 = ({}) => {
                               <div
                                 className="url-href hover-link"
                                 onClick={() => {
-                                  setStep(1);
+                                  setStep(0);
                                 }}
                               >
                                 Register
@@ -179,7 +179,7 @@ const Step4 = ({}) => {
                                 <div
                                   className="url-href hover-link"
                                   onClick={() => {
-                                    setStep(1);
+                                    setStep(0);
                                   }}
                                 >
                                   Register

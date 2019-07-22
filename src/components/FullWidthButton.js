@@ -79,6 +79,7 @@ FullWidthButton.defaultProps = {
   color: "#fff",
   onMouseOut: () => {},
   onMouseOver: () => {},
+  onClick: () => {},
   disabled: false
 };
 

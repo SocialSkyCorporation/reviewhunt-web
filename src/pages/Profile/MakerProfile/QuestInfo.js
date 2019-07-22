@@ -11,8 +11,9 @@ import { Dropdown, TextInput, Screenshots } from "components/FormTypes";
 import HunterDashboardContext from "contexts/HunterDashboardContext";
 
 const QuestInfo = ({ quest }) => {
-  const { id } = quest;
+  console.log("quest", quest);
   const {
+    id,
     quest_type,
     bounty_base,
     title,
@@ -37,7 +38,9 @@ const QuestInfo = ({ quest }) => {
     submitQuest,
     fetchingSubmittedQuests,
     getQuestSubmissions,
-    submittedQuests
+    submittedQuests,
+    joiningQuest,
+    joinQuest
   } = useContext(HunterDashboardContext);
 
   useEffect(() => {
@@ -53,12 +56,9 @@ const QuestInfo = ({ quest }) => {
       </div>
       <div className="info-title text-black uppercase">{title}</div>
 
-      <div className="quest-tag">Quest Bounty - ${tag}</div>
+      <div className="quest-tag">Quest Bounty - {tag}</div>
 
-      <HistoryMessage
-        type="general"
-        status={status}
-      />
+      <HistoryMessage type="general" status={status} />
 
       <div className="info-description text-grey">{description}</div>
 
@@ -69,11 +69,35 @@ const QuestInfo = ({ quest }) => {
 
       <div className="info-subheading text-black">SCREENSHOT EXAMPLE</div>
       <img className="info-quest-image" src={image} alt="" />
-      <FullWidthButton
-        text="JOIN QUEST"
-        onClick={() => updateState("submitModalVisible", true)}
-        style={{ maxWidth: 240 }}
-      />
+
+      {status === null && (
+        <FullWidthButton
+          onClick={() => joinQuest(id, null, null)}
+          text="JOIN QUEST"
+          style={{ marginTop: 16, maxWidth: 260 }}
+        />
+      )}
+
+      {status === "joined" && (
+        <>
+          <FullWidthButton
+            disabled
+            icon={<Icon type="loading" />}
+            onClick={() => {}}
+            text={`SUBMISSION ENDING IN 0`}
+            style={{ marginTop: 16, maxWidth: 260 }}
+            borderColor="transparent"
+            color="rgba(245, 34, 45, 0.7)"
+            backgroundColor="#fff"
+          />
+          <FullWidthButton
+            onClick={() => {}}
+            text={`SUBMIT QUEST`}
+            style={{ marginTop: 16, maxWidth: 260 }}
+          />
+        </>
+      )}
+
       <Modal
         maskClosable={false}
         onCancel={() => updateState("submitModalVisible", false)}

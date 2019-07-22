@@ -122,7 +122,7 @@ const Step6 = ({}) => {
             {product_name}
           </div>
           <div>
-            <div>{quest_count ? quest_count : 0} quests</div>
+            <div>{quests ? quests.length : 0} quests</div>
             {hasAppstoreReview && !hasPlaystoreReview && <div>App Store</div>}
             {hasPlaystoreReview && !hasAppstoreReview && <div>Play Store</div>}
             {hasAppstoreReview && hasPlaystoreReview && (

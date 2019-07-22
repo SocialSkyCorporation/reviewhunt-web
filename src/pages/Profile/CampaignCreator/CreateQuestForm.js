@@ -3,35 +3,38 @@ import React, {
   useCallback,
   useEffect,
   useContext,
-  memo
+  useMemo
 } from "react";
 import PropTypes from "prop-types";
+import { Spin } from "antd";
 import { TextInput, Screenshots } from "components/FormTypes";
 import SimpleButton from "components/SimpleButton";
 import NewCampaignContext from "contexts/NewCampaignContext";
 import { filterGeneralQuests } from "utils/helpers/campaignHelper";
 
-const CreateQuestForm = memo(
-  ({ index }) => {
-    const {
-      createQuest,
-      deleteQuest,
-      updateStateSingleQuest,
-      saveQuest,
-      quests
-    } = useContext(NewCampaignContext);
+const CreateQuestForm = ({ index }) => {
+  const {
+    createQuest,
+    deleteQuest,
+    updateStateSingleQuest,
+    saveQuest,
+    quests
+  } = useContext(NewCampaignContext);
 
-    const {
-      id,
-      saved,
-      title,
-      description,
-      criteria,
-      bounty_amount,
-      image
-    } = quests[index];
+  const {
+    id,
+    saved,
+    title,
+    description,
+    criteria,
+    bounty_amount,
+    saving,
+    image
+  } = quests[index];
 
-    return (
+  console.log("quest updated", quests[index]);
+  return (
+    <Spin spinning={saving === true} tip="Saving...">
       <div>
         <TextInput
           title={"Quest Name"}
@@ -53,9 +56,7 @@ const CreateQuestForm = memo(
           small
           maxBytes={20000000}
           images={typeof image === "string" ? [image] : image}
-          onChange={files =>
-            updateStateSingleQuest(index, "image", files)
-          }
+          onChange={files => updateStateSingleQuest(index, "image", files)}
         />
         <TextInput
           title={"What to include in the quest proof"}
@@ -84,7 +85,7 @@ const CreateQuestForm = memo(
                 quest_type: `general_${index + 1}`,
                 image
               };
-              if (saved) {
+              if (id !== null) {
                 saveQuest(id, form, index);
               } else {
                 createQuest(id, form, index);
@@ -94,10 +95,9 @@ const CreateQuestForm = memo(
           />
         </div>
       </div>
-    );
-  },
-  ({ quests: prevQuests }, { quests: nextQuests }) => prevQuests === nextQuests
-);
+    </Spin>
+  );
+};
 
 CreateQuestForm.propTypes = {};
 

@@ -154,9 +154,7 @@ class Profile extends Component {
       "Checkout"
     ];
 
-    const isNewCampaign =
-      tabIndex === TAB_CREATE_CAMPAIGN &&
-      this.props.newCampaignContext.campaignId === null;
+    const isNewCampaign = tabIndex === TAB_CREATE_CAMPAIGN; 
 
     const editingCampaign =
       tabIndex === TAB_CAMPAIGNS &&

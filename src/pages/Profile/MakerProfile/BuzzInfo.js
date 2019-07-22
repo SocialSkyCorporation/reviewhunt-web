@@ -49,7 +49,7 @@ const ChannelSubmissionItem = ({
               <img src={approvedImg} alt="" />
             </div>
           )}
-          {submitted.status === "pending" && (
+          {submitted.status === "submitted" && (
             <div className="complete-overlay">
               <img src={pendingImg} alt="" />
             </div>
