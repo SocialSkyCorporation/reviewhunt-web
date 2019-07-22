@@ -227,7 +227,7 @@ const CampaignDashboard = ({
             noBorder
             data={submittedItems && submittedItems[currentItemIndex]}
             onApproveClick={() => approveSubmittedItem(currentItemIndex)}
-            onRejectClick={() => rejectSubmittedItem(currentItemIndex)}
+            onRejectClick={(reason) => rejectSubmittedItem(currentItemIndex, reason)}
           />
           {currentItemIndex > 0 && (
             <img onClick={prevClicked} className="prev-button" src={prevImg} />

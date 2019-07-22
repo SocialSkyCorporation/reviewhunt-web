@@ -17,7 +17,6 @@ export function filterAllowedChannels(hunterChannels, allowedChannels) {
     }
   });
 
-  console.log("filtered", filteredChannels);
   return filteredChannels;
 }
 

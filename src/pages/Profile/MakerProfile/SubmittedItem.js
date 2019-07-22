@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Spin } from "antd";
+import { Input, Button, Spin } from "antd";
 import SimpleButton from "components/SimpleButton";
 import approvedImg from "assets/images/approved.svg";
 import rejectedImg from "assets/images/rejected.svg";
@@ -9,6 +9,7 @@ import greenStar from "assets/images/green-star-filled.svg";
 import fullScreenImg from "assets/images/fullscreen-dark.svg";
 import Linkify from "react-linkify";
 import { toTimeAgo } from "utils/date";
+const { TextArea } = Input;
 
 const questTypeDictionary = {
   general_1: "Quest 1",
@@ -69,6 +70,8 @@ const SubmittedItem = ({
     submitting
   } = data;
 
+  const [inputVisible, setInputVisible] = useState(false);
+
   let description = null;
 
   if (quest_quest_type === "buzz") {
@@ -120,7 +123,7 @@ const SubmittedItem = ({
             hoverColor="rgba(245, 34, 45, 0.7)"
             color="rgba(245, 34, 45, 0.7)"
             style={{ minWidth: 120 }}
-            onClick={onRejectClick}
+            onClick={() => setInputVisible(true)}
           />
           <SimpleButton
             inverse
@@ -130,7 +133,24 @@ const SubmittedItem = ({
             onClick={onApproveClick}
           />
         </div>
-        <div className="bottom-divider" />
+
+        {inputVisible && (
+          <div className="reject-reason-container">
+            <TextArea
+              style={{ marginTop: 16, height: 80 }}
+              placeholder="Reason"
+            />
+            <Button
+              style={{ float: "right", marginTop: 8 }}
+              onClick={onRejectClick}
+            >
+              Submit
+            </Button>
+          </div>
+        )}
+
+        {!noBorder && <div className="bottom-divider" />}
+
         {approved && (
           <img className="approved-rejected-icon" src={approvedImg} alt="" />
         )}

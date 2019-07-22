@@ -100,19 +100,71 @@ class CampaignProvider extends React.Component {
     }
   };
 
-  approveSubmittedItem = index => {
+  approveSubmittedItem = async index => {
     const { submittedItems } = this.state;
     const clonedItems = _.clone(submittedItems);
-    // clonedItems[index]["status"] = "approved";
-    clonedItems[index]["submitting"] = true;
-    this.setState({ submittedItems: clonedItems });
+    try {
+      // clonedItems[index]["status"] = "approved";
+      const { id } = clonedItems[index];
+      clonedItems[index]["submitting"] = true;
+      await this.setState({ submittedItems: clonedItems });
+
+      const result = await api.patch(
+        `/hunter_quests/${id}/review.json`,
+        {
+          hunter_quest: {
+            status: "approved"
+          }
+        },
+        true,
+        TYPE_MAKER
+      );
+
+      clonedItems[index]["status"] = "approved";
+      clonedItems[index]["submitting"] = false;
+      this.setState({ submittedItems: clonedItems });
+    } catch (e) {
+      notification["error"]({
+        message: extractErrorMessage(e)
+      });
+      clonedItems[index]["submitting"] = false;
+      this.setState({ submittedItems: clonedItems });
+    } finally {
+    }
   };
 
-  rejectSubmittedItem = index => {
+  rejectSubmittedItem = async (index, review_comment) => {
     const { submittedItems } = this.state;
     const clonedItems = _.clone(submittedItems);
-    clonedItems[index]["status"] = "rejected";
-    this.setState({ submittedItems: clonedItems });
+    try {
+      // clonedItems[index]["status"] = "approved";
+      const { id } = clonedItems[index];
+      clonedItems[index]["submitting"] = true;
+      await this.setState({ submittedItems: clonedItems });
+
+      const result = await api.patch(
+        `/hunter_quests/${id}/review.json`,
+        {
+          hunter_quest: {
+            status: "rejected",
+            review_comment
+          }
+        },
+        true,
+        TYPE_MAKER
+      );
+
+      clonedItems[index]["status"] = "rejected";
+      clonedItems[index]["submitting"] = false;
+      this.setState({ submittedItems: clonedItems });
+    } catch (e) {
+      notification["error"]({
+        message: extractErrorMessage(e)
+      });
+      clonedItems[index]["submitting"] = false;
+      this.setState({ submittedItems: clonedItems });
+    } finally {
+    }
   };
 
   render() {

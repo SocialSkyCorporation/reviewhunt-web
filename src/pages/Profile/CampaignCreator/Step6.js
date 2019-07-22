@@ -215,14 +215,14 @@ const Step6 = ({}) => {
                   <NameValue
                     title={"입금계좌"}
                     value={currencyInfo.address.ko}
-                    minKeyWidth={120}
+                    minKeyWidth={160}
                   />
                   <NameValue
                     title={"입금액 (KRW 환산)"}
                     value={`${numberWithCommas(
                       Number(currencyInfo.amount).toFixed(2)
                     )} KRW`}
-                    minKeyWidth={120}
+                    minKeyWidth={160}
                   />
                   <div className="text-info text-grey">
                     * 입금자명이 다를 경우 입금확인이 어려우니 반드시 정확한

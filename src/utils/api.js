@@ -49,7 +49,7 @@ function request(
     headers["Authorization"] = "Token token=" + token;
   }
 
-  if (["GET", "DELETE", "PATCH"].indexOf(method) > -1) {
+  if (["GET", "DELETE"].indexOf(method) > -1) {
     qs = "?" + getQueryString(params || {});
   } else {
     // POST or PUT
