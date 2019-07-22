@@ -103,7 +103,7 @@ const QuestInfo = ({ quest }) => {
         onCancel={() => updateState("submitModalVisible", false)}
         visible={submitModalVisible}
         footer={null}
-        width="auto"
+        width={720}
         bodyStyle={{ padding: 60 }}
         wrapClassName="profile-page"
       >
