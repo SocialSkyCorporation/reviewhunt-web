@@ -16,7 +16,7 @@
     "moment": "^2.24.0",
     "numeral": "^2.0.6",
     "qrcode.react": "^0.9.3",
-    "query-string": "^4.3.4",
+    "query-string": "^6.8.1",
     "react": "^16.8.6",
     "react-beforeunload": "^2.1.0",
     "react-content-loader": "^4.2.1",
