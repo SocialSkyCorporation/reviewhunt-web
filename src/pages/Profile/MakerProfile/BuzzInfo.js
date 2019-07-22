@@ -5,6 +5,8 @@ import { Icon, Spin, Modal } from "antd";
 import backImg from "assets/images/back.svg";
 import clockImg from "assets/images/clock.svg";
 import approvedImg from "assets/images/approved.svg";
+import pendingImg from "assets/images/pending.svg";
+import rejectedImg from "assets/images/rejected.svg";
 import SimpleButton from "components/SimpleButton";
 import QuestStepProgress from "components/QuestStepProgress";
 import HistoryMessage from "../HistoryMessage";
@@ -36,13 +38,28 @@ const ChannelSubmissionItem = ({
     (parseFloat(reward_estimation) / huntPerUsd).toFixed(2)
   );
 
-  
+  console.log("submitte", submitted);
+
   return (
     <div className={`channel-submission-item ${!registered && "unregistered"}`}>
       {submitted && (
-        <div className="complete-overlay">
-          <img src={approvedImg} alt="" />
-        </div>
+        <>
+          {submitted.status === "approved" && (
+            <div className="complete-overlay">
+              <img src={approvedImg} alt="" />
+            </div>
+          )}
+          {submitted.status === "pending" && (
+            <div className="complete-overlay">
+              <img src={pendingImg} alt="" />
+            </div>
+          )}
+          {submitted.status === "rejected" && (
+            <div className="complete-overlay">
+              <img src={rejectedImg} alt="" />
+            </div>
+          )}
+        </>
       )}
       <div className="channel-submission-content">
         {profile_image && (
@@ -53,7 +70,9 @@ const ChannelSubmissionItem = ({
           src={profile_image || image}
           alt=""
         />
-        <div className="channel-text text-black">{_.capitalize(channel_type)}</div>
+        <div className="channel-text text-black">
+          {_.capitalize(channel_type)}
+        </div>
         {registered ? (
           <div className="channel-expected-earning text-green">
             Your Expected Earnings
@@ -118,7 +137,7 @@ const BuzzInfo = ({ quest }) => {
 
   useEffect(() => {
     getSocialChannels();
-  }, [])
+  }, []);
 
   const [submitChannel, setSubmitChannel] = useState("");
   const [proofImage, setProofImage] = useState([]);
@@ -141,8 +160,6 @@ const BuzzInfo = ({ quest }) => {
     );
   }
 
-
-
   const allowedChannels = useMemo(() => {
     return filterAllowedChannels(socialChannels, allowed_channels).map(
       (channel, index) => {
@@ -157,7 +174,7 @@ const BuzzInfo = ({ quest }) => {
               updateState("submitModalVisible", true);
             }}
             submitted={_.find(submittedQuests, ["buzz_channel_id", id])}
-            registered={true}
+            registered={false}
           />
         );
       }

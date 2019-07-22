@@ -19,7 +19,8 @@ const QuestInfo = ({ quest }) => {
     criteria,
     bounty_max,
     description,
-    image
+    image,
+    status
   } = quest;
   let tag =
     bounty_max === bounty_base
@@ -54,32 +55,9 @@ const QuestInfo = ({ quest }) => {
 
       <div className="quest-tag">Quest Bounty - ${tag}</div>
 
-      {/*   <HistoryMessage
-        type="confirm"
-        message={"Your quest submission was confirmed."}
-      />
-
       <HistoryMessage
-        type="reject"
-        message={
-          "Your quest submission was not approved (if you want to appeal, use #reviewhunt-appeal channel in our Disocrd group (https://discord.gg/84zsT4m)."
-        }
+        type={status}
       />
-
-      <HistoryMessage
-        type="star"
-        rating={9}
-        message={"Your buzz content get 3.5 rating"}
-      />
-
-      <HistoryMessage
-        type="earned"
-        message={"Your quest submission was confirmed."}
-      />
-      <HistoryMessage
-        type="paid"
-        message={"Your quest submission was confirmed."}
-      />*/}
 
       <div className="info-description text-grey">{description}</div>
 
@@ -93,7 +71,7 @@ const QuestInfo = ({ quest }) => {
       <FullWidthButton
         text="JOIN QUEST"
         onClick={() => updateState("submitModalVisible", true)}
-        style={{maxWidth: 240}}
+        style={{ maxWidth: 240 }}
       />
       <Modal
         maskClosable={false}
