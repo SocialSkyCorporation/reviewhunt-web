@@ -36,6 +36,8 @@ const ReviewInfo = ({ quest }) => {
   const hasPlaystore = allowed_channels.includes("playstore");
   const hasAppstore = allowed_channels.includes("appstore");
 
+  const [joined, setJoined] = useState(false);
+  const [timer, setTimer] = useState(0);
   const [proofImage, setProofImage] = useState([]);
   const [proofText, setProofText] = useState("");
   const [submissionType, setSubmissionType] = useState("");
@@ -106,15 +108,53 @@ const ReviewInfo = ({ quest }) => {
             <img className="info-quest-image" src={appstoreReviewImg} alt="" />
           </div>
 
-          <FullWidthButton
-            icon={<img src={appstoreLogo} />}
-            onClick={() => {
-              setSubmissionType("appstore");
-              updateState("submitModalVisible", true);
-            }}
-            text="JOIN APP STORE REVIEW"
-            style={{ marginTop: 16, maxWidth: 260 }}
-          />
+          {!joined && (
+            <FullWidthButton
+              icon={<img src={appstoreLogo} />}
+              onClick={() => {
+                setSubmissionType("appstore");
+                // updateState("submitModalVisible", true);
+                setJoined(true);
+                let time = 60;
+                setTimer(time);
+                const timerInterval = setInterval(() => {
+                  time -= 1;
+                  if (time <= 0) clearInterval(timerInterval);
+                  setTimer(time);
+                }, 1000);
+              }}
+              text="JOIN APP STORE REVIEW"
+              style={{ marginTop: 16, maxWidth: 260 }}
+            />
+          )}
+
+          {joined && (
+            <>
+              <FullWidthButton
+                disabled
+                icon={<Icon type="loading" />}
+                onClick={() => {
+                  setSubmissionType("appstore");
+                  // updateState("submitModalVisible", true);
+                  setJoined(true);
+                }}
+                text={`SUBMISSION ENDING IN ${timer}`}
+                style={{ marginTop: 16 }}
+                borderColor="transparent"
+                color="rgba(245, 34, 45, 0.7)"
+                backgroundColor="#fff"
+              />
+              <FullWidthButton
+                onClick={() => {
+                  setSubmissionType("appstore");
+                  // updateState("submitModalVisible", true);
+                  setJoined(true);
+                }}
+                text={`SUBMIT QUEST`}
+                style={{}}
+              />
+            </>
+          )}
         </>
       )}
 
@@ -252,7 +292,12 @@ const ReviewInfo = ({ quest }) => {
             </div>
             <FullWidthButton
               onClick={() =>
-                submitQuest(quest, {channel_type: submissionType}, null, proofImage)
+                submitQuest(
+                  quest,
+                  { channel_type: submissionType },
+                  null,
+                  proofImage
+                )
               }
               text={`SUBMIT ${
                 submissionType === "appstore" ? "APP STORE" : "PLAY STORE"
