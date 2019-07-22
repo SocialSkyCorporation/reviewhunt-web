@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { Icon } from "antd";
 import PropTypes from "prop-types";
 
 const FullWidthButton = ({
   text,
   style,
   onClick,
+  disabled,
   icon,
   borderColor,
   borderWidth,
@@ -12,13 +14,22 @@ const FullWidthButton = ({
   hoverColor,
   color,
   inverse,
+  loading,
   onMouseOut,
   onMouseOver
 }) => {
   const [hover, setHover] = useState(false);
-  const buttonStyle = { borderWidth, backgroundColor, borderColor, color, ...style };
+  const buttonStyle = {
+    borderWidth,
+    backgroundColor,
+    borderColor,
+    color,
+    ...style
+  };
 
-  const inverseStyle = inverse ? { backgroundColor: color, color: backgroundColor } : {};
+  const inverseStyle = inverse
+    ? { backgroundColor: color, color: backgroundColor }
+    : {};
 
   const hoverStyle = hover
     ? {
@@ -30,19 +41,24 @@ const FullWidthButton = ({
   return (
     <div
       onMouseOver={e => {
+        if(disabled) return;
         setHover(true);
         onMouseOver(e);
       }}
       onMouseOut={e => {
+        if(disabled) return;
         setHover(false);
         onMouseOut(e);
       }}
       className="full-width-button"
-      onClick={onClick}
+      onClick={() => {
+        if(disabled) return;
+        !loading && onClick();
+      }}
       style={{ ...buttonStyle, ...inverseStyle, ...hoverStyle, ...style }}
     >
       {icon && <div className="icon">{icon}</div>}
-      {text}
+      {loading ? <Icon type="loading" /> : text}
     </div>
   );
 };
@@ -59,9 +75,11 @@ FullWidthButton.defaultProps = {
   backgroundColor: "#000",
   hoverColor: "#0a0a0a",
   borderWidth: 1,
+  loading: false,
   color: "#fff",
   onMouseOut: () => {},
-  onMouseOver: () => {}
+  onMouseOver: () => {},
+  disabled: false
 };
 
 export default FullWidthButton;
