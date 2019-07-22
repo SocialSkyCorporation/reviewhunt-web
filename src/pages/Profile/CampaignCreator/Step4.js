@@ -15,6 +15,7 @@ import SimpleButton from "components/SimpleButton";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 import appstoreImg from "assets/images/appstore.svg";
 import playstoreImg from "assets/images/playstore.svg";
+import { filterBuzzQuests } from "utils/helpers/campaignHelper";
 
 const questDictionary = {
   general_1: "QUEST 1",
@@ -29,9 +30,7 @@ const RewardDetailRow = props => {
   return (
     <div>
       <div className="reward-detail-row row-align-center">
-        <div className="reward-row-tag uppercase text-grey">
-          {title}
-        </div>
+        <div className="reward-row-tag uppercase text-grey">{title}</div>
         <div className="reward-row-content">{props.children}</div>
         <div className="text-black">{bounty}</div>
       </div>
@@ -64,14 +63,17 @@ const Step4 = ({}) => {
     fetchEstimate,
     fetchingEstimate,
     campaignInfo,
-    campaignId
+    campaignId,
+    setCampaignBudget
   } = useContext(NewCampaignContext);
 
   useEffect(() => {
-    if(campaignId) {
+    if (campaignId) {
       fetchEstimate();
     }
-  }, [fetchEstimate, campaignId])
+  }, [fetchEstimate, campaignId]);
+
+  const buzzQuests = quests.filter(filterBuzzQuests);
 
   return (
     <div className="campaign-step">
@@ -89,23 +91,23 @@ const Step4 = ({}) => {
           fetchEstimate();
         }}
       />
-      <BudgetSlider
-        title={"Max reward per content"}
-        value={maxRewardAmount}
-        min={10}
-        max={10000}
-        step={5}
-        onChange={value => {
-          updateState("fetchingEstimate", true);
-          updateState("maxRewardAmount", value);
-          fetchEstimate();
-        }}
-      />
+      {buzzQuests.length > 0 && (
+        <BudgetSlider
+          title={"Max reward per content"}
+          value={maxRewardAmount}
+          min={10}
+          max={10000}
+          step={5}
+          onChange={value => {
+            updateState("fetchingEstimate", true);
+            updateState("maxRewardAmount", value);
+            fetchEstimate();
+          }}
+        />
+      )}
 
       <div className="reward-details">
-        <div className="text-black reward-details-text">
-          Reward Details
-        </div>
+        <div className="text-black reward-details-text">Reward Details</div>
 
         {quests.map(
           ({ allowed_channels, quest_type, title, bounty_max }, index) => {
@@ -195,7 +197,11 @@ const Step4 = ({}) => {
 
               case "buzz":
                 return (
-                  <RewardDetailRow key={quest_type} title={"Buzz Content"} bounty={`$10 - $${maxRewardAmount}`}>
+                  <RewardDetailRow
+                    key={quest_type}
+                    title={"Buzz Content"}
+                    bounty={`$10 - $${maxRewardAmount}`}
+                  >
                     {allowed_channels.map((channel, index) => {
                       return (
                         <div key={index} className="text-black">
@@ -250,7 +256,7 @@ const Step4 = ({}) => {
         </div>
         <SimpleButton
           text={"Save and Next"}
-          onClick={() => setStep(STEP_CONFIRM)}
+          onClick={() => setCampaignBudget()}
         />
       </div>
     </div>

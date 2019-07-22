@@ -6,7 +6,11 @@ import { extractErrorMessage } from "utils/errorMessage";
 import { validateImage } from "utils/helpers/uploadHelpers";
 import { TYPE_MAKER } from "pages/Auth";
 import { questSortFunction } from "utils/helpers/campaignHelper";
-import { filterGeneralQuests } from "utils/helpers/campaignHelper";
+import {
+  filterGeneralQuests,
+  filterBuzzQuests
+} from "utils/helpers/campaignHelper";
+import queryString from "query-string";
 
 const NewCampaignContext = React.createContext();
 
@@ -52,8 +56,8 @@ const initialState = {
   questBuzz: { id: null, quest_type: "buzz", allowed_channels: [] },
   appstoreCriteria: "",
   channelsCriteria: "",
-  totalBudgetAmount: 1000,
-  maxRewardAmount: 10,
+  totalBudgetAmount: 5000,
+  maxRewardAmount: 100,
   campaignId: null,
   estimate: {
     total_bounty: 0,
@@ -290,7 +294,7 @@ class NewCampaignProvider extends Component {
         let questsClone = _.clone(quests);
         questsClone[index]["saving"] = true;
         await this.setState({ quests: questsClone });
-        
+
         const result = await api.uploadFormData(
           "put",
           `/campaigns/${campaignId}/quests/${id}.json`,
@@ -494,7 +498,7 @@ class NewCampaignProvider extends Component {
         this.setState({ loading: true });
         const buzzFormData = new FormData();
         buzzFormData.append("quest[quest_type]", "buzz");
-        buzzFormData.append("quest[bounty_max]", "10");
+        buzzFormData.append("quest[bounty_max]", "100");
         for (const key in questBuzz["allowed_channels"]) {
           if (key === "appstore") continue;
           buzzFormData.append(
@@ -617,6 +621,42 @@ class NewCampaignProvider extends Component {
     }
   };
 
+  setCampaignBudget = async () => {
+    const {
+      maxRewardAmount,
+      totalBudgetAmount,
+      quests,
+      campaignId
+    } = this.state;
+    const buzzQuests = quests.filter(filterBuzzQuests);
+
+    this.setState({ loading: true });
+    try {
+      if (buzzQuests.length > 0) {
+        const {id} = buzzQuests[0];
+        const result = await api.put(
+          `/campaigns/${campaignId}/quests/${id}.json`,
+          { quest: { bounty_max: maxRewardAmount } },
+          true,
+          TYPE_MAKER
+        );
+      }
+
+      const result = await api.put(
+        `/campaigns/${campaignId}.json`,
+        { campaign: { total_bounty: totalBudgetAmount } },
+        true,
+        TYPE_MAKER
+      );
+
+      this.setStep(STEP_CONFIRM);
+    } catch (e) {
+      notification["error"]({ message: extractErrorMessage(e) });
+    } finally {
+      this.setState({ loading: false });
+    }
+  };
+
   render() {
     return (
       <Provider
@@ -638,7 +678,8 @@ class NewCampaignProvider extends Component {
           setCampaignData: this.setCampaignData,
           resetState: this.resetState,
           saveReviewAndBuzz: this.saveReviewAndBuzz,
-          saveAllGeneralQuests: this.saveAllGeneralQuests
+          saveAllGeneralQuests: this.saveAllGeneralQuests,
+          setCampaignBudget: this.setCampaignBudget
         }}
       >
         {this.props.children}

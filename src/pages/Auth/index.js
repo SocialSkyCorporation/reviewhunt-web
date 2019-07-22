@@ -30,7 +30,7 @@ class Auth extends Component {
 			nameOfCompany: "",
 			fullName: "sung woo park",
 			emailAddress: "abcdefgh@mail.com",
-			password: "tjddn4",
+			password: "swp123456",
 			confirmPassword: "swp123456",
 			countryOfResidence: "Country Of Residence",
 			gender: "Gender",
