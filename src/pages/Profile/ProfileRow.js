@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import { Input, Modal, Select } from "antd";
 import deleteImg from "assets/images/delete.svg";
 import { useTranslation } from "react-i18next";
-import {OptimizedInput, OptimizedInputPassword, OptimizedSelect} from 'pages/Auth/OptimizedFormTypes';
+import {
+  OptimizedInput,
+  OptimizedInputPassword,
+  OptimizedSelect
+} from "pages/Auth/OptimizedFormTypes";
 
 const TYPE_DROPDOWN = "DROPDOWN";
 const TYPE_PASSWORD = "PASSWORD";
@@ -34,6 +38,7 @@ const ProfileRow = ({
           <>
             {type === TYPE_DROPDOWN && (
               <OptimizedSelect
+                onChange={onChange}
                 defaultValue={value}
                 className="value-container select gray-bg-select text-grey"
               >
