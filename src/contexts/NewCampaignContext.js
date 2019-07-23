@@ -34,7 +34,7 @@ const initialState = {
     description: "",
     images: [],
     urls: {
-      appstore: "https://appstore.com",
+      appstore: "",
       playstore: "",
       website: ""
     }
