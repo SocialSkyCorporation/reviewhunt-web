@@ -83,7 +83,7 @@ const Step3 = ({}) => {
             </div>
             {campaignInfo.urls.playstore ? (
               <a className="url-href" href={campaignInfo.urls.playstore}>
-                {campaignInfo.playstore}
+                {campaignInfo.urls.playstore}
               </a>
             ) : (
               <div className="row-align-center">
