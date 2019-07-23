@@ -77,8 +77,8 @@ const QuestGridItem = props => {
             <p className="description two-lines">{short_description}</p>
           </div>
 
-          <div className="row-space-between">
-            <div className="row-align-center">
+          <div className="row-space-between col-on-mobile">
+            <div className="row-align-center stat-item">
               <img className="grid-item-icon" src={moneySvg} alt="" />
               <div className="bounty-text-container">
                 <div className="subheader text-black">
@@ -91,7 +91,7 @@ const QuestGridItem = props => {
 
             <div className="vertical-divider" />
 
-            <div className="row-align-center">
+            <div className="row-align-center stat-item">
               <img className="grid-item-icon" src={hunterSvg} alt="" />
               <div className="bounty-text-container">
                 <div className="subheader text-black">

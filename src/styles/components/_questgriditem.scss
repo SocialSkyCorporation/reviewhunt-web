@@ -16,6 +16,10 @@
     line-height: 1;
   }
 
+  .stat-item {
+    max-width: 150px;
+  }
+
   .category-badge {
     padding: 8px 12px;
     border-radius: 4px;
@@ -93,6 +97,11 @@
       width: 1px;
       height: 40px;
       background: #8b9699;
+
+      @include responsive(mobile) {
+        visibility: hidden;
+        height: 8px;
+      }
     }
 
     .grid-item-icon {
@@ -164,7 +173,7 @@
       white-space: normal;
 
       //fallback for non webkit
-      max-height: 28px;
+      max-height: 38px;
     }
   }
 }
