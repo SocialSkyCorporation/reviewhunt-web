@@ -69,7 +69,7 @@ class HunterDashboardProvider extends React.Component {
 
       const campaignCopy = _.clone(currentCampaign);
       campaignCopy.quests.forEach((_quest, _index) => {
-        if (_quest.id === result.id) {
+        if (_quest.id === result.quest_id) {
           Object.assign(_quest, result);
         }
       });
