@@ -110,7 +110,7 @@ const Step4 = ({}) => {
         <div className="text-black reward-details-text">Reward Details</div>
 
         {quests.map(
-          ({ allowed_channels, quest_type, title, bounty_max }, index) => {
+          ({ allowed_channels, quest_type, title, bounty_base, bounty_max }, index) => {
             switch (quest_type) {
               case "general_1":
               case "general_2":
@@ -129,7 +129,7 @@ const Step4 = ({}) => {
                   <RewardDetailRow
                     key={quest_type}
                     title={"App Review"}
-                    bounty={"$5.0"}
+                    bounty={bounty_max ? `$${numberWithCommas(bounty_max)}` : 0}
                   >
                     <div className="col">
                       <div>
@@ -200,7 +200,7 @@ const Step4 = ({}) => {
                   <RewardDetailRow
                     key={quest_type}
                     title={"Buzz Content"}
-                    bounty={`$10 - $${maxRewardAmount}`}
+                    bounty={bounty_max ? `$${bounty_base} - $${numberWithCommas(bounty_max)}` : 0}
                   >
                     {allowed_channels.map((channel, index) => {
                       return (
