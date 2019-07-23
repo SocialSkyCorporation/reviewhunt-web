@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import macImgTop from "assets/images/mac-img-top@2x.png";
 import featureImg1 from "assets/images/feature-1@2x.png";
 import featureImg2 from "assets/images/feature-2@2x.png";
@@ -28,15 +29,22 @@ export default () => {
           easily build a strong early user base and community exposure.
         </div>
         <div className="row-align-center button-container">
-          <SimpleButton
-            inverse={true}
-            text="Join Now"
-            style={{ fontSize: 12, marginRight: 10 }}
-          />
-          <SimpleButton
-            text="Read Pitch Deck"
-            style={{ fontSize: 12, marginLeft: 10 }}
-          />
+          <Link to="/profile">
+            <SimpleButton
+              inverse={true}
+              text="Join Now"
+              style={{ fontSize: 12, marginRight: 10 }}
+            />
+          </Link>
+          <a
+            target="__blank"
+            href="https://review.hunt.town/reviewhunt-pitch-en-v1.1.pdf"
+          >
+            <SimpleButton
+              text="Read Pitch Deck"
+              style={{ fontSize: 12, marginLeft: 10 }}
+            />
+          </a>
         </div>
       </div>
 
@@ -95,7 +103,12 @@ export default () => {
               and talk about them with others. Over 70,000 new products are
               shared within the Steemhunt community, and they will be their
               early users in Reviewhunt.
-              <SimpleButton text="About Steemhunt" style={{ marginTop: 20 }} />
+              <a target="__blank" href="https://token.hunt.town">
+                <SimpleButton
+                  text="About Steemhunt"
+                  style={{ marginTop: 20, maxWidth: 180 }}
+                />
+              </a>
             </div>
           </div>
           <img className="laptop-screenshot" src={featureImg2} alt="" />
@@ -118,36 +131,45 @@ export default () => {
       </div>
 
       <div className="easy-build-container">
-      <div>
-        <div className="easy-build-sentence-1">
-          It’s never been easier to build
-        </div>
-        <div className="easy-build-sentence-2">
-          early-user base, App Store reviews, Reddit threads, Tweets, Youtube
-          videos, blog posts, local channel contents, <br />…
-        </div>
+        <div>
+          <div className="easy-build-sentence-1">
+            It’s never been easier to build
+          </div>
+          <div className="easy-build-sentence-2">
+            early-user base, App Store reviews, Reddit threads, Tweets, Youtube
+            videos, blog posts, local channel contents, <br />…
+          </div>
 
-        <div className="easy-build-sentence-3">Ready to run your campaign?</div>
-        <div className="row-align-center button-container">
-          <SimpleButton
-            text="Join Now"
-            style={{ marginRight: 10 }}
-            borderColor={"#73fdea"}
-            backgroundColor={"#000"}
-            hoverColor={"#73fdea"}
-            hoverTextColor={"#000"}
-            color={"#73fdea"}
-          />
-          <SimpleButton
-            text="Read Pitch Deck"
-            style={{ marginLeft: 10 }}
-            borderColor={"#8b9699"}
-            backgroundColor={"#000"}
-            hoverColor={"#8b9699"}
-            color={"#8b9699"}
-            hoverTextColor={"#000"}
-          />
-        </div>
+          <div className="easy-build-sentence-3">
+            Ready to run your campaign?
+          </div>
+          <div className="row-align-center button-container">
+            <Link to="/profile">
+              <SimpleButton
+                text="Join Now"
+                style={{ marginRight: 10 }}
+                borderColor={"#73fdea"}
+                backgroundColor={"#000"}
+                hoverColor={"#73fdea"}
+                hoverTextColor={"#000"}
+                color={"#73fdea"}
+              />
+            </Link>
+            <a
+              target="__blank"
+              href="https://review.hunt.town/reviewhunt-pitch-en-v1.1.pdf"
+            >
+              <SimpleButton
+                text="Read Pitch Deck"
+                style={{ marginLeft: 10 }}
+                borderColor={"#8b9699"}
+                backgroundColor={"#000"}
+                hoverColor={"#8b9699"}
+                color={"#8b9699"}
+                hoverTextColor={"#000"}
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>
