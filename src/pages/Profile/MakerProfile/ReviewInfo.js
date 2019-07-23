@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Icon, Spin, Modal } from "antd";
 import backImg from "assets/images/back.svg";
@@ -13,35 +13,77 @@ import { Dropdown, TextInput, Screenshots } from "components/FormTypes";
 import HunterDashboardContext from "contexts/HunterDashboardContext";
 import appstoreReviewImg from "assets/images/apple-review@2x.jpg";
 import playstoreReviewImg from "assets/images/google-review@2x.jpg";
+import moment from "moment";
+import _ from "lodash";
 
 const ReviewInfo = ({ quest }) => {
-  const { id } = quest;
   const {
+    id,
     allowed_channels,
     bounty_base,
     title,
     criteria,
     bounty_max,
     description,
-    image,
-    status
+    image
   } = quest;
 
   const {
     updateState,
     submittingQuest,
     submitModalVisible,
-    submitQuest
+    submitQuest,
+    submittedQuests,
+    getQuestSubmissions,
+    joinQuest
   } = useContext(HunterDashboardContext);
 
   const hasPlaystore = allowed_channels.includes("playstore");
   const hasAppstore = allowed_channels.includes("appstore");
 
   const [joined, setJoined] = useState(false);
-  const [timer, setTimer] = useState(0);
+  const [appStoreTimer, setAppStoreTimer] = useState(null);
+  const [playStoreTimer, setPlayStoreTimer] = useState(null);
   const [proofImage, setProofImage] = useState([]);
   const [proofText, setProofText] = useState("");
   const [submissionType, setSubmissionType] = useState("");
+
+  useEffect(() => {
+    getQuestSubmissions(id);
+  }, [quest]);
+
+  const appStoreQuest = _.find(submittedQuests, ["channel", "appstore"]);
+  const appStoreStatus = appStoreQuest ? appStoreQuest.status : null;
+  const playStoreQuest = _.find(submittedQuests, ["channel", "playstore"]);
+  const playStoreStatus = playStoreQuest ? playStoreQuest.status : null;
+
+  useEffect(() => {
+    let appStoreTick = null;
+    let playStoreTick = null;
+
+    if (appStoreStatus === "joined") {
+      appStoreTick = setInterval(() => {
+        const timeNow = moment();
+        const expirationTime = moment(appStoreQuest.expires_at);
+        const diff = expirationTime.diff(timeNow);
+        setAppStoreTimer(moment(diff).format("hh:mm:ss"));
+      }, 1000);
+    }
+
+    if (playStoreStatus === "joined") {
+      playStoreTick = setInterval(() => {
+        const timeNow = moment();
+        const expirationTime = moment(playStoreQuest.expires_at);
+        const diff = expirationTime.diff(timeNow);
+        setPlayStoreTimer(moment(diff).format("hh:mm:ss"));
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(playStoreTick);
+      clearInterval(appStoreTick);
+    };
+  }, [submittedQuests]);
 
   return (
     <div>
@@ -50,7 +92,6 @@ const ReviewInfo = ({ quest }) => {
 
       <div className="quest-tag">Quest Bounty - $5 per review</div>
 
-      <HistoryMessage status={status} />
 
       <div className="info-description text-grey">
         Have you enjoyed the app? Please write a review on the App Store or Play
@@ -105,37 +146,23 @@ const ReviewInfo = ({ quest }) => {
             <img className="info-quest-image" src={appstoreReviewImg} alt="" />
           </div>
 
-          {status !== "joined" && (
+          <HistoryMessage status={appStoreStatus} type="appstore" />
+
+          {appStoreStatus === null && (
             <FullWidthButton
               icon={<img src={appstoreLogo} />}
-              onClick={() => {
-                setSubmissionType("appstore");
-                // updateState("submitModalVisible", true);
-                setJoined(true);
-                let time = 60;
-                setTimer(time);
-                const timerInterval = setInterval(() => {
-                  time -= 1;
-                  if (time <= 0) clearInterval(timerInterval);
-                  setTimer(time);
-                }, 1000);
-              }}
+              onClick={() => joinQuest(id, "appstore", null)}
               text="JOIN APP STORE REVIEW"
               style={{ marginTop: 16, maxWidth: 260 }}
             />
           )}
 
-          {status === "joined" && (
+          {appStoreStatus === "joined" && appStoreTimer && (
             <>
               <FullWidthButton
                 disabled
                 icon={<Icon type="loading" />}
-                onClick={() => {
-                  setSubmissionType("appstore");
-                  // updateState("submitModalVisible", true);
-                  setJoined(true);
-                }}
-                text={`SUBMISSION ENDING IN ${timer}`}
+                text={`SUBMISSION ENDING IN ${appStoreTimer}`}
                 style={{ marginTop: 16, maxWidth: 260 }}
                 borderColor="transparent"
                 color="rgba(245, 34, 45, 0.7)"
@@ -144,8 +171,7 @@ const ReviewInfo = ({ quest }) => {
               <FullWidthButton
                 onClick={() => {
                   setSubmissionType("appstore");
-                  // updateState("submitModalVisible", true);
-                  setJoined(true);
+                  updateState("submitModalVisible", true);
                 }}
                 text={`SUBMIT QUEST`}
                 style={{ marginTop: 16, maxWidth: 260 }}
@@ -187,15 +213,38 @@ const ReviewInfo = ({ quest }) => {
             <img className="info-quest-image" src={playstoreReviewImg} alt="" />
           </div>
 
-          <FullWidthButton
-            icon={<img src={playstoreLogo} />}
-            onClick={() => {
-              setSubmissionType("playstore");
-              updateState("submitModalVisible", true);
-            }}
-            text="JOIN PLAY STORE REVIEW"
-            style={{ marginTop: 16, maxWidth: 260 }}
-          />
+          <HistoryMessage status={playStoreStatus} type="playstore" />
+
+          {playStoreStatus === null && (
+            <FullWidthButton
+              icon={<img src={playstoreLogo} />}
+              onClick={() => joinQuest(id, "playstore", null)}
+              text="JOIN PLAY STORE REVIEW"
+              style={{ marginTop: 16, maxWidth: 260 }}
+            />
+          )}
+
+          {playStoreStatus === "joined" && playStoreTimer && (
+            <>
+              <FullWidthButton
+                disabled
+                icon={<Icon type="loading" />}
+                text={`SUBMISSION ENDING IN ${playStoreTimer}`}
+                style={{ marginTop: 16, maxWidth: 260 }}
+                borderColor="transparent"
+                color="rgba(245, 34, 45, 0.7)"
+                backgroundColor="#fff"
+              />
+              <FullWidthButton
+                onClick={() => {
+                  setSubmissionType("playstore");
+                  updateState("submitModalVisible", true);
+                }}
+                text={`SUBMIT QUEST`}
+                style={{ marginTop: 16, maxWidth: 260 }}
+              />
+            </>
+          )}
         </>
       )}
 
@@ -290,7 +339,9 @@ const ReviewInfo = ({ quest }) => {
             <FullWidthButton
               onClick={() =>
                 submitQuest(
-                  quest,
+                  submissionType === "appstore"
+                    ? appStoreQuest
+                    : playStoreQuest,
                   { channel_type: submissionType },
                   null,
                   proofImage

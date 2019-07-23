@@ -50,7 +50,7 @@ class HunterDashboardProvider extends React.Component {
   };
 
   joinQuest = async (questId, channel, buzzChannelId) => {
-    const { currentCampaign } = this.state;
+    const { submittedQuests } = this.state;
     this.setState({ joiningQuest: true });
 
     try {
@@ -67,16 +67,23 @@ class HunterDashboardProvider extends React.Component {
         TYPE_HUNTER
       );
 
-      const campaignCopy = _.clone(currentCampaign);
-      campaignCopy.quests.forEach((_quest, _index) => {
-        if (_quest.id === result.quest_id) {
-          Object.assign(_quest, result);
-        }
-      });
+      const submittedQuestsCopy = _.clone(submittedQuests);
 
-      this.setState({
-        currentCampaign: campaignCopy
-      });
+      if (_.find(submittedQuests, ["id", result.id])) {
+        submittedQuestsCopy.forEach((_quest, _index) => {
+          if (_quest.id === result.id) {
+            Object.assign(_quest, result);
+          }
+        });
+        this.setState({
+          submittedQuests: submittedQuestsCopy
+        });
+      } else {
+        this.setState({
+          submittedQuests: submittedQuests.concat(result)
+        });
+      }
+
       console.log("joined", result);
     } catch (e) {
       notification["error"]({
@@ -88,7 +95,8 @@ class HunterDashboardProvider extends React.Component {
   };
 
   submitQuest = async (quest, channel, contentUrl, img) => {
-    const { currentCampaign, submittedQuests } = this.state;
+    console.log("submitting", quest, channel);
+    const { submittedQuests } = this.state;
     if (img.length == 0) {
       notification["error"]({
         message: "At least one image is required."
@@ -101,37 +109,37 @@ class HunterDashboardProvider extends React.Component {
     try {
       const formData = new FormData();
       formData.append("hunter_quest[quest_id]", quest.id);
-      channel &&
-        formData.append(
-          "hunter_quest[channel]",
-          channel.channel_type.toLowerCase()
-        );
+
+      channel.channel_type &&
+        formData.append("hunter_quest[channel]", channel.channel_type);
+
       contentUrl && formData.append("hunter_quest[proof_url]", contentUrl);
+
       quest.quest_type === "buzz" &&
         formData.append("hunter_quest[buzz_channel_id]", channel.id);
+
       formData.append(
         "hunter_quest[proof_image]",
         new Blob([img[0].image], { type: "image/png" })
       );
 
       const result = await api.uploadFormData(
-        "post",
-        "/hunter_quests.json",
+        "put",
+        `/hunter_quests/${quest.id}.json`,
         formData,
         true,
         TYPE_HUNTER
       );
 
-      const campaignCopy = _.clone(currentCampaign);
-      campaignCopy.quests.forEach((_quest, _index) => {
+      const submittedQuestsCopy = _.clone(submittedQuests);
+      submittedQuestsCopy.forEach((_quest, _index) => {
         if (_quest.id === result.id) {
           Object.assign(_quest, result);
         }
       });
 
       this.setState({
-        currentCampaign: campaignCopy,
-        submittedQuests: submittedQuests.concat(result),
+        submittedQuests: submittedQuestsCopy,
         submitModalVisible: false
       });
     } catch (e) {
