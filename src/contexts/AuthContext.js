@@ -222,6 +222,7 @@ class AuthProvider extends React.Component {
   };
 
   addSocialChannel = async channel => {
+    console.log("adding", channel);
     const { socialChannels } = this.state;
     await this.setState({ socialChannels: socialChannels.concat(channel) });
     let newChannels = _.clone(this.state.socialChannels);
@@ -231,7 +232,7 @@ class AuthProvider extends React.Component {
         "/buzz_channels.json",
         {
           buzz_channel: {
-            channel_type: channel.value,
+            channel_type: channel.key,
             url: channel.url
           }
         },
@@ -294,7 +295,7 @@ class AuthProvider extends React.Component {
       for (const channel of socialChannels) {
         const form = {
           buzz_channel: {
-            channel_type: channel.value,
+            channel_type: channel.key,
             url: channel.url
           }
         };
