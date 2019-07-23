@@ -51,9 +51,10 @@ const QuestStepProgress = props => {
         //current is review, next exists, and next is buzz
         if (quest_type === "buzz") {
           isCurrentQuest =
-            currentStep == index - 1 &&
-            steps[index - 1] &&
-            steps[index - 1]["quest_type"] === "review";
+            currentStep == index ||
+            (currentStep == index - 1 &&
+              steps[index - 1] &&
+              steps[index - 1]["quest_type"] === "review");
         }
 
         const isClickable = status !== null || isCurrentQuest;
