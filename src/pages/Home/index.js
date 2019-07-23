@@ -11,6 +11,7 @@ import AppContext from "contexts/AppContext";
 import ContentLoader from "components/ContentLoader";
 import logoCircle from "assets/images/logo-circle.svg";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
+import {filterRunningCampaigns} from 'utils/helpers/campaignHelper';
 
 export default () => {
   const { t } = useTranslation();
@@ -111,7 +112,7 @@ export default () => {
               <ContentLoader />
             </>
           )}
-          {campaigns.map((campaign, index) => (
+          {campaigns.filter(filterRunningCampaigns).map((campaign, index) => (
             <QuestGridItem key={index} data={campaign} />
           ))}
 
@@ -132,9 +133,13 @@ export default () => {
             Gate to tap into tech early-adopters
           </div>
           <div className="row-align-center button-container">
-          <Link to="/profile">
-            <SimpleButton inverse text="Join Now" style={{ marginRight: 10 }} />
-          </Link>
+            <Link to="/profile">
+              <SimpleButton
+                inverse
+                text="Join Now"
+                style={{ marginRight: 10 }}
+              />
+            </Link>
             <a
               target="__blank"
               href="https://review.hunt.town/reviewhunt-pitch-en-v1.1.pdf"

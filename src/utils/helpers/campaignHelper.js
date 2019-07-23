@@ -20,6 +20,10 @@ export function filterAllowedChannels(hunterChannels, allowedChannels) {
   return filteredChannels;
 }
 
+export function filterRunningCampaigns(campaign) {
+  return campaign.status === "running";
+}
+
 export function filterGeneralQuests(item) {
   return item.quest_type.indexOf("general") > -1;
 }
