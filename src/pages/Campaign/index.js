@@ -40,7 +40,7 @@ export default props => {
 
   useEffect(() => {
     if (!fetchingCampaign) {
-      fetchCampaign(id);
+      fetchCampaign(id, true);
     }
 
     scrollTop();
@@ -55,6 +55,8 @@ export default props => {
       urls,
       joined
     } = currentCampaign;
+
+    console.log(currentCampaign);
 
     return (
       <div className="padded-container banner-container primary-gradient">
@@ -98,7 +100,7 @@ export default props => {
 
         <div className="row-align-center">
           <SimpleButton
-            backgroundColor="transparent"
+            backgroundColor={joined ? "#000" : "transparent"}
             text={joined ? "JOINED" : t("product.join")}
             style={{ marginTop: 30 }}
             onClick={() => {
@@ -109,7 +111,7 @@ export default props => {
               joinCampaign(id);
             }}
             loading={joiningCampaign}
-            inverse={joined}
+            color={joined ? "#fff" : "#000"}
           />
           <div className="row-align-center url-icon-container">
             {urls["appstore"] && (
