@@ -52,16 +52,17 @@ class CampaignProvider extends React.Component {
 
     await this.setState({ fetchingCampaigns: true });
     const campaigns = await api.get("/campaigns.json");
+    console.log("campaigns", campaigns);
     await this.setState({ fetchingCampaigns: false, campaigns });
   };
 
-  fetchCampaign = async id => {
+  fetchCampaign = async (id, shouldAuthenticate = false) => {
     const { fetchingCampaign } = this.state;
     if (fetchingCampaign) return;
 
     await this.setState({ fetchingCampaign: true });
     try {
-      const currentCampaign = await api.get(`/campaigns/${id}.json`);
+      const currentCampaign = await api.get(`/campaigns/${id}.json`, {}, shouldAuthenticate, TYPE_HUNTER);
       console.log("curr", currentCampaign);
       await this.setState({ currentCampaign });
     } catch (e) {
