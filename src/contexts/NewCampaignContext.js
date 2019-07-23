@@ -349,7 +349,7 @@ class NewCampaignProvider extends Component {
   };
 
   deleteQuest = (index, id) => {
-    const { quests, campaignId } = this.state;
+    const { quests, campaignId, activeKeys } = this.state;
     const okPressed = async () => {
       try {
         if (id) {
@@ -357,7 +357,9 @@ class NewCampaignProvider extends Component {
         }
         const questsClone = _.clone(quests);
         questsClone.splice(index, 1);
-        this.setState({ quests: questsClone });
+        const activeKeysClone = _.clone(activeKeys);
+        activeKeysClone.pop();
+        this.setState({ quests: questsClone, activeKeys: activeKeysClone });
       } catch (e) {
         notification["error"]({ message: extractErrorMessage(e) });
       }
@@ -376,7 +378,7 @@ class NewCampaignProvider extends Component {
 
   addQuest = () => {
     console.log("adding quest");
-    const { quests } = this.state;
+    const { quests, activeKeys } = this.state;
     const generalQuests = quests.filter(filterGeneralQuests);
     if (generalQuests.length > 2) return;
 
@@ -392,7 +394,8 @@ class NewCampaignProvider extends Component {
           bounty_amount: 0,
           saved: false
         })
-        .sort(questSortFunction)
+        .sort(questSortFunction),
+      activeKeys: activeKeys.concat((generalQuests.length + 1) + "")
     });
   };
 
@@ -633,7 +636,7 @@ class NewCampaignProvider extends Component {
     this.setState({ loading: true });
     try {
       if (buzzQuests.length > 0) {
-        const {id} = buzzQuests[0];
+        const { id } = buzzQuests[0];
         const result = await api.put(
           `/campaigns/${campaignId}/quests/${id}.json`,
           { quest: { bounty_max: maxRewardAmount } },

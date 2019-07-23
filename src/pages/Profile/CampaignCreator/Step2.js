@@ -21,7 +21,7 @@ const Step2 = ({}) => {
     <div className="campaign-step">
       <div className="text-grey">Step 2 of 5</div>
       <div className="step-title text-black">Design Quests</div>
-      <Collapse defaultActiveKey={activeKeys} onChange={keys => updateState("activeKeys", keys)}>
+      <Collapse activeKey={activeKeys} onChange={keys => updateState("activeKeys", keys)}>
         {generalQuests.map((quest, index) => {
           const { quest_type } = quest;
           if (quest_type !== "buzz" && quest_type !== "review") {
