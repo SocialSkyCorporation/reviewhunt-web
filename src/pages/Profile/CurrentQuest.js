@@ -22,7 +22,7 @@ const CurrentQuest = props => {
   let currentStep = 0;
 
   quests.forEach(({ status }, i) => {
-    if (status !== null) {
+    if (status !== null && status !== "joined") {
       currentStep++;
     }
   });
@@ -32,8 +32,10 @@ const CurrentQuest = props => {
   const [questInfoIndex, setQuestInfoIndex] = useState(currentStep);
 
   const quest = quests[questInfoIndex];
-  const { quest_type } = quest;
-  const { currentCampaign } = useContext(HunterDashboardContext);
+  const { id, quest_type } = quest;
+  const { currentCampaign, getQuestSubmissions, submittedQuests } = useContext(HunterDashboardContext);
+  const { getSocialChannels } = useContext(AuthContext);
+
   const {
     product_name,
     short_description,
@@ -41,19 +43,9 @@ const CurrentQuest = props => {
     expires_at
   } = currentCampaign;
 
-  const { id } = quest;
 
-  const { getQuestSubmissions, submittedQuests } = useContext(
-    HunterDashboardContext
-  );
-
-  const { getSocialChannels } = useContext(AuthContext);
-
-  useEffect(() => {
-    getQuestSubmissions(id);
-  }, []);
-
-  console.log("submitted", submittedQuests);
+  console.log("quests", quests);
+  console.log("submitted quests", submittedQuests);
 
   return useMemo(
     () => (
@@ -92,7 +84,7 @@ const CurrentQuest = props => {
         {quest_type === "buzz" && <BuzzInfo quest={quest} />}
       </div>
     ),
-    [quest, currentCampaign]
+    [quest, currentCampaign, currentStep, submittedQuests]
   );
 };
 

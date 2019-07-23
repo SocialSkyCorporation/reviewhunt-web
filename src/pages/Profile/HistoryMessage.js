@@ -18,7 +18,7 @@ const HistoryMessage = ({ type, status, rating, containerStyle }) => {
 	let img = "";
 	let message = "";
 
-	if(!status) {
+	if(!status || status === "joined") {
 		return null;
 	}
 

@@ -12,7 +12,7 @@ const QuestItem = (props) => {
   let currentStep = 0;
 
   quests.forEach(({ status }, i) => {
-    if (status !== null) {
+    if (status !== null && status !== "joined") {
       currentStep++;
     }
   });

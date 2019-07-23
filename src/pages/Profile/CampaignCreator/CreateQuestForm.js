@@ -32,7 +32,8 @@ const CreateQuestForm = ({ index }) => {
     image
   } = quests[index];
 
-  console.log("quest updated", quests[index]);
+  const generalQuests = quests.filter(filterGeneralQuests);
+
   return (
     <Spin spinning={saving === true} tip="Saving...">
       <div>
@@ -67,7 +68,7 @@ const CreateQuestForm = ({ index }) => {
           maxCharacters={560}
         />
         <div className="save-delete-container">
-          {quests.filter(filterGeneralQuests).length - 1 === index && (
+          {generalQuests.length !== 1 && generalQuests.length - 1 === index && (
             <div
               className="text-grey delete-button hover-link"
               onClick={() => deleteQuest(index, id)}

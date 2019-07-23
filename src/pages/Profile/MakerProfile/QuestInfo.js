@@ -9,27 +9,20 @@ import HistoryMessage from "../HistoryMessage";
 import FullWidthButton from "components/FullWidthButton";
 import { Dropdown, TextInput, Screenshots } from "components/FormTypes";
 import HunterDashboardContext from "contexts/HunterDashboardContext";
+import moment from 'moment';
 
 const QuestInfo = ({ quest }) => {
-  console.log("quest", quest);
   const {
     id,
     quest_type,
     bounty_base,
+    expires_at,
     title,
     criteria,
     bounty_max,
     description,
     image,
-    status
   } = quest;
-  let tag =
-    bounty_max === bounty_base
-      ? `$${bounty_base}`
-      : `$${bounty_base} - $${bounty_max}`;
-
-  const [proofImage, setProofImage] = useState([]);
-  const [proofText, setProofText] = useState("");
 
   const {
     updateState,
@@ -43,11 +36,36 @@ const QuestInfo = ({ quest }) => {
     joinQuest
   } = useContext(HunterDashboardContext);
 
+  let tag =
+    bounty_max === bounty_base
+      ? `$${bounty_base}`
+      : `$${bounty_base} - $${bounty_max}`;
+
+  const [proofImage, setProofImage] = useState([]);
+  const [proofText, setProofText] = useState("");
+  const [timer, setTimer] = useState(null);
+
   useEffect(() => {
     getQuestSubmissions(id);
-  }, []);
+  }, [quest]);
 
-  console.log("submitted", submittedQuests);
+  const joinedQuest = submittedQuests.length > 0 && submittedQuests[0];
+  const status = joinedQuest ? joinedQuest.status : null;
+
+  useEffect(() => {
+    let tickTime = null;
+    if(status === "joined") {
+      tickTime = setInterval(() => {
+        const timeNow = moment();
+        const expirationTime = moment(expires_at);
+        const diff = expirationTime.diff(timeNow);
+        setTimer(moment(diff).format("hh:mm:ss"))
+      }, 1000)
+    }
+
+    return () => clearInterval(tickTime);
+  }, [submittedQuests])
+
 
   return (
     <div>
@@ -78,20 +96,20 @@ const QuestInfo = ({ quest }) => {
         />
       )}
 
-      {status === "joined" && (
+      {status === "joined" && timer && (
         <>
           <FullWidthButton
             disabled
             icon={<Icon type="loading" />}
             onClick={() => {}}
-            text={`SUBMISSION ENDING IN 0`}
+            text={`SUBMISSION ENDING IN ${timer}`}
             style={{ marginTop: 16, maxWidth: 260 }}
             borderColor="transparent"
             color="rgba(245, 34, 45, 0.7)"
             backgroundColor="#fff"
           />
           <FullWidthButton
-            onClick={() => {}}
+            onClick={() => updateState("submitModalVisible", true)}
             text={`SUBMIT QUEST`}
             style={{ marginTop: 16, maxWidth: 260 }}
           />
@@ -161,7 +179,7 @@ const QuestInfo = ({ quest }) => {
             </div>
             <FullWidthButton
               onClick={() =>
-                submitQuest(quest, { channel_type: null }, null, proofImage)
+                submitQuest(joinedQuest, { channel_type: null }, null, proofImage)
               }
               text="SUBMIT YOUR PROOF"
               style={{ marginTop: 30 }}
