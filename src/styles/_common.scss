@@ -62,6 +62,10 @@ hr {
   box-sizing: border-box;
 }
 
+a {
+  color: #3fcaff;
+}
+
 .hidden {
   display: none;
 }
@@ -745,6 +749,10 @@ hr {
   @include responsive(mobile) {
     flex-direction: column;
   }
+}
+
+.policy {
+  padding-top: 120px;
 }
 
 .col-on-tablet {

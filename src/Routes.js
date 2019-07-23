@@ -12,6 +12,9 @@ const Home = asyncComponent(() => import("pages/Home"));
 const About = asyncComponent(() => import("pages/About"));
 const Auth = asyncComponent(() => import("pages/Auth"));
 const Campaign = asyncComponent(() => import("pages/Campaign"));
+const Privacy = asyncComponent(() => import("pages/Policy/Privacy"));
+const Cookie = asyncComponent(() => import("pages/Policy/Cookie"));
+const Terms = asyncComponent(() => import("pages/Policy/Terms"));
 const HunterProfile = asyncComponent(() =>
   import("pages/Profile/HunterProfile")
 );
@@ -36,6 +39,9 @@ class Routes extends Component {
                 <Route path="/auth" component={Auth} />
                 <Route path="/campaigns/:id" component={Campaign} />
                 <Route path="/about" exact component={About} />
+                <Route path="/privacy" exact component={Privacy} />
+                <Route path="/terms" exact component={Terms} />
+                <Route path="/cookie" exact component={Cookie} />
                 <ProtectedRoute
                   path="/profile"
                   exact

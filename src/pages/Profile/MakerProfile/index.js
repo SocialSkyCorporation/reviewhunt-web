@@ -12,6 +12,7 @@ import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { withTranslation } from "react-i18next";
 import CampaignCreator from "../CampaignCreator";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
+import { scrollTop } from "utils/scroller";
 import {
   withAuthContext,
   withNewCampaignContext,
@@ -43,6 +44,8 @@ class Profile extends Component {
     const { fetchCampaign } = this.props.campaignContext;
 
     console.log("tab index", tabIndex);
+
+    scrollTop();
 
     if (tabIndex === TAB_CAMPAIGNS && campaignId !== null) {
       fetchCampaign(campaignId);

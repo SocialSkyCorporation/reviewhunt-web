@@ -129,8 +129,9 @@
   }
 
   .grid-dropdown {
-    margin-left: 36px;
+    margin-left: 26px;
     margin-bottom: 20px;
+    width: 180px;
 
     @include responsive(tablet) {
       margin-left: 16px;

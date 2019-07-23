@@ -10,28 +10,25 @@ import CampaignContext from "contexts/CampaignContext";
 import AppContext from "contexts/AppContext";
 import ContentLoader from "components/ContentLoader";
 import logoCircle from "assets/images/logo-circle.svg";
-import { numberWithCommas } from 'utils/helpers/numberFormatHelper';
+import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 
 export default () => {
   const { t } = useTranslation();
   const { campaigns, getCampaigns, fetchingCampaigns } = useContext(
     CampaignContext
   );
-  const {huntPerUsd} = useContext(
-    AppContext
-  );
+  const { huntPerUsd } = useContext(AppContext);
 
   let totalHunters = 0;
   let totalBountyFund = 0;
   let totalQuests = 0;
 
-
-  campaigns.forEach((campaign) => {
-    const {quest_count, total_bounty, current_participant_count} = campaign;
+  campaigns.forEach(campaign => {
+    const { quest_count, total_bounty, current_participant_count } = campaign;
     totalQuests += quest_count;
     totalBountyFund += parseFloat(total_bounty);
     totalHunters += current_participant_count;
-  })
+  });
 
   useEffect(() => {
     getCampaigns();
@@ -70,7 +67,10 @@ export default () => {
                 <img src={imgMoney} alt="" />
                 <div className="stat-text">
                   <h1>
-                    {numberWithCommas((totalBountyFund / huntPerUsd).toFixed(0))} <span>HUNT</span>
+                    {numberWithCommas(
+                      (totalBountyFund / huntPerUsd).toFixed(0)
+                    )}{" "}
+                    <span>HUNT</span>
                   </h1>
                   <h2>(${numberWithCommas(totalBountyFund)})</h2>
                 </div>
@@ -132,8 +132,19 @@ export default () => {
             Gate to tap into tech early-adopters
           </div>
           <div className="row-align-center button-container">
+          <Link to="/profile">
             <SimpleButton inverse text="Join Now" style={{ marginRight: 10 }} />
-            <SimpleButton text="Read Pitch Deck" style={{ marginLeft: 10 }} backgroundColor="transparent" />
+          </Link>
+            <a
+              target="__blank"
+              href="https://review.hunt.town/reviewhunt-pitch-en-v1.1.pdf"
+            >
+              <SimpleButton
+                text="Read Pitch Deck"
+                style={{ marginLeft: 10 }}
+                backgroundColor="transparent"
+              />
+            </a>
           </div>
         </div>
         <div className="call-to-action-desc">

@@ -25,6 +25,7 @@ import BuzzChannels from "./BuzzChannels";
 import { TYPE_HUNTER } from "pages/Auth";
 import { extractErrorMessage } from "utils/errorMessage";
 import CircularProgress from "components/CircularProgress";
+import { scrollTop } from "utils/scroller";
 import _ from "lodash";
 
 const { Option } = Select;
@@ -47,6 +48,7 @@ class HunterProfile extends Component {
       getCampaigns,
       getQuestSubmissions
     } = this.props.hunterDashboardContext;
+    scrollTop();
 
     console.log("tab index", tabIndex);
 
