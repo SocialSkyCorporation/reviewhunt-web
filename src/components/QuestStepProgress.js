@@ -31,10 +31,9 @@ const QuestStepProgress = props => {
       {steps.sort(questSortFunction).map((step, index) => {
         const { quest_type, status } = step;
         let isComplete = currentStep > index;
-        const isClickable = status !== null || currentStep === index;
         const animationDisabled =
-          (status !== null ||
-            (currentStep !== clickedIndex && clickedIndex === index)) &&
+          currentStep !== clickedIndex &&
+          clickedIndex === index &&
           "animation-disabled";
         let isCurrentQuest = index === currentStep || clickedIndex === index;
         let toolTipText = "";
@@ -51,11 +50,13 @@ const QuestStepProgress = props => {
 
         //current is review, next exists, and next is buzz
         if (quest_type === "buzz") {
-          isComplete =
-            status !== null &&
+          isCurrentQuest =
+            currentStep == index - 1 &&
             steps[index - 1] &&
             steps[index - 1]["quest_type"] === "review";
         }
+
+        const isClickable = status !== null || isCurrentQuest;
 
         return (
           <div className="step-container" key={index}>
@@ -120,10 +121,7 @@ const QuestStepProgress = props => {
               </div>
             </Tooltip>
             {index !== steps.length - 1 && (
-              <div
-                className={`step-divider ${(isComplete || isCurrentQuest) &&
-                  "complete"}`}
-              />
+              <div className={`step-divider ${isComplete && "complete"}`} />
             )}
           </div>
         );
