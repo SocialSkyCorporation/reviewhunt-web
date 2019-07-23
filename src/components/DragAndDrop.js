@@ -3,15 +3,14 @@ import PropTypes from "prop-types";
 import { Icon, Modal } from "antd";
 import { useDropzone } from "react-dropzone";
 import uploadImageImg from "assets/images/upload-images.svg";
-import NewCampaignContext from 'contexts/NewCampaignContext';
+import NewCampaignContext from "contexts/NewCampaignContext";
 
 const { confirm } = Modal;
-
 
 const DragAndDrop = props => {
   const { single, small, maxBytes, onChange, images } = props;
   const [files, setFiles] = useState(images);
-  const {deleteImg} = useContext(NewCampaignContext);
+  const { deleteImg } = useContext(NewCampaignContext);
 
   useEffect(() => {
     if (images.length >= 0) {
@@ -32,7 +31,7 @@ const DragAndDrop = props => {
   const acceptSingleImage = images => {
     return [{ image: images[0], preview: URL.createObjectURL(images[0]) }];
   };
-  
+
   const {
     getRootProps,
     getInputProps,
@@ -60,7 +59,6 @@ const DragAndDrop = props => {
     </p>
   );
 
-
   if (single) {
     description = (
       <p style={descriptionStyle}>
@@ -70,7 +68,7 @@ const DragAndDrop = props => {
     );
   }
 
-  if(small) {
+  if (small) {
     baseStyle["width"] = 240;
     baseStyle["height"] = 240;
     baseStyle["objectFit"] = "contain";
@@ -96,14 +94,7 @@ const DragAndDrop = props => {
             style={closeIcon}
             type="close-circle"
             onClick={() => {
-              confirm({
-                title: "Are you sure?",
-                content: `You're about to delete an image. This action cannot be reverted.`,
-                onOk() {
-                  deleteImg(file, index, isEditMode);
-                },
-                onCancel() {}
-              });
+              deleteImg(file, index, isEditMode);
             }}
           />
           <div style={thumbInner}>
@@ -114,13 +105,17 @@ const DragAndDrop = props => {
     });
 
   if (single) {
-    const isEditMode = typeof files[0] !== "object"; 
+    const isEditMode = typeof files[0] !== "object";
     return (
       <>
         <div {...getRootProps({ style })}>
           <input {...getInputProps()} />
           {files && files.length > 0 ? (
-            <img src={isEditMode ? files[0] : files[0].preview} style={selectedImgStyle} alt="" />
+            <img
+              src={isEditMode ? files[0] : files[0].preview}
+              style={selectedImgStyle}
+              alt=""
+            />
           ) : (
             <>
               <img src={uploadImageImg} alt="" />
@@ -165,7 +160,7 @@ const baseStyle = {
   alignItems: "center",
   justifyContent: "center",
   paddingTop: "32px",
-  minHeight: '200px',
+  minHeight: "200px",
   paddingBottom: "16px",
   marginTop: 5,
   borderWidth: 2,
