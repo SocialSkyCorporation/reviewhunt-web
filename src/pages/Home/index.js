@@ -91,7 +91,6 @@ export default () => {
   const content = () => {
     return (
       <div className="grid-wrapper">
-        <Select className="grid-dropdown" defaultValue={t("home.for_you")} />
         <div className="grid-content">
           {fetchingCampaigns && (
             <>

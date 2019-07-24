@@ -129,20 +129,6 @@
     }
   }
 
-  .grid-dropdown {
-    margin-left: 26px;
-    margin-bottom: 20px;
-    width: 180px;
-
-    @include responsive(tablet) {
-      margin-left: 16px;
-    }
-
-    @include responsive(mobile) {
-      margin-left: 0px;
-    }
-  }
-
   .grid-content {
     display: flex;
     flex-flow: row wrap;
