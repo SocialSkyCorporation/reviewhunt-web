@@ -11,7 +11,6 @@ import AppContext from "contexts/AppContext";
 import ContentLoader from "components/ContentLoader";
 import logoCircle from "assets/images/logo-circle.svg";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
-import { filterRunningCampaigns } from "utils/helpers/campaignHelper";
 
 export default () => {
   const { t } = useTranslation();
@@ -102,7 +101,7 @@ export default () => {
               <ContentLoader />
             </>
           )}
-          {campaigns.filter(filterRunningCampaigns).map((campaign, index) => (
+          {campaigns.map((campaign, index) => (
             <QuestGridItem key={index} data={campaign} />
           ))}
 
