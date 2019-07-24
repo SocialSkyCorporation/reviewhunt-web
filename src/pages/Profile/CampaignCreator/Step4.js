@@ -217,7 +217,7 @@ const Step4 = ({}) => {
         )}
 
         <div>
-          <div className="max-result-text text-grey">MAX RESULT</div>
+          <div className="max-result-text text-grey uppercase">Estimation</div>
           {fetchingEstimate ? (
             <Icon type="loading" style={{ marginTop: 8 }} />
           ) : (
