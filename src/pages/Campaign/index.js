@@ -150,7 +150,7 @@ export default props => {
     } = currentCampaign;
     let progress =
       (Number.parseFloat(bounty_left) / Number.parseFloat(total_bounty)) * 100;
-    progress = !Number.isNaN(progress) ? progress : 0;
+    progress = !Number.isNaN(progress) ? Math.floor(progress) : 0;
 
     return (
       <div className="padded-container product-info">
