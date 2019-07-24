@@ -64,7 +64,7 @@ const FullWidthButton = ({
 };
 
 FullWidthButton.propTypes = {
-  text: PropTypes.string,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   style: PropTypes.object,
   onClick: PropTypes.func
 };
