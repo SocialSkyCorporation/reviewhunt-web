@@ -727,10 +727,9 @@
   font-size: 1rem !important;
 }
 
-.ant-menu-item-selected {
+.ant-menu-item-selected, .ant-menu-submenu-selected {
     color: #000;
 }
-
 
 .ant-modal {
    // width: 760px !important;

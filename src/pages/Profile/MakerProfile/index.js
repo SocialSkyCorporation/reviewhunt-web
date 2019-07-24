@@ -11,6 +11,7 @@ import SimpleButton from "components/SimpleButton";
 import steemLogoBlack from "assets/images/steem-logo-bk.svg";
 import { withTranslation } from "react-i18next";
 import CampaignCreator from "../CampaignCreator";
+import CampaignStatus from "./CampaignStatus";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 import { scrollTop } from "utils/scroller";
 import {
@@ -118,7 +119,7 @@ class Profile extends Component {
             resetState();
             setTabIndex(TAB_CREATE_CAMPAIGN);
             setCurrentCampaign(null);
-            updateState("selectedTabKeys", [`create-step-0`]);
+            updateState("selectedTabKeys", [`campaign-step-0`]);
             setCampaignId(null);
           }}
           text="CREATE CAMPAIGN"
@@ -184,7 +185,7 @@ class Profile extends Component {
         <Menu
           onClick={() => {}}
           defaultOpenKeys={["create-campaign", "campaigns", "campaign-steps"]}
-          selectedKeys={selectedTabKeys}
+          selectedKeys={[...selectedTabKeys, `campaign-step-${step}`]}
           mode="inline"
         >
           {tabIndex === TAB_CREATE_CAMPAIGN && (
@@ -198,7 +199,7 @@ class Profile extends Component {
             >
               {steps.map((s, index) => (
                 <Menu.Item
-                  key={"create-step-" + index}
+                  key={"campaign-step-" + index}
                   selected={
                     (tabIndex === TAB_CREATE_CAMPAIGN && index === step) ||
                     (tabIndex === TAB_CAMPAIGNS &&
@@ -218,7 +219,6 @@ class Profile extends Component {
                       return;
                     }
                     setStep(index);
-                    updateState("selectedTabKeys", [`create-step-${index}`]);
                     if (!campaignId) {
                       setTabIndex(TAB_CREATE_CAMPAIGN);
                     }
@@ -291,7 +291,7 @@ class Profile extends Component {
                     {steps.map((s, index) => {
                       return (
                         <Menu.Item
-                          key={campaignIndex + "-step-" + index}
+                          key={"campaign-step-" + index}
                           onClick={() => {
                             if (
                               !currentCampaign &&
@@ -305,9 +305,6 @@ class Profile extends Component {
                               return;
                             }
                             setStep(index);
-                            updateState("selectedTabKeys", [
-                              `${campaignIndex}-step-${index}`
-                            ]);
                             if (!campaignId) {
                               setTabIndex(TAB_CREATE_CAMPAIGN);
                             }
@@ -332,15 +329,7 @@ class Profile extends Component {
                     setTabIndex(TAB_CAMPAIGNS);
                     setCampaignId(campaign.id);
                     setStep(STEP_CREATE_CAMPAIGN);
-                    if (campaign.status === "draft") {
-                      updateState("selectedTabKeys", [
-                        `${campaignIndex}-step-0`
-                      ]);
-                    } else {
-                      updateState("selectedTabKeys", [
-                        `campaign-${campaign.id}`
-                      ]);
-                    }
+                    updateState("selectedTabKeys", [`campaign-${campaign.id}`]);
                   }}
                 >
                   {icon}
@@ -356,6 +345,7 @@ class Profile extends Component {
             onClick={() => {
               scrollTop();
               setTabIndex(TAB_SETTINGS);
+              updateState("selectedTabKeys", ['settings']);
               setCampaignId(null);
             }}
             style={{ paddingLeft: 0 }}
@@ -437,6 +427,8 @@ class Profile extends Component {
       );
     } else if (status === "draft") {
       return <CampaignCreator data={currentCampaign} />;
+    } else {
+      return <CampaignStatus data={currentCampaign} />;
     }
   }
 

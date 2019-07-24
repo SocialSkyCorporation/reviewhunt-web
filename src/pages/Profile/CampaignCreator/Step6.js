@@ -116,7 +116,7 @@ const Step6 = ({}) => {
       </div>
 
       <div className="checkout-summary row-align-center">
-        <img src={images[0]} alt=""/>
+        <img src={images[0]} alt="" />
         <div>
           <div className="text-black text-big payment-summary-title">
             {product_name}
@@ -146,17 +146,25 @@ const Step6 = ({}) => {
       <div className="checkout-header text-black uppercase">Amount to pay</div>
       <NameValue
         title={"Total budget to reward hunters"}
-        value={`$${numberWithCommas(totalBudget)}`}
+        value={`$${numberWithCommas(totalBudget.toFixed(2))}`}
         minKeyWidth={280}
       />
-      <NameValue title={"Platform fee (8%)"} value={`$${numberWithCommas(platformFee)}`} minKeyWidth={280} />
+      <NameValue
+        title={"Platform fee (8%)"}
+        value={`$${numberWithCommas(platformFee.toFixed(2))}`}
+        minKeyWidth={280}
+      />
       <NameValue
         title={"Accounting / Conversion fee (12%)"}
-        value={`$${numberWithCommas(conversionFee)}`}
+        value={`$${numberWithCommas(conversionFee.toFixed(2))}`}
         minKeyWidth={280}
       />
       <div className="divider-line" />
-      <NameValue title={"Total"} value={"$12,600"} minKeyWidth={280} />
+      <NameValue
+        title={"Total"}
+        value={`$${(totalBudget + platformFee + conversionFee).toFixed(2)}`}
+        minKeyWidth={280}
+      />
       <div className="text-grey text-info">
         * Currency fluctuations, bank fees and applicable taxes may change your
         final amount.

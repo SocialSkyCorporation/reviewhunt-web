@@ -71,7 +71,7 @@ const initialState = {
   fetchingEstimate: false,
   fetchingCurrency: false,
   activeKeys: ["1"],
-  selectedTabKeys: [],
+  selectedTabKeys: ["campaign-step-0"],
   loading: false,
   formDirty: false
 };
