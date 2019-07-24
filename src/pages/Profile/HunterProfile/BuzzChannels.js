@@ -49,11 +49,7 @@ function ChannelItem(props) {
           <div className="buzz-icon-container">
             <img
               className="buzz-channel-icon"
-              src={
-                profile_image
-                  ? profile_image
-                  : icon
-              }
+              src={profile_image ? profile_image : icon}
               alt=""
             />
             {is_verified && (
@@ -65,15 +61,21 @@ function ChannelItem(props) {
             )}
           </div>
           <div>
-          <div className="buzz-channel-text text-grey">{channel_type}</div>
-          <div className="buzz-channel-text text-black">{name || user_name}</div>
+            <div className="buzz-channel-text text-grey">
+              {_.capitalize(channel_type)}
+            </div>
+            <div className="buzz-channel-text text-black">
+              {name || user_name}
+            </div>
           </div>
         </div>
 
         <div className="buzz-summary">
           <div className="row-align-center">
             <div className="buzz-link">
-              <a target="__blank">{url}</a>
+              <a target="__blank" href={url}>
+                {url}
+              </a>
             </div>
             {editMode && (
               <img
@@ -186,10 +188,10 @@ const BuzzChannels = ({}) => {
                     ]);
 
                     addSocialChannel({
-                        ...value,
-                        url: urlInput,
-                        estimating: true
-                    })
+                      ...value,
+                      url: urlInput,
+                      estimating: true
+                    });
 
                     setSelectValue("Channels");
                     setUrlInput("");
