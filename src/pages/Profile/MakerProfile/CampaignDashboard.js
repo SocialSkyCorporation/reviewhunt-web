@@ -215,6 +215,7 @@ const CampaignDashboard = ({
           maskClosable={true}
           onCancel={() => setModalVisible(false)}
           visible={modalVisible}
+          width={340}
           footer={null}
           style={{
             display: "flex"
@@ -227,7 +228,9 @@ const CampaignDashboard = ({
             noBorder
             data={submittedItems && submittedItems[currentItemIndex]}
             onApproveClick={() => approveSubmittedItem(currentItemIndex)}
-            onRejectClick={(reason) => rejectSubmittedItem(currentItemIndex, reason)}
+            onRejectClick={reason =>
+              rejectSubmittedItem(currentItemIndex, reason)
+            }
           />
           {currentItemIndex > 0 && (
             <img onClick={prevClicked} className="prev-button" src={prevImg} />

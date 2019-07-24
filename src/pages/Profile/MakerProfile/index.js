@@ -300,7 +300,7 @@ class Profile extends Component {
 
     const { status } = currentCampaign;
 
-    if (status === "paid") {
+    if (status === "running") {
       return (
         <CampaignDashboard
           onEditDescClicked={() => {

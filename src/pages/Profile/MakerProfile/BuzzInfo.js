@@ -19,17 +19,13 @@ import CircularProgress from "components/CircularProgress";
 import { availableChannels } from "utils/constants";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
 import { filterAllowedChannels } from "utils/helpers/campaignHelper";
+import moment from "moment";
 import _ from "lodash";
 
-const ChannelSubmissionItem = ({
-  data,
-  text,
-  onClick,
-  registered,
-  submitted
-}) => {
-  const { reward_estimation, profile_image, channel_type, submitting } = data;
+const ChannelSubmissionItem = ({ data, onClick, submittedData }) => {
+  const { reward_estimation, profile_image, channel_type } = data;
   const { huntPerUsd } = useContext(AppContext);
+  const [timer, setTimer] = useState(null);
 
   const image = _.find(availableChannels, ["key", channel_type]).greyIcon;
 
@@ -38,78 +34,109 @@ const ChannelSubmissionItem = ({
     (parseFloat(reward_estimation) / huntPerUsd).toFixed(2)
   );
 
-  console.log("submitte", submitted);
+  const status = submittedData ? submittedData.status : null;
+  let buttonText = status ? <Icon type="loading" /> : "Join";
+  let img = null;
+
+  const joined = status === "joined";
+
+  if (timer && status === "joined") {
+    buttonText = `SUBMIT IN ${timer}`;
+  } else if (status === "submitted") {
+    buttonText = "WAITING FOR MODERATION";
+    img = pendingImg;
+  } else if (status === "approved") {
+    buttonText = "CONFIRMED";
+    img = approvedImg;
+  } else if (status === "rejected") {
+    buttonText = "REJECTED";
+    img = rejectedImg;
+  }
+
+  useEffect(() => {
+    let tickTime = null;
+    if (status === "joined") {
+      const { expires_at } = submittedData;
+      tickTime = setInterval(() => {
+        const timeNow = moment();
+        const expirationTime = moment(expires_at);
+        const diff = expirationTime.diff(timeNow);
+        const days = moment.duration(diff).days();
+        let display = moment(diff).format("hh:mm:ss");
+        if (days > 0) {
+          display = days + " days " + display;
+        }
+        setTimer(display);
+      }, 1000);
+    }
+
+    return () => clearInterval(tickTime);
+  }, [status]);
 
   return (
-    <div className={`channel-submission-item ${!registered && "unregistered"}`}>
-      {submitted && (
-        <>
-          {submitted.status === "approved" && (
-            <div className="complete-overlay">
-              <img src={approvedImg} alt="" />
-            </div>
-          )}
-          {submitted.status === "submitted" && (
-            <div className="complete-overlay">
-              <img src={pendingImg} alt="" />
-            </div>
-          )}
-          {submitted.status === "rejected" && (
-            <div className="complete-overlay">
-              <img src={rejectedImg} alt="" />
-            </div>
-          )}
-        </>
-      )}
-      <div className="channel-submission-content">
-        {profile_image && (
-          <img className="channel-icon-right-corner" src={image} alt="" />
+    <Spin tip="Joining..." spinning={status && status === "joining"}>
+      <div
+        className={`channel-submission-item ${status === null &&
+          "unregistered"}`}
+      >
+        {status && (
+          <>
+            {status !== null && status !== "joined" && (
+              <div className="complete-overlay">
+                <img src={img} alt="" />
+              </div>
+            )}
+          </>
         )}
-        <img
-          className="channel-submission-icon"
-          src={profile_image || image}
-          alt=""
-        />
-        <div className="channel-text text-black">
-          {_.capitalize(channel_type)}
+        <div className="channel-submission-content">
+          {profile_image && (
+            <img className="channel-icon-right-corner" src={image} alt="" />
+          )}
+          <img
+            className="channel-submission-icon"
+            src={profile_image || image}
+            alt=""
+          />
+          <div className="channel-text text-black">
+            {_.capitalize(channel_type)}
+          </div>
+          {joined && (
+            <div className="channel-expected-earning text-green">
+              Your Expected Earnings
+              <br />
+              {huntPrice} HUNT (${usdPrice})
+            </div>
+          )}
+          {status === null && (
+            <div className="channel-expected-earning text-grey">
+              You did not join
+              <br />
+              this quest
+            </div>
+          )}
+          {status === "submitted" && (
+            <div className="channel-expected-earning text-grey">
+              Quest Submitted
+              <br />
+            </div>
+          )}
         </div>
-        {registered ? (
-          <div className="channel-expected-earning text-green">
-            Your Expected Earnings
-            <br />
-            {huntPrice} HUNT (${usdPrice})
-          </div>
-        ) : (
-          <div className="channel-expected-earning text-grey">
-            You didn't reigster
-            <br />
-            this channel
-          </div>
-        )}
+        <FullWidthButton
+          text={buttonText}
+          onClick={() => {
+            onClick(data);
+          }}
+          inverse={status === null}
+          style={joined ? {} : { borderTop: "solid 1px #e5e5e5" }}
+        />
       </div>
-      <FullWidthButton
-        text={submitted ? "Completed" : "Submit"}
-        onClick={() => {
-          if (!registered) {
-            //redirect to onboarding
-            return;
-          }
-          onClick(data);
-        }}
-        inverse={!registered}
-        style={registered ? {} : { borderTop: "solid 1px #e5e5e5" }}
-      />
-    </div>
+    </Spin>
   );
 };
 
-ChannelSubmissionItem.defaultProps = {
-  registered: false
-};
-
 const BuzzInfo = ({ quest }) => {
-  const { id } = quest;
   const {
+    id,
     bounty_base,
     title,
     criteria,
@@ -126,7 +153,8 @@ const BuzzInfo = ({ quest }) => {
     submitQuest,
     submittedQuests,
     fetchingSubmittedQuests,
-    getQuestSubmissions
+    getQuestSubmissions,
+    joinQuest
   } = useContext(HunterDashboardContext);
 
   const { loading, getSocialChannels, socialChannels } = useContext(
@@ -138,6 +166,10 @@ const BuzzInfo = ({ quest }) => {
   useEffect(() => {
     getSocialChannels();
   }, []);
+
+  useEffect(() => {
+    getQuestSubmissions(id);
+  }, [quest]);
 
   const [submitChannel, setSubmitChannel] = useState("");
   const [proofImage, setProofImage] = useState([]);
@@ -162,19 +194,24 @@ const BuzzInfo = ({ quest }) => {
 
   const allowedChannels = useMemo(() => {
     return filterAllowedChannels(socialChannels, allowed_channels).map(
-      (channel, index) => {
-        const { id } = channel;
+      (buzzChannel, index) => {
+        const submitted = _.find(submittedQuests, [
+          "buzz_channel_id",
+          buzzChannel.id
+        ]);
         return (
           <ChannelSubmissionItem
-            key={id}
-            text="Youtube"
-            data={channel}
+            key={buzzChannel.id}
+            data={buzzChannel}
             onClick={data => {
-              setSubmitChannel(data);
+              if (!submitted) {
+                joinQuest(id, buzzChannel.channel_type, buzzChannel.id);
+                return;
+              }
+              setSubmitChannel(submitted);
               updateState("submitModalVisible", true);
             }}
-            submitted={_.find(submittedQuests, ["buzz_channel_id", id])}
-            registered={false}
+            submittedData={submitted}
           />
         );
       }
@@ -355,7 +392,7 @@ const BuzzInfo = ({ quest }) => {
             </div>
             <FullWidthButton
               onClick={() =>
-                submitQuest(quest, submitChannel, urlText, proofImage)
+                submitQuest(submitChannel, submitChannel, urlText, proofImage)
               }
               text="SUBMIT YOUR PROOF"
               style={{ marginTop: 30 }}

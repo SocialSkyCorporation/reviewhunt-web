@@ -33,7 +33,9 @@ const CurrentQuest = props => {
 
   const quest = quests[questInfoIndex];
   const { id, quest_type } = quest;
-  const { currentCampaign, getQuestSubmissions, submittedQuests } = useContext(HunterDashboardContext);
+  const { currentCampaign, getQuestSubmissions, submittedQuests } = useContext(
+    HunterDashboardContext
+  );
   const { getSocialChannels } = useContext(AuthContext);
 
   const {
@@ -43,48 +45,41 @@ const CurrentQuest = props => {
     expires_at
   } = currentCampaign;
 
-
-  console.log("quests", quests);
-  console.log("submitted quests", submittedQuests);
-
-  return useMemo(
-    () => (
-      <div className="current-quest">
-        <div className="row-space-between">
-          <div className="row-align-center hover-link" onClick={onBackPressed}>
-            <img className="back-icon" src={backImg} alt="" />
-            <div className="header-text">Back</div>
-          </div>
-          <div className="row-align-center">
-            <img className="clock-icon" src={clockImg} alt="" />
-            <div className="header-text">{timeToX(expires_at)}</div>
-          </div>
+  return (
+    <div className="current-quest">
+      <div className="row-space-between">
+        <div className="row-align-center hover-link" onClick={onBackPressed}>
+          <img className="back-icon" src={backImg} alt="" />
+          <div className="header-text">Back</div>
         </div>
-
-        <div className="text-black header-title">{product_name}</div>
-        <div className="text-grey header-description">{short_description}</div>
-
-        <Link to={`/campaigns/${currentCampaign.id}`}>
-          <SimpleButton
-            text="CHECK PRODUCT INFO"
-            style={{ marginTop: 15, marginBottom: 30, maxWidth: 180 }}
-          />
-        </Link>
-
-        <div className="divider" />
-        <QuestStepProgress
-          steps={quests}
-          currentStep={currentStep}
-          containerStyle={{ marginTop: 16, marginBottom: 16 }}
-          onStepClicked={step => setQuestInfoIndex(step)}
-        />
-
-        {quest_type.indexOf("general") > -1 && <QuestInfo quest={quest} />}
-        {quest_type === "review" && <ReviewInfo quest={quest} />}
-        {quest_type === "buzz" && <BuzzInfo quest={quest} />}
+        <div className="row-align-center">
+          <img className="clock-icon" src={clockImg} alt="" />
+          <div className="header-text">{timeToX(expires_at)}</div>
+        </div>
       </div>
-    ),
-    [quest, currentCampaign, currentStep, submittedQuests]
+
+      <div className="text-black header-title">{product_name}</div>
+      <div className="text-grey header-description">{short_description}</div>
+
+      <Link to={`/campaigns/${currentCampaign.id}`}>
+        <SimpleButton
+          text="CHECK PRODUCT INFO"
+          style={{ marginTop: 15, marginBottom: 30, maxWidth: 180 }}
+        />
+      </Link>
+
+      <div className="divider" />
+      <QuestStepProgress
+        steps={quests}
+        currentStep={currentStep}
+        containerStyle={{ marginTop: 16, marginBottom: 16 }}
+        onStepClicked={step => setQuestInfoIndex(step)}
+      />
+
+      {quest_type.indexOf("general") > -1 && <QuestInfo quest={quest} />}
+      {quest_type === "review" && <ReviewInfo quest={quest} />}
+      {quest_type === "buzz" && <BuzzInfo quest={quest} />}
+    </div>
   );
 };
 

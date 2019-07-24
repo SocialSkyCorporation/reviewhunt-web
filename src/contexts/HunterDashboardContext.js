@@ -50,8 +50,19 @@ class HunterDashboardProvider extends React.Component {
   };
 
   joinQuest = async (questId, channel, buzzChannelId) => {
+    console.log("joining quest");
     const { submittedQuests } = this.state;
-    this.setState({ joiningQuest: true });
+
+    await this.setState({
+      joiningQuest: true,
+
+      submittedQuests: submittedQuests.concat({
+        buzz_channel_id: buzzChannelId,
+        status: "joining"
+      })
+    });
+
+    const submittedQuestsCopy = _.clone(this.state.submittedQuests);
 
     try {
       const result = await api.post(
@@ -67,9 +78,22 @@ class HunterDashboardProvider extends React.Component {
         TYPE_HUNTER
       );
 
-      const submittedQuestsCopy = _.clone(submittedQuests);
-
-      if (_.find(submittedQuests, ["id", result.id])) {
+      //handle submission post join
+      if (
+        (buzzChannelId && _.find(submittedQuestsCopy),
+        ["buzz_channel_id", buzzChannelId])
+      ) {
+        //handle buzz join
+        console.log("handling buzz join", submittedQuestsCopy);
+        submittedQuestsCopy.forEach((_quest, _index) => {
+          if (_quest.buzz_channel_id === result.buzz_channel_id) {
+            Object.assign(_quest, result);
+          }
+        });
+        this.setState({
+          submittedQuests: submittedQuestsCopy
+        });
+      } else if (_.find(submittedQuests, ["id", result.id])) {
         submittedQuestsCopy.forEach((_quest, _index) => {
           if (_quest.id === result.id) {
             Object.assign(_quest, result);
@@ -79,6 +103,7 @@ class HunterDashboardProvider extends React.Component {
           submittedQuests: submittedQuestsCopy
         });
       } else {
+        //handle initial joining quest
         this.setState({
           submittedQuests: submittedQuests.concat(result)
         });
@@ -89,6 +114,16 @@ class HunterDashboardProvider extends React.Component {
       notification["error"]({
         message: extractErrorMessage(e)
       });
+
+      if (buzzChannelId) {
+        _.find(submittedQuestsCopy, [
+          "buzz_channel_id",
+          buzzChannelId
+        ]).status = null;
+        this.setState({
+          submittedQuests: submittedQuestsCopy
+        });
+      }
     } finally {
       this.setState({ joiningQuest: false });
     }

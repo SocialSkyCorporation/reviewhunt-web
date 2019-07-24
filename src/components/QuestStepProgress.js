@@ -20,8 +20,6 @@ const QuestStepProgress = props => {
   } = props;
   const [clickedIndex, setClickedIndex] = useState(currentStep);
 
-  let buzzShouldGlow = false;
-  let buzzFilled = false;
 
   return (
     <div
