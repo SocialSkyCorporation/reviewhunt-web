@@ -71,6 +71,7 @@ const initialState = {
   fetchingEstimate: false,
   fetchingCurrency: false,
   activeKeys: ["1"],
+  selectedTabKeys: [],
   loading: false,
   formDirty: false
 };

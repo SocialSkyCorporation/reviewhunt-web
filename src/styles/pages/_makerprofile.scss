@@ -312,10 +312,11 @@
   }
 
   .text-info {
-    font-size: .875rem;
+    font-size: 0.875rem;
   }
 
-  .ant-collapse-header, .ant-checkbox-wrapper {
+  .ant-collapse-header,
+  .ant-checkbox-wrapper {
     font-size: 1rem;
   }
 
@@ -565,8 +566,6 @@
       }
     }
   }
-
-  
 }
 
 .content-history {

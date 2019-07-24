@@ -1,5 +1,5 @@
 import React, { useContext, Component } from "react";
-import { Select, notification } from "antd";
+import { Select, Icon, Menu, notification } from "antd";
 import TabItem, { TabSubItem } from "../TabItem";
 import QuestItem from "../QuestItem";
 import CurrentQuest from "../CurrentQuest";
@@ -31,7 +31,14 @@ export const TAB_CAMPAIGNS = "campaigns";
 export const TAB_HISTORY = "history";
 export const TAB_SETTINGS = "settings";
 export const TAB_CHECKOUT = "checkout";
-const tabs = [TAB_CREATE_CAMPAIGN, TAB_CAMPAIGNS, TAB_HISTORY, TAB_SETTINGS, TAB_CHECKOUT];
+const tabs = [
+  TAB_CREATE_CAMPAIGN,
+  TAB_CAMPAIGNS,
+  TAB_HISTORY,
+  TAB_SETTINGS,
+  TAB_CHECKOUT
+];
+const { SubMenu } = Menu;
 
 class Profile extends Component {
   state = {
@@ -58,7 +65,7 @@ class Profile extends Component {
     const { t } = this.props;
     const { emailMe } = this.props.authContext;
     const { campaigns } = emailMe;
-    const { resetState } = this.props.newCampaignContext;
+    const { resetState, updateState } = this.props.newCampaignContext;
     const { setCurrentCampaign } = this.props.campaignContext;
     const {
       tabIndex,
@@ -111,6 +118,7 @@ class Profile extends Component {
             resetState();
             setTabIndex(TAB_CREATE_CAMPAIGN);
             setCurrentCampaign(null);
+            updateState("selectedTabKeys", [`create-step-0`]);
             setCampaignId(null);
           }}
           text="CREATE CAMPAIGN"
@@ -139,7 +147,12 @@ class Profile extends Component {
     } = this.props.profileContext;
     const { t } = this.props;
     const { emailMe } = this.props.authContext;
-    const { step, setStep } = this.props.newCampaignContext;
+    const {
+      step,
+      setStep,
+      selectedTabKeys,
+      updateState
+    } = this.props.newCampaignContext;
     const {
       setCurrentCampaign,
       currentCampaign,
@@ -157,7 +170,7 @@ class Profile extends Component {
       "Checkout"
     ];
 
-    const isNewCampaign = tabIndex === TAB_CREATE_CAMPAIGN; 
+    const isNewCampaign = tabIndex === TAB_CREATE_CAMPAIGN;
 
     const editingCampaign =
       tabIndex === TAB_CAMPAIGNS &&
@@ -168,89 +181,197 @@ class Profile extends Component {
 
     return (
       <div className="tabs">
-        <TabItem
-          text="Create Campaign"
-          selected={tabIndex === TAB_CREATE_CAMPAIGN}
-          style={shouldShowSubItems ? { marginBottom: 0 } : {}}
-          onClick={() => {
-            if (tabIndex === TAB_CREATE_CAMPAIGN) return;
-            resetState();
-            setTabIndex(TAB_CREATE_CAMPAIGN);
-            setCurrentCampaign(null);
-            setCampaignId(null);
-          }}
-        />
-
-        {shouldShowSubItems && (
-          <div>
-            {steps.map((s, index) => (
-              <TabSubItem
-                key={index}
-                selected={
-                  (tabIndex === TAB_CREATE_CAMPAIGN && index === step) ||
-                  (tabIndex === TAB_CAMPAIGNS &&
-                    campaignId !== null &&
-                    index === step)
-                }
-                onClick={() => {
-                  if (
-                    !currentCampaign &&
-                    !this.props.newCampaignContext.campaignId
-                  ) {
-                    notification["warn"]({
-                      message:
-                        'You must complete the "Product Description" tab before continuing.'
-                    });
-
-                    return;
+        <Menu
+          onClick={() => {}}
+          defaultOpenKeys={["create-campaign", "campaigns", "campaign-steps"]}
+          selectedKeys={selectedTabKeys}
+          mode="inline"
+        >
+          {tabIndex === TAB_CREATE_CAMPAIGN && (
+            <SubMenu
+              key="create-campaign"
+              title={
+                <span>
+                  <span>Create Campaign</span>
+                </span>
+              }
+            >
+              {steps.map((s, index) => (
+                <Menu.Item
+                  key={"create-step-" + index}
+                  selected={
+                    (tabIndex === TAB_CREATE_CAMPAIGN && index === step) ||
+                    (tabIndex === TAB_CAMPAIGNS &&
+                      campaignId !== null &&
+                      index === step)
                   }
-                  setStep(index);
-                  if (!campaignId) {
-                    setTabIndex(TAB_CREATE_CAMPAIGN);
-                  }
-                }}
-                text={s}
-              />
-            ))}
-          </div>
-        )}
-        <TabItem
-          text={"Campaigns"}
-          selected={tabIndex === TAB_CAMPAIGNS}
-          style={{ marginBottom: 0 }}
-        />
+                  onClick={() => {
+                    if (
+                      !currentCampaign &&
+                      !this.props.newCampaignContext.campaignId
+                    ) {
+                      notification["warn"]({
+                        message:
+                          'You must complete the "Product Description" tab before continuing.'
+                      });
 
-        <div>
-          {campaigns.map((campaign, index) => (
-            <TabSubItem
-              key={campaign.id}
-              selected={tabIndex === TAB_CAMPAIGNS && campaign.id == campaignId}
-              onClick={() => {
-                fetchCampaign(campaign.id);
-                setTabIndex(TAB_CAMPAIGNS);
-                setCampaignId(campaign.id);
-              }}
-              text={campaign.product_name}
-            />
-          ))}
-        </div>
-        <TabItem
+                      return;
+                    }
+                    setStep(index);
+                    updateState("selectedTabKeys", [`create-step-${index}`]);
+                    if (!campaignId) {
+                      setTabIndex(TAB_CREATE_CAMPAIGN);
+                    }
+                  }}
+                >
+                  {s}
+                </Menu.Item>
+              ))}
+            </SubMenu>
+          )}
+          <SubMenu
+            key="campaigns"
+            title={
+              <span>
+                <span>Campaigns</span>
+              </span>
+            }
+          >
+            {campaigns.map((campaign, campaignIndex) => {
+              let icon = null;
+
+              switch (campaign.status) {
+                case "draft":
+                  icon = <Icon type="edit" style={{ color: "#4d4d4d" }} />;
+                  break;
+                case "submitted":
+                  icon = <Icon type="ellipsis" style={{ color: "#f5a623" }} />;
+                  break;
+                case "paid":
+                  icon = <Icon type="dollar" style={{ color: "#52c41a" }} />;
+                  break;
+                case "request_edit":
+                  icon = (
+                    <Icon type="issues-close" style={{ color: "#ff597a" }} />
+                  );
+                  break;
+                case "rejected":
+                  icon = <Icon type="close" style={{ color: "#ff597a" }} />;
+                  break;
+                case "refunded":
+                  icon = <Icon type="undo" style={{ color: "#52c41a" }} />;
+                  break;
+                case "converting_hunt":
+                  icon = <Icon type="swap" style={{ color: "#fa6f6f" }} />;
+                  break;
+                case "running":
+                  icon = <Icon type="loading" style={{ color: "#3fcaff" }} />;
+                  break;
+                case "distributing":
+                  icon = <Icon type="export" style={{ color: "#52c41a" }} />;
+                  break;
+                case "completed":
+                  icon = <Icon type="file-done" style={{ color: "#4d4d4d" }} />;
+                  break;
+              }
+
+              if (campaign.status === "draft" && campaign.id == campaignId) {
+                const selectedKey = step + "";
+                return (
+                  <SubMenu
+                    key="campaign-steps"
+                    title={
+                      <span>
+                        {icon}
+                        <span>{campaign.product_name}</span>
+                      </span>
+                    }
+                    style={{ marginLeft: 16 }}
+                  >
+                    {steps.map((s, index) => {
+                      return (
+                        <Menu.Item
+                          key={campaignIndex + "-step-" + index}
+                          onClick={() => {
+                            if (
+                              !currentCampaign &&
+                              !this.props.newCampaignContext.campaignId
+                            ) {
+                              notification["warn"]({
+                                message:
+                                  'You must complete the "Product Description" tab before continuing.'
+                              });
+
+                              return;
+                            }
+                            setStep(index);
+                            updateState("selectedTabKeys", [
+                              `${campaignIndex}-step-${index}`
+                            ]);
+                            if (!campaignId) {
+                              setTabIndex(TAB_CREATE_CAMPAIGN);
+                            }
+                          }}
+                        >
+                          {s}
+                        </Menu.Item>
+                      );
+                    })}
+                  </SubMenu>
+                );
+              }
+
+              return (
+                <Menu.Item
+                  key={`campaign-${campaign.id}`}
+                  selected={
+                    tabIndex === TAB_CAMPAIGNS && campaign.id == campaignId
+                  }
+                  onClick={() => {
+                    fetchCampaign(campaign.id);
+                    setTabIndex(TAB_CAMPAIGNS);
+                    setCampaignId(campaign.id);
+                    setStep(STEP_CREATE_CAMPAIGN);
+                    if (campaign.status === "draft") {
+                      updateState("selectedTabKeys", [
+                        `${campaignIndex}-step-0`
+                      ]);
+                    } else {
+                      updateState("selectedTabKeys", [
+                        `campaign-${campaign.id}`
+                      ]);
+                    }
+                  }}
+                >
+                  {icon}
+                  {campaign.product_name}
+                </Menu.Item>
+              );
+            })}
+          </SubMenu>
+          <Menu.Item
+            className="settings-tab"
+            key="settings"
+            selected={tabIndex === TAB_SETTINGS}
+            onClick={() => {
+              scrollTop();
+              setTabIndex(TAB_SETTINGS);
+              setCampaignId(null);
+            }}
+            style={{ paddingLeft: 0 }}
+          >
+            Setting
+          </Menu.Item>
+        </Menu>
+
+        {/*        <TabItem
           text={"History"}
           selected={tabIndex === TAB_HISTORY}
           onClick={() => {
             setTabIndex(TAB_HISTORY);
             setCampaignId(null);
           }}
-        />
-        <TabItem
-          text={"Setting"}
-          selected={tabIndex === TAB_SETTINGS}
-          onClick={() => {
-            setTabIndex(TAB_SETTINGS);
-            setCampaignId(null);
-          }}
-        />
-        
+        />*/}
       </div>
     );
   }

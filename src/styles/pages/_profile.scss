@@ -706,6 +706,32 @@
   }
 }
 
+
+.ant-menu-inline {
+  border-right: none;
+}
+
+.ant-menu-submenu-title {
+  padding-left: 0px !important;
+}
+
+.ant-menu-item {
+  padding-left: 16px !important;
+
+  &.settings-tab {
+  padding-left: 0px !important;
+}
+}
+
+.ant-menu-submenu-title, .ant-menu-item {
+  font-size: 1rem !important;
+}
+
+.ant-menu-item-selected {
+    color: #000;
+}
+
+
 .ant-modal {
    // width: 760px !important;
 
