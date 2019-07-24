@@ -44,7 +44,7 @@ export default () => {
               backgroundColor="transparent"
               style={{
                 marginTop: 20,
-                marginBottom: 16,
+                marginBottom: 30,
                 maxWidth: 160
               }}
             />
