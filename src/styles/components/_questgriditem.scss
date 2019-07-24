@@ -16,6 +16,17 @@
     line-height: 1;
   }
 
+  .stat-items-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @include responsive(mobile) {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
   .stat-item {
     max-width: 150px;
   }
@@ -100,7 +111,7 @@
 
       @include responsive(mobile) {
         visibility: hidden;
-        height: 8px;
+        height: 12px;
       }
     }
 

@@ -77,7 +77,7 @@ const QuestGridItem = props => {
             <p className="description two-lines">{short_description}</p>
           </div>
 
-          <div className="row-space-between col-on-mobile">
+          <div className="stat-items-container">
             <div className="row-align-center stat-item">
               <img className="grid-item-icon" src={moneySvg} alt="" />
               <div className="bounty-text-container">
