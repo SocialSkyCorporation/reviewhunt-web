@@ -8,7 +8,10 @@ const { Provider, Consumer } = AppContext;
 
 class AppProvider extends React.Component {
   state = {
-    huntPerUsd: 0
+    huntPerUsd: 0,
+    totalBounty: 0,
+    hunterCount: 0,
+    questCount: 0
   };
 
   componentDidMount() {
@@ -24,9 +27,14 @@ class AppProvider extends React.Component {
 
   fetchHuntPrice = async () => {
     try {
-      const result = await api.get("/prices.json");
-      const { price_hunt } = result;
-      this.setState({ huntPerUsd: price_hunt });
+      const result = await api.get("/stats.json");
+      const { price_hunt, total_bounty, hunter_count, quest_count } = result;
+      this.setState({
+        huntPerUsd: price_hunt,
+        totalBounty: total_bounty,
+        hunterCount: hunter_count,
+        questCount: quest_count
+      });
     } catch (e) {
       notification["error"]({ message: extractErrorMessage(e) });
       clearInterval(this.fetchInterval);

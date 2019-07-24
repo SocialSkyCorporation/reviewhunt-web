@@ -11,25 +11,16 @@ import AppContext from "contexts/AppContext";
 import ContentLoader from "components/ContentLoader";
 import logoCircle from "assets/images/logo-circle.svg";
 import { numberWithCommas } from "utils/helpers/numberFormatHelper";
-import {filterRunningCampaigns} from 'utils/helpers/campaignHelper';
+import { filterRunningCampaigns } from "utils/helpers/campaignHelper";
 
 export default () => {
   const { t } = useTranslation();
   const { campaigns, getCampaigns, fetchingCampaigns } = useContext(
     CampaignContext
   );
-  const { huntPerUsd } = useContext(AppContext);
-
-  let totalHunters = 0;
-  let totalBountyFund = 0;
-  let totalQuests = 0;
-
-  campaigns.forEach(campaign => {
-    const { quest_count, total_bounty, current_participant_count } = campaign;
-    totalQuests += quest_count;
-    totalBountyFund += parseFloat(total_bounty);
-    totalHunters += current_participant_count;
-  });
+  const { huntPerUsd, totalBounty, hunterCount, questCount } = useContext(
+    AppContext
+  );
 
   useEffect(() => {
     getCampaigns();
@@ -68,12 +59,12 @@ export default () => {
                 <img src={imgMoney} alt="" />
                 <div className="stat-text">
                   <h1>
-                    {numberWithCommas(
-                      (totalBountyFund / huntPerUsd).toFixed(0)
-                    )}{" "}
+                    {numberWithCommas(parseFloat(totalBounty).toFixed(0))}{" "}
                     <span>HUNT</span>
                   </h1>
-                  <h2>(${numberWithCommas(totalBountyFund)})</h2>
+                  <h2>
+                    (${numberWithCommas((totalBounty * huntPerUsd).toFixed(2))})
+                  </h2>
                 </div>
               </div>
             </div>
@@ -85,9 +76,9 @@ export default () => {
                 <img src={imgHunter} alt="" />
                 <div className="stat-text">
                   <h1>
-                    {numberWithCommas(totalHunters)} <span>HUNTERS</span>
+                    {numberWithCommas(hunterCount)} <span>HUNTERS</span>
                   </h1>
-                  <h2>(on {numberWithCommas(totalQuests)} quests)</h2>
+                  <h2>(on {numberWithCommas(questCount)} quests)</h2>
                 </div>
               </div>
             </div>
