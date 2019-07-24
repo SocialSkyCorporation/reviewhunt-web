@@ -102,7 +102,7 @@ export default props => {
           <SimpleButton
             backgroundColor={joined ? "#000" : "transparent"}
             text={joined ? "JOINED" : t("product.join")}
-            style={{ marginTop: 30 }}
+            style={{ marginTop: 20 }}
             onClick={() => {
               if (!agreed) {
                 scrollBottom();
