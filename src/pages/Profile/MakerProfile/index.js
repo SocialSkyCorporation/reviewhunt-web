@@ -108,7 +108,7 @@ class Profile extends Component {
             <b>{numberOfHunters}</b> hunters have joined your quest
           </div>
           <div>
-            A total of <b>${numberWithCommas(reviewCreditSpent)}</b> review
+            A total of <b>${numberWithCommas(reviewCreditSpent.toFixed(2))}</b> review
             credit spent.
           </div>
         </div>
